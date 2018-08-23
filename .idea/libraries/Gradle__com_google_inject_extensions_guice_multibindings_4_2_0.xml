@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-multibindings/4.2.0/76c96e043d05bc4788e703b3af06a3ece32293bd/guice-multibindings-4.2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-multibindings/4.2.0/d8fa79c1388de0bce573086f53726fa3cc30d67b/guice-multibindings-4.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

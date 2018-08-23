@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(':stream-utils')
+    implementation "javax.annotation:javax.annotation-api:$annotionsApiVer"
+    implementation "org.apache.commons:commons-text:$commonsTextVer"
+    implementation "com.google.inject:guice:$guiceVer"
+    implementation "com.google.inject.extensions:guice-multibindings:$guiceVer"
+    implementation "com.google.inject.extensions:guice-assistedinject:$guiceVer"
+}
