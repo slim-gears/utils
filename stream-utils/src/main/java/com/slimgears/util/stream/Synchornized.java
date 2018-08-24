@@ -1,4 +1,4 @@
-package com.slimgears.utils.stream;
+package com.slimgears.util.stream;
 
 import java.util.concurrent.Callable;
 import java.util.function.BiFunction;

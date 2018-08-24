@@ -13,7 +13,7 @@ import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeConverter;
 import com.google.inject.spi.TypeConverterBinding;
-import com.slimgears.utils.stream.Safe;
+import com.slimgears.util.stream.Safe;
 
 import java.io.File;
 import java.lang.reflect.Array;

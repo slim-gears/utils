@@ -1,4 +1,4 @@
-package com.slimgears.utils.stream;
+package com.slimgears.util.stream;
 
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.slimgears.utils.stream.Optionals.ofType;
+import static com.slimgears.util.stream.Optionals.ofType;
 
 public class Lazy<T> implements Supplier<T>, AutoCloseable {
     private final Callable<T> supplier;

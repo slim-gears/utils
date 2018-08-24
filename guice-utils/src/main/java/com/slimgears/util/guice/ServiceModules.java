@@ -9,7 +9,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.slimgears.utils.stream.Streams;
+import com.slimgears.util.stream.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
