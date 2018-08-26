@@ -8,6 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/apt-utils" />
             <option value="$PROJECT_DIR$/guice-utils" />
             <option value="$PROJECT_DIR$/stream-utils" />
           </set>

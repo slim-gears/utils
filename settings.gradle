@@ -1,3 +1,4 @@
 include 'stream-utils'
 include 'guice-utils'
+include 'apt-utils'
 

@@ -19,7 +19,19 @@ project.ext {
     guiceVer = "4.2.0"
     commonsTextVer = "1.4"
 
-    scripts = "$rootProject.projectDir/gradle-scripts"
+    autoValueVer = "1.6.2"
+    autoServiceVer = "1.0-rc4"
+    jsr305Ver = "3.0.2"
+    logbackVer = "1.2.3"
+    guavaVer = "26.0-jre"
+    javaFormatVer = "1.6"
+    commonsTextVer = "1.4"
+    commonsIoVer = "2.6"
+    annotationApiVer = "1.3.2"
+    mockitoVer = "2.21.0"
+
+
+    scriptsDir = "$rootProject.projectDir/gradle-scripts"
     sourceCompatibility = 1.8
 }
 
@@ -27,8 +39,8 @@ subprojects {
     group rootProject.group
     version rootProject.version
 
-    apply from: "$rootProject.scripts/java.gradle"
-    apply from: "$rootProject.scripts/maven-publish.gradle"
+    apply from: "$rootProject.scriptsDir/java.gradle"
+    apply from: "$rootProject.scriptsDir/maven-publish.gradle"
 
     repositories {
         mavenCentral()

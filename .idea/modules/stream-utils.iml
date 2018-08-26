@@ -13,6 +13,8 @@
       <excludeFolder url="file://$MODULE_DIR$/../../stream-utils/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../stream-utils/build/classes" />
       <excludeFolder url="file://$MODULE_DIR$/../../stream-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../stream-utils/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/../../stream-utils/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/../../stream-utils/build/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/../../stream-utils/out" />
     </content>

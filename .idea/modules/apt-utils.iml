@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":apt-utils" external.linked.project.path="$MODULE_DIR$/../../apt-utils" external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.github.slim-gears.utils" external.system.module.version="0.1-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../apt-utils/out/production/classes" />
+    <output-test url="file://$MODULE_DIR$/../../apt-utils/out/test/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../apt-utils">
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/main/antlr" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated-src" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/out" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/generated" />
+    <content url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/main" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/test" />
+    <content url="file://$MODULE_DIR$/../../apt-utils/build/generated/source/apt/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated/source/apt/main" isTestSource="false" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../apt-utils/build/generated/source/apt/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated/source/apt/test" isTestSource="true" generated="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="guice-utils" />
+    <orderEntry type="module" module-name="stream-utils" />
+    <orderEntry type="library" name="Gradle: org.antlr:antlr4:4.7.1" level="project" />
+    <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
+    <orderEntry type="library" name="Gradle: org.antlr:antlr4-runtime:4.7.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.auto.service:auto-service:1.0-rc4" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.auto.value:auto-value-annotations:1.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.auto.value:auto-value:1.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.escapevelocity:escapevelocity:0.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-text:1.4" level="project" />
+    <orderEntry type="library" name="Gradle: commons-io:commons-io:2.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.auto:auto-common:0.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:26.0-jre" level="project" />
+    <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup:javapoet:1.11.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.antlr:ST4:4.0.8" level="project" />
+    <orderEntry type="library" name="Gradle: org.antlr:antlr-runtime:3.5.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.abego.treelayout:org.abego.treelayout.core:1.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.glassfish:javax.json:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: com.ibm.icu:icu4j:58.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.7" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:2.5.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.1.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:23.5-jre" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:1.3.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:2.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.0.18" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-assistedinject:4.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject:guice:4.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.testing.compile:compile-testing:0.15" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.truth.extensions:truth-java8-extension:0.37" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.truth:truth:0.42" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.auto:auto-common:0.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:2.21.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.checkerframework:checker-qual:2.5.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.errorprone:error_prone_annotations:2.3.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy:1.8.15" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy-agent:1.8.15" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.6" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.checkerframework:checker-compat-qual:2.5.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.googlecode.java-diff-utils:diffutils:1.3.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.inject.extensions:guice-assistedinject:4.2.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.google.inject:guice:4.2.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: tools" level="project" />
+  </component>
+</module>

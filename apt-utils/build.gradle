@@ -1,0 +1,53 @@
+ext {
+    escapeVelocityVer = "0.9"
+    javaPoetVer = "1.11.1"
+    googleCompileTestingVer = "0.15"
+    googleTruthVer = "0.42"
+}
+
+apply from: "$rootProject.scriptsDir/antlr.gradle"
+
+import org.gradle.internal.jvm.Jvm
+
+generateGrammarSource {
+    arguments += ['-package', 'com.slimgears.rxrpc.apt.typeinfo']
+}
+
+configurations {
+    testOutput.extendsFrom (testImplementation)
+}
+
+task testJar(type: Jar, dependsOn: testClasses) {
+    classifier = 'tests'
+    from sourceSets.test.output
+}
+
+artifacts {
+    testOutput testJar
+}
+
+dependencies {
+    implementation project(':guice-utils')
+    implementation project(':stream-utils')
+
+    implementation "com.google.auto.service:auto-service:$autoServiceVer"
+    annotationProcessor "com.google.auto.service:auto-service:$autoServiceVer"
+    implementation"com.google.auto.value:auto-value-annotations:$autoValueVer"
+    implementation "com.google.auto.value:auto-value:$autoValueVer"
+    annotationProcessor "com.google.auto.value:auto-value:$autoValueVer"
+    implementation "com.google.escapevelocity:escapevelocity:$escapeVelocityVer"
+    implementation "org.apache.commons:commons-text:$commonsTextVer"
+    implementation "commons-io:commons-io:$commonsIoVer"
+
+    testImplementation "com.google.testing.compile:compile-testing:$googleCompileTestingVer"
+    testImplementation "com.google.truth:truth:$googleTruthVer"
+    implementation "com.google.guava:guava:$guavaVer"
+
+    implementation "org.slf4j:slf4j-api:$slf4jVer"
+    implementation "ch.qos.logback:logback-classic:$logbackVer"
+    implementation "ch.qos.logback:logback-core:$logbackVer"
+    implementation "javax.annotation:javax.annotation-api:$annotationApiVer"
+    implementation "com.squareup:javapoet:$javaPoetVer"
+
+    testImplementation files(Jvm.current().getToolsJar())
+}
