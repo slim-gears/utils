@@ -1,11 +1,9 @@
 /**
  *
  */
-package com.slimgears.rxrpc.apt;
+package com.slimgears.apt.util;
 
-import com.slimgears.rxrpc.apt.data.TypeInfo;
-import com.slimgears.rxrpc.apt.util.TypeConverter;
-import com.slimgears.rxrpc.apt.util.TypeConverters;
+import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.util.guice.ConfigProviders;
 import org.junit.Assert;
 import org.junit.Test;
