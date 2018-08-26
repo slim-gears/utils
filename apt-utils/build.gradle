@@ -26,6 +26,14 @@ artifacts {
     testOutput testJar
 }
 
+publishing {
+    publications {
+        maven {
+            artifact project.tasks.testJar
+        }
+    }
+}
+
 dependencies {
     implementation project(':guice-utils')
     implementation project(':stream-utils')
