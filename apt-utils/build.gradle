@@ -10,7 +10,7 @@ apply from: "$rootProject.scriptsDir/antlr.gradle"
 import org.gradle.internal.jvm.Jvm
 
 generateGrammarSource {
-    arguments += ['-package', 'com.slimgears.rxrpc.apt.typeinfo']
+    arguments += ['-package', 'com.slimgears.apt.typeinfo']
 }
 
 configurations {

@@ -13,6 +13,9 @@
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/classes" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated-src" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/out" />
     </content>
