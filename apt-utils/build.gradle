@@ -28,7 +28,7 @@ artifacts {
 
 publishing {
     publications {
-        maven {
+        mavenJava {
             artifact project.tasks.testJar
         }
     }
