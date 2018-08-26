@@ -1,4 +1,4 @@
-group 'com.slimgears.utils'
+group 'com.github.slim-gears.utils'
 version '0.1-SNAPSHOT'
 
 buildscript {

@@ -42,7 +42,7 @@ public class TypeConversionModule extends AbstractModule {
         convertToTypes(is(ImmutableList.class), collectionConverter(getProvider(Injector.class), ImmutableList::copyOf));
         convertToTypes(is(Collection.class), collectionConverter(getProvider(Injector.class), ImmutableList::copyOf));
         convertToTypes(is(ImmutableCollection.class), collectionConverter(getProvider(Injector.class), ImmutableList::copyOf));
-        convertToTypes(isOnly(Pattern.class), converter(TypeConversionModule::fromWildcard));
+        convertToTypes(isOnly(Pattern.class), converter(Pattern::compile));
         convertToTypes(isOnly(Path.class), converter(Paths::get));
         convertToTypes(isOnly(File.class), converter(File::new));
         convertToTypes(isOnly(URI.class), converter(URI::create));
@@ -153,14 +153,10 @@ public class TypeConversionModule extends AbstractModule {
         return Matchers.only(TypeLiteral.get(cls));
     }
 
-    private static Pattern fromWildcard(String wildcard) {
-        return Pattern.compile(wildcard.replaceAll("\\*", ".*"));
-    }
-
     public static class Builder {
         private final Collection<Consumer<Binder>> bindings = new ArrayList<>();
 
-        interface ConversionBuilder<T> {
+        public interface ConversionBuilder<T> {
             Builder convert(Function<String, T> converter);
         }
 
