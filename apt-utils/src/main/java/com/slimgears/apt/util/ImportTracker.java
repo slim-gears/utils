@@ -3,6 +3,7 @@
  */
 package com.slimgears.apt.util;
 
+import com.google.common.collect.ImmutableSet;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
 
@@ -16,18 +17,14 @@ public class ImportTracker {
     private final Collection<String> imports = new TreeSet<>();
     private final Collection<TypeInfo> usedClasses = new TreeSet<>(TypeInfo.comparator);
     private final Collection<TypeInfo> knownClasses = new HashSet<>();
-    private final String selfPackageName;
+    private final ImmutableSet<String> knownPackageNames;
 
-    public static ImportTracker create(String selfPackageName) {
-        return new ImportTracker(selfPackageName);
+    public static ImportTracker create(String... knownPackageNames) {
+        return new ImportTracker(knownPackageNames);
     }
 
-    public static ImportTracker create() {
-        return create("");
-    }
-
-    private ImportTracker(String selfPackageName) {
-        this.selfPackageName = selfPackageName;
+    private ImportTracker(String... knownPackageNames) {
+        this.knownPackageNames = ImmutableSet.copyOf(knownPackageNames);
     }
 
     public String[] imports() {
@@ -63,7 +60,7 @@ public class ImportTracker {
                 : TypeInfo.of(typeInfo.name()));
 
         String packageName = typeInfo.packageName();
-        if (!packageName.isEmpty() && !packageName.equals(selfPackageName)) {
+        if (!packageName.isEmpty() && !knownPackageNames.contains(packageName)) {
             imports.add(packageName + "." + typeInfo.simpleName());
         }
         TypeInfo.Builder builder = TypeInfo.builder().name(typeInfo.simpleName());

@@ -41,11 +41,11 @@ public interface HasTypeParameters {
             return (B)this;
         }
 
-        default B paramsFromMethod(ExecutableElement element) {
+        default B typeParamsFromMethod(ExecutableElement element) {
             return typeParams(element.getTypeParameters());
         }
 
-        default B paramsFromMethod(ExecutableType executableType) {
+        default B typeParamsFromMethod(ExecutableType executableType) {
             executableType.getTypeVariables().stream().map(TypeParameterInfo::of).forEach(this::typeParam);
             //noinspection unchecked
             return (B)this;

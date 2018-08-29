@@ -10,6 +10,13 @@ import javax.lang.model.element.ExecutableElement;
 public interface HasMethods {
     ImmutableList<MethodInfo> methods();
 
+    default ImmutableList<MethodInfo> constructors() {
+        return methods()
+                .stream()
+                .filter(m -> "<init>".equals(m.name()))
+                .collect(ImmutableList.toImmutableList());
+    }
+
     interface Builder<B extends Builder<B>> {
         ImmutableList.Builder<MethodInfo> methodsBuilder();
 

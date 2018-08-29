@@ -1,7 +1,6 @@
 package com.slimgears.apt.data;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableList;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
@@ -12,8 +11,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @AutoValue
-public abstract class MethodInfo implements HasName, HasAnnotations, HasTypeParameters {
-    public abstract ImmutableList<ParamInfo> params();
+public abstract class MethodInfo implements HasName, HasAnnotations, HasParameters, HasTypeParameters {
     public abstract TypeInfo returnType();
 
     public static Builder builder() {
@@ -24,6 +22,7 @@ public abstract class MethodInfo implements HasName, HasAnnotations, HasTypePara
         Builder builder = builder()
                 .name(executableElement.getSimpleName().toString())
                 .paramsFromMethod(executableElement)
+                .typeParamsFromMethod(executableElement)
                 .returnType(TypeInfo.of(executableElement.getReturnType()));
 
         executableElement.getParameters()
@@ -38,14 +37,20 @@ public abstract class MethodInfo implements HasName, HasAnnotations, HasTypePara
         ExecutableType executableType = (ExecutableType)Environment.instance().types().asMemberOf(containingType, element);
         Builder builder = builder()
                 .name(element.getSimpleName().toString())
-                .paramsFromMethod(executableType)
+                .annotationsFromElement(element)
+                .typeParamsFromMethod(executableType)
                 .returnType(TypeInfo.of(executableType.getReturnType()));
 
         List<? extends VariableElement> paramElements = element.getParameters();
         List<? extends TypeMirror> paramTypes = executableType.getParameterTypes();
 
         IntStream.range(0, paramElements.size())
-                .mapToObj(i -> ParamInfo.create(paramElements.get(i).getSimpleName().toString(), TypeInfo.of(paramTypes.get(i))))
+                .mapToObj(i -> ParamInfo
+                        .builder()
+                        .name(paramElements.get(i).getSimpleName().toString())
+                        .type(TypeInfo.of(paramTypes.get(i)))
+                        .annotationsFromElement(paramElements.get(i))
+                        .build())
                 .forEach(builder::addParam);
 
         return builder.build();
@@ -55,18 +60,9 @@ public abstract class MethodInfo implements HasName, HasAnnotations, HasTypePara
     public interface Builder extends
             InfoBuilder<MethodInfo>,
             HasName.Builder<Builder>,
+            HasParameters.Builder<Builder>,
             HasAnnotations.Builder<Builder>,
             HasTypeParameters.Builder<Builder> {
-        ImmutableList.Builder<ParamInfo> paramsBuilder();
         Builder returnType(TypeInfo type);
-
-        default Builder addParam(ParamInfo param) {
-            paramsBuilder().add(param);
-            return this;
-        }
-
-        default Builder addParam(String name, TypeInfo type) {
-            return addParam(ParamInfo.create(name, type));
-        }
     }
 }

@@ -7,9 +7,30 @@ import com.google.common.collect.ImmutableList;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import java.lang.annotation.Annotation;
 
 public interface HasAnnotations {
     ImmutableList<AnnotationInfo> annotations();
+
+    default AnnotationInfo getAnnotation(TypeInfo atype) {
+        return annotations()
+                .stream()
+                .filter(a -> a.type().equals(atype))
+                .findFirst()
+                .orElse(null);
+    }
+
+    default AnnotationInfo getAnnotation(Class<? extends Annotation> aclass) {
+        return getAnnotation(TypeInfo.of(aclass));
+    }
+
+    default boolean hasAnnotation(TypeInfo atype) {
+        return annotations().stream().anyMatch(a -> a.type().equals(atype));
+    }
+
+    default boolean hasAnnotation(Class<? extends Annotation> aclass) {
+        return hasAnnotation(TypeInfo.of(aclass));
+    }
 
     interface Builder<B extends Builder<B>> {
         ImmutableList.Builder<AnnotationInfo> annotationsBuilder();

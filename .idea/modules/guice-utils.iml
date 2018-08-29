@@ -12,7 +12,9 @@
       <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build/docs" />
       <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build/publications" />
       <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/../../guice-utils/build/tmp" />

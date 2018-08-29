@@ -22,7 +22,9 @@ public class ConfigProviders {
     public static ConfigProvider loadFrom(Callable<InputStream> streamSupplier) {
         return props -> {
             try (InputStream stream = streamSupplier.call()) {
-                props.load(stream);
+                if (stream != null) {
+                    props.load(stream);
+                }
             } catch (Exception e) {
                 throw new RuntimeException("Error occurred when loading properties", e);
             }

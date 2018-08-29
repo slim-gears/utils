@@ -7,22 +7,24 @@
     <content url="file://$MODULE_DIR$/../../apt-utils">
       <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/main/antlr" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/test/antlr" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/main" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/docs" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated-src" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/publications" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/out" />
     </content>
     <content url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/generated" />
-    <content url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/main" isTestSource="false" />
-    </content>
+    <content url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/main" />
     <content url="file://$MODULE_DIR$/../../apt-utils/build/generated-src/antlr/test" />
     <content url="file://$MODULE_DIR$/../../apt-utils/build/generated/source/apt/main">
       <sourceFolder url="file://$MODULE_DIR$/../../apt-utils/build/generated/source/apt/main" isTestSource="false" generated="true" />
@@ -60,10 +62,10 @@
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:guava:23.5-jre" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:1.3.9" level="project" />
-    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:2.0.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.0.18" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:23.5-jre" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.findbugs:jsr305:1.3.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.checkerframework:checker-qual:2.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.errorprone:error_prone_annotations:2.0.18" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-assistedinject:4.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject:guice:4.2.0" level="project" />

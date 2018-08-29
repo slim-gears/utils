@@ -3,6 +3,7 @@
  */
 package com.slimgears.apt.util;
 
+import com.google.common.base.Preconditions;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 
@@ -170,18 +171,30 @@ public class ElementUtils {
     }
 
     public static <A extends Annotation> TypeInfo[] typesFromAnnotation(A annotation, Function<A, Class[]> classRetriever) {
+        return Stream
+                .of(typeMirrorsFromAnnotation(annotation, classRetriever))
+                .map(TypeInfo::of)
+                .toArray(TypeInfo[]::new);
+    }
+
+    public static <A extends Annotation> TypeMirror[] typeMirrorsFromAnnotation(A annotation, Function<A, Class[]> classRetriever) {
         try {
-            return Stream.of(classRetriever.apply(annotation)).map(TypeInfo::of).toArray(TypeInfo[]::new);
+            return Stream.of(classRetriever.apply(annotation)).toArray(TypeMirror[]::new);
         } catch (MirroredTypesException e) {
-            return e.getTypeMirrors().stream().map(TypeInfo::of).toArray(TypeInfo[]::new);
+            return e.getTypeMirrors().toArray(new TypeMirror[0]);
         }
     }
 
     public static <A extends Annotation> TypeInfo typeFromAnnotation(A annotation, Function<A, Class> classRetriever) {
+        return TypeInfo.of(Preconditions.checkNotNull(typeMirrorFromAnnotation(annotation, classRetriever)));
+    }
+
+    public static <A extends Annotation> TypeMirror typeMirrorFromAnnotation(A annotation, Function<A, Class> classRetriever) {
         try {
-            return TypeInfo.of(classRetriever.apply(annotation));
+            classRetriever.apply(annotation);
+            return null;
         } catch (MirroredTypeException e) {
-            return TypeInfo.of(e.getTypeMirror());
+            return e.getTypeMirror();
         }
     }
 

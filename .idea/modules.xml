@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils.iml" filepath="$PROJECT_DIR$/utils.iml" />

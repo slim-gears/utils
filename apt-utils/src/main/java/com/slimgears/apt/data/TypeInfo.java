@@ -126,7 +126,7 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public static TypeInfo of(Type type) {
-        return of(type.getTypeName());
+        return of(type.getTypeName().replace('$', '.'));
     }
 
     public static TypeInfo of(TypeElement typeElement) {
