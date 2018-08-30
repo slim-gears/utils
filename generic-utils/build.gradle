@@ -1,28 +1,13 @@
 sourceSets {
     apt {
-        java {
-            srcDir 'src/apt/java'
-        }
-    }
-}
-
-task aptJar(type: Jar, dependsOn: classes) {
-    classifier = 'apt'
-    from sourceSets.apt.output
-}
-
-publishing {
-    publications {
-        mavenJava {
-            artifact project.tasks.aptJar
-        }
+        java.srcDir 'src/apt/java'
     }
 }
 
 dependencies {
     aptImplementation project(':apt-utils')
     aptImplementation project(':stream-utils')
-    aptImplementation sourceSets.main.output
+    aptImplementation project(':generic-utils')
     aptImplementation "com.google.auto.service:auto-service:$autoServiceVer"
     aptImplementation "com.google.guava:guava:$guavaVer"
     aptImplementation "com.google.auto.value:auto-value-annotations:$autoValueVer"

@@ -26,9 +26,9 @@ artifacts {
     testOutput testJar
 }
 
-publishing {
-    publications {
-        mavenJava {
+project.afterEvaluate {
+    project.publishing.publications {
+        mainMaven {
             artifact project.tasks.testJar
         }
     }

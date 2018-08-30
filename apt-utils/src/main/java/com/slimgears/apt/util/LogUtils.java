@@ -48,7 +48,7 @@ public class LogUtils {
     }
 
     private static class MessagerAppender extends AppenderBase<ILoggingEvent> {
-        private final static ImmutableMap<Level, Diagnostic.Kind> loglevelMap = ImmutableMap.<Level, Diagnostic.Kind>builder()
+        private final static ImmutableMap<Level, Diagnostic.Kind> logLevelMap = ImmutableMap.<Level, Diagnostic.Kind>builder()
                 .put(Level.TRACE, Diagnostic.Kind.OTHER)
                 .put(Level.DEBUG, Diagnostic.Kind.OTHER)
                 .put(Level.INFO, Diagnostic.Kind.NOTE)
@@ -81,7 +81,7 @@ public class LogUtils {
 
         @Override
         protected void append(ILoggingEvent eventObject) {
-            Diagnostic.Kind kind = loglevelMap.get(eventObject.getLevel());
+            Diagnostic.Kind kind = logLevelMap.get(eventObject.getLevel());
             this.messager.printMessage(kind, eventObject.getFormattedMessage());
         }
     }
