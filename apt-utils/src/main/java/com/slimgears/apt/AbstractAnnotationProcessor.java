@@ -8,15 +8,21 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.slimgears.util.stream.Streams.ofType;
+import static com.slimgears.util.stream.Streams.takeWhile;
 
+@SupportedOptions(LogUtils.verbosityOption)
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -71,4 +77,22 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     protected boolean processMethod(TypeElement annotationType, ExecutableElement methodElement) { return false; }
     protected boolean processField(TypeElement annotationType, VariableElement variableElement) { return false; }
+
+    @Override
+    public Set<String> getSupportedOptions() {
+        return Stream
+                .concat(
+                        takeWhile(Stream.iterate((Class)getClass(), Class::getSuperclass), cls -> cls != Object.class)
+                                .flatMap(cls -> Optional
+                                        .ofNullable(((Class<?>)cls).getAnnotation(SupportedOptions.class))
+                                        .map(SupportedOptions::value)
+                                        .map(Arrays::stream)
+                                        .orElseGet(Stream::empty)),
+                        getAdditionalSupportedOptions())
+                .collect(Collectors.toSet());
+    }
+
+    protected Stream<String> getAdditionalSupportedOptions() {
+        return Stream.empty();
+    }
 }

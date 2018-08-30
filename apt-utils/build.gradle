@@ -1,10 +1,3 @@
-ext {
-    escapeVelocityVer = "0.9"
-    javaPoetVer = "1.11.1"
-    googleCompileTestingVer = "0.15"
-    googleTruthVer = "0.42"
-}
-
 apply from: "$rootProject.scriptsDir/antlr.gradle"
 
 import org.gradle.internal.jvm.Jvm
@@ -38,24 +31,23 @@ dependencies {
     implementation project(':guice-utils')
     implementation project(':stream-utils')
 
-    implementation "com.google.auto.service:auto-service:$autoServiceVer"
-    annotationProcessor "com.google.auto.service:auto-service:$autoServiceVer"
-    implementation"com.google.auto.value:auto-value-annotations:$autoValueVer"
-    implementation "com.google.auto.value:auto-value:$autoValueVer"
-    annotationProcessor "com.google.auto.value:auto-value:$autoValueVer"
-    implementation "com.google.escapevelocity:escapevelocity:$escapeVelocityVer"
-    implementation "org.apache.commons:commons-text:$commonsTextVer"
-    implementation "commons-io:commons-io:$commonsIoVer"
+    compileOnly libs.autoService
+    annotationProcessor libs.autoService
+    compileOnly libs.autoValueAnnotations
+    annotationProcessor libs.autoValue
+    implementation libs.escapeVelocity
+    implementation libs.commonsText
+    implementation libs.commonsIo
 
-    testImplementation "com.google.testing.compile:compile-testing:$googleCompileTestingVer"
-    testImplementation "com.google.truth:truth:$googleTruthVer"
-    implementation "com.google.guava:guava:$guavaVer"
+    testImplementation libs.googleCompileTesting
+    testImplementation libs.googleTruth
+    implementation libs.guava
 
-    implementation "org.slf4j:slf4j-api:$slf4jVer"
-    implementation "ch.qos.logback:logback-classic:$logbackVer"
-    implementation "ch.qos.logback:logback-core:$logbackVer"
-    implementation "javax.annotation:javax.annotation-api:$annotationApiVer"
-    implementation "com.squareup:javapoet:$javaPoetVer"
+    implementation libs.slf4j
+    implementation libs.logbackClassic
+    implementation libs.logbackCore
+    implementation libs.javaxAnnotationApi
+    implementation libs.javaPoet
 
     testImplementation files(Jvm.current().getToolsJar())
 }

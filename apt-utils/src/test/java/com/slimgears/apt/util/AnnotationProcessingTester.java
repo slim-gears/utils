@@ -32,7 +32,7 @@ public class AnnotationProcessingTester {
     private final Collection<AbstractProcessor> processors = new ArrayList<>();
     private final Collection<String> options = new ArrayList<>();
     private final Collection<Function<CompileTester.SuccessfulCompilationClause, CompileTester.SuccessfulCompilationClause>> assertions = new ArrayList<>();
-    private Level verbosityLevel = Level.DEBUG;
+    private Level verbosityLevel = Level.INFO;
 
     public static AnnotationProcessingTester create() {
         return new AnnotationProcessingTester();

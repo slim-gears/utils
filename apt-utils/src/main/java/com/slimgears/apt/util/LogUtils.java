@@ -18,10 +18,11 @@ import javax.tools.Diagnostic;
 import java.util.Optional;
 
 public class LogUtils {
+    public final static String verbosityOption = "verbosity";
     private final static Logger log = LoggerFactory.getLogger(LogUtils.class);
 
     public static SelfClosable applyLogging(ProcessingEnvironment environment) {
-        setVerbosity(environment.getOptions().get("verbosity"));
+        setVerbosity(environment.getOptions().get(verbosityOption));
         return MessagerAppender.install(environment.getMessager());
     }
 

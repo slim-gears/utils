@@ -8,12 +8,13 @@ dependencies {
     aptImplementation project(':apt-utils')
     aptImplementation project(':stream-utils')
     aptImplementation project(':generic-utils')
-    aptImplementation "com.google.auto.service:auto-service:$autoServiceVer"
-    aptImplementation "com.google.guava:guava:$guavaVer"
-    aptImplementation "com.google.auto.value:auto-value-annotations:$autoValueVer"
-    aptImplementation "com.google.auto.value:auto-value:$autoValueVer"
-    aptAnnotationProcessor "com.google.auto.value:auto-value:$autoValueVer"
-    aptAnnotationProcessor "com.google.auto.service:auto-service:$autoServiceVer"
+
+    aptCompileOnly libs.autoService
+    aptAnnotationProcessor libs.autoService
+    aptImplementation libs.guava
+    aptCompileOnly libs.autoValueAnnotations
+    aptAnnotationProcessor libs.autoValue
+
     testImplementation sourceSets.apt.output
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
 }
