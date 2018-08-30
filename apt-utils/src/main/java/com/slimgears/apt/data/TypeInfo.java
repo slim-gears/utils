@@ -35,21 +35,26 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
             .put(TypeInfo.of(char.class), TypeInfo.of(Character.class))
             .build();
 
+    public abstract int arrayDimensions();
+
     public abstract Builder toBuilder();
 
     public String fullName() {
-        return (typeParams().isEmpty())
+        String name = typeParams().isEmpty()
                 ? name()
-                : name() + typeParams()
-                .stream()
-                .map(TypeParameterInfo::typeName)
-                .collect(Collectors.joining(", ", "<", ">"));
+                : name() + typeParams().stream()
+                        .map(TypeParameterInfo::typeName)
+                        .collect(Collectors.joining(", ", "<", ">"));
+
+        return name + dimensionsToString();
     }
 
     public Optional<TypeInfo> elementType() {
-        return typeParams().isEmpty()
-                ? isArray() ? Optional.of(of(name().substring(0, name().indexOf("[]")))) : Optional.empty()
-                : Optional.of(typeParams().get(0).type());
+        return isArray()
+                ? Optional.of(toBuilder().arrayDimensions(0).build())
+                : !typeParams().isEmpty()
+                        ? Optional.of(typeParams().get(0).type())
+                        : Optional.empty();
     }
 
     public TypeInfo elementTypeOrVoid() {
@@ -61,7 +66,11 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public String simpleName() {
-        return name().substring(name().lastIndexOf('.') + 1);
+        return name().substring(name().lastIndexOf('.') + 1) + dimensionsToString();
+    }
+
+    public String erasureName() {
+        return name() + dimensionsToString();
     }
 
     public String packageName() {
@@ -69,7 +78,7 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public boolean isArray() {
-        return name().endsWith("[]");
+        return arrayDimensions() > 0;
     }
 
     public boolean is(String name) {
@@ -89,7 +98,7 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public static Builder builder() {
-        return new AutoValue_TypeInfo.Builder();
+        return new AutoValue_TypeInfo.Builder().arrayDimensions(0);
     }
 
     public static TypeInfo ofWildcard() {
@@ -105,9 +114,9 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public static TypeInfo arrayOf(TypeInfo typeInfo, int dimensions) {
-        return builder().name(typeInfo
-                .elementTypeOrSelf()
-                .name() + IntStream.range(0, dimensions).mapToObj(i -> "[]").collect(Collectors.joining()))
+        return typeInfo
+                .toBuilder()
+                .arrayDimensions(typeInfo.arrayDimensions() + dimensions)
                 .build();
     }
 
@@ -152,6 +161,7 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
             HasMethods.Builder<Builder>,
             HasTypeParameters.Builder<Builder>,
             HasAnnotations.Builder<Builder> {
+        public Builder arrayDimensions(int dimensions);
     }
 
     public TypeInfo asBoxed() {
@@ -170,5 +180,9 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
 
     public static String packageName(Name name) {
         return packageName(name.toString());
+    }
+
+    private String dimensionsToString() {
+        return IntStream.range(0, arrayDimensions()).mapToObj(i -> "[]").collect(Collectors.joining());
     }
 }

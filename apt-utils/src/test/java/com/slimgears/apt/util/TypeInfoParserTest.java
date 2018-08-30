@@ -7,6 +7,28 @@ import org.junit.Test;
 
 public class TypeInfoParserTest {
     @Test
+    public void testElementType() {
+        TypeInfo typeInfo = TypeInfo.of("java.util.List<java.lang.String[]>[][][]");
+        Assert.assertEquals("java.util.List<java.lang.String[]>", typeInfo.elementTypeOrSelf().fullName());
+        Assert.assertEquals("java.lang.String[]", typeInfo.elementTypeOrSelf().elementTypeOrSelf().fullName());
+        Assert.assertEquals("java.lang.String", typeInfo.elementTypeOrSelf().elementTypeOrSelf().elementTypeOrSelf().fullName());
+    }
+
+    @Test
+    public void testTypeInfoArrayParser() {
+        TypeInfo typeInfo = TypeInfoParserAdapter.toTypeInfo("java.util.List<java.lang.String[]>[]");
+        Assert.assertEquals("java.lang.String[]", TypeInfo.of("java.lang.String[]").fullName());
+
+        Assert.assertEquals("java.util.List<java.lang.String[]>[]", typeInfo.fullName());
+        Assert.assertEquals("java.util.List[]", typeInfo.erasureName());
+        Assert.assertEquals("List[]", typeInfo.simpleName());
+        Assert.assertEquals("java.util", typeInfo.packageName());
+        Assert.assertEquals("java.util.List<java.lang.String[]>", typeInfo.elementTypeOrSelf().fullName());
+        Assert.assertEquals("java.lang.String[]", typeInfo.elementTypeOrSelf().elementTypeOrSelf().fullName());
+        Assert.assertEquals("java.lang.String", typeInfo.elementTypeOrSelf().elementTypeOrSelf().elementTypeOrSelf().fullName());
+    }
+
+    @Test
     public void testTypeInfoParser() {
         TypeInfo typeInfo = TypeInfoParserAdapter.toTypeInfo("java.util.List<java.util.Map<java.lang.String, java.util.List<java.lang.String>>>");
         Assert.assertEquals("java.util.List", typeInfo.name());

@@ -25,6 +25,18 @@ public class TypeConvertersTest {
     private final static TypeConverter propertiesTypeConverter = TypeConverters.fromProperties(properties);
 
     @Test
+    public void testArrayAndListConverterFromProperties() {
+        Properties properties = ConfigProviders.create(
+                p -> p.put("java.lang.String", "string"),
+                p -> p.put("T[]", "${T}[]"));
+        TypeConverter converter = TypeConverters.fromProperties(properties);
+
+        testConversion(converter,
+                TypeInfo.of(String[].class),
+                TypeInfo.of("string[]"));
+    }
+
+    @Test
     public void testTypeConverterFromProperties() {
         testConversion(
                 TypeInfo.of(Map.class.getName(), TypeInfo.of(String.class), TypeInfo.of(Integer.class)),
@@ -44,8 +56,12 @@ public class TypeConvertersTest {
     }
 
     private void testConversion(TypeInfo from, TypeInfo expected) {
-        Assert.assertTrue(propertiesTypeConverter.canConvert(from));
-        TypeInfo actual = propertiesTypeConverter.convert(propertiesTypeConverter, from);
+        testConversion(propertiesTypeConverter, from, expected);
+    }
+
+    private void testConversion(TypeConverter typeConverter, TypeInfo from, TypeInfo expected) {
+        Assert.assertTrue(typeConverter.canConvert(from));
+        TypeInfo actual = typeConverter.convert(typeConverter, from);
         Assert.assertEquals(expected, actual);
     }
 }

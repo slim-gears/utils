@@ -61,8 +61,10 @@ public class ImportTracker {
 
         String packageName = typeInfo.packageName();
         if (!packageName.isEmpty() && !knownPackageNames.contains(packageName)) {
-            imports.add(packageName + "." + typeInfo.simpleName());
+            TypeInfo importType = typeInfo.isArray() ? typeInfo.elementTypeOrSelf() : typeInfo;
+            imports.add(importType.name());
         }
+
         TypeInfo.Builder builder = TypeInfo.builder().name(typeInfo.simpleName());
         typeInfo.typeParams().stream().map(TypeParameterInfo::type)
                 .map(this::simplify)

@@ -97,11 +97,11 @@ public class TypeConverters {
     }
 
     private static boolean areTypesMatching(TypeInfo left, TypeInfo right) {
-        if (left.isArray() && right.isArray()) {
-            return true;
+        if (left.arrayDimensions() != right.arrayDimensions()) {
+            return false;
         }
 
-        if (!Objects.equals(left.name(), right.name())) {
+        if (!left.isArray() && !Objects.equals(left.name(), right.name())) {
             return false;
         }
 
@@ -111,7 +111,7 @@ public class TypeConverters {
     private static TypeInfo typeFromTemplate(TypeConverter upstream, TypeInfo patternType, TypeInfo sourceType, String template) {
         Map<String, TypeInfo> paramMap = new HashMap<>();
         if (patternType.isArray()) {
-            String name = patternType.elementTypeOrSelf().name();
+            String name = patternType.elementTypeOrSelf().fullName();
             TypeInfo type = sourceType.elementTypeOrSelf();
             paramMap.put(name, upstream.convert(upstream, type));
         } else {
