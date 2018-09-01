@@ -19,6 +19,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/poms" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/publications" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/resources" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/build/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/../../apt-utils/out" />

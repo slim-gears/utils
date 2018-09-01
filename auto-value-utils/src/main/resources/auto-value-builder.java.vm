@@ -1,0 +1,26 @@
+package $targetClass.packageName();
+
+$imports
+
+@$[javax.annotation.Generated]("$processor")
+public interface $targetClass.simpleName()<##
+#foreach ($tp in $sourceClass.typeParams())##
+    $tp.type(), ##
+#end##
+B extends $targetClass.simpleName()<##
+#foreach ($tp in $sourceClass.typeParams())##
+    $tp.type(), ##
+#end##
+B>> {
+#foreach ($p in $properties)##
+    #foreach ($a in $p.annotations())
+    $a.asString()
+##
+    #end
+    @$[com.fasterxml.jackson.annotation.JsonProperty]("$p.name()")
+    B ${p.name()}($[$p.type()] $p.name());
+#if ($foreach.hasNext)
+
+#end
+#end
+}

@@ -2,4 +2,5 @@ include 'stream-utils'
 include 'guice-utils'
 include 'apt-utils'
 include 'generic-utils'
+include 'auto-value-utils'
 

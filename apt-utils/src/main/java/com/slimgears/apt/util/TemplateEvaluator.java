@@ -1,18 +1,23 @@
 package com.slimgears.apt.util;
 
 import com.google.escapevelocity.Template;
+import com.slimgears.util.stream.Safe;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,22 +26,24 @@ public class TemplateEvaluator {
     private final Map<String, Object> templateVariables = new HashMap<>();
     private final Collection<Function<String, String>> preProcessors = new ArrayList<>();
     private final Collection<Function<String, String>> postProcessors = new ArrayList<>();
-    private final Supplier<Reader> reader;
+    private final String resourceName;
+    private final Template.ResourceOpener resourceOpener;
 
-    private TemplateEvaluator(Supplier<Reader> reader) {
-        this.reader = reader;
-    }
-
-    public static TemplateEvaluator forReader(Supplier<Reader> reader) {
-        return new TemplateEvaluator(reader);
-    }
-
-    public static TemplateEvaluator forStream(Supplier<InputStream> stream) {
-        return forReader(() -> new InputStreamReader(stream.get()));
+    private TemplateEvaluator(String resourceName, Template.ResourceOpener resourceOpener) {
+        preProcess(TemplateUtils::preProcessWhitespace);
+        postProcess(TemplateUtils::postProcessWhitespace);
+        this.resourceName = resourceName;
+        this.resourceOpener = applyPreprocessing(resourceOpener);
     }
 
     public static TemplateEvaluator forResource(String path) {
-        return forStream(() -> TemplateEvaluator.class.getResourceAsStream(path));
+        return new TemplateEvaluator(path, combine(fromResources(), fromDirectory()));
+    }
+
+    public static TemplateEvaluator forFile(String path) {
+        Path filePath = Paths.get(path);
+        Path parent = filePath.getParent();
+        return new TemplateEvaluator(filePath.getFileName().toString(), combine(fromDirectory(parent.toString()), fromResources()));
     }
 
     public TemplateEvaluator preProcess(Function<String, String> postProcessor) {
@@ -82,18 +89,7 @@ public class TemplateEvaluator {
 
     public String evaluate() {
         try {
-            String templateCode = IOUtils.toString(reader.get());
-            templateCode = preProcessors
-                    .stream()
-                    .reduce((a, b) -> str -> b.apply(a.apply(str)))
-                    .orElse(str -> str)
-                    .apply(templateCode);
-
-            log.trace("Preprocessed template:");
-            LogUtils.dumpContent(templateCode);
-
-            StringReader strReader = new StringReader(templateCode);
-            Template template = Template.parseFrom(strReader);
+            Template template = Template.parseFrom(resourceName, resourceOpener);
             String source = template.evaluate(templateVariables);
             return postProcessors
                     .stream()
@@ -107,5 +103,49 @@ public class TemplateEvaluator {
 
     public void write(Consumer<String> writer) {
         writer.accept(evaluate());
+    }
+
+    private String preProcess(String templateCode) {
+        return preProcessors
+                .stream()
+                .reduce((a, b) -> str -> b.apply(a.apply(str)))
+                .orElse(str -> str)
+                .apply(templateCode);
+    }
+
+    private static Template.ResourceOpener fromResources() {
+        return path -> Optional
+                .ofNullable(TemplateEvaluator.class.getResourceAsStream("/" + path))
+                .map(InputStreamReader::new)
+                .orElse(null);
+    }
+
+    private static Template.ResourceOpener fromDirectory(String dir) {
+        return path -> Optional.of(Paths.get(dir, path))
+                .map(Safe.ofFunction(Files::newBufferedReader))
+                .orElse(null);
+    }
+    private static Template.ResourceOpener fromDirectory() {
+        return path -> Optional.of(Paths.get(path))
+                .map(Safe.ofFunction(Files::newBufferedReader))
+                .orElse(null);
+    }
+
+    private static Template.ResourceOpener combine(Template.ResourceOpener... openers) {
+        return path -> Arrays
+                .stream(openers)
+                .map(Safe.ofFunction(o -> o.openResource(path)))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Template.ResourceOpener applyPreprocessing(Template.ResourceOpener opener) {
+        return path -> Optional
+                .ofNullable(opener.openResource(path))
+                .map(Safe.ofFunction(IOUtils::toString))
+                .map(this::preProcess)
+                .map(StringReader::new)
+                .orElse(null);
     }
 }

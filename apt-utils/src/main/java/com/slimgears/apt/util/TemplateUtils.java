@@ -44,4 +44,18 @@ public class TemplateUtils {
         builder.append(code, prevPos, len);
         return builder.toString();
     }
+
+    public static String preProcessWhitespace(String template) {
+        template = template.replace("\r\n", "\n").replace("\r", "\n");
+        Pattern redundantWhiteSpace = Pattern.compile("(##\\n) +([^ ])", Pattern.DOTALL);
+        return redundantWhiteSpace.matcher(template).replaceAll("$1$2");
+    }
+
+    public static String postProcessWhitespace(String template) {
+        template = template.replace("\r\n", "\n").replace("\r", "\n");
+        Pattern redundantWhiteSpace = Pattern.compile("([^\\s]+[ ])[ ]+([^ ])", Pattern.DOTALL);
+        Pattern doubleNewLines = Pattern.compile("\\n\\s*\\n\\s*\\n", Pattern.DOTALL);
+        template = redundantWhiteSpace.matcher(template).replaceAll("$1$2");
+        return doubleNewLines.matcher(template).replaceAll("\n\n");
+    }
 }

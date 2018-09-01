@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/apt-utils" />
+            <option value="$PROJECT_DIR$/auto-value-utils" />
             <option value="$PROJECT_DIR$/generic-utils" />
             <option value="$PROJECT_DIR$/guice-utils" />
             <option value="$PROJECT_DIR$/stream-utils" />

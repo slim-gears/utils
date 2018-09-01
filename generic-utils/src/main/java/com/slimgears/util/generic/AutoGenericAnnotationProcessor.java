@@ -11,11 +11,7 @@ import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.MethodInfo;
 import com.slimgears.apt.data.TypeInfo;
-import com.slimgears.apt.util.ElementUtils;
-import com.slimgears.apt.util.ImportTracker;
-import com.slimgears.apt.util.JavaUtils;
-import com.slimgears.apt.util.NameTemplateUtils;
-import com.slimgears.apt.util.TemplateEvaluator;
+import com.slimgears.apt.util.*;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -24,7 +20,6 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -91,7 +86,7 @@ public class AutoGenericAnnotationProcessor extends AbstractAnnotationProcessor 
         ImportTracker importTracker = ImportTracker.create(packageName, "java.lang");
 
         TemplateEvaluator
-                .forResource("/auto-generic.java.vm")
+                .forResource("auto-generic.java.vm")
                 .variable("packageName", packageName)
                 .variable("processor", getClass().getName())
                 .variable("imports", importTracker)

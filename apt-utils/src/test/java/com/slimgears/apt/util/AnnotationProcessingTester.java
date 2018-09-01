@@ -7,6 +7,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.testing.compile.CompileTester;
 import com.google.testing.compile.JavaFileObjects;
+import com.google.testing.compile.JavaSourcesSubject;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.event.Level;
 
@@ -79,10 +80,12 @@ public class AnnotationProcessingTester {
     public void test() {
         options("-Averbosity=" + verbosityLevel);
 
-        CompileTester.SuccessfulCompilationClause compilationClause = assert_()
+        JavaSourcesSubject subject = assert_()
                 .about(javaSources())
                 .that(inputFiles)
-                .withCompilerOptions(options)
+                .withCompilerOptions(options);
+
+        CompileTester.SuccessfulCompilationClause compilationClause = subject
                 .processedWith(processors)
                 .compilesWithoutError();
 

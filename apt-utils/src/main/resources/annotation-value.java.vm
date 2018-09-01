@@ -1,0 +1,9 @@
+@$[$annotation.type()]##
+#if ($annotation.hasValues())##
+(##
+    #foreach ($v in $annotation.values())##
+        $v.name() = $v.value().asString()##
+        #if ($foreach.hasNext), #end##
+    #end##
+)##
+#end##

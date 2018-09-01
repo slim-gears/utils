@@ -1,0 +1,15 @@
+package com.slimgears.sample;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
+
+@AutoValuePrototype
+public interface SampleValuePrototype {
+    int intValue();
+
+    @SampleFieldAnnotation(strValue = "test")
+    double doubleValue();
+
+    @SampleFieldAnnotation
+    String strValue();
+}

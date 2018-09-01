@@ -2,11 +2,7 @@ package com.slimgears.util.generic;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
-import com.slimgears.apt.data.HasParameters;
-import com.slimgears.apt.data.InfoBuilder;
-import com.slimgears.apt.data.MethodInfo;
-import com.slimgears.apt.data.ParamInfo;
-import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.apt.data.*;
 
 import java.util.Map;
 
@@ -20,7 +16,7 @@ public abstract class MappedConstructorInfo implements HasParameters {
     }
 
     public TypeInfo getClassParam(ParamInfo param) {
-        return classParams().get(param.getAnnotation(AutoGeneric.ClassParam.class).values().get("value").toString());
+        return classParams().get(param.getAnnotation(AutoGeneric.ClassParam.class).getValue("value").primitive().toString());
     }
 
     public static Builder builder() {
