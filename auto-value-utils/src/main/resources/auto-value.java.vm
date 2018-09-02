@@ -9,24 +9,12 @@ $imports
 @$[com.fasterxml.jackson.databind.annotation.JsonDeserialize](builder = ${targetClass.simpleName()}.Builder.class)
 @$[com.fasterxml.jackson.databind.annotation.JsonSerialize](as = ${targetClass.simpleName()}.class)
 public abstract class $targetClass.simpleName()#typeParams($sourceClass) ##
-#if (!$interfaces.empty)implements ##
-    #foreach ($iface in $interfaces)##
-        $[$iface]##
-        #if ($foreach.hasNext), #end##
-    #end ##
-#end##
+implements ##
+#foreach ($iface in $interfaces)##
+    $[$iface]##
+    #if ($foreach.hasNext), #end##
+#end ##
 {
-
-##
-#foreach ($p in $properties)##
-    #foreach ($a in $p.annotations())
-    $a.asString()
-##
-    #end
-    @$[com.fasterxml.jackson.annotation.JsonProperty]("$p.name()")
-    public abstract $[$p.type()] ${p.name()}();
-
-#end
     public abstract Builder#typeParams($sourceClass) toBuilder();
 
     public static #typeParams($sourceClass) Builder#typeParams($sourceClass) builder() {
@@ -45,17 +33,6 @@ public abstract class $targetClass.simpleName()#typeParams($sourceClass) ##
             Builder#typeParams($sourceClass)>##
         #end ##
         {
-#foreach ($p in $properties)
-
-##
-    #foreach ($a in $p.annotations())
-        $a.asString()
-##
-    #end
-        @$[com.fasterxml.jackson.annotation.JsonProperty]("$p.name()")
-        Builder ${p.name()}($[$p.type()] $p.name());
-#end
-
         @$[com.fasterxml.jackson.annotation.JsonCreator]
         public static #typeParams($sourceClass) Builder#typeParams($sourceClass) create() {
             return new AutoValue_${targetClass.simpleName()}.Builder#if ($sourceClass.hasTypeParams())<>#end();

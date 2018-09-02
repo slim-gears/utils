@@ -37,6 +37,10 @@ public class ElementUtils {
         return modifiersContainNone(element, Modifier.STATIC);
     }
 
+    public static boolean isAbstract(Element element) {
+        return modifiersContainNone(element, Modifier.DEFAULT) && modifiersContainAll(element, Modifier.ABSTRACT);
+    }
+
     public static boolean isInterface(Element element) {
         return isOfKind(element, ElementKind.INTERFACE);
     }

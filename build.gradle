@@ -1,5 +1,5 @@
 group 'com.github.slim-gears.utils'
-version '0.2-SNAPSHOT'
+version '0.3-SNAPSHOT'
 
 buildscript {
     repositories {

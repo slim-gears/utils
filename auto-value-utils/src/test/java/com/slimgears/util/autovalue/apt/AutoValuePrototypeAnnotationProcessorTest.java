@@ -12,7 +12,9 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .inputFiles(
                         "SampleFieldAnnotation.java",
                         "SampleValuePrototype.java")
-                .expectedSources("SampleValue.java")
+                .expectedSources(
+                        "SampleValue.java",
+                        "SampleValuePrototypeBuilder.java")
                 .test();
     }
 

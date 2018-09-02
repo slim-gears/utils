@@ -17,6 +17,7 @@ import javax.lang.model.element.TypeElement;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.slimgears.util.stream.Streams.ofType;
 
@@ -28,13 +29,15 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     @Override
     protected boolean processType(TypeElement annotationElement, TypeElement type) {
         validatePrototype(type);
-        processedElements.add(type);
         ensureBuildersForInterfaces(type);
 
-        Collection<TypeInfo> interfaces = type
-                .getInterfaces()
-                .stream()
-                .map(TypeInfo::of)
+        Collection<TypeInfo> interfaces = Stream
+                .concat(
+                        Stream.of(TypeInfo.of(type)),
+                        type
+                                .getInterfaces()
+                                .stream()
+                                .map(TypeInfo::of))
                 .collect(Collectors.toList());
 
         Collection<PropertyInfo> properties = getProperties(type);
@@ -94,6 +97,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .getEnclosedElements()
                 .stream()
                 .flatMap(ofType(ExecutableElement.class))
+                .filter(ElementUtils::isAbstract)
                 .filter(ElementUtils::isNotStatic)
                 .filter(ElementUtils::isPublic)
                 .filter(element -> element.getParameters().isEmpty())

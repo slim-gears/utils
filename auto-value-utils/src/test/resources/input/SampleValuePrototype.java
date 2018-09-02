@@ -12,4 +12,8 @@ public interface SampleValuePrototype {
 
     @SampleFieldAnnotation
     String strValue();
+
+    default String calculatedString() {
+        return strValue() + doubleValue() + intValue();
+    }
 }
