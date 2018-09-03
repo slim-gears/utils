@@ -7,7 +7,7 @@ sourceSets {
 dependencies {
     implementation project(':apt-utils')
     implementation project(':stream-utils')
-    implementation sourceSets.annotations.output
+    implementation project.sourceSetDependency(sourceSets.annotations)
 
     compileOnly libs.autoService
     annotationProcessor libs.autoService
