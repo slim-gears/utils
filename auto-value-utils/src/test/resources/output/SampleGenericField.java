@@ -9,20 +9,20 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-@JsonDeserialize(builder = SampleGeneric.Builder.class)
-@JsonSerialize(as = SampleGeneric.class)
-public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>{
-    public abstract Builder<T> toBuilder();
+@JsonDeserialize(builder = SampleGenericField.Builder.class)
+@JsonSerialize(as = SampleGenericField.class)
+public abstract class SampleGenericField implements SampleGenericFieldPrototype{
+    public abstract Builder toBuilder();
 
-    public static <T> Builder<T> builder() {
+    public static Builder builder() {
         return Builder.create();
     }
 
     @AutoValue.Builder
-    public interface Builder<T> extends BuilderPrototype<SampleGeneric<T>, Builder<T>>, SampleGenericPrototypeBuilder<T, Builder<T>> {
+    public interface Builder extends BuilderPrototype<SampleGenericField, Builder>, SampleGenericFieldPrototypeBuilder<Builder> {
         @JsonCreator
-        public static <T> Builder<T> create() {
-            return new AutoValue_SampleGeneric.Builder<>();
+        public static Builder create() {
+            return new AutoValue_SampleGenericField.Builder();
         }
     }
 }

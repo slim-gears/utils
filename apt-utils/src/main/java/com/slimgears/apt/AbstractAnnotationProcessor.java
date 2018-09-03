@@ -13,6 +13,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +41,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                 onComplete();
             }
             return res;
+        } catch (AnnotationTypeMismatchException e) {
+            return false;
         }
     }
 

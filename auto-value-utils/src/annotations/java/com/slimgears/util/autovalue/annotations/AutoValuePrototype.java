@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface AutoValuePrototype {
     String value() default "";
+    String[] annotators() default {};
 }

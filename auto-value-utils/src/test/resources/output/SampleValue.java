@@ -11,7 +11,7 @@ import javax.annotation.Generated;
 @AutoValue
 @JsonDeserialize(builder = SampleValue.Builder.class)
 @JsonSerialize(as = SampleValue.class)
-public abstract class SampleValue implements SampleValuePrototype {
+public abstract class SampleValue implements SampleValuePrototype{
     public abstract Builder toBuilder();
 
     public static Builder builder() {

@@ -7,18 +7,29 @@ public interface $targetClass.simpleName()<##
 #foreach ($tp in $sourceClass.typeParams())##
     $tp.type(), ##
 #end##
-B extends $targetClass.simpleName()<##
+_B extends $targetClass.simpleName()<##
 #foreach ($tp in $sourceClass.typeParams())##
     $tp.type(), ##
 #end##
-B>> {
+_B>> ##
+#if (!$interfaces.empty)##
+extends ##
+    #foreach ($iface in $interfaces)##
+        $[${iface.erasureName()}Builder]<##
+        #foreach ($tp in $iface.typeParams())##
+            $tp.type(), ##
+        #end##
+        _B>##
+        #if ($foreach.hasNext), #end##
+    #end##
+#end ##
+{
 #foreach ($p in $properties)##
     #foreach ($a in $p.annotations())
     $a.asString()
 ##
     #end
-    @$[com.fasterxml.jackson.annotation.JsonProperty]("$p.name()")
-    B ${p.name()}($[$p.type()] $p.name());
+    _B ${p.name()}($[$p.type()] $p.name());
 #if ($foreach.hasNext)
 
 #end

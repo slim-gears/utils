@@ -5,6 +5,8 @@ package com.slimgears.apt.util;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.util.guice.ConfigProviders;
+import com.slimgears.util.stream.Safe;
+import org.apache.commons.text.StringSubstitutor;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +19,7 @@ import java.util.stream.Stream;
 
 import static com.slimgears.util.guice.ConfigProviders.loadFromFile;
 import static com.slimgears.util.guice.ConfigProviders.loadFromResource;
+import static com.slimgears.util.stream.Streams.ofType;
 
 public class TypeConverters {
     public static TypeConverter empty = create(t -> false, (u, t) -> t);
@@ -29,7 +32,7 @@ public class TypeConverters {
                 .orElse(TypeConverters.empty);
     }
 
-    public static TypeConverter fromEnvironment(String typeMapsKey) {
+    public static TypeConverter fromEnvironmentMaps(String typeMapsKey) {
         return Optional
                 .ofNullable(Environment.instance().properties().getProperty(typeMapsKey))
                 .map(typeMaps -> typeMaps.split(","))
@@ -38,6 +41,23 @@ public class TypeConverters {
                 .map(String::trim)
                 .map(Paths::get)
                 .map(TypeConverters::fromPropertiesFile)
+                .reduce(TypeConverter::combineWith)
+                .orElse(empty);
+    }
+
+    public static TypeConverter fromEnvironmentConverters(String typeConvertersKey) {
+        //noinspection unchecked
+        return Optional
+                .ofNullable(Environment.instance().properties().getProperty(typeConvertersKey))
+                .map(converters -> converters.split(","))
+                .map(Stream::of)
+                .orElseGet(Stream::empty)
+                .map(String::trim)
+                .map(Safe.ofFunction(Class::forName))
+                .filter(TypeConverter.class::isAssignableFrom)
+                .map(cls -> (Class<? extends TypeConverter>)cls)
+                .map(Safe.ofFunction(Class::newInstance))
+                .flatMap(ofType(TypeConverter.class))
                 .reduce(TypeConverter::combineWith)
                 .orElse(empty);
     }
@@ -128,6 +148,8 @@ public class TypeConverters {
             template = template.replace(varRef, entry.getValue().fullName());
         }
 
-        return TypeInfo.of(template);
+        return (template.startsWith("`") && template.endsWith("`"))
+                ? TypeInfo.builder().name(template.substring(1, template.length() - 1)).build()
+                : TypeInfo.of(template);
     }
 }

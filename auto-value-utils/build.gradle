@@ -1,18 +1,19 @@
 sourceSets {
     annotations {
-        java.srcDir 'src/apt/java'
+        java.srcDir 'src/annotations/java'
     }
 }
 
 dependencies {
     implementation project(':apt-utils')
     implementation project(':stream-utils')
-    implementation sourceSets.annotations.output
+    implementation project.sourceSetDependency(sourceSets.annotations)
     implementation libs.autoValueAnnotations
     annotationProcessor libs.autoValue
     compileOnly libs.autoService
     annotationProcessor libs.autoService
     implementation libs.guava
+    implementation libs.slf4j
 
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
     testImplementation libs.jacksonAnnotations

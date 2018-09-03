@@ -50,6 +50,10 @@ public class ImportTracker {
     }
 
     private TypeInfo simplify(TypeInfo typeInfo) {
+        if (typeInfo.isWildcard()) {
+            return typeInfo;
+        }
+
         if (knownClasses.contains(typeInfo) ||
                 (typeInfo.isArray() && knownClasses.contains(typeInfo.elementTypeOrSelf()))) {
             return typeInfo;
@@ -66,10 +70,31 @@ public class ImportTracker {
         }
 
         TypeInfo.Builder builder = TypeInfo.builder().name(typeInfo.simpleName());
-        typeInfo.typeParams().stream().map(TypeParameterInfo::type)
+        typeInfo.typeParams().stream()
                 .map(this::simplify)
-                .forEach(builder::typeParams);
+                .forEach(builder::typeParam);
+
         return builder.build();
+    }
+
+    private TypeParameterInfo simplify(TypeParameterInfo typeParameter) {
+        return TypeParameterInfo
+                .builder()
+                .name(typeParameter.name())
+                .bounding(simplify(typeParameter.bounding()))
+                .type(simplify(typeParameter.type()))
+                .build();
+    }
+
+    private TypeParameterInfo.BoundInfo simplify(TypeParameterInfo.BoundInfo boundInfo) {
+        if (boundInfo == null) {
+            return null;
+        }
+        if (boundInfo.kind() == TypeParameterInfo.BoundInfo.Kind.BoundExtends) {
+            return TypeParameterInfo.BoundInfo.ofBoundExtends(simplify(boundInfo.boundExtends()));
+        } else {
+            return TypeParameterInfo.BoundInfo.ofBoundSuper(simplify(boundInfo.boundSuper()));
+        }
     }
 
     @Override

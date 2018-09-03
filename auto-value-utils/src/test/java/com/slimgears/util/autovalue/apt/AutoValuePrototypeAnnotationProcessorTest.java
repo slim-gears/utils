@@ -32,6 +32,16 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testGenericFieldPrototype() {
+        tester()
+                .inputFiles("SampleGenericFieldPrototype.java")
+                .expectedSources(
+                        "SampleGenericFieldPrototypeBuilder.java",
+                        "SampleGenericField.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)

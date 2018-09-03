@@ -55,6 +55,20 @@ public class TypeConvertersTest {
                 TypeInfo.of("string"));
     }
 
+    @Test
+    public void testTypeConverterWithHardName() {
+        Properties properties = new Properties();
+        properties.put("java.lang.Integer", "number");
+        properties.put("java.lang.String", "string");
+        properties.put("java.util.List<T>", "${T}[]");
+        properties.put("java.util.Map<K, V>", "`{[key: ${K}]: ${V}}`");
+        TypeConverter typeConverter = TypeConverters.fromProperties(properties);
+        testConversion(
+                typeConverter,
+                TypeInfo.of("java.util.Map<java.lang.String, java.util.List<java.lang.Integer>>"),
+                TypeInfo.builder().name("{[key: string]: number[]}").build());
+    }
+
     private void testConversion(TypeInfo from, TypeInfo expected) {
         testConversion(propertiesTypeConverter, from, expected);
     }

@@ -1,9 +1,11 @@
 package com.slimgears.sample;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
-@AutoValuePrototype
+@AutoValuePrototype()
 public interface SampleValuePrototype {
     int intValue();
 

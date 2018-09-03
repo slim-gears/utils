@@ -9,11 +9,7 @@ $imports
 @$[com.fasterxml.jackson.databind.annotation.JsonDeserialize](builder = ${targetClass.simpleName()}.Builder.class)
 @$[com.fasterxml.jackson.databind.annotation.JsonSerialize](as = ${targetClass.simpleName()}.class)
 public abstract class $targetClass.simpleName()#typeParams($sourceClass) ##
-implements ##
-#foreach ($iface in $interfaces)##
-    $[$iface]##
-    #if ($foreach.hasNext), #end##
-#end ##
+implements $[$sourceClass]##
 {
     public abstract Builder#typeParams($sourceClass) toBuilder();
 
@@ -23,15 +19,13 @@ implements ##
 
     @$[com.google.auto.value.AutoValue].Builder
     public interface Builder#typeParams($sourceClass) extends ##
-        $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<$targetClass.simpleName()#typeParams($sourceClass)##
-        , Builder#typeParams($sourceClass)>##
-        #foreach ($iface in $interfaces)##
-        , $[${iface.packageName()}.${iface.simpleName()}Builder]<##
-            #foreach ($p in $iface.typeParams())##
-                $[$p.type()], ##
-            #end##
-            Builder#typeParams($sourceClass)>##
-        #end ##
+        $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<$targetClass.simpleName()#typeParams($sourceClass), ##
+        Builder#typeParams($sourceClass)>, ##
+        $[${sourceClass.erasureName()}Builder]<##
+        #foreach ($tp in $sourceClass.typeParams())##
+            $[$tp.type()], ##
+        #end##
+        Builder#typeParams($sourceClass)> ##
         {
         @$[com.fasterxml.jackson.annotation.JsonCreator]
         public static #typeParams($sourceClass) Builder#typeParams($sourceClass) create() {
