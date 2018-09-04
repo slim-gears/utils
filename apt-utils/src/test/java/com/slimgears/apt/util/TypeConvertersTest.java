@@ -56,6 +56,16 @@ public class TypeConvertersTest {
     }
 
     @Test
+    public void testWildcardConverter() {
+        Properties properties = new Properties();
+        properties.put("`{[*:*]:*}`", "`{[key:$2]:$3}`");
+        TypeConverter typeConverter = TypeConverters.fromProperties(properties);
+        testConversion(typeConverter,
+                TypeInfo.builder().name("{[key: string]: number}").build(),
+                TypeInfo.builder().name("{[key:string]:number}").build());
+    }
+
+    @Test
     public void testTypeConverterWithHardName() {
         Properties properties = new Properties();
         properties.put("java.lang.Integer", "number");

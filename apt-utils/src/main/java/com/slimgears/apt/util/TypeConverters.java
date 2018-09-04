@@ -6,14 +6,19 @@ import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.util.guice.ConfigProviders;
 import com.slimgears.util.stream.Safe;
-import org.apache.commons.text.StringSubstitutor;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -110,6 +115,10 @@ public class TypeConverters {
     }
 
     private static TypeConverter createConverter(String from, String to) {
+        if (isWildcard(from)) {
+            return TypeConverters.create(matchWildcard(from), (upstream, type) -> typeFromWildcard(upstream, type, from, to));
+        }
+
         TypeInfo pattern = TypeInfo.of(from);
         return TypeConverters.create(
                 type -> areTypesMatching(pattern, type),
@@ -128,7 +137,44 @@ public class TypeConverters {
         return (left.typeParams().size() == right.typeParams().size());
     }
 
+    private static Pattern patternFromWildcard(String wildcard) {
+        wildcard = wildcard.substring(1, wildcard.length() - 1);
+        String regex = "^" + wildcard
+                .replace("{", "\\{")
+                .replace("}", "\\}")
+                .replace("[", "\\[")
+                .replace("]", "\\]")
+                .replace("*", "\\s*([a-zA-Z0-9_$<,>]+)\\s*") + "$";
+        return Pattern.compile(regex);
+    }
+
+    private static Predicate<TypeInfo> matchWildcard(String wildcard) {
+        Pattern pattern = patternFromWildcard(wildcard);
+        return type -> pattern.matcher(type.fullName()).matches();
+    }
+
+    private static TypeInfo typeFromWildcard(TypeConverter upstream, TypeInfo sourceType, String wildcard, String template) {
+        if (template.isEmpty()) {
+            return sourceType;
+        }
+
+        Pattern pattern = patternFromWildcard(wildcard);
+        Matcher matcher = pattern.matcher(sourceType.fullName());
+        if (!matcher.matches()) {
+            return sourceType;
+        }
+
+        for (int i = 1; i < matcher.groupCount() + 1; ++i) {
+            template = template.replace("$" + i, matcher.group(i));
+        }
+        return toTypeInfo(template);
+    }
+
     private static TypeInfo typeFromTemplate(TypeConverter upstream, TypeInfo patternType, TypeInfo sourceType, String template) {
+        if (template.isEmpty()) {
+            return sourceType;
+        }
+
         Map<String, TypeInfo> paramMap = new HashMap<>();
         if (patternType.isArray()) {
             String name = patternType.elementTypeOrSelf().fullName();
@@ -148,8 +194,16 @@ public class TypeConverters {
             template = template.replace(varRef, entry.getValue().fullName());
         }
 
-        return (template.startsWith("`") && template.endsWith("`"))
+        return toTypeInfo(template);
+    }
+
+    private static TypeInfo toTypeInfo(String template) {
+        return isWildcard(template)
                 ? TypeInfo.builder().name(template.substring(1, template.length() - 1)).build()
                 : TypeInfo.of(template);
+    }
+
+    private static boolean isWildcard(String template) {
+        return template.startsWith("`") && template.endsWith("`");
     }
 }

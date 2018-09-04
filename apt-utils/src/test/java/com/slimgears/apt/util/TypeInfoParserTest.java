@@ -38,6 +38,11 @@ public class TypeInfoParserTest {
     }
 
     @Test
+    public void testParsingUnrecognized() {
+        Assert.assertEquals("{[key: string]: number[]}", TypeInfo.of("{[key: string]: number[]}").name());
+    }
+
+    @Test
     public void testTypeInfoParserForConstrainedArgs() {
         TypeInfo typeInfo = TypeInfoParserAdapter.toTypeInfo("class<? extends java.lang.Object>");
         Assert.assertEquals(1, typeInfo.typeParams().size());

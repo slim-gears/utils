@@ -83,12 +83,10 @@ public class ElementUtils {
                 .filter(ElementUtils::isNotStatic)
                 .flatMap(element -> Stream.concat(
                         Stream.of(element)
-                                .filter(ExecutableElement.class::isInstance)
-                                .map(ExecutableElement.class::cast)
+                                .flatMap(ofType(ExecutableElement.class))
                                 .flatMap(ElementUtils::getReferencedTypes),
                         Stream.of(element)
-                                .filter(VariableElement.class::isInstance)
-                                .map(VariableElement.class::cast)
+                                .flatMap(ofType(VariableElement.class))
                                 .flatMap(v -> getReferencedTypeParams(v.asType()))
                                 .flatMap(ElementUtils::toTypeElement)))
                 .filter(ElementUtils::isUnknownType)
@@ -108,17 +106,23 @@ public class ElementUtils {
 
     public static Stream<TypeMirror> getReferencedTypeParams(TypeMirror type) {
         return Stream.of(
-                Stream.of(type),
                 Stream.of(type)
-                        .filter(DeclaredType.class::isInstance)
-                        .map(DeclaredType.class::cast)
+                        .flatMap(ofType(DeclaredType.class)),
+                Stream.of(type)
+                        .flatMap(ofType(WildcardType.class))
+                        .flatMap(wt -> Stream.of(wt.getExtendsBound(), wt.getSuperBound()))
+                        .flatMap(ofType(DeclaredType.class))
                         .flatMap(t -> t.getTypeArguments().stream())
                         .flatMap(ElementUtils::getReferencedTypeParams),
                 Stream.of(type)
-                        .filter(ArrayType.class::isInstance)
-                        .map(ArrayType.class::cast)
+                        .flatMap(ofType(DeclaredType.class))
+                        .flatMap(t -> t.getTypeArguments().stream())
+                        .flatMap(ElementUtils::getReferencedTypeParams),
+                Stream.of(type)
+                        .flatMap(ofType(ArrayType.class))
                         .map(ArrayType::getComponentType))
                 .flatMap(self())
+                .filter(DeclaredType.class::isInstance)
                 .distinct();
     }
 

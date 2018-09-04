@@ -8,27 +8,34 @@ import com.slimgears.apt.data.TypeParameterInfo;
 import com.slimgears.apt.typeinfo.TypeInfoLexer;
 import com.slimgears.apt.typeinfo.TypeInfoParser;
 import com.slimgears.util.stream.Optionals;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
 public class TypeInfoParserAdapter {
-    private final static Supplier<RuntimeException> invalidState = () -> new RuntimeException("Invalid parser state");
-
     public static TypeInfo toTypeInfo(String str) {
         TypeInfoLexer lexer = new TypeInfoLexer(CharStreams.fromString(str));
+        lexer.removeErrorListeners();
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         TypeInfoParser parser = new TypeInfoParser(tokenStream);
-        return toTypeInfo(parser.type());
+        parser.removeErrorListeners();
+        parser.removeParseListeners();
+        TypeInfo typeInfo = toTypeInfo(parser.type());
+        return (parser.getNumberOfSyntaxErrors() > 0)
+                ? TypeInfo.builder().name(str).build()
+                : typeInfo;
     }
 
     private static TypeInfo toTypeInfo(TypeInfoParser.TypeContext ctx) {
         return Optionals.or(
                 () -> Optional.ofNullable(ctx.primitiveType()).map(TypeInfoParserAdapter::toTypeInfo),
                 () -> Optional.ofNullable(ctx.referenceType()).map(TypeInfoParserAdapter::toTypeInfo))
-                .orElseThrow(invalidState);
+                .orElse(null);
     }
 
     private static TypeInfo toTypeInfo(TypeInfoParser.PrimitiveTypeContext ctx) {
@@ -40,7 +47,7 @@ public class TypeInfoParserAdapter {
                 () -> Optional.ofNullable(ctx.classOrInterfaceType()).map(TypeInfoParserAdapter::toTypeInfo),
                 () -> Optional.ofNullable(ctx.arrayType()).map(TypeInfoParserAdapter::toTypeInfo),
                 () -> Optional.ofNullable(ctx.typeVariable()).map(TypeInfoParserAdapter::toTypeInfo))
-                .orElseThrow(invalidState);
+                .orElse(null);
     }
 
     private static TypeInfo toTypeInfo(TypeInfoParser.ClassOrInterfaceTypeContext ctx) {
@@ -56,7 +63,8 @@ public class TypeInfoParserAdapter {
     private static TypeParameterInfo toTypeParamInfo(TypeInfoParser.TypeArgumentContext typeArgument) {
         return Optionals.or(
                 () -> Optional.ofNullable(typeArgument.referenceType()).map(TypeInfoParserAdapter::toTypeInfo).map(t -> TypeParameterInfo.of("", t)),
-                () -> Optional.ofNullable(typeArgument.wildcard()).map(TypeInfoParserAdapter::toTypeParamInfo)).orElseThrow(invalidState);
+                () -> Optional.ofNullable(typeArgument.wildcard()).map(TypeInfoParserAdapter::toTypeParamInfo))
+                .orElse(null);
     }
 
     private static TypeParameterInfo toTypeParamInfo(TypeInfoParser.WildcardContext ctx) {
@@ -80,7 +88,7 @@ public class TypeInfoParserAdapter {
                 () -> Optional.ofNullable(ctx.classOrInterfaceType()).map(TypeInfoParserAdapter::toTypeInfo).map(type -> TypeInfo.arrayOf(type, ctx.dim().size())),
                 () -> Optional.ofNullable(ctx.primitiveType()).map(TypeInfoParserAdapter::toTypeInfo).map(type -> TypeInfo.arrayOf(type, ctx.dim().size())),
                 () -> Optional.ofNullable(ctx.typeVariable()).map(TypeInfoParserAdapter::toTypeInfo).map(type -> TypeInfo.arrayOf(type, ctx.dim().size())))
-                .orElseThrow(invalidState);
+                .orElse(null);
     }
 
     private static TypeInfo toTypeInfo(TypeInfoParser.TypeVariableContext ctx) {
