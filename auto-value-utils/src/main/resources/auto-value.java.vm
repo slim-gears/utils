@@ -11,6 +11,7 @@ $imports
 public abstract class $targetClass.simpleName()#typeParams($sourceClass) ##
 implements $[$sourceClass]##
 {
+    @$[com.fasterxml.jackson.annotation.JsonIgnore]
     public abstract Builder#typeParams($sourceClass) toBuilder();
 
     public static #typeParams($sourceClass) Builder#typeParams($sourceClass) builder() {

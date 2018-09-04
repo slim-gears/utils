@@ -1,6 +1,7 @@
 package com.slimgears.sample;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
@@ -12,6 +13,7 @@ import javax.annotation.Generated;
 @JsonDeserialize(builder = SampleGeneric.Builder.class)
 @JsonSerialize(as = SampleGeneric.class)
 public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>{
+    @JsonIgnore
     public abstract Builder<T> toBuilder();
 
     public static <T> Builder<T> builder() {

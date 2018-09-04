@@ -21,6 +21,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -33,8 +34,12 @@ public class AutoGenericAnnotationProcessor extends AbstractAnnotationProcessor 
     protected boolean processType(TypeElement annotationType, TypeElement type) {
         AutoGeneric annotation = type.getAnnotation(AutoGeneric.class);
         NameTemplateUtils.validateNameTemplate(annotation.className(), type);
-        Stream.of(annotation.implementations())
-                .forEach(imp -> generateClass(type, annotation, imp));
+        try {
+            Stream.of(annotation.implementations())
+                    .forEach(imp -> generateClass(type, annotation, imp));
+        } catch (AnnotationTypeMismatchException e) {
+            return false;
+        }
         return true;
     }
 
