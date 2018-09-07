@@ -49,4 +49,14 @@ public class CanonicalTypes {
                 .map(CanonicalTypes::toCanonical)
                 .toArray(Type[]::new);
     }
+
+    public static Class<?> toClass(Type type) {
+        if (type instanceof Class) {
+            return (Class<?>)type;
+        } else if (type instanceof CanonicalType) {
+            return ((CanonicalType) type).asClass();
+        } else {
+            return null;
+        }
+    }
 }

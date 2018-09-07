@@ -53,4 +53,9 @@ public class CanonicalParameterizedType implements ParameterizedType, CanonicalT
                 Objects.equals(ownerType, ((CanonicalParameterizedType) obj).ownerType) &&
                 Arrays.equals(args, ((CanonicalParameterizedType) obj).args);
     }
+
+    @Override
+    public Class<?> asClass() {
+        return CanonicalTypes.toClass(rawType);
+    }
 }

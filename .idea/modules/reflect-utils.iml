@@ -8,6 +8,12 @@
       <sourceFolder url="file://$MODULE_DIR$/../../reflect-utils/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../reflect-utils/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/build/publications" />
+      <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/build/test-results" />
+      <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/build/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/../../reflect-utils/out" />
     </content>
     <content url="file://$MODULE_DIR$/../../reflect-utils/build/generated/source/apt/main">

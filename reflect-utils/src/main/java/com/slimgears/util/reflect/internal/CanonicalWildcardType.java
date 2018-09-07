@@ -37,4 +37,9 @@ public class CanonicalWildcardType implements WildcardType, CanonicalType {
                 Arrays.equals(lowerBounds, ((CanonicalWildcardType) obj).lowerBounds) &&
                 Arrays.equals(upperBounds, ((CanonicalWildcardType) obj).upperBounds);
     }
+
+    @Override
+    public Class<?> asClass() {
+        return null;
+    }
 }
