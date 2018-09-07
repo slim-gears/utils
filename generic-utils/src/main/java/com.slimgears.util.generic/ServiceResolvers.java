@@ -19,9 +19,16 @@ public class ServiceResolvers {
         return new ServiceResolver() {
             @Override
             public <T> T resolve(TypeToken<T> token) {
-                return !(token.isInterface() || token.hasModifier(Modifier::isAbstract))
+                return canResolve(token)
                         ? token.newInstance()
                         : null;
+            }
+
+            @Override
+            public boolean canResolve(TypeToken<?> token) {
+                return !token.isInterface() &&
+                        !token.hasModifier(Modifier::isAbstract) &&
+                        token.constructor() != null;
             }
         };
     }
@@ -53,13 +60,18 @@ public class ServiceResolvers {
 
         public ServiceResolver build() {
             return new ServiceResolver() {
+                @SuppressWarnings("unchecked")
                 @Override
                 public <T> T resolve(TypeToken<T> cls) {
-                    //noinspection unchecked
                     return Optional
                             .ofNullable(bindingMap.get(cls))
                             .map(s -> (T)s.get())
                             .orElseGet(() -> upstream.resolve(cls));
+                }
+
+                @Override
+                public boolean canResolve(TypeToken<?> token) {
+                    return bindingMap.containsKey(token) || upstream.canResolve(token);
                 }
             };
         }

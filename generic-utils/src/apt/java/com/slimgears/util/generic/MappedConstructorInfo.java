@@ -2,6 +2,7 @@ package com.slimgears.util.generic;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
+import com.slimgears.apt.data.*;
 
 import java.util.Map;
 

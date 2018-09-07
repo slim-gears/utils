@@ -100,7 +100,7 @@ public class TypeToken<T> {
                 }
             };
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":generic-utils" external.linked.project.path="$MODULE_DIR$/../../../generic-utils" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.github.slim-gears.utils" external.system.module.version="0.3-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../generic-utils">
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/resources" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/test-results" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

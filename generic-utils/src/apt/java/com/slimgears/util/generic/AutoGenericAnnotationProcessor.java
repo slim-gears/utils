@@ -11,6 +11,7 @@ import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.MethodInfo;
 import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.apt.util.*;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
