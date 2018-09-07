@@ -2,18 +2,26 @@ sourceSets {
     annotations {
         java.srcDir 'src/annotations/java'
     }
+    apt {
+        java.srcDir 'src/apt/java'
+    }
 }
 
 dependencies {
-    implementation project(':apt-utils')
-    implementation project(':stream-utils')
-    implementation project.sourceSetDependency(sourceSets.annotations)
+    bundledImplementation project(':reflect-utils')
 
-    compileOnly libs.autoService
-    annotationProcessor libs.autoService
-    implementation libs.guava
-    compileOnly libs.autoValueAnnotations
-    annotationProcessor libs.autoValue
+    aptImplementation project(':apt-utils')
+    aptImplementation project(':stream-utils')
+    aptImplementation project.sourceSetDependency(sourceSets.annotations)
+
+    aptCompileOnly libs.autoService
+    aptAnnotationProcessor libs.autoService
+    aptImplementation libs.guava
+    aptCompileOnly libs.autoValueAnnotations
+    aptAnnotationProcessor libs.autoValue
 
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
+    testImplementation sourceSets.apt.output
 }
+
+configurations.testImplementation.extendsFrom(configurations.aptImplementation)
