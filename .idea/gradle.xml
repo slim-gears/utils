@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/auto-value-utils" />
             <option value="$PROJECT_DIR$/generic-utils" />
             <option value="$PROJECT_DIR$/guice-utils" />
+            <option value="$PROJECT_DIR$/reflect-utils" />
             <option value="$PROJECT_DIR$/stream-utils" />
           </set>
         </option>

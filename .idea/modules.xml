@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils.iml" filepath="$PROJECT_DIR$/utils.iml" />
     </modules>
