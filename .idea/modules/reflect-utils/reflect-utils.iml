@@ -6,6 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../../reflect-utils/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/classes" />
       <excludeFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/publications" />
       <excludeFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/tmp" />

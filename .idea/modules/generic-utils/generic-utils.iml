@@ -5,7 +5,9 @@
     <content url="file://$MODULE_DIR$/../../../generic-utils">
       <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/docs" />
       <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/publications" />
       <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/resources" />
       <excludeFolder url="file://$MODULE_DIR$/../../../generic-utils/build/test-results" />

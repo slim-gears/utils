@@ -2,17 +2,20 @@ package com.slimgears.apt.data;
 
 import com.google.auto.value.AutoOneOf;
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
 import com.slimgears.util.stream.Optionals;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.type.TypeMirror;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AutoValue
 public abstract class AnnotationValueInfo implements HasName, HasType {
     public enum Kind {
         Primitive,
+        Array,
         Type,
         Annotation
     }
@@ -23,12 +26,15 @@ public abstract class AnnotationValueInfo implements HasName, HasType {
         public abstract Object primitive();
         public abstract AnnotationInfo annotation();
         public abstract TypeInfo type();
+        public abstract ImmutableList<Value> array();
 
         public String asString() {
             if (kind() == Kind.Annotation) {
                 return annotation().asString();
             } else if (kind() == Kind.Type) {
                 return type().erasureName() + ".class";
+            } else if (kind() == Kind.Array) {
+                return array().stream().map(Value::asString).collect(Collectors.joining(", ", "{", "}"));
             } else {
                 Object primitive = primitive();
                 if (primitive instanceof String) {
@@ -47,6 +53,10 @@ public abstract class AnnotationValueInfo implements HasName, HasType {
             return AutoOneOf_AnnotationValueInfo_Value.primitive(primitive);
         }
 
+        public static Value ofArray(Value... array) {
+            return AutoOneOf_AnnotationValueInfo_Value.array(ImmutableList.copyOf(array));
+        }
+
         public static Value ofAnnotation(AnnotationInfo annotation) {
             return AutoOneOf_AnnotationValueInfo_Value.annotation(annotation);
         }
@@ -63,6 +73,10 @@ public abstract class AnnotationValueInfo implements HasName, HasType {
 
     public boolean isType() {
         return value().kind() == Kind.Type;
+    }
+
+    public boolean isArray() {
+        return value().kind() == Kind.Array;
     }
 
     public static Builder builder() {
@@ -99,6 +113,14 @@ public abstract class AnnotationValueInfo implements HasName, HasType {
                 .build();
     }
 
+    public static AnnotationValueInfo ofArray(String name, TypeInfo type, Value... values) {
+        return builder()
+                .name(name)
+                .type(type)
+                .value(Value.ofArray(values))
+                .build();
+    }
+
     public static AnnotationValueInfo ofAnnotation(String name, AnnotationMirror annotation) {
         return builder()
                 .name(name)
@@ -117,7 +139,6 @@ public abstract class AnnotationValueInfo implements HasName, HasType {
         default Builder value(AnnotationInfo value) {
             return value(Value.ofAnnotation(value));
         }
-
         default Builder value(Object primitive) {
             return value(Value.ofPrimitive(primitive));
         }
