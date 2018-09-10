@@ -5,12 +5,13 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://dl.bintray.com/slim-gears/maven' }
         maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'net.ltgt.gradle:gradle-apt-plugin:0.18'
         classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
-        classpath 'com.github.slim-gears:gradle-bintray-plugin:1.8.7'
+        classpath 'com.slimgears.bintray.gradle:gradle-bintray-plugin:1.8.9'
     }
 }
 
