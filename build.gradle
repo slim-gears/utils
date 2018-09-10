@@ -1,6 +1,5 @@
 group 'com.slimgears.utils'
-//version System.getenv('TRAVIS_TAG') ?: '0.3-SNAPSHOT'
-version '0.3.11'
+version System.getenv('TRAVIS_TAG') ?: '0.3-SNAPSHOT'
 
 buildscript {
     repositories {
