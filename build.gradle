@@ -1,13 +1,16 @@
-group 'com.github.slim-gears.utils'
-version '0.3-SNAPSHOT'
+group 'com.slimgears.utils'
+version System.getenv('TRAVIS_TAG') ?: '0.3-SNAPSHOT'
 
 buildscript {
     repositories {
+        mavenLocal()
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.18"
-        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.18'
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
+        classpath 'com.github.slim-gears:gradle-bintray-plugin:1.8.7'
     }
 }
 
@@ -20,4 +23,5 @@ apply from: "$scriptsDir/root.gradle"
 subprojects {
     apply from: "$scriptsDir/java.gradle"
     apply from: "$scriptsDir/maven-publish.gradle"
+    apply from: "$scriptsDir/bintray.gradle"
 }
