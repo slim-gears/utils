@@ -20,7 +20,7 @@ script:
 
 deploy:
   provider: script
-  script: ./gradlew bintrayPublish
-  skip_cleanup: true
+  script: echo Deployment invoked
   on:
     tags: true
+    branch: master
