@@ -21,6 +21,3 @@ script:
 deploy:
   provider: script
   script: echo Deployment invoked
-  on:
-    tags: true
-    branch: master
