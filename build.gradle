@@ -1,26 +1,8 @@
-group 'com.slimgears.utils'
-version System.getenv('TRAVIS_TAG') ?: '0.3-SNAPSHOT'
-
 buildscript {
-    repositories {
-        mavenLocal()
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url 'https://dl.bintray.com/slim-gears/maven' }
-        maven { url 'https://jitpack.io' }
-    }
-    dependencies {
-        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.18'
-        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
-        classpath 'com.slimgears.bintray.gradle:gradle-bintray-plugin:1.8.9'
-        classpath 'com.gradle:build-scan-plugin:1.16'
-    }
+    apply from: "$projectDir/gradle-scripts/buildscript.gradle", to: it
 }
 
-ext {
-    scriptsDir = "$rootProject.projectDir/gradle-scripts"
-}
-
-apply from: "$scriptsDir/root.gradle"
+apply from: "$projectDir/gradle-scripts/root.gradle"
 
 subprojects {
     apply from: "$scriptsDir/java.gradle"
