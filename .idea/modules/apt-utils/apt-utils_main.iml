@@ -46,7 +46,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.auto.service:auto-service:1.0-rc4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.auto:auto-common:0.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.auto.value:auto-value-annotations:1.6.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.auto:auto-common:0.8" level="project" />
   </component>
 </module>
