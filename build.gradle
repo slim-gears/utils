@@ -6,6 +6,5 @@ apply from: "$projectDir/gradle-scripts/root.gradle"
 
 subprojects {
     apply from: "$scriptsDir/java.gradle"
-    apply from: "$scriptsDir/maven-publish.gradle"
     apply from: "$scriptsDir/bintray.gradle"
 }
