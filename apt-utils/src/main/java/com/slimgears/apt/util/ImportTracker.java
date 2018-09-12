@@ -35,6 +35,10 @@ public class ImportTracker {
         return scopedInstance.withScope(tracker, callable);
     }
 
+    public static ScopedInstance.Closable withTracker(ImportTracker tracker) {
+        return scopedInstance.scope(tracker);
+    }
+
     private ImportTracker(String... knownPackageNames) {
         this.knownPackageNames = ImmutableSet.copyOf(knownPackageNames);
     }

@@ -11,8 +11,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_main.iml" group="auto-value-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_test.iml" group="auto-value-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils.iml" group="generic-utils" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_annotations.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_annotations.iml" group="generic-utils" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_apt.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_apt.iml" group="generic-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_main.iml" group="generic-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_test.iml" group="generic-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils/guice-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils/guice-utils.iml" group="guice-utils" />

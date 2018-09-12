@@ -1,5 +1,6 @@
 dependencies {
     implementation project(':stream-utils')
+    implementation project(':generic-utils')
     implementation libs.slf4j
     implementation libs.javaxAnnotationApi
     implementation libs.commonsText

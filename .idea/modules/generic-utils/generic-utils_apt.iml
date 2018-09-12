@@ -3,9 +3,6 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../generic-utils/out/apt/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../generic-utils/build/generated/source/apt/apt">
-      <sourceFolder url="file://$MODULE_DIR$/../../../generic-utils/build/generated/source/apt/apt" isTestSource="false" />
-    </content>
     <content url="file://$MODULE_DIR$/../../../generic-utils/src/apt">
       <sourceFolder url="file://$MODULE_DIR$/../../../generic-utils/src/apt/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../generic-utils/src/apt/resources" type="java-resource" />

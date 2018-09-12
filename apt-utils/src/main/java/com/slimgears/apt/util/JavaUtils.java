@@ -4,6 +4,7 @@
 package com.slimgears.apt.util;
 
 import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.util.generic.ScopedInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +20,12 @@ import java.util.stream.Stream;
 public class JavaUtils extends TemplateUtils {
     private final static Logger log = LoggerFactory.getLogger(JavaUtils.class);
     public static Function<TemplateEvaluator, TemplateEvaluator> imports(ImportTracker importTracker) {
+        ScopedInstance.Closable closable = ImportTracker.withTracker(importTracker);
         return evaluator -> evaluator
                 .variable("imports", importTracker)
                 .postProcess(TemplateUtils.postProcessImports(importTracker))
-                .postProcess(code -> addImports(importTracker, code, imp -> "import " + imp + ";"));
+                .postProcess(code -> addImports(importTracker, code, imp -> "import " + imp + ";"))
+                .postProcess(code -> { closable.close(); return code; });
     }
 
     public static Consumer<String> fileWriter(ProcessingEnvironment environment, TypeInfo targetClass) {
