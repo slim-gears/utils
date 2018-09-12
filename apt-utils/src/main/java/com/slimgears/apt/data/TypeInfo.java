@@ -26,6 +26,7 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
             .thenComparing(TypeInfo::simpleName);
 
     private final static ImmutableMap<TypeInfo, TypeInfo> boxableTypes = ImmutableMap.<TypeInfo, TypeInfo>builder()
+            .put(TypeInfo.of(void.class), TypeInfo.of(Void.class))
             .put(TypeInfo.of(boolean.class), TypeInfo.of(Boolean.class))
             .put(TypeInfo.of(short.class), TypeInfo.of(Short.class))
             .put(TypeInfo.of(int.class), TypeInfo.of(Integer.class))
