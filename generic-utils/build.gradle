@@ -4,6 +4,7 @@ sourceSets {
     }
     apt {
         java.srcDir 'src/apt/java'
+        java.srcDir "$buildDir/generated/source/apt/apt"
     }
 }
 

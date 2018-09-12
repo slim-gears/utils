@@ -6,13 +6,17 @@ package com.slimgears.apt.util;
 import com.google.common.collect.ImmutableSet;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
+import com.slimgears.util.generic.ScopedInstance;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
 
 public class ImportTracker {
+    private final static ScopedInstance<ImportTracker> scopedInstance = new ScopedInstance<>();
     private final static String importsMagicWord = "`imports`";
     private final Collection<String> imports = new TreeSet<>();
     private final Collection<TypeInfo> usedClasses = new TreeSet<>(TypeInfo.comparator);
@@ -23,8 +27,23 @@ public class ImportTracker {
         return new ImportTracker(knownPackageNames);
     }
 
+    public static ImportTracker current() {
+        return scopedInstance.current();
+    }
+
+    public static <T> T withTracker(ImportTracker tracker, Callable<? extends T> callable) {
+        return scopedInstance.withScope(tracker, callable);
+    }
+
     private ImportTracker(String... knownPackageNames) {
         this.knownPackageNames = ImmutableSet.copyOf(knownPackageNames);
+    }
+
+    public static String useType(TypeInfo type) {
+        return Optional
+                .ofNullable(scopedInstance.current())
+                .map(tracker -> tracker.use(type))
+                .orElseGet(type::toString);
     }
 
     public String[] imports() {

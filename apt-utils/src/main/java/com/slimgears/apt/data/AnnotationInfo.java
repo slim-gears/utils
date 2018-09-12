@@ -5,10 +5,14 @@ package com.slimgears.apt.data;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import com.slimgears.apt.util.ImportTracker;
+import com.slimgears.apt.util.JavaUtils;
 import com.slimgears.apt.util.TemplateEvaluator;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
+import java.util.Optional;
+import java.util.function.Function;
 
 @AutoValue
 public abstract class AnnotationInfo implements HasType {
@@ -27,10 +31,19 @@ public abstract class AnnotationInfo implements HasType {
     }
 
     public String asString() {
-        return TemplateEvaluator
+        ImportTracker tracker = Optional
+                .ofNullable(ImportTracker.current())
+                .orElseGet(ImportTracker::create);
+        return asString(tracker);
+    }
+
+    public String asString(ImportTracker tracker) {
+        return ImportTracker.withTracker(tracker, () -> TemplateEvaluator
                 .forResource("annotation-value.java.vm")
+                .apply(JavaUtils.imports(tracker))
+                .variable("requiresExplicitName", values().size() != 1 || !"value".equals(values().get(0).name()))
                 .variable("annotation", this)
-                .evaluate();
+                .evaluate());
     }
 
     public static Builder builder() {
@@ -49,9 +62,17 @@ public abstract class AnnotationInfo implements HasType {
         ImmutableList.Builder<AnnotationValueInfo> valuesBuilder();
         AnnotationInfo build();
 
-        default Builder value(String name, AnnotationValue annotationValue) {
-            valuesBuilder().add(AnnotationValueInfo.of(name, annotationValue));
+        default Builder value(AnnotationValueInfo valueInfo) {
+            valuesBuilder().add(valueInfo);
             return this;
+        }
+
+        default Builder value(String name, AnnotationValueInfo.Value value) {
+            return value(AnnotationValueInfo.of(name, value));
+        }
+
+        default Builder value(String name, AnnotationValue annotationValue) {
+            return value(AnnotationValueInfo.of(name, annotationValue));
         }
     }
 }

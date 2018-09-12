@@ -11,11 +11,7 @@ import java.util.function.Supplier;
 import static com.slimgears.util.generic.ServiceResolvers.defaultResolver;
 
 public class Scope {
-    private final static ThreadLocal<ServiceResolver> currentResolver = new ThreadLocal<>();
-
-    public interface Closable extends AutoCloseable {
-        void close();
-    }
+    private final static ScopedInstance<ServiceResolver> scopedInstance = new ScopedInstance<>(defaultResolver);
 
     public static <T> T resolve(Class<T> cls) {
         return current().resolve(cls);
@@ -30,31 +26,26 @@ public class Scope {
     }
 
     public static ServiceResolver current() {
-        return Optional
-                .ofNullable(currentResolver.get())
-                .orElse(defaultResolver);
+        return scopedInstance.current();
     }
 
-    public static Closable scope(Consumer<ServiceResolvers.Builder> builder) {
-        ServiceResolver prevResolver = current();
-        ServiceResolver newResolver = ServiceResolvers
-                .builder()
-                .parentResolver(prevResolver)
-                .apply(builder)
-                .build();
-        currentResolver.set(newResolver);
-        return () -> currentResolver.set(prevResolver);
+    public static ScopedInstance.Closable scope(Consumer<ServiceResolvers.Builder> builder) {
+        return scopedInstance.scope(fromBuilder(builder));
     }
 
     public static void withScope(Consumer<ServiceResolvers.Builder> builder, Runnable runnable) {
-        Scope.<Void>withScope(builder, () -> { runnable.run(); return null; });
+        scopedInstance.withScope(fromBuilder(builder), runnable);
     }
 
     public static <T> T withScope(Consumer<ServiceResolvers.Builder> builder, Callable<T> callable) {
-        try (Closable closable = scope(builder)) {
-            return callable.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return scopedInstance.withScope(fromBuilder(builder), callable);
+    }
+
+    private static ServiceResolver fromBuilder(Consumer<ServiceResolvers.Builder> builder) {
+        return ServiceResolvers
+                .builder()
+                .parentResolver(current())
+                .apply(builder)
+                .build();
     }
 }
