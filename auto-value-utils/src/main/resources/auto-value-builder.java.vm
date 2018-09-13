@@ -25,10 +25,15 @@ extends ##
 #end ##
 {
 #foreach ($p in $properties)##
-    #foreach ($a in $p.annotations())
-    $a.asString()
+    #foreach ($a in $p.annotations())##
+        #if ($a.type().simpleName() != "Nullable")##
 ##
-    #end
+
+    $a.asString()##
+        #end##
+    #end##
+##
+
     _B ${p.name()}($[$p.type()] $p.name());
 #if ($foreach.hasNext)
 

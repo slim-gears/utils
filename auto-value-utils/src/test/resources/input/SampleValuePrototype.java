@@ -1,9 +1,8 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
+
+import javax.annotation.Nullable;
 
 @AutoValuePrototype()
 public interface SampleValuePrototype {
@@ -13,6 +12,7 @@ public interface SampleValuePrototype {
     double doubleValue();
 
     @SampleFieldAnnotation
+    @Nullable
     String strValue();
 
     default String calculatedString() {
