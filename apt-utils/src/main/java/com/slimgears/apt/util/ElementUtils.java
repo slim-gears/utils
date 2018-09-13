@@ -129,8 +129,8 @@ public class ElementUtils {
     public static Stream<DeclaredType> getHierarchy(DeclaredType declaredType) {
         return Stream.of(
                 Stream.of(declaredType),
-                getSuperClass(declaredType),
-                getInterfaces(declaredType))
+                getSuperClass(declaredType).flatMap(ElementUtils::getHierarchy),
+                getInterfaces(declaredType).flatMap(ElementUtils::getHierarchy))
                 .flatMap(self())
                 .distinct();
     }
