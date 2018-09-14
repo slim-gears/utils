@@ -1,8 +1,8 @@
 buildscript {
-    apply from: "$projectDir/gradle-scripts/buildscript.gradle", to: it
+    apply from: "$projectDir/gradle/buildscript.gradle", to: it
 }
 
-apply from: "$projectDir/gradle-scripts/root.gradle"
+apply from: "$projectDir/gradle/root.gradle"
 
 subprojects {
     apply from: "$scriptsDir/java.gradle"
