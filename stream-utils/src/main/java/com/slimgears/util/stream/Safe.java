@@ -37,6 +37,10 @@ public class Safe {
         }
     }
 
+    public static <T> Supplier<T> ofCallable(Callable<T> callable) {
+        return () -> safely(callable);
+    }
+
     public static Closable ofClosable(AutoCloseable closeable) {
         return ofRunnable(closeable::close)::run;
     }

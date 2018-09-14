@@ -9,11 +9,19 @@ public class ScopedInstance<T> {
         void close();
     }
 
-    public ScopedInstance(T instance) {
+    public static <T> ScopedInstance<T> create() {
+        return new ScopedInstance<>();
+    }
+
+    public static <T> ScopedInstance<T> create(T instance) {
+        return new ScopedInstance<>(instance);
+    }
+
+    private ScopedInstance(T instance) {
         this.instance.set(instance);
     }
 
-    public ScopedInstance() {
+    private ScopedInstance() {
     }
 
     public T current() {

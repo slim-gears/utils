@@ -2,6 +2,7 @@
  */
 package com.slimgears.util.guice;
 
+import com.slimgears.util.stream.DoubleUtils;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.io.InputStream;
@@ -9,11 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ConfigProviders {
@@ -56,7 +58,7 @@ public class ConfigProviders {
     }
 
     public static ConfigProvider loadFromMap(Map<String, ?> values) {
-        return props -> values.forEach((key, value) -> props.put(key, Optional.ofNullable(value).map(Object::toString).orElse("")));
+        return props -> setProperties(props, "", values);
     }
 
     public static ConfigProvider of(ConfigProvider... configs) {
@@ -68,4 +70,23 @@ public class ConfigProviders {
         of(configs).apply(properties);
         return properties;
     }
+
+    private static void setProperty(Properties properties, String key, Object value) {
+        if (value instanceof Map) {
+            //noinspection unchecked
+            setProperties(properties, key + ".", (Map<String, Object>)value);
+        } if (value instanceof List) {
+            //noinspection unchecked
+            properties.setProperty(key, ((List<Object>)value).stream().map(String::valueOf).collect(Collectors.joining(",")));
+        } else if (value instanceof Double) {
+            properties.setProperty(key, DoubleUtils.toString((double)value));
+        } else {
+            properties.setProperty(key, String.valueOf(value));
+        }
+    }
+
+    private static void setProperties(Properties properties, String keyPrefix, Map<String, ?> values) {
+        values.forEach((key, value) -> setProperty(properties,keyPrefix + key, value));
+    }
+
 }

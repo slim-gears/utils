@@ -26,6 +26,7 @@ public class TypeConversionModuleTest {
     @Test
     public void testCustomTypeConversionModule() {
         Injector injector = Guice.createInjector(
+                new TypeConversionModule(),
                 TypeConversionModule
                         .builder()
                         .isExactly(CustomClass.class).convert(CustomClass::new)

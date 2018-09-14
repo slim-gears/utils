@@ -8,15 +8,11 @@ import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
 import com.slimgears.util.generic.ScopedInstance;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public class ImportTracker {
-    private final static ScopedInstance<ImportTracker> scopedInstance = new ScopedInstance<>();
+    private final static ScopedInstance<ImportTracker> scopedInstance = ScopedInstance.create();
     private final static String importsMagicWord = "`imports`";
     private final Collection<String> imports = new TreeSet<>();
     private final Collection<TypeInfo> usedClasses = new TreeSet<>(TypeInfo.comparator);

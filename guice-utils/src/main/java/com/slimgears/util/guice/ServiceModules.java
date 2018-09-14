@@ -7,12 +7,12 @@ import com.google.inject.*;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.slimgears.util.stream.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Named;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -180,13 +180,13 @@ public class ServiceModules {
         }
     }
 
-    private static String nameFromAnnotation(Class cls) {
+    private static String nameFromAnnotation(Class<?> cls) {
         return Optional
-                .ofNullable((Named)cls.getAnnotation(Named.class))
+                .ofNullable(cls.getAnnotation(Named.class))
                 .map(Named::value)
                 .orElseGet(() -> Optional
-                        .ofNullable((Named)cls.getAnnotation(Named.class))
-                        .map(Named::value)
+                        .ofNullable(cls.getAnnotation(com.google.inject.name.Named.class))
+                        .map(com.google.inject.name.Named::value)
                         .orElseGet(cls::getSimpleName));
     }
 }

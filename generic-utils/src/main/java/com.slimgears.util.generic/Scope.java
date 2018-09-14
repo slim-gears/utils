@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import static com.slimgears.util.generic.ServiceResolvers.defaultResolver;
 
 public class Scope {
-    private final static ScopedInstance<ServiceResolver> scopedInstance = new ScopedInstance<>(defaultResolver);
+    private final static ScopedInstance<ServiceResolver> scopedInstance = ScopedInstance.create(defaultResolver);
 
     public static <T> T resolve(Class<T> cls) {
         return current().resolve(cls);

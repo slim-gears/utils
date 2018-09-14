@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -35,18 +36,22 @@ import java.util.stream.Stream;
 public class TypeConversionModule extends AbstractModule {
     @Override
     protected void configure() {
+        Provider<Injector> injector = getProvider(Injector.class);
+        Provider<Set<TypeConverterBinding>> converterBindings = () -> injector.get().getTypeConverterBindings();
+
         convertToTypes(isArray(), arrayConverter(getProvider(Injector.class)));
-        convertToTypes(is(Set.class), collectionConverter(getProvider(Injector.class), ImmutableSet::copyOf));
-        convertToTypes(is(ImmutableSet.class), collectionConverter(getProvider(Injector.class), ImmutableSet::copyOf));
-        convertToTypes(is(List.class), collectionConverter(getProvider(Injector.class), ImmutableList::copyOf));
-        convertToTypes(is(ImmutableList.class), collectionConverter(getProvider(Injector.class), ImmutableList::copyOf));
-        convertToTypes(is(Collection.class), collectionConverter(getProvider(Injector.class), ImmutableList::copyOf));
-        convertToTypes(is(ImmutableCollection.class), collectionConverter(getProvider(Injector.class), ImmutableList::copyOf));
+        convertToTypes(is(Set.class), collectionConverter(converterBindings, ImmutableSet::copyOf));
+        convertToTypes(is(ImmutableSet.class), collectionConverter(converterBindings, ImmutableSet::copyOf));
+        convertToTypes(is(List.class), collectionConverter(converterBindings, ImmutableList::copyOf));
+        convertToTypes(is(ImmutableList.class), collectionConverter(converterBindings, ImmutableList::copyOf));
+        convertToTypes(is(Collection.class), collectionConverter(converterBindings, ImmutableList::copyOf));
+        convertToTypes(is(ImmutableCollection.class), collectionConverter(converterBindings, ImmutableList::copyOf));
         convertToTypes(isOnly(Pattern.class), converter(Pattern::compile));
         convertToTypes(isOnly(Path.class), converter(Paths::get));
         convertToTypes(isOnly(File.class), converter(File::new));
         convertToTypes(isOnly(URI.class), converter(URI::create));
         convertToTypes(isOnly(URL.class), converter(Safe.ofFunction(URL::new)));
+        convertToTypes(isOnly(Duration.class), converter(Duration::parse));
     }
 
     public static Builder builder() {
@@ -61,7 +66,7 @@ public class TypeConversionModule extends AbstractModule {
         <T> Collection<?> toCollection(Collection<? extends T> items);
     }
 
-    private static TypeConverter collectionConverter(Provider<Injector> injector,
+    private static TypeConverter collectionConverter(Provider<Set<TypeConverterBinding>> converterBindings,
                                            CollectionFactory collectionFactory) {
         return (value, toType) -> {
             Type elementClass = ((ParameterizedType)toType.getType()).getActualTypeArguments()[0];
@@ -76,7 +81,7 @@ public class TypeConversionModule extends AbstractModule {
                 return collectionFactory.toCollection(Arrays.asList(items));
             }
 
-            TypeConverter typeConverter = findConverter(elementType, injector.get());
+            TypeConverter typeConverter = findConverter(elementType, converterBindings.get());
             return collectionFactory.toCollection(Stream.of(items)
                     .map(str -> typeConverter.convert(str, elementType))
                     .collect(Collectors.toList()));
@@ -103,13 +108,13 @@ public class TypeConversionModule extends AbstractModule {
                 return items;
             }
 
-            TypeConverter typeConverter = findConverter(elementType, injector.get());
+            TypeConverter typeConverter = findConverter(elementType, injector.get().getTypeConverterBindings());
             return convertArray(items, elementClass, typeConverter);
         };
     }
 
-    private static TypeConverter findConverter(TypeLiteral<?> toType, Injector injector) {
-        return injector.getTypeConverterBindings()
+    private static TypeConverter findConverter(TypeLiteral<?> toType, Set<TypeConverterBinding> converterBindings) {
+        return converterBindings
                 .stream()
                 .filter(b -> b.getTypeMatcher().matches(toType))
                 .map(TypeConverterBinding::getTypeConverter)
