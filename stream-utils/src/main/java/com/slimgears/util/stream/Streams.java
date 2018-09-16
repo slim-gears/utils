@@ -1,6 +1,7 @@
 package com.slimgears.util.stream;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -24,6 +25,14 @@ public class Streams {
 
     public static <T> Stream<T> takeWhile(Stream<T> stream, Predicate<? super T> predicate) {
         return StreamSupport.stream(takeWhile(stream.spliterator(), predicate), false);
+    }
+
+    public static <T> Stream<T> fromIterator(Iterator<T> iterator) {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), false);
+    }
+
+    public static <T> Stream<T> fromIterable(Iterable<T> iterable) {
+        return fromIterator(iterable.iterator());
     }
 
     public static <T> Stream<T> fromEnumeration(Enumeration<T> enumeration) {

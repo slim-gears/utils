@@ -4,6 +4,8 @@ package com.slimgears.util.guice;
 
 import com.slimgears.util.stream.DoubleUtils;
 import org.apache.commons.text.StringSubstitutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ConfigProviders {
+    private final static Logger log = LoggerFactory.getLogger(ConfigProviders.class);
     public static final ConfigProvider empty = p -> {};
 
     public static ConfigProvider loadFrom(Callable<InputStream> streamSupplier) {
@@ -28,7 +31,7 @@ public class ConfigProviders {
                     props.load(stream);
                 }
             } catch (Exception e) {
-                throw new RuntimeException("Error occurred when loading properties", e);
+                log.debug("Could not load properties", e);
             }
         };
     }

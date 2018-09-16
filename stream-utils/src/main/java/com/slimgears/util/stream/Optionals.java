@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class Optionals {
-    public static <T, R extends T> Function<? super T, Optional<R>> ofType(Class<R> type) {
+    public static <T, R extends T> Function<T, Optional<R>> ofType(Class<R> type) {
         return val -> Optional
                 .ofNullable(val)
                 .filter(type::isInstance)

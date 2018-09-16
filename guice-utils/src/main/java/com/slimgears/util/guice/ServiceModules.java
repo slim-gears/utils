@@ -5,6 +5,7 @@ package com.slimgears.util.guice;
 
 import com.google.inject.*;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
@@ -17,9 +18,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,111 +31,136 @@ public class ServiceModules {
     private final static Logger LOG = LoggerFactory.getLogger(ServiceModules.class);
 
     public static <S> Module forServiceSet(Class<S> serviceClass) {
-        return new ServiceSetModule<>(serviceClass);
+        return builder(serviceClass).build(toServiceSet());
     }
 
-    public static <S> ServiceMapModule<String, S> forNamedServiceMap(Class<S> serviceClass) {
-        return new AnnotatedNamedServiceMapModule<>(serviceClass);
+    public static <S> Module forNamedServiceMap(Class<S> serviceClass) {
+        return builder(serviceClass).build(toNamedServiceMap());
     }
 
     public static <S, F> Module forNamedServiceFactoryMap(Class<S> serviceClass, Class<F> serviceFactoryClass) {
-        return new AnnotatedNamedServiceFactoryMapModule<>(serviceClass, serviceFactoryClass);
+        return builder(serviceClass).build(toNamedServiceFactoryMap(serviceFactoryClass));
     }
 
     public static <K, S> Module forServiceMap(Class<K> keyClass, Class<S> serviceClass, Function<Class<? extends S>, K> keyGetter) {
-        return new ServiceMapModule<>(
-                keyClass,
-                serviceClass,
-                keyGetter);
+        return builder(serviceClass).build(toServiceMap(keyClass, keyGetter));
     }
 
-    static class ServiceSetModule<S> extends AbstractModule {
+    public static <S> Builder<S> builder(Class<S> serviceClass) {
+        return new Builder<>(serviceClass);
+    }
+
+    public static class Builder<S> {
         private final Class<S> serviceClass;
+        private Predicate<Class<? extends S>> predicate = cls -> true;
+        private Consumer<ScopedBindingBuilder> scopeBuilder = builder -> {};
+        private final Collection<ServiceBinder.Listener<S>> listeners = new ArrayList<>();
 
-        ServiceSetModule(Class<S> serviceClass) {
+        public Builder(Class<S> serviceClass) {
             this.serviceClass = serviceClass;
         }
 
-        @Override
-        protected void configure() {
-            Multibinder<S> serviceBinder = Multibinder.newSetBinder(binder(), serviceClass);
-            Stream<Class<? extends S>> serviceClasses = readServices(serviceClass);
-            serviceClasses.forEach(serviceImplClass ->
-                    serviceBinder.addBinding().to(serviceImplClass).in(Singleton.class));
-        }
-    }
-
-    public static class AnnotatedNamedServiceMapModule<S> extends ServiceMapModule<String, S> {
-        AnnotatedNamedServiceMapModule(Class<S> serviceClass) {
-            super(String.class, serviceClass, ServiceModules::nameFromAnnotation);
+        public Builder<S> apply(Consumer<Builder<S>> config) {
+            config.accept(this);
+            return this;
         }
 
-        @Override
-        protected void addBinding(MapBinder<String, S> binder, String key, Class<? extends S> serviceImplClass) {
-            super.addBinding(binder, key, serviceImplClass);
-            bind(serviceClass).annotatedWith(Names.named(key)).to(serviceImplClass);
-        }
-    }
-
-    public static class AnnotatedNamedServiceFactoryMapModule<S, F> extends AbstractModule {
-        private final Class<S> serviceClass;
-        private final Class<F> factoryClass;
-
-        AnnotatedNamedServiceFactoryMapModule(Class<S> serviceClass, Class<F> factoryClass) {
-            this.serviceClass = serviceClass;
-            this.factoryClass = factoryClass;
+        public Builder<S> filter(Predicate<Class<? extends S>> predicate) {
+            this.predicate = this.predicate.and(predicate);
+            return this;
         }
 
-        @Override
-        protected void configure() {
-            Map<String, Class<? extends S>> stringClassMap = ServiceModules.readNamedServiceMap(serviceClass);
-            MapBinder<String, F> strategyFactoryMultibinging = MapBinder.newMapBinder(binder(), String.class, factoryClass);
-            stringClassMap.forEach((name, cls) -> {
-                Key<F> factoryKey = Key.get(factoryClass, Names.named(name));
-                Module module = new FactoryModuleBuilder()
-                        .implement(serviceClass, cls)
-                        .build(factoryKey);
-                install(module);
-                strategyFactoryMultibinging.addBinding(name).to(factoryKey);
-            });
-        }
-    }
-
-    public interface MapBindingListener<K, S> {
-        void onBind(Binder binder, K key, Class<? extends S> serviceClass);
-    }
-
-    public static class ServiceMapModule<K, S> extends AbstractModule {
-        final Class<S> serviceClass;
-        private final Class<K> keyClass;
-        private final Function<Class<? extends S>, K> keyProvider;
-        private final Collection<MapBindingListener<K, S>> listeners = new ArrayList<>();
-
-        ServiceMapModule(Class<K> keyClass, Class<S> serviceClass, Function<Class<? extends S>, K> keyProvider) {
-            this.keyClass = keyClass;
-            this.serviceClass = serviceClass;
-            this.keyProvider = keyProvider;
-        }
-
-        public ServiceMapModule<K, S> onBinding(MapBindingListener<K, S> listener) {
+        public Builder<S> onBind(ServiceBinder.Listener<S> listener) {
             listeners.add(listener);
             return this;
         }
 
-        @Override
-        protected void configure() {
-            MapBinder<K, S> serviceBinder = MapBinder.newMapBinder(binder(), keyClass, serviceClass);
-            Stream<Class<? extends S>> serviceClasses = readServices(serviceClass);
-            serviceClasses.forEach(serviceImplClass -> {
-                K key = keyProvider.apply(serviceImplClass);
-                addBinding(serviceBinder, keyProvider.apply(serviceImplClass), serviceImplClass);
-                listeners.forEach(l -> l.onBind(binder(), key, serviceImplClass));
-            });
+        public Builder<S> inScope(Scope scope) {
+            this.scopeBuilder = scopeBuilder.andThen(b -> b.in(scope));
+            return this;
         }
 
-        protected void addBinding(MapBinder<K, S> binder, K key, Class<? extends S> serviceClass) {
-            binder.addBinding(key).to(serviceClass);
+        public Builder<S> inScope(Class<? extends Annotation> scope) {
+            this.scopeBuilder = scopeBuilder.andThen(b -> b.in(scope));
+            return this;
         }
+
+        public Module build(ServiceBinder.Factory<S> serviceBinderFactory) {
+            return new AbstractModule() {
+                @Override
+                protected void configure() {
+                    ServiceBinder<S> serviceBinder = serviceBinderFactory.createBinder(serviceClass, binder());
+                    readServices(serviceClass)
+                            .filter(predicate)
+                            .forEach(svc -> {
+                                scopeBuilder.accept(serviceBinder.bind(svc));
+                                listeners.forEach(l -> l.onBind(binder(), svc));
+                            });
+                }
+            };
+        }
+    }
+
+    interface ServiceBinder<S> {
+        interface Factory<S> {
+            ServiceBinder<S> createBinder(Class<S> serviceClass, Binder binder);
+        }
+
+        interface Listener<S> {
+            void onBind(Binder binder, Class<? extends S> serviceClass);
+        }
+
+        ScopedBindingBuilder bind(Class<? extends S> serviceImpl);
+    }
+
+    public static <S> ServiceBinder.Factory<S> toServiceSet() {
+        return (serviceClass, binder) -> {
+            Multibinder<S> serviceBinder = Multibinder.newSetBinder(binder, serviceClass);
+            return svc -> serviceBinder.addBinding().to(svc);
+        };
+    }
+
+    public static <S, K> ServiceBinder.Factory<S> toServiceMap(Class<K> keyClass, Function<Class<? extends S>, K> keyProvider) {
+        return (serviceClass, binder) -> {
+            MapBinder<K, S> mapBinder = MapBinder.newMapBinder(binder, keyClass, serviceClass);
+            return svc -> mapBinder.addBinding(keyProvider.apply(svc)).to(svc);
+        };
+    }
+
+    public static <S> ServiceBinder.Factory<S> toNamedServiceMap(Function<Class<? extends S>, String> nameProvider) {
+        ServiceBinder.Factory<S> bindingFactory = toServiceMap(String.class, nameProvider);
+        return (serviceClass, binder) -> {
+            ServiceBinder<S> mapServiceBinder = bindingFactory.createBinder(serviceClass, binder);
+            return svc -> {
+                mapServiceBinder.bind(svc);
+                binder.bind(serviceClass).annotatedWith(Names.named(nameProvider.apply(svc))).to(svc);
+                return binder.bind(svc);
+            };
+        };
+    }
+
+    public static <S> ServiceBinder.Factory<S> toNamedServiceMap() {
+        return toNamedServiceMap(ServiceModules::nameFromAnnotation);
+    }
+
+    public static <S, F> ServiceBinder.Factory<S> toNamedServiceFactoryMap(Class<F> factoryClass,
+                                                                           Function<Class<? extends S>, String> nameProvider) {
+        return (serviceClass, binder) -> {
+            MapBinder<String, F> factoryMultibinging = MapBinder.newMapBinder(binder, String.class, factoryClass);
+            return svc -> {
+                String name = nameProvider.apply(svc);
+                Key<F> factoryKey = Key.get(factoryClass, Names.named(name));
+                Module module = new FactoryModuleBuilder()
+                        .implement(serviceClass, svc)
+                        .build(factoryKey);
+                binder.install(module);
+                return factoryMultibinging.addBinding(name).to(factoryKey);
+            };
+        };
+    }
+
+    public static <S, F> ServiceBinder.Factory<S> toNamedServiceFactoryMap(Class<F> factoryClass) {
+        return toNamedServiceFactoryMap(factoryClass, ServiceModules::nameFromAnnotation);
     }
 
     public static <S> Map<String, Class<? extends S>> readNamedServiceMap(Class<S> serviceClass) {
@@ -180,7 +209,7 @@ public class ServiceModules {
         }
     }
 
-    private static String nameFromAnnotation(Class<?> cls) {
+    public static String nameFromAnnotation(Class<?> cls) {
         return Optional
                 .ofNullable(cls.getAnnotation(Named.class))
                 .map(Named::value)

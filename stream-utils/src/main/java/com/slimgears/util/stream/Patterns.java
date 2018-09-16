@@ -7,7 +7,7 @@ public class Patterns {
         String regex = "^" + wildcard
                 .replace(".", "\\.")
                 .replace("?", ".")
-                .replace("\\*", ".*") + "$";
+                .replace("*", ".*") + "$";
         return Pattern.compile(regex);
     }
 }
