@@ -10,4 +10,8 @@ import java.lang.annotation.Target;
 public @interface AutoValuePrototype {
     String value() default "";
     String[] annotators() default {};
+
+    @Retention(RetentionPolicy.SOURCE)
+    @Target(ElementType.TYPE)
+    @interface Builder {}
 }

@@ -50,6 +50,16 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testCustomBuilderValuePrototype() {
+        tester()
+                .inputFiles("SampleCustomBuilderValuePrototype.java")
+                .expectedSources(
+                        "SampleCustomBuilderValue.java",
+                        "SampleCustomBuilderValuePrototypeBuilder.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)

@@ -12,7 +12,7 @@ _B extends $targetClass.simpleName()<##
     $tp.type(), ##
 #end##
 _B>> ##
-#if (!$interfaces.empty)##
+#if (!$interfaces.empty || $hasOwnBuilder)##
 extends ##
     #foreach ($iface in $interfaces)##
         $[${iface.erasureName()}Builder]<##
@@ -20,8 +20,15 @@ extends ##
             $tp.type(), ##
         #end##
         _B>##
-        #if ($foreach.hasNext), #end##
+        #if ($foreach.hasNext || $hasOwnBuilder), #end##
     #end##
+#end##
+#if ($hasOwnBuilder)##
+    $[$ownBuilder.erasureName()]<##
+    #foreach ($tp in $sourceClass.typeParams())##
+        $tp.type(), ##
+    #end##
+    _B>##
 #end ##
 {
 #foreach ($p in $properties)##
@@ -43,7 +50,7 @@ extends ##
     #foreach ($bm in $p.builderMethods())##
 ##
 
-    default _B $bm.name()To${utils.capitalize($p.name())}(##
+    default _B $p.name()${utils.capitalize($bm.name())}(##
         #foreach ($bmarg in $bm.params())##
             #if (!$foreach.hasNext && $bmarg.type().isArray())##
             $[$bmarg.type().elementTypeOrSelf()]... ##

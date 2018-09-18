@@ -9,7 +9,7 @@ $imports
 @$[com.fasterxml.jackson.databind.annotation.JsonDeserialize](builder = ${targetClass.simpleName()}.Builder.class)
 @$[com.fasterxml.jackson.databind.annotation.JsonSerialize](as = ${targetClass.simpleName()}.class)
 public abstract class $targetClass.simpleName()#typeParams($sourceClass) ##
-implements $[$sourceClass]##
+implements $[$sourceClass] ##
 {
     @$[com.fasterxml.jackson.annotation.JsonIgnore]
     public abstract Builder#typeParams($sourceClass) toBuilder();

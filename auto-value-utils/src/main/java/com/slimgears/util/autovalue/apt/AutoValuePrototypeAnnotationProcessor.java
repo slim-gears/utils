@@ -8,16 +8,14 @@ import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
+import com.slimgears.util.stream.Streams;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -97,12 +95,13 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     private void generateInterfaceBuilder(DeclaredType type) {
         processedElements.add(type);
 
-        Collection<TypeInfo> interfaces = ElementUtils
-                .toTypeElement(type)
+        Collection<TypeInfo> interfaces = ElementUtils.toTypeElement(type)
                 .map(TypeElement::getInterfaces)
                 .flatMap(Collection::stream)
                 .map(TypeInfo::of)
                 .collect(Collectors.toList());
+
+        Optional<TypeInfo> ownBuilder = getOwnBuilder(type);
 
         TypeInfo sourceClass = TypeInfo.of(type);
         String targetName = sourceClass.simpleName() + "Builder";
@@ -112,6 +111,8 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         TemplateEvaluator.forResource("auto-value-builder.java.vm")
                 .variable("utils", new TemplateUtils())
+                .variable("ownBuilder", ownBuilder.orElse(null))
+                .variable("hasOwnBuilder", ownBuilder.isPresent())
                 .variable("properties", properties)
                 .variable("interfaces", interfaces)
                 .variable("processor", TypeInfo.of(getClass()))
@@ -120,6 +121,21 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .variable("imports", importTracker)
                 .apply(JavaUtils.imports(importTracker))
                 .write(JavaUtils.fileWriter(processingEnv, targetClass));
+    }
+
+    private Optional<TypeInfo> getOwnBuilder(DeclaredType type) {
+        return ElementUtils.toTypeElement(type)
+                .map(TypeElement::getEnclosedElements)
+                .flatMap(Collection::stream)
+                .flatMap(Streams.ofType(TypeElement.class))
+                .filter(e -> ElementUtils.hasAnnotation(e, AutoValuePrototype.Builder.class))
+                .map(this::validateOwnBuilder)
+                .map(TypeInfo::of)
+                .findFirst();
+    }
+
+    private TypeElement validateOwnBuilder(TypeElement typeElement) {
+        return typeElement;
     }
 
     private Collection<PropertyInfo> getProperties(DeclaredType type) {
