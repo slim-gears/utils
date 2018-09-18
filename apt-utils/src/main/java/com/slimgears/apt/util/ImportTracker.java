@@ -80,12 +80,12 @@ public class ImportTracker {
 
         usedClasses.add(typeInfo.isArray()
                 ? typeInfo.elementTypeOrSelf()
-                : TypeInfo.of(typeInfo.name()));
+                : TypeInfo.of(typeInfo.importName()));
 
         String packageName = typeInfo.packageName();
         if (!packageName.isEmpty() && !knownPackageNames.contains(packageName)) {
             TypeInfo importType = typeInfo.isArray() ? typeInfo.elementTypeOrSelf() : typeInfo;
-            imports.add(importType.name());
+            imports.add(importType.importName());
         }
 
         TypeInfo.Builder builder = TypeInfo.builder().name(typeInfo.simpleName());

@@ -7,6 +7,10 @@ public class ScopedInstance<T> {
 
     public interface Closable extends AutoCloseable {
         void close();
+
+        default Closable merge(Closable another) {
+            return () -> { this.close(); another.close(); };
+        }
     }
 
     public static <T> ScopedInstance<T> create() {

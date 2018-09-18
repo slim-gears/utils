@@ -35,6 +35,39 @@ extends ##
 ##
 
     _B ${p.name()}($[$p.type()] $p.name());
+    #if ($p.hasBuilder())##
+##
+
+    $[$p.builderType()] ${p.name()}Builder();
+    #end##
+    #foreach ($bm in $p.builderMethods())##
+##
+
+    default _B $bm.name()To${utils.capitalize($p.name())}(##
+        #foreach ($bmarg in $bm.params())##
+            #if (!$foreach.hasNext && $bmarg.type().isArray())##
+            $[$bmarg.type().elementTypeOrSelf()]... ##
+            #else##
+            $[$bmarg.type()] ##
+            #end##
+            $bmarg.name()##
+            #if ($foreach.hasNext), #end##
+        #end) {##
+##
+
+        ${p.name()}Builder().$bm.name()(##
+        #foreach ($bmarg in $bm.params())##
+           $bmarg.name()##
+           #if ($foreach.hasNext), #end##
+        #end); ##
+##
+
+        return (_B)this;
+    }
+
+##
+    #end##
+
 #if ($foreach.hasNext)
 
 #end

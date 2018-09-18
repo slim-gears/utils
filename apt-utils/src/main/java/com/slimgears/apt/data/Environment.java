@@ -3,6 +3,7 @@ package com.slimgears.apt.data;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.slimgears.apt.util.TypeFilters;
+import com.slimgears.util.generic.ScopedInstance;
 import com.slimgears.util.guice.ConfigProvider;
 import com.slimgears.util.guice.ConfigProviders;
 import com.slimgears.util.stream.Safe;
@@ -19,24 +20,24 @@ import java.util.Properties;
 import java.util.function.Predicate;
 
 @AutoValue
-public abstract class Environment implements AutoCloseable {
-    private final Environment parent;
+public abstract class Environment implements Safe.Closable {
+    private final ScopedInstance.Closable closable;
     private final static String configOptionName = "rxrpc.config";
     private final static String excludedTypesOptionName = "rxrpc.excludeTypes";
     private final static String includeTypesOptionName = "rxrpc.includeTypes";
-    private final static ThreadLocal<Environment> instance = new ThreadLocal<>();
+    private final static ScopedInstance<Environment> instance = ScopedInstance.create();
 
     public abstract ProcessingEnvironment processingEnvironment();
     public abstract RoundEnvironment roundEnvironment();
     public abstract ImmutableMap<String, String> properties();
 
     protected Environment() {
-        this.parent = instance.get();
-        instance.set(this);
+        this.closable = instance.scope(this)
+                .merge(TypeInfo.withRegistrar());
     }
 
     public void close() {
-        instance.set(this.parent);
+        closable.close();
     }
 
     protected abstract Predicate<TypeInfo> ignoredTypePredicate();
@@ -87,14 +88,11 @@ public abstract class Environment implements AutoCloseable {
     }
 
     public static Environment instance() {
-        return Optional.ofNullable(instance.get()).orElseThrow(() -> new RuntimeException("Environment was not set"));
+        return Optional.ofNullable(instance.current()).orElseThrow(() -> new RuntimeException("Environment was not set"));
     }
 
     public static Safe.Closable withEnvironment(ProcessingEnvironment processingEnvironment, RoundEnvironment roundEnvironment) {
-        Environment prev = instance.get();
-        instance.set(create(processingEnvironment, roundEnvironment));
-        return () -> instance.set(prev);
-
+        return create(processingEnvironment, roundEnvironment);
     }
 
     private static ConfigProvider loadFromExternalConfig(ProcessingEnvironment processingEnvironment) {

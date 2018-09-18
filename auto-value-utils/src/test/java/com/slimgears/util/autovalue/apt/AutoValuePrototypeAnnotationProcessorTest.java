@@ -42,6 +42,14 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testGuavaValuePrototype() {
+        tester()
+                .inputFiles("SampleGuavaValuePrototype.java")
+                .expectedSources("SampleGuavaValuePrototypeBuilder.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)

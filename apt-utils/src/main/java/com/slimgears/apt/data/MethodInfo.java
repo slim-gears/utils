@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @AutoValue
-public abstract class MethodInfo implements HasName, HasAnnotations, HasParameters, HasTypeParameters {
+public abstract class MethodInfo implements HasName, HasEnclosingType, HasAnnotations, HasParameters, HasTypeParameters {
     public abstract TypeInfo returnType();
 
     public static Builder builder() {
@@ -60,6 +60,7 @@ public abstract class MethodInfo implements HasName, HasAnnotations, HasParamete
     public interface Builder extends
             InfoBuilder<MethodInfo>,
             HasName.Builder<Builder>,
+            HasEnclosingType.Builder<Builder>,
             HasParameters.Builder<Builder>,
             HasAnnotations.Builder<Builder>,
             HasTypeParameters.Builder<Builder> {

@@ -8,27 +8,35 @@ import com.slimgears.apt.data.TypeParameterInfo;
 import com.slimgears.apt.typeinfo.TypeInfoLexer;
 import com.slimgears.apt.typeinfo.TypeInfoParser;
 import com.slimgears.util.stream.Optionals;
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class TypeInfoParserAdapter {
     public static TypeInfo toTypeInfo(String str) {
-        TypeInfoLexer lexer = new TypeInfoLexer(CharStreams.fromString(str));
+        String[] parts = str.split("\\$");
+
+        TypeInfoLexer lexer = new TypeInfoLexer(CharStreams.fromString(str.replace('$', '.')));
         lexer.removeErrorListeners();
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         TypeInfoParser parser = new TypeInfoParser(tokenStream);
         parser.removeErrorListeners();
         parser.removeParseListeners();
         TypeInfo typeInfo = toTypeInfo(parser.type());
-        return (parser.getNumberOfSyntaxErrors() > 0)
+
+        typeInfo = (parser.getNumberOfSyntaxErrors() > 0)
                 ? TypeInfo.builder().name(str).build()
                 : typeInfo;
+
+        if (parts.length > 1) {
+            typeInfo = typeInfo
+                    .toBuilder()
+                    .enclosingType(toTypeInfo(parts[0]))
+                    .build();
+        }
+
+        return typeInfo;
     }
 
     private static TypeInfo toTypeInfo(TypeInfoParser.TypeContext ctx) {

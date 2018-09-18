@@ -3,8 +3,12 @@
  */
 package com.slimgears.apt.util;
 
+import com.google.common.base.Strings;
+
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TemplateUtils {
     public final static TemplateUtils instance = new TemplateUtils();
@@ -12,6 +16,14 @@ public class TemplateUtils {
 
     public static String camelCaseToDash(String camelCase) {
         return camelCasePattern.matcher(camelCase).replaceAll("$1-$2").toLowerCase();
+    }
+
+    public static String toCamelCase(String firstPart, String... otherParts) {
+        return firstPart + Stream.of(otherParts).map(TemplateUtils::capitalize).collect(Collectors.joining());
+    }
+
+    public static String capitalize(String str) {
+        return Strings.isNullOrEmpty(str) ? str : Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
 
     public static Function<String, String> postProcessImports(ImportTracker importTracker) {

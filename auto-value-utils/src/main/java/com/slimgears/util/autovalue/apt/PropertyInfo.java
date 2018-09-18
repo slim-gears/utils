@@ -1,17 +1,13 @@
 package com.slimgears.util.autovalue.apt;
 
+import com.google.auto.common.MoreTypes;
 import com.google.auto.value.AutoValue;
-import com.slimgears.apt.data.HasAnnotations;
-import com.slimgears.apt.data.HasName;
-import com.slimgears.apt.data.HasType;
-import com.slimgears.apt.data.InfoBuilder;
-import com.slimgears.util.stream.Optionals;
-import com.slimgears.util.stream.Streams;
+import com.google.common.collect.ImmutableList;
+import com.slimgears.apt.data.*;
 
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
-import java.util.Optional;
+import javax.lang.model.type.ExecutableType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,34 +16,32 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
     private static final Pattern namePattern = Pattern.compile("^(get)|(is)(?<name>[A-Z]\\w*)$");
 
     public abstract ExecutableElement element();
-    public TypeElement typeElement() {
-        return Optional.of(element())
-                .map(ExecutableElement::getReturnType)
-                .flatMap(Optionals.ofType(DeclaredType.class))
-                .map(DeclaredType::asElement)
-                .flatMap(Optionals.ofType(TypeElement.class))
-                .orElse(null);
+    public abstract ImmutableList<MethodInfo> builderMethods();
+
+    public DeclaredType propertyType() {
+        return MoreTypes.asDeclared(element().getReturnType());
     }
 
     public boolean hasBuilder() {
-        return typeElement()
-                .getEnclosedElements()
-                .stream()
-                .flatMap(Streams.ofType(TypeElement.class))
-                .filter(t -> "Builder".equals(t.getSimpleName().toString()))
-                .anyMatch(t -> typeElement().getTypeParameters().size() == t.getTypeParameters().size());
+        return PropertyUtils.hasBuilder(element());
+    }
+
+    public TypeInfo builderType() {
+        return TypeInfo.of(PropertyUtils.builderTypeFor(propertyType()));
     }
 
     public static Builder builder() {
         return new AutoValue_PropertyInfo.Builder();
     }
 
-    public static PropertyInfo of(ExecutableElement element) {
+    public static PropertyInfo of(DeclaredType declaredType, ExecutableElement element) {
+        ExecutableType executableType = MoreTypes.asExecutable(Environment.instance().types().asMemberOf(declaredType, element));
         return builder()
                 .name(propertyName(element.getSimpleName().toString()))
                 .element(element)
-                .type(element.getReturnType())
+                .type(executableType.getReturnType())
                 .annotationsFromElement(element)
+                .addBuilderMethods(PropertyUtils.builderMethods(executableType))
                 .build();
     }
 
@@ -65,5 +59,16 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
             HasType.Builder<Builder>,
             HasAnnotations.Builder<Builder> {
         Builder element(ExecutableElement element);
+        ImmutableList.Builder<MethodInfo> builderMethodsBuilder();
+
+        default Builder addBuilderMethod(MethodInfo methodInfo) {
+            builderMethodsBuilder().add(methodInfo);
+            return this;
+        }
+
+        default Builder addBuilderMethods(Iterable<MethodInfo> methodInfo) {
+            builderMethodsBuilder().addAll(methodInfo);
+            return this;
+        }
     }
 }

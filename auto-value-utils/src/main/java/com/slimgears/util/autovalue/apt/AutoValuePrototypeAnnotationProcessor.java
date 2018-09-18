@@ -1,20 +1,19 @@
 package com.slimgears.util.autovalue.apt;
 
+import com.google.auto.common.MoreElements;
 import com.google.auto.service.AutoService;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMultimap;
 import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.TypeInfo;
-import com.slimgears.apt.util.ElementUtils;
-import com.slimgears.apt.util.ImportTracker;
-import com.slimgears.apt.util.JavaUtils;
-import com.slimgears.apt.util.TemplateEvaluator;
+import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,7 +26,7 @@ import static com.slimgears.util.stream.Streams.ofType;
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("com.slimgears.util.autovalue.annotations.AutoValuePrototype")
 public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationProcessor {
-    private final Collection<TypeElement> processedElements = new HashSet<>();
+    private final Collection<DeclaredType> processedElements = new HashSet<>();
     private final ImmutableMultimap<String, Annotator> valueAnnotators;
 
     public AutoValuePrototypeAnnotationProcessor() {
@@ -45,9 +44,10 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     @Override
     protected boolean processType(TypeElement annotationElement, TypeElement type) {
         validatePrototype(type);
-        ensureBuildersForInterfaces(type);
 
-        Collection<PropertyInfo> properties = getProperties(type);
+        DeclaredType declaredType = ElementUtils.toDeclaredType(type);
+        ensureBuildersForInterfaces(declaredType);
+        Collection<PropertyInfo> properties = getProperties(declaredType);
 
         AutoValuePrototype annotation = type.getAnnotation(AutoValuePrototype.class);
 
@@ -86,20 +86,21 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .orElse(Annotator.empty);
     }
 
-    private void ensureBuildersForInterfaces(TypeElement typeElement) {
+    private void ensureBuildersForInterfaces(DeclaredType declaredType) {
         ElementUtils
-                .getHierarchy(typeElement)
-                .filter(ElementUtils::isInterface)
+                .getHierarchy(declaredType)
+                .filter(t -> ElementUtils.toTypeElement(declaredType).anyMatch(ElementUtils::isInterface))
                 .filter(e -> !processedElements.contains(e))
                 .forEach(this::generateInterfaceBuilder);
     }
 
-    private void generateInterfaceBuilder(TypeElement type) {
+    private void generateInterfaceBuilder(DeclaredType type) {
         processedElements.add(type);
 
-        Collection<TypeInfo> interfaces = type
-                .getInterfaces()
-                .stream()
+        Collection<TypeInfo> interfaces = ElementUtils
+                .toTypeElement(type)
+                .map(TypeElement::getInterfaces)
+                .flatMap(Collection::stream)
                 .map(TypeInfo::of)
                 .collect(Collectors.toList());
 
@@ -110,6 +111,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         ImportTracker importTracker = ImportTracker.create("java.lang", targetClass.packageName());
 
         TemplateEvaluator.forResource("auto-value-builder.java.vm")
+                .variable("utils", new TemplateUtils())
                 .variable("properties", properties)
                 .variable("interfaces", interfaces)
                 .variable("processor", TypeInfo.of(getClass()))
@@ -120,8 +122,9 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .write(JavaUtils.fileWriter(processingEnv, targetClass));
     }
 
-    private Collection<PropertyInfo> getProperties(TypeElement type) {
-        return type
+    private Collection<PropertyInfo> getProperties(DeclaredType type) {
+        TypeElement typeElement = MoreElements.asType(type.asElement());
+        return typeElement
                 .getEnclosedElements()
                 .stream()
                 .flatMap(ofType(ExecutableElement.class))
@@ -129,7 +132,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .filter(ElementUtils::isNotStatic)
                 .filter(ElementUtils::isPublic)
                 .filter(element -> element.getParameters().isEmpty())
-                .map(PropertyInfo::of)
+                .map(ee -> PropertyInfo.of(type, ee))
                 .collect(Collectors.toList());
     }
 

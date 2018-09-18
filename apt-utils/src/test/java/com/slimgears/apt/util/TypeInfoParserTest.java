@@ -6,6 +6,10 @@ import org.junit.Test;
 
 
 public class TypeInfoParserTest {
+    static class NestedClass {
+
+    }
+
     @Test
     public void testElementType() {
         TypeInfo typeInfo = TypeInfo.of("java.util.List<java.lang.String[]>[][][]");
