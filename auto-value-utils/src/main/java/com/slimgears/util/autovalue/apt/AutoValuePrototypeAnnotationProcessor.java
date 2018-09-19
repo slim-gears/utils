@@ -1,6 +1,6 @@
 package com.slimgears.util.autovalue.apt;
 
-import com.google.auto.common.MoreElements;
+import com.google.auto.common.MoreTypes;
 import com.google.auto.service.AutoService;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMultimap;
@@ -8,14 +8,18 @@ import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
-import com.slimgears.util.stream.Streams;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
-import java.util.*;
+import javax.lang.model.type.TypeMirror;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.ServiceLoader;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -24,7 +28,7 @@ import static com.slimgears.util.stream.Streams.ofType;
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("com.slimgears.util.autovalue.annotations.AutoValuePrototype")
 public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationProcessor {
-    private final Collection<DeclaredType> processedElements = new HashSet<>();
+//    private final Collection<DeclaredType> processedElements = new HashSet<>();
     private final ImmutableMultimap<String, Annotator> valueAnnotators;
 
     public AutoValuePrototypeAnnotationProcessor() {
@@ -44,9 +48,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         validatePrototype(type);
 
         DeclaredType declaredType = ElementUtils.toDeclaredType(type);
-        ensureBuildersForInterfaces(declaredType);
-
-        Collection<PropertyInfo> properties = getProperties(declaredType);
+        generateInterfaceBuilder(declaredType);
 
         AutoValuePrototype annotation = type.getAnnotation(AutoValuePrototype.class);
         String targetName = annotation.value().isEmpty()
@@ -60,7 +62,6 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         try {
             TemplateEvaluator.forResource("auto-value.java.vm")
-                    .variable("properties", properties)
                     .variable("processor", TypeInfo.of(getClass()))
                     .variable("sourceClass", sourceClass)
                     .variable("targetClass", targetClass)
@@ -84,24 +85,8 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .orElse(Annotator.empty);
     }
 
-    private void ensureBuildersForInterfaces(DeclaredType declaredType) {
-        ElementUtils
-                .getHierarchy(declaredType)
-                .filter(t -> ElementUtils.toTypeElement(declaredType).anyMatch(ElementUtils::isInterface))
-                .filter(e -> !processedElements.contains(e))
-                .forEach(this::generateInterfaceBuilder);
-    }
-
     private void generateInterfaceBuilder(DeclaredType type) {
-        processedElements.add(type);
-
-        Collection<TypeInfo> interfaces = ElementUtils.toTypeElement(type)
-                .map(TypeElement::getInterfaces)
-                .flatMap(Collection::stream)
-                .map(TypeInfo::of)
-                .collect(Collectors.toList());
-
-        Optional<TypeInfo> ownBuilder = getOwnBuilder(type);
+        Collection<BuilderInfo> builders = getBuilders(type);
 
         TypeInfo sourceClass = TypeInfo.of(type);
         String targetName = sourceClass.simpleName() + "Builder";
@@ -111,10 +96,8 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         TemplateEvaluator.forResource("auto-value-builder.java.vm")
                 .variable("utils", new TemplateUtils())
-                .variable("ownBuilder", ownBuilder.orElse(null))
-                .variable("hasOwnBuilder", ownBuilder.isPresent())
+                .variable("builders", builders)
                 .variable("properties", properties)
-                .variable("interfaces", interfaces)
                 .variable("processor", TypeInfo.of(getClass()))
                 .variable("sourceClass", sourceClass)
                 .variable("targetClass", targetClass)
@@ -123,32 +106,73 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .write(JavaUtils.fileWriter(processingEnv, targetClass));
     }
 
-    private Optional<TypeInfo> getOwnBuilder(DeclaredType type) {
-        return ElementUtils.toTypeElement(type)
-                .map(TypeElement::getEnclosedElements)
-                .flatMap(Collection::stream)
-                .flatMap(Streams.ofType(TypeElement.class))
-                .filter(e -> ElementUtils.hasAnnotation(e, AutoValuePrototype.Builder.class))
-                .map(this::validateOwnBuilder)
-                .map(TypeInfo::of)
-                .findFirst();
+    private Collection<BuilderInfo> getBuilders(DeclaredType type) {
+        return ElementUtils.getHierarchy(type)
+                .flatMap(valType -> ElementUtils.toTypeElement(valType)
+                        .map(TypeElement::getEnclosedElements)
+                        .flatMap(Collection::stream)
+                        .flatMap(ofType(TypeElement.class))
+                        .filter(isValidBuilder(valType))
+                        .map(te -> BuilderInfo.create(valType, MoreTypes.asDeclared(te.asType()))))
+                .collect(Collectors.toList());
     }
 
-    private TypeElement validateOwnBuilder(TypeElement typeElement) {
-        return typeElement;
+    private Predicate<TypeElement> isValidBuilder(DeclaredType type) {
+        return te -> isValidBuilderName(te) && hasValidTypeParams(type, te);
+    }
+
+    private boolean isValidBuilderName(TypeElement typeElement) {
+        return "Builder".equals(typeElement.getSimpleName().toString());
+    }
+
+    private boolean hasValidTypeParams(DeclaredType valType, TypeElement typeElement) {
+        int paramSize = typeElement.getTypeParameters().size();
+        return paramSize == valType.getTypeArguments().size() + 1 &&
+                hasValidBuilderBounds(typeElement, typeElement.getTypeParameters().get(paramSize - 1));
+    }
+
+    private boolean hasValidBuilderBounds(TypeElement builderType, TypeParameterElement typeParamElement) {
+        if (typeParamElement.getBounds().size() != 1) {
+            return false;
+        }
+        TypeMirror bound = typeParamElement.getBounds().get(0);
+        if (!(bound instanceof DeclaredType)) {
+            return false;
+        }
+        DeclaredType boundDeclaredType = (DeclaredType) bound;
+        TypeElement extendsBound = MoreTypes.asTypeElement(boundDeclaredType);
+        return extendsBound.equals(builderType);
+    }
+
+    private boolean propertyHasPrefix(ExecutableElement element) {
+        String getterName = element.getSimpleName().toString();
+        return !PropertyInfo.propertyName(getterName).equals(getterName);
     }
 
     private Collection<PropertyInfo> getProperties(DeclaredType type) {
-        TypeElement typeElement = MoreElements.asType(type.asElement());
-        return typeElement
-                .getEnclosedElements()
-                .stream()
-                .flatMap(ofType(ExecutableElement.class))
-                .filter(ElementUtils::isAbstract)
-                .filter(ElementUtils::isNotStatic)
-                .filter(ElementUtils::isPublic)
-                .filter(element -> element.getParameters().isEmpty())
-                .map(ee -> PropertyInfo.of(type, ee))
+        boolean hasPrefix = ElementUtils.getHierarchy(type)
+                .flatMap(dt -> ElementUtils
+                        .toTypeElement(dt)
+                        .map(TypeElement::getEnclosedElements)
+                        .flatMap(Collection::stream)
+                        .flatMap(ofType(ExecutableElement.class))
+                        .filter(ElementUtils::isAbstract)
+                        .filter(ElementUtils::isNotStatic)
+                        .filter(ElementUtils::isPublic)
+                        .filter(element -> element.getParameters().isEmpty()))
+                .allMatch(this::propertyHasPrefix);
+
+        return ElementUtils.getHierarchy(type)
+                .flatMap(dt -> ElementUtils
+                        .toTypeElement(dt)
+                        .map(TypeElement::getEnclosedElements)
+                        .flatMap(Collection::stream)
+                        .flatMap(ofType(ExecutableElement.class))
+                        .filter(ElementUtils::isAbstract)
+                        .filter(ElementUtils::isNotStatic)
+                        .filter(ElementUtils::isPublic)
+                        .filter(element -> element.getParameters().isEmpty())
+                        .map(ee -> PropertyInfo.create(dt, ee, hasPrefix)))
                 .collect(Collectors.toList());
     }
 

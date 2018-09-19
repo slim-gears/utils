@@ -26,8 +26,7 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                         "SampleGenericInterface.java",
                         "SampleGenericPrototype.java")
                 .expectedSources(
-                        "SampleInterfaceBuilder.java",
-                        "SampleGenericInterfaceBuilder.java",
+                        "SampleGenericPrototypeBuilder.java",
                         "SampleGeneric.java")
                 .test();
     }

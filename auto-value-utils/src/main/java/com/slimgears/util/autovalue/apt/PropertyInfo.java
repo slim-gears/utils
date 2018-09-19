@@ -5,7 +5,6 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.slimgears.apt.data.*;
-import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.DeclaredType;
@@ -38,17 +37,17 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
         return new AutoValue_PropertyInfo.Builder();
     }
 
-    public static PropertyInfo of(DeclaredType declaredType, ExecutableElement element) {
-        AutoValuePrototype meta = declaredType.asElement().getAnnotation(AutoValuePrototype.class);
+    public static PropertyInfo create(DeclaredType declaredType, ExecutableElement element, boolean usePrefixes) {
         ExecutableType executableType = MoreTypes.asExecutable(Environment.instance().types().asMemberOf(declaredType, element));
 
         String getterName = element.getSimpleName().toString();
         String propertyName = propertyName(getterName);
+        String setterName = usePrefixes ? "set" + capitalize(propertyName) : getterName;
 
         return builder()
                 .name(propertyName)
                 .getterName(getterName)
-                .setterName(getterName)
+                .setterName(setterName)
                 .element(element)
                 .type(executableType.getReturnType())
                 .annotationsFromElement(element)
@@ -56,7 +55,7 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
                 .build();
     }
 
-    private static String propertyName(String name) {
+    static String propertyName(String name) {
         Matcher matcher = namePattern.matcher(name);
         return (matcher.matches())
                 ? decapitalize(matcher.group("name"))
