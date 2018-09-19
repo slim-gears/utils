@@ -41,7 +41,7 @@ extends ##
     #end##
 ##
 
-    _B ${p.name()}($[$p.type()] $p.name());
+    _B ${p.setterName()}($[$p.type()] $p.name());
     #if ($p.hasBuilder())##
 ##
 

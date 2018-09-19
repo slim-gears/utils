@@ -45,10 +45,10 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         DeclaredType declaredType = ElementUtils.toDeclaredType(type);
         ensureBuildersForInterfaces(declaredType);
+
         Collection<PropertyInfo> properties = getProperties(declaredType);
 
         AutoValuePrototype annotation = type.getAnnotation(AutoValuePrototype.class);
-
         String targetName = annotation.value().isEmpty()
                 ? type.getSimpleName().toString().replace("Prototype", "")
                 : annotation.value();
