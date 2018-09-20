@@ -4,7 +4,6 @@
 package com.slimgears.apt.util;
 
 import com.google.auto.common.MoreElements;
-import com.google.auto.common.OverridesUtils;
 import com.google.common.base.Preconditions;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
@@ -106,8 +105,7 @@ public class ElementUtils {
     }
 
     public static boolean overrides(ExecutableElement overrider, ExecutableElement overriden) {
-        return OverridesUtils.nativeOverrides(Environment.instance().elements(), overrider, overriden) ||
-                OverridesUtils.explicitOverrides(Environment.instance().types(), overrider, overriden);
+        return Environment.instance().elements().overrides(overrider, overriden, MoreElements.asType(overrider.getEnclosingElement()));
     }
 
     public static Stream<TypeElement> getReferencedTypes(TypeElement typeElement) {
