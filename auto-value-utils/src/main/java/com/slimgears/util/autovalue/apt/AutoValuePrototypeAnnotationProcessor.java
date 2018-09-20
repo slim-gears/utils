@@ -1,10 +1,12 @@
 package com.slimgears.util.autovalue.apt;
 
+import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
 import com.google.auto.service.AutoService;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMultimap;
 import com.slimgears.apt.AbstractAnnotationProcessor;
+import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
@@ -21,6 +23,7 @@ import java.util.Collection;
 import java.util.ServiceLoader;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.slimgears.util.stream.Streams.ofType;
@@ -150,30 +153,30 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     }
 
     private Collection<PropertyInfo> getProperties(DeclaredType type) {
-        boolean hasPrefix = ElementUtils.getHierarchy(type)
-                .flatMap(dt -> ElementUtils
-                        .toTypeElement(dt)
-                        .map(TypeElement::getEnclosedElements)
-                        .flatMap(Collection::stream)
-                        .flatMap(ofType(ExecutableElement.class))
-                        .filter(ElementUtils::isAbstract)
-                        .filter(ElementUtils::isNotStatic)
-                        .filter(ElementUtils::isPublic)
-                        .filter(element -> element.getParameters().isEmpty()))
-                .allMatch(this::propertyHasPrefix);
-
-        return ElementUtils.getHierarchy(type)
-                .flatMap(dt -> ElementUtils
-                        .toTypeElement(dt)
-                        .map(TypeElement::getEnclosedElements)
-                        .flatMap(Collection::stream)
-                        .flatMap(ofType(ExecutableElement.class))
-                        .filter(ElementUtils::isAbstract)
-                        .filter(ElementUtils::isNotStatic)
-                        .filter(ElementUtils::isPublic)
-                        .filter(element -> element.getParameters().isEmpty())
-                        .map(ee -> PropertyInfo.create(dt, ee, hasPrefix)))
+        Collection<ExecutableElement> elements = MoreElements
+                .getLocalAndInheritedMethods(
+                        MoreTypes.asTypeElement(type),
+                        Environment.instance().types(),
+                        Environment.instance().elements())
+                .stream()
+                .flatMap(this::isPropertyMethod)
                 .collect(Collectors.toList());
+
+        boolean hasPrefix = elements.stream().allMatch(this::propertyHasPrefix);
+
+        return elements
+                .stream()
+                .map(ee -> PropertyInfo.create(type, ee, hasPrefix))
+                .collect(Collectors.toList());
+    }
+
+    private Stream<ExecutableElement> isPropertyMethod(ExecutableElement executableElement) {
+        return Stream
+                .of(executableElement)
+                .filter(ElementUtils::isAbstract)
+                .filter(ElementUtils::isNotStatic)
+                .filter(ElementUtils::isPublic)
+                .filter(element -> element.getParameters().isEmpty());
     }
 
     private void validatePrototype(TypeElement type) {

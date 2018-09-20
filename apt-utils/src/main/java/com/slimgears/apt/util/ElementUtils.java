@@ -3,6 +3,8 @@
  */
 package com.slimgears.apt.util;
 
+import com.google.auto.common.MoreElements;
+import com.google.auto.common.OverridesUtils;
 import com.google.common.base.Preconditions;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
@@ -12,6 +14,7 @@ import javax.lang.model.type.*;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -72,7 +75,39 @@ public class ElementUtils {
     }
 
     public static boolean hasAnnotation(Element elemenet, Class<? extends Annotation> annotationCls) {
-        return elemenet.getAnnotation(annotationCls) != null;
+        return MoreElements.isAnnotationPresent(elemenet, annotationCls);
+    }
+
+    public static <A extends Annotation> Stream<A> getMethodAnnotation(ExecutableElement element, Class<A> cls) {
+        return getOverrides(element).map(ee -> ee.getAnnotation(cls)).filter(Objects::nonNull);
+    }
+
+    public static Stream<AnnotationMirror> getMethodAnnotations(ExecutableElement element) {
+        return getOverrides(element).flatMap(ee -> ee.getAnnotationMirrors().stream());
+    }
+
+    public static Stream<ExecutableElement> getOverrides(ExecutableElement element) {
+        TypeElement overridenType = MoreElements.asType(element.getEnclosingElement());
+        return Stream.concat(Stream.of(element), getOverrides(overridenType, element));
+    }
+
+    private static Stream<ExecutableElement> getOverrides(TypeElement overridenType, ExecutableElement element) {
+        return Stream
+                .concat(
+                        Stream.of(overridenType.getSuperclass()).flatMap(ElementUtils::toTypeElement),
+                        overridenType.getInterfaces().stream().flatMap(ElementUtils::toTypeElement))
+                .flatMap(superType -> Stream
+                        .concat(Stream.of(superType)
+                                .map(TypeElement::getEnclosedElements)
+                                .flatMap(Collection::stream)
+                                .flatMap(ofType(ExecutableElement.class))
+                                .filter(ee -> overrides(element, ee)),
+                                getOverrides(superType, element)));
+    }
+
+    public static boolean overrides(ExecutableElement overrider, ExecutableElement overriden) {
+        return OverridesUtils.nativeOverrides(Environment.instance().elements(), overrider, overriden) ||
+                OverridesUtils.explicitOverrides(Environment.instance().types(), overrider, overriden);
     }
 
     public static Stream<TypeElement> getReferencedTypes(TypeElement typeElement) {
