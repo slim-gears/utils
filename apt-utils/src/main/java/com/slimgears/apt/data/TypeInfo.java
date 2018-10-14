@@ -1,27 +1,38 @@
 package com.slimgears.apt.data;
 
 import com.google.auto.common.MoreTypes;
+import com.google.auto.common.MoreElements;
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.apt.util.TypeInfoParserAdapter;
+import com.slimgears.util.generic.ScopedInstance;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.NoType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.slimgears.util.stream.Streams.ofType;
+import static java.util.Objects.requireNonNull;
 
 @AutoValue
-public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, HasTypeParameters {
+public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods, HasAnnotations, HasTypeParameters {
+    private final static ScopedInstance<Map<String, TypeInfo>> typeRegistrar = ScopedInstance.create(new HashMap<>());
+
     public final static Comparator<TypeInfo> comparator = Comparator
             .<TypeInfo, String>comparing(TypeInfo::packageName)
             .thenComparing(TypeInfo::simpleName);
@@ -51,6 +62,14 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
         return name + dimensionsToString();
     }
 
+    public TypeInfo toSymbolic() {
+        return of(fullName());
+    }
+
+    public String importName() {
+        return hasEnclosingType() ? requireNonNull(enclosingType()).importName() : erasureName();
+    }
+
     public Optional<TypeInfo> elementType() {
         return isArray()
                 ? Optional.of(toBuilder().arrayDimensions(0).build())
@@ -68,7 +87,8 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public String simpleName() {
-        return name().substring(name().lastIndexOf('.') + 1) + dimensionsToString();
+        String packageName = packageName();
+        return (Strings.isNullOrEmpty(packageName) ? name() : name().substring(packageName.length() + 1)) + dimensionsToString();
     }
 
     public String erasureName() {
@@ -76,7 +96,7 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public String packageName() {
-        return packageName(name());
+        return hasEnclosingType() ? requireNonNull(enclosingType()).packageName() : packageName(name());
     }
 
     public boolean isArray() {
@@ -123,32 +143,35 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public static TypeInfo of(String name, TypeInfo param, TypeInfo... otherParams) {
-        return builder().name(name)
+        return register(builder().name(name)
                 .typeParams(param)
-                .typeParams(otherParams).build();
+                .typeParams(otherParams).build());
     }
 
     public static TypeInfo of(String fullName) {
-        return TypeInfoParserAdapter.toTypeInfo(fullName);
+        return register(TypeInfoParserAdapter.toTypeInfo(fullName));
     }
 
     public static TypeInfo of(TypeMirror typeMirror) {
-        if (typeMirror instanceof DeclaredType) {
-            return of((DeclaredType)typeMirror);
+        if (typeMirror instanceof NoType) {
+            return TypeInfo.of(void.class);
+        } else if (typeMirror instanceof DeclaredType) {
+            return register(TypeInfo.of((DeclaredType)(typeMirror)));
         } else {
-            return of(typeMirror.toString());
+            return register(of(typeMirror.toString()));
         }
     }
 
     public static TypeInfo of(DeclaredType declaredType) {
         return builder()
                 .name(MoreTypes.asTypeElement(declaredType).getQualifiedName().toString())
+                .enclosingTypeFrom(declaredType)
                 .typeParamsFromTypeMirrors(declaredType.getTypeArguments())
                 .build();
     }
 
     public static TypeInfo of(Type type) {
-        return of(type.getTypeName().replace('$', '.'));
+        return register(of(type.getTypeName()));
     }
 
     public static TypeInfo of(TypeElement typeElement) {
@@ -158,23 +181,28 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
                 .annotationsFromElement(typeElement)
                 .typeParams(typeElement.getTypeParameters());
 
+        if (typeElement.getEnclosingElement() instanceof TypeElement) {
+            builder.enclosingType(MoreElements.asType(typeElement.getEnclosingElement()));
+        }
+
         typeElement.getEnclosedElements()
                 .stream()
                 .flatMap(ofType(ExecutableElement.class))
                 .map(m -> MethodInfo.create(m, declaredType))
                 .forEach(builder::method);
 
-        return builder.build();
+        return register(builder.build());
     }
 
     @AutoValue.Builder
     public interface Builder extends
             InfoBuilder<TypeInfo>,
             HasName.Builder<Builder>,
+            HasEnclosingType.Builder<Builder>,
             HasMethods.Builder<Builder>,
             HasTypeParameters.Builder<Builder>,
             HasAnnotations.Builder<Builder> {
-        public Builder arrayDimensions(int dimensions);
+        Builder arrayDimensions(int dimensions);
     }
 
     public TypeInfo asBoxed() {
@@ -183,10 +211,11 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
 
     @Override
     public String toString() {
-        return fullName();
+        return fullName().replace('$', '.');
     }
 
     public static String packageName(String qualifiedName) {
+        qualifiedName = qualifiedName.split("\\$")[0];
         int pos = qualifiedName.lastIndexOf('.');
         return (pos >= 0) ? qualifiedName.substring(0, pos) : "";
     }
@@ -197,5 +226,17 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
 
     private String dimensionsToString() {
         return IntStream.range(0, arrayDimensions()).mapToObj(i -> "[]").collect(Collectors.joining());
+    }
+
+    public static ScopedInstance.Closable withRegistrar() {
+        return typeRegistrar.scope(new HashMap<>());
+    }
+
+    private static TypeInfo register(TypeInfo type) {
+        typeRegistrar.current().computeIfAbsent(type.erasureName(), tname -> type.hasTypeParams() ? TypeInfo.of(tname) : type);
+        if (!type.hasEnclosingType() && typeRegistrar.current().containsKey(packageName(type.erasureName()))) {
+            return type.toBuilder().enclosingType(typeRegistrar.current().get(packageName(type.erasureName()))).build();
+        }
+        return type;
     }
 }

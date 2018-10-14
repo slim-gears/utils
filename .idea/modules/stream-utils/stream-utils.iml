@@ -4,6 +4,7 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../stream-utils">
       <excludeFolder url="file://$MODULE_DIR$/../../../stream-utils/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../stream-utils/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../../stream-utils/build/classes" />
       <excludeFolder url="file://$MODULE_DIR$/../../../stream-utils/build/docs" />
       <excludeFolder url="file://$MODULE_DIR$/../../../stream-utils/build/libs" />

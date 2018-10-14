@@ -50,10 +50,10 @@ public class AnnotationInfoTest {
         Assert.assertEquals(
                 "@TestAnnotation(value = AnnotationInfoTest.class, " +
                 "items = {" +
-                        "@Item(\"TestValue1\"), " +
-                        "@Item(value = \"TestValue2\", items = {1, 2, 3}), " +
-                        "@Item(\"TestValue3\")}, " +
-                        "item = @Item)", annotation.asString());
+                        "@TestAnnotation.Item(\"TestValue1\"), " +
+                        "@TestAnnotation.Item(value = \"TestValue2\", items = {1, 2, 3}), " +
+                        "@TestAnnotation.Item(\"TestValue3\")}, " +
+                        "item = @TestAnnotation.Item)", annotation.asString());
     }
 
     @Test
@@ -65,6 +65,6 @@ public class AnnotationInfoTest {
                 .build()
                 .asString();
 
-        Assert.assertEquals("@Item(\"TestValue3\")", annotation);
+        Assert.assertEquals("@TestAnnotation.Item(\"TestValue3\")", annotation);
     }
 }

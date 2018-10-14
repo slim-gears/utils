@@ -26,8 +26,7 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                         "SampleGenericInterface.java",
                         "SampleGenericPrototype.java")
                 .expectedSources(
-                        "SampleInterfaceBuilder.java",
-                        "SampleGenericInterfaceBuilder.java",
+                        "SampleGenericPrototypeBuilder.java",
                         "SampleGeneric.java")
                 .test();
     }
@@ -62,9 +61,47 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testGuavaValuePrototype() {
+        tester()
+                .inputFiles("SampleGuavaValuePrototype.java")
+                .expectedSources("SampleGuavaValuePrototypeBuilder.java")
+                .test();
+    }
+
+    @Test
+    public void testCustomBuilderValuePrototype() {
+        tester()
+                .inputFiles("SampleCustomBuilderValuePrototype.java")
+                .expectedSources(
+                        "SampleCustomBuilderValue.java",
+                        "SampleCustomBuilderValuePrototypeBuilder.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
                 .processedWith(new AutoValuePrototypeAnnotationProcessor(), new AutoValueProcessor());
     }
+
+//    public interface DummyValuePrototype {
+//        boolean isFoo();
+//    }
+//
+//    public interface DummyValueBuilder<B extends DummyValueBuilder<B>> {
+//        B setFoo(boolean foo);
+//    }
+//
+//    @AutoValue
+//    public static abstract class DummyValue implements DummyValuePrototype {
+//        public static Builder builder() {
+//            return new AutoValue_AutoValuePrototypeAnnotationProcessorTest_DummyValue.Builder();
+//        }
+//
+//        @AutoValue.Builder
+//        public interface Builder extends DummyValueBuilder<Builder> {
+//            DummyValue build();
+//        }
+//    }
 }
