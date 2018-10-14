@@ -9,6 +9,7 @@ import com.slimgears.apt.data.*;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.ExecutableType;
+import javax.lang.model.type.TypeMirror;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,21 +17,19 @@ import java.util.regex.Pattern;
 public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
     private static final Pattern namePattern = Pattern.compile("^((get)|(is))(?<name>[A-Z]\\w*)$");
 
-    public abstract ExecutableElement element();
+    public abstract ExecutableType executableType();
+    public abstract ExecutableElement executableElement();
+    public abstract TypeMirror propertyType();
     public abstract ImmutableList<MethodInfo> builderMethods();
     public abstract String setterName();
     public abstract String getterName();
 
-    public DeclaredType propertyType() {
-        return MoreTypes.asDeclared(element().getReturnType());
-    }
-
     public boolean hasBuilder() {
-        return PropertyUtils.hasBuilder(element());
+        return PropertyUtils.hasBuilder(executableElement());
     }
 
     public TypeInfo builderType() {
-        return TypeInfo.of(PropertyUtils.builderTypeFor(propertyType()));
+        return TypeInfo.of(PropertyUtils.builderTypeFor(MoreTypes.asDeclared(propertyType())));
     }
 
     public static Builder builder() {
@@ -44,15 +43,19 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
         String propertyName = propertyName(getterName);
         String setterName = usePrefixes ? "set" + capitalize(propertyName) : getterName;
 
-        return builder()
+        PropertyInfo propertyInfo = builder()
                 .name(propertyName)
                 .getterName(getterName)
                 .setterName(setterName)
-                .element(element)
+                .executableElement(element)
+                .executableType(executableType)
+                .propertyType(executableType.getReturnType())
                 .type(executableType.getReturnType())
                 .annotationsFromElement(element)
                 .addBuilderMethods(PropertyUtils.builderMethods(executableType))
                 .build();
+
+        return propertyInfo;
     }
 
     static String propertyName(String name) {
@@ -76,7 +79,9 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
             HasName.Builder<Builder>,
             HasType.Builder<Builder>,
             HasAnnotations.Builder<Builder> {
-        Builder element(ExecutableElement element);
+        Builder executableType(ExecutableType executableType);
+        Builder executableElement(ExecutableElement executableElement);
+        Builder propertyType(TypeMirror propertyType);
         ImmutableList.Builder<MethodInfo> builderMethodsBuilder();
         Builder setterName(String setter);
         Builder getterName(String getter);

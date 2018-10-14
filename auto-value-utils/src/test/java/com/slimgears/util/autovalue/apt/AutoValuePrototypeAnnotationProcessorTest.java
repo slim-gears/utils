@@ -79,6 +79,18 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+//    @Test
+//    public void testSpecializedGenericPrototype() {
+//        tester()
+//                .inputFiles(
+//                        "SampleSpecializedGenericPrototype.java",
+//                        "SampleGuavaInterface.java")
+//                .expectedSources(
+//                        "SampleSpecializedGeneric.java",
+//                        "SampleSpecializedGenericPrototypeBuilder.java")
+//                .test();
+//    }
+//
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
