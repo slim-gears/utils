@@ -39,7 +39,7 @@ public class NameTemplateUtils {
 
         Set<String> varNames = getVarNames(template);
 
-        checkArgument(varNames.size() == typeElement.getTypeParameters().size(), "Template variable names number mismatch");
+        checkArgument(varNames.size() <= typeElement.getTypeParameters().size(), "Template variable names number mismatch");
         varNames.forEach(n -> checkArgument(namesFromTypeParams.contains(n), "Template variable name " + n + " does not correspond to type parameter"));
     }
 
