@@ -1,10 +1,20 @@
 #macro (typeParams $cls)##
     #if ($cls.hasTypeParams())##
     <##
-        #foreach ($p in $cls.typeParams())##
-            $[$p.type()]##
+        #foreach ($tp in $cls.typeParams())##
+            $[$tp.typeName()]##
             #if ($foreach.hasNext), #end##
         #end##
     >##
+    #end##
+#end##
+#macro (typeParamsDeclaration $cls)##
+    #if ($cls.hasTypeParams())##
+            <##
+        #foreach ($tp in $cls.typeParams())##
+                $[$tp.fullDeclaration()]##
+            #if ($foreach.hasNext), #end##
+        #end##
+            >##
     #end##
 #end##

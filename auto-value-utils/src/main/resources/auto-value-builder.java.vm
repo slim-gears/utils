@@ -5,7 +5,7 @@ $imports
 @$[javax.annotation.Generated]("$processor")
 public interface $targetClass.simpleName()<##
 #foreach ($tp in $sourceClass.typeParams())##
-    $tp.type(), ##
+    $[$tp.fullDeclaration()], ##
 #end##
 _B extends $targetClass.simpleName()<##
 #foreach ($tp in $sourceClass.typeParams())##

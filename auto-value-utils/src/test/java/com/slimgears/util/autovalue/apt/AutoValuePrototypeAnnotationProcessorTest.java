@@ -33,12 +33,32 @@ public class AutoValuePrototypeAnnotationProcessorTest {
     }
 
     @Test
+    public void testComparableGenericPrototype() {
+        tester()
+                .inputFiles(
+                        "SampleComparableGenericInterface.java",
+                        "SampleComparableGenericPrototype.java")
+                .expectedSources(
+                        "SampleComparableGeneric.java",
+                        "SampleComparableGenericPrototypeBuilder.java")
+                .test();
+    }
+
+    @Test
     public void testGenericFieldPrototype() {
         tester()
                 .inputFiles("SampleGenericFieldPrototype.java")
                 .expectedSources(
                         "SampleGenericFieldPrototypeBuilder.java",
                         "SampleGenericField.java")
+                .test();
+    }
+
+    @Test
+    public void testPrototypeReferences() {
+        tester()
+                .inputFiles("SampleAPrototype.java", "SampleBPrototype.java")
+                .expectedSources("SampleBPrototypeBuilder.java")
                 .test();
     }
 

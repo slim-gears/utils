@@ -23,4 +23,13 @@ public class ImportTrackerTest {
         Assert.assertEquals(1, importTracker.imports().length);
         Assert.assertEquals("com.slimgears.apt.util.ImportTrackerTest", importTracker.imports()[0]);
     }
+
+    @Test
+    public void testGenericBoundClassImport() {
+        ImportTracker importTracker = ImportTracker.create();
+        String simplifiedType = importTracker.use("T extends java.util.Comparable<T>");
+        Assert.assertEquals("T extends Comparable<T>", simplifiedType);
+        Assert.assertEquals(1, importTracker.imports().length);
+        Assert.assertEquals("java.util.Comparable", importTracker.imports()[0]);
+    }
 }

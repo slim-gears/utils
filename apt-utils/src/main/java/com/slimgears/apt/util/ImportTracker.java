@@ -10,8 +10,12 @@ import com.slimgears.util.generic.ScopedInstance;
 
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ImportTracker {
+    private final static Pattern boundTypePattern = Pattern
+                .compile("^(?<bounding>[a-zA-Z_]\\w*\\s+((extends)|(super))\\s+)(?<type>[^\\s]+.*)$");
     private final static ScopedInstance<ImportTracker> scopedInstance = ScopedInstance.create();
     private final static String importsMagicWord = "`imports`";
     private final Collection<String> imports = new TreeSet<>();
@@ -64,6 +68,13 @@ public class ImportTracker {
     }
 
     public String use(String cls) {
+        Matcher matcher = boundTypePattern.matcher(cls);
+        if (matcher.matches()) {
+            String bounding = matcher.group("bounding");
+            String type = matcher.group("type");
+            String simplifiedType = use(TypeInfo.of(type));
+            return bounding + simplifiedType;
+        }
         TypeInfo typeInfo = TypeInfo.of(cls);
         return use(typeInfo);
     }

@@ -10,21 +10,21 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-@JsonDeserialize(builder = SampleGeneric.Builder.class)
-@JsonSerialize(as = SampleGeneric.class)
-public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, SampleInterface, SampleGenericInterface<T> {
+@JsonDeserialize(builder = SampleComparableGeneric.Builder.class)
+@JsonSerialize(as = SampleComparableGeneric.class)
+public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T>{
     @JsonIgnore
     public abstract Builder<T> toBuilder();
 
-    public static <T> Builder<T> builder() {
+    public static <T extends Comparable<T>> Builder<T> builder() {
         return Builder.create();
     }
 
     @AutoValue.Builder
-    public interface Builder<T> extends BuilderPrototype<SampleGeneric<T>, Builder<T>>, SampleGenericPrototypeBuilder<T, Builder<T>>, SampleInterfaceBuilder<Builder<T>>, SampleGenericInterfaceBuilder<T, Builder<T>> {
+    public interface Builder<T extends Comparable<T>> extends BuilderPrototype<SampleComparableGeneric<T>, Builder<T>>, SampleComparableGenericPrototypeBuilder<T, Builder<T>> {
         @JsonCreator
-        public static <T> Builder<T> create() {
-            return new AutoValue_SampleGeneric.Builder<>();
+        public static <T extends Comparable<T>> Builder<T> create() {
+            return new AutoValue_SampleComparableGeneric.Builder<>();
         }
     }
 }

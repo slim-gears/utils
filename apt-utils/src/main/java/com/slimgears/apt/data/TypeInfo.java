@@ -1,5 +1,6 @@
 package com.slimgears.apt.data;
 
+import com.google.auto.common.MoreTypes;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableMap;
 import com.slimgears.apt.util.ElementUtils;
@@ -132,7 +133,18 @@ public abstract class TypeInfo implements HasName, HasMethods, HasAnnotations, H
     }
 
     public static TypeInfo of(TypeMirror typeMirror) {
-        return of(typeMirror.toString());
+        if (typeMirror instanceof DeclaredType) {
+            return of((DeclaredType)typeMirror);
+        } else {
+            return of(typeMirror.toString());
+        }
+    }
+
+    public static TypeInfo of(DeclaredType declaredType) {
+        return builder()
+                .name(MoreTypes.asTypeElement(declaredType).getQualifiedName().toString())
+                .typeParamsFromTypeMirrors(declaredType.getTypeArguments())
+                .build();
     }
 
     public static TypeInfo of(Type type) {
