@@ -15,7 +15,7 @@ public interface SampleValuePrototype {
     @Nullable
     String strValue();
 
-    boolean isFoo();
+    boolean foo();
 
     default String calculatedString() {
         return strValue() + doubleValue() + intValue();

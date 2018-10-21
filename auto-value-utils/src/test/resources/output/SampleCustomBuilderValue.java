@@ -20,11 +20,23 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         return Builder.create();
     }
 
+    @Override
+    public abstract int intValue();
+
+    @Override
+    public abstract double doubleValue();
+
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleCustomBuilderValue, Builder>, SampleCustomBuilderValuePrototypeBuilder<Builder> {
         @JsonCreator
         public static Builder create() {
             return new AutoValue_SampleCustomBuilderValue.Builder();
         }
+
+        @Override
+        Builder intValue(int intValue);
+
+        @Override
+        Builder doubleValue(double doubleValue);
     }
 }

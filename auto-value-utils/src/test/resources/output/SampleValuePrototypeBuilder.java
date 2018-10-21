@@ -13,6 +13,6 @@ public interface SampleValuePrototypeBuilder<_B extends SampleValuePrototypeBuil
     @SampleFieldAnnotation
     _B strValue(String strValue);
 
-    _B isFoo(boolean foo);
+    _B foo(boolean foo);
 
 }

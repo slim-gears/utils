@@ -12,7 +12,7 @@ import javax.annotation.Generated;
 @AutoValue
 @JsonDeserialize(builder = SampleGeneric.Builder.class)
 @JsonSerialize(as = SampleGeneric.class)
-public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>{
+public abstract class SampleGeneric<T> implements SampleGenericPrototype<T> {
     @JsonIgnore
     public abstract Builder<T> toBuilder();
 
@@ -20,11 +20,23 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>{
         return Builder.create();
     }
 
+    @Override
+    public abstract String value();
+
+    @Override
+    public abstract T tValue();
+
     @AutoValue.Builder
     public interface Builder<T> extends BuilderPrototype<SampleGeneric<T>, Builder<T>>, SampleGenericPrototypeBuilder<T, Builder<T>> {
         @JsonCreator
         public static <T> Builder<T> create() {
             return new AutoValue_SampleGeneric.Builder<>();
         }
+
+        @Override
+        Builder<T> value(String value);
+
+        @Override
+        Builder<T> tValue(T tValue);
     }
 }
