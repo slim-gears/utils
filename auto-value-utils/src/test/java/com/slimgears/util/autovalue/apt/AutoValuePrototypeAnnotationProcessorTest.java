@@ -2,10 +2,25 @@ package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.value.processor.AutoValueProcessor;
 import com.slimgears.apt.util.AnnotationProcessingTester;
+import com.slimgears.util.generic.ScopedInstance;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.event.Level;
 
 public class AutoValuePrototypeAnnotationProcessorTest {
+    private ScopedInstance.Closable scope;
+
+    @Before
+    public void setUp() {
+        scope = AutoValuePrototypeAnnotationProcessor.Registrar.scope();
+    }
+
+    @After
+    public void tearDown() {
+        scope.close();
+    }
+
     @Test
     public void testBasicPrototype() {
         tester()

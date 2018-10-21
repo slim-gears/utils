@@ -8,8 +8,12 @@ import com.google.common.collect.ImmutableMultimap;
 import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.apt.data.TypeParameterInfo;
 import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
+import com.slimgears.util.generic.ScopedInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -20,6 +24,8 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -31,7 +37,36 @@ import static com.slimgears.util.stream.Streams.ofType;
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("com.slimgears.util.autovalue.annotations.AutoValuePrototype")
 public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationProcessor {
-//    private final Collection<DeclaredType> processedElements = new HashSet<>();
+    private final static Logger log = LoggerFactory.getLogger(AutoValuePrototypeAnnotationProcessor.class);
+
+    public static class Registrar {
+        private final Collection<TypeElement> processedElements = new HashSet<>();
+        private final static ScopedInstance<Registrar> instance = ScopedInstance.create(new Registrar());
+
+        public Registrar() {
+            log.debug("Registrar created");
+        }
+
+        public boolean needsProcessing(DeclaredType type) {
+            boolean processed = processedElements.contains(MoreTypes.asTypeElement(type));
+            log.debug("Type {} is {} ({} processed types)", type, processed ? "processed" : "not processed", processedElements.size());
+            return !processed;
+        }
+
+        public void processed(DeclaredType type) {
+            processedElements.add(MoreTypes.asTypeElement(type));
+            log.debug("Adding processed type: {} ({} processed types)", type, processedElements.size());
+        }
+
+        public static Registrar current() {
+            return instance.current();
+        }
+
+        public static ScopedInstance.Closable scope() {
+            return instance.scope(new Registrar());
+        }
+    }
+
     private final ImmutableMultimap<String, Annotator> valueAnnotators;
 
     public AutoValuePrototypeAnnotationProcessor() {
@@ -51,7 +86,8 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         validatePrototype(type);
 
         DeclaredType declaredType = ElementUtils.toDeclaredType(type);
-        generateInterfaceBuilder(declaredType);
+        ensureBuildersForInterfaces(declaredType);
+        //generateInterfaceBuilder(declaredType);
 
         AutoValuePrototype annotation = type.getAnnotation(AutoValuePrototype.class);
         String targetName = annotation.value().isEmpty()
@@ -60,6 +96,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         TypeInfo sourceClass = TypeInfo.of(type);
         TypeInfo targetClass = TypeInfo.of(sourceClass.packageName() + "." + targetName);
+        Collection<PropertyInfo> properties = getProperties(declaredType);
 
         ImportTracker importTracker = ImportTracker.create("java.lang", targetClass.packageName());
 
@@ -68,6 +105,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                     .variable("processor", TypeInfo.of(getClass()))
                     .variable("sourceClass", sourceClass)
                     .variable("targetClass", targetClass)
+                    .variable("properties", properties)
                     .variable("imports", importTracker)
                     .apply(JavaUtils.imports(importTracker))
                     .write(JavaUtils.fileWriter(processingEnv, targetClass));
@@ -88,8 +126,25 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .orElse(Annotator.empty);
     }
 
+    private void ensureBuildersForInterfaces(DeclaredType declaredType) {
+        ElementUtils
+                .getHierarchy(declaredType)
+                .filter(t -> ElementUtils.toTypeElement(declaredType).anyMatch(ElementUtils::isInterface))
+                .filter(Registrar.current()::needsProcessing)
+                .forEach(this::generateInterfaceBuilder);
+    }
+
     private void generateInterfaceBuilder(DeclaredType type) {
+        type = MoreTypes.asDeclared(type.asElement().asType());
+        Registrar.current().processed(type);
         Collection<BuilderInfo> builders = getBuilders(type);
+
+        log.debug("Generating builder for type: {} (declaration: {}{})", type, TypeInfo.of(type).name(), TypeInfo.of(type)
+                .typeParams()
+                .stream()
+                .map(TypeParameterInfo::fullDeclaration)
+                .collect(Collectors.joining(", ", "<", ">"))
+        );
 
         TypeInfo sourceClass = TypeInfo.of(type);
         String targetName = sourceClass.simpleName() + "Builder";
@@ -110,13 +165,25 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     }
 
     private Collection<BuilderInfo> getBuilders(DeclaredType type) {
-        return ElementUtils.getHierarchy(type)
-                .flatMap(valType -> ElementUtils.toTypeElement(valType)
-                        .map(TypeElement::getEnclosedElements)
-                        .flatMap(Collection::stream)
-                        .flatMap(ofType(TypeElement.class))
-                        .filter(isValidBuilder(valType))
-                        .map(te -> BuilderInfo.create(valType, MoreTypes.asDeclared(te.asType()))))
+        return Stream
+                .concat(
+                        ElementUtils.getHierarchy(type)
+                                .flatMap(valType -> ElementUtils.toTypeElement(valType)
+                                    .map(TypeElement::getEnclosedElements)
+                                    .flatMap(Collection::stream)
+                                    .flatMap(ofType(TypeElement.class))
+                                    .filter(isValidBuilder(valType))
+                                    .map(te -> BuilderInfo.create(valType, MoreTypes.asDeclared(te.asType())))),
+                        ElementUtils.toTypeElement(type)
+                                .map(TypeElement::getInterfaces)
+                                .flatMap(Collection::stream)
+                                .map(TypeInfo::of)
+                                .map(valType -> BuilderInfo.create(
+                                        valType,
+                                        valType.toBuilder()
+                                                .name(valType.name() + "Builder")
+                                                .typeParam("_B", TypeInfo.ofWildcard())
+                                                .build())))
                 .collect(Collectors.toList());
     }
 

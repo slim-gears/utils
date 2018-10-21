@@ -11,6 +11,10 @@ public abstract class BuilderInfo {
     public abstract TypeInfo builderType();
 
     public static BuilderInfo create(DeclaredType valueType, DeclaredType builderType) {
-        return new AutoValue_BuilderInfo(TypeInfo.of(valueType), TypeInfo.of(builderType));
+        return create(TypeInfo.of(valueType), TypeInfo.of(builderType));
+    }
+
+    public static BuilderInfo create(TypeInfo valueType, TypeInfo builderType) {
+        return new AutoValue_BuilderInfo(valueType, builderType);
     }
 }

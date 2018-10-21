@@ -7,6 +7,7 @@ sourceSets {
 dependencies {
     implementation project(':apt-utils')
     implementation project(':stream-utils')
+    implementation project(':generic-utils')
     implementation project.sourceSetDependency(sourceSets.annotations)
     implementation libs.autoValueAnnotations
     annotationProcessor libs.autoValue

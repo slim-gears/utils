@@ -18,6 +18,19 @@ implements $[$sourceClass] ##
         return Builder.create();
     }
 
+#foreach ($p in $properties)
+    @Override##
+    #foreach ($a in $p.annotations())##
+##
+
+    $a.asString()##
+    #end##
+##
+
+    public abstract $[$p.type()] $p.name()();
+
+#end
+
     @$[com.google.auto.value.AutoValue].Builder
     public interface Builder#typeParamsDeclaration($sourceClass) extends ##
         $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<$targetClass.simpleName()#typeParams($sourceClass), ##
@@ -32,5 +45,32 @@ implements $[$sourceClass] ##
         public static #typeParamsDeclaration($sourceClass) Builder#typeParams($sourceClass) create() {
             return new AutoValue_${targetClass.simpleName()}.Builder#if ($sourceClass.hasTypeParams())<>#end();
         }
+#foreach ($p in $properties)##
+##
+
+        @Override##
+    #foreach ($a in $p.annotations())##
+        #if ($a.type().simpleName() != "Nullable")##
+##
+
+        $a.asString()##
+        #end##
+    #end##
+##
+
+        Builder#typeParams($sourceClass) ${p.setterName()}($[$p.type()] $p.name());##
+    #if ($p.hasBuilder())##
+##
+
+       $[$p.builderType()] ${p.name()}Builder();##
+
+##
+    #end##
+    #if ($foreach.hasNext)##
+
+##
+    #end##
+#end
+
     }
 }
