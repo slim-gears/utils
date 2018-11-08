@@ -37,7 +37,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .reduce(Boolean::logicalOr)
                     .orElse(false);
 
-            if (roundEnv.processingOver()) {
+            if (annotations.isEmpty()) {
                 onComplete();
             }
             return res;

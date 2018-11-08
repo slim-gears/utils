@@ -62,7 +62,7 @@ implements $[$sourceClass] ##
     #if ($p.hasBuilder())##
 ##
 
-       $[$p.builderType()] ${p.name()}Builder();##
+        $[$p.builderType()] ${p.name()}Builder();##
 
 ##
     #end##

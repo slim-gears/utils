@@ -5,7 +5,7 @@ import java.util.Iterator;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
-public interface SampleSpecializedGenericPrototypeBuilder<_B extends SampleSpecializedGenericPrototypeBuilder<_B>> {
+public interface SampleSpecializedGenericPrototypeBuilder<_B extends SampleSpecializedGenericPrototypeBuilder<_B>> extends SampleGuavaInterfaceBuilder<java.lang.String, _B> {
 
     _B values(ImmutableList<String> values);
 
