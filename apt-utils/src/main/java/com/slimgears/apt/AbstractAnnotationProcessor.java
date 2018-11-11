@@ -37,7 +37,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .reduce(Boolean::logicalOr)
                     .orElse(false);
 
-            if (roundEnv.processingOver()) {
+            if (isProcessingOver(roundEnv)) {
                 onComplete();
             }
             return res;
@@ -47,6 +47,10 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return processingEnv.getSourceVersion();
+    }
+
+    protected boolean isProcessingOver(RoundEnvironment roundEnvironment) {
+        return roundEnvironment.processingOver();
     }
 
     protected void onComplete() {
