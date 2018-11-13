@@ -41,7 +41,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     private final static Logger log = LoggerFactory.getLogger(AutoValuePrototypeAnnotationProcessor.class);
 
     public static class Registrar {
-        private final Collection<TypeElement> processedElements = new HashSet<>();
+        private final Collection<String> processedElements = new HashSet<>();
         private final static ScopedInstance<Registrar> instance = ScopedInstance.create(new Registrar());
 
         public Registrar() {
@@ -49,13 +49,13 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         }
 
         public boolean needsProcessing(DeclaredType type) {
-            boolean processed = processedElements.contains(MoreTypes.asTypeElement(type));
-            log.debug("Type {} is {} ({} processed types)", type, processed ? "processed" : "not processed", processedElements.size());
+            boolean processed = processedElements.contains(type.asElement().toString());
+            log.debug("Type {} is {} ({} processed types)", type.asElement().toString(), processed ? "processed" : "not processed", processedElements.size());
             return !processed;
         }
 
         public void processed(DeclaredType type) {
-            processedElements.add(MoreTypes.asTypeElement(type));
+            processedElements.add(type.asElement().toString());
             log.debug("Adding processed type: {} ({} processed types)", type, processedElements.size());
         }
 
