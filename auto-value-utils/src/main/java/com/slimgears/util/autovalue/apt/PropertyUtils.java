@@ -75,6 +75,7 @@ public class PropertyUtils {
                 .stream()
                 .flatMap(ofType(ExecutableElement.class))
                 .filter(ElementUtils::isPublic)
+                .filter(ElementUtils::isNotStatic)
                 .filter(ee -> Optional
                         .of(ee.getReturnType())
                         .flatMap(Optionals.ofType(DeclaredType.class))

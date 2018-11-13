@@ -21,6 +21,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.Collection;
@@ -86,7 +87,6 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         validatePrototype(type);
 
         DeclaredType declaredType = ElementUtils.toDeclaredType(type);
-        ensureBuildersForInterfaces(declaredType);
         //generateInterfaceBuilder(declaredType);
 
         AutoValuePrototype annotation = type.getAnnotation(AutoValuePrototype.class);
@@ -98,6 +98,11 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         TypeInfo targetClass = TypeInfo.of(sourceClass.packageName() + "." + targetName);
         Collection<PropertyInfo> properties = getProperties(declaredType);
 
+        if (properties.stream().anyMatch(p -> p.propertyType().getKind() == TypeKind.ERROR)) {
+            delayProcessing();
+        }
+
+        ensureBuildersForInterfaces(declaredType);
         ImportTracker importTracker = ImportTracker.create("java.lang", targetClass.packageName());
 
         try {

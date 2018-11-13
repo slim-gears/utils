@@ -69,7 +69,7 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
-    @Test @Ignore
+    @Test
     public void testPrototypeReferences() {
         tester()
                 .inputFiles("SampleAPrototype.java", "SampleBPrototype.java")
