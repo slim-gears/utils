@@ -1,11 +1,17 @@
 package com.slimgears.sample;
 
+import com.google.common.collect.ImmutableList;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.reflect.TypeToken;
 import javax.annotation.Generated;
 import javax.annotation.Nullable;
 
@@ -13,9 +19,51 @@ import javax.annotation.Nullable;
 @AutoValue
 @JsonDeserialize(builder = SampleValue.Builder.class)
 @JsonSerialize(as = SampleValue.class)
-public abstract class SampleValue implements SampleValuePrototype {
+public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<SampleValue, SampleValue.Builder> {
+    public static final Meta metaClass = new Meta();
+
+    public static class Meta implements MetaClass<SampleValue, SampleValue.Builder> {
+        public final PropertyMeta<SampleValue, Builder, Integer> intValue = PropertyMeta.create("intValue", new TypeToken<Integer>(){}, SampleValue::intValue, Builder::intValue);
+        public final PropertyMeta<SampleValue, Builder, Double> doubleValue = PropertyMeta.create("doubleValue", new TypeToken<Double>(){}, SampleValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleValue, Builder, String> strValue = PropertyMeta.create("strValue", new TypeToken<String>(){}, SampleValue::strValue, Builder::strValue);
+        public final PropertyMeta<SampleValue, Builder, Boolean> foo = PropertyMeta.create("foo", new TypeToken<Boolean>(){}, SampleValue::foo, Builder::foo);
+        public final ImmutableList<PropertyMeta<SampleValue, Builder, ?>> allProperties = ImmutableList.<PropertyMeta<SampleValue, Builder, ?>>builder()
+                .add(intValue)
+                .add(doubleValue)
+                .add(strValue)
+                .add(foo)
+                .build();
+
+        @Override
+        public TypeToken<Builder> builderClass() {
+            return new TypeToken<Builder>(){};
+        }
+
+        @Override
+        public TypeToken<SampleValue> objectClass() {
+            return new TypeToken<SampleValue>(){};
+        }
+
+        @Override
+        public Iterable<PropertyMeta<SampleValue, Builder, ?>> properties() {
+            return allProperties;
+        }
+
+        @Override
+        public Builder createBuilder() {
+            return SampleValue.builder();
+        }
+    }
+
     @JsonIgnore
     public abstract Builder toBuilder();
+
+    @JsonIgnore
+    @Override
+    public MetaClass<SampleValue, SampleValue.Builder> metaClass() {
+        //noinspection unchecked
+        return (MetaClass<SampleValue, SampleValue.Builder>)metaClass;
+    }
 
     public static Builder builder() {
         return Builder.create();

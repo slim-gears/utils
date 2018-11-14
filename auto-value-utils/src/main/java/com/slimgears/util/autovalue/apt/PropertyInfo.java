@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.slimgears.apt.data.*;
 
+import javax.annotation.Nullable;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.ExecutableType;
@@ -23,6 +24,9 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
     public abstract ImmutableList<MethodInfo> builderMethods();
     public abstract String setterName();
     public abstract String getterName();
+    public boolean isOptional() {
+        return executableElement().getAnnotation(Nullable.class) != null;
+    }
 
     public boolean hasBuilder() {
         return PropertyUtils.hasBuilder(executableElement());

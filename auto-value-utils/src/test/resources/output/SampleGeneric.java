@@ -1,20 +1,64 @@
 package com.slimgears.sample;
 
+import com.google.common.collect.ImmutableList;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.reflect.TypeToken;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 @JsonDeserialize(builder = SampleGeneric.Builder.class)
 @JsonSerialize(as = SampleGeneric.class)
-public abstract class SampleGeneric<T> implements SampleGenericPrototype<T> {
+public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, HasMetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> {
+    public static final Meta metaClass = new Meta();
+
+    public static class Meta<T> implements MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> {
+        public final PropertyMeta<SampleGeneric<T>, Builder<T>, String> value = PropertyMeta.create("value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
+        public final PropertyMeta<SampleGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create("tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
+        public final ImmutableList<PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> allProperties = ImmutableList.<PropertyMeta<SampleGeneric<T>, Builder<T>, ?>>builder()
+                .add(value)
+                .add(tValue)
+                .build();
+
+        @Override
+        public TypeToken<Builder<T>> builderClass() {
+            return new TypeToken<Builder<T>>(){};
+        }
+
+        @Override
+        public TypeToken<SampleGeneric<T>> objectClass() {
+            return new TypeToken<SampleGeneric<T>>(){};
+        }
+
+        @Override
+        public Iterable<PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> properties() {
+            return allProperties;
+        }
+
+        @Override
+        public Builder<T> createBuilder() {
+            return SampleGeneric.builder();
+        }
+    }
+
     @JsonIgnore
     public abstract Builder<T> toBuilder();
+
+    @JsonIgnore
+    @Override
+    public MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> metaClass() {
+        //noinspection unchecked
+        return (MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>>)metaClass;
+    }
 
     public static <T> Builder<T> builder() {
         return Builder.create();

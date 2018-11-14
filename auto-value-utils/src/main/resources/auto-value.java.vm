@@ -1,5 +1,8 @@
 package $targetClass.packageName();
 
+import com.google.common.collect.ImmutableList;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
+
 #parse("type-params.java.vm")
 
 $imports
@@ -9,10 +12,53 @@ $imports
 @$[com.fasterxml.jackson.databind.annotation.JsonDeserialize](builder = ${targetClass.simpleName()}.Builder.class)
 @$[com.fasterxml.jackson.databind.annotation.JsonSerialize](as = ${targetClass.simpleName()}.class)
 public abstract class $targetClass.simpleName()#typeParamsDeclaration($sourceClass) ##
-implements $[$sourceClass] ##
+implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> ##
 {
+    public static final Meta metaClass = new Meta();
+
+    public static class Meta#typeParamsDeclaration($sourceClass) implements $[com.slimgears.util.autovalue.annotations.MetaClass]<##
+        $targetClass.simpleName()#typeParams($sourceClass), ##
+        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> {
+#foreach ($p in $properties)
+        public final PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create("$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
+#end
+        public final ImmutableList<PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> allProperties = ImmutableList.<PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>>builder()
+#foreach ($p in $properties)
+                .add($p.name())
+#end
+                .build();
+
+        @Override
+        public $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass() {
+            return new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
+        }
+
+        @Override
+        public $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass() {
+            return new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
+        }
+
+        @Override
+        public Iterable<PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> properties() {
+            return allProperties;
+        }
+
+        @Override
+        public Builder#typeParams($sourceClass) createBuilder() {
+           return ${targetClass.simpleName()}.builder();
+        }
+    }
+
     @$[com.fasterxml.jackson.annotation.JsonIgnore]
     public abstract Builder#typeParams($sourceClass) toBuilder();
+
+
+    @$[com.fasterxml.jackson.annotation.JsonIgnore]
+    @Override
+    public $[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
+        //noinspection unchecked
+        return ($[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>)metaClass;
+    }
 
     public static #typeParamsDeclaration($sourceClass) Builder#typeParams($sourceClass) builder() {
         return Builder.create();
@@ -27,7 +73,7 @@ implements $[$sourceClass] ##
     #end##
 ##
 
-    public abstract $[$p.type()] $p.name()();
+    public abstract $[$p.type()] $p.getterName()();
 
 #end
 

@@ -1,5 +1,7 @@
 package $targetClass.packageName();
 
+#parse("type-params.java.vm")
+
 $imports
 
 @$[javax.annotation.Generated]("$processor")

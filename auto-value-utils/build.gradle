@@ -16,6 +16,8 @@ dependencies {
     implementation libs.guava
     implementation libs.slf4j
 
+    annotationsImplementation project(':reflect-utils')
+
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
     testImplementation libs.googleTruth
     testImplementation libs.jacksonAnnotations
