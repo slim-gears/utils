@@ -81,7 +81,7 @@ public class AutoValuePrototypeAnnotationProcessorTest {
     public void testGuavaValuePrototype() {
         tester()
                 .inputFiles("SampleGuavaValuePrototype.java")
-                .expectedSources("SampleGuavaValuePrototypeBuilder.java")
+                .expectedSources("SampleGuavaValuePrototypeBuilder.java", "SampleGuavaValue.java")
                 .test();
     }
 

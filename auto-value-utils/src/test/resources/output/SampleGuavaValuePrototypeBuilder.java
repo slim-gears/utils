@@ -119,4 +119,5 @@ public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePro
         return (_B)this;
     }
 
+    _B optionalList(ImmutableList<String> optionalList);
 }

@@ -105,7 +105,7 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
 ##
 
         Builder#typeParams($sourceClass) ${p.setterName()}($[$p.type()] $p.name());##
-    #if ($p.hasBuilder())##
+    #if ($p.hasBuilder() && !$p.isOptional())##
 ##
 
         $[$p.builderType()] ${p.name()}Builder();##
