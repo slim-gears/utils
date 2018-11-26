@@ -164,7 +164,7 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
 
     public static TypeInfo of(DeclaredType declaredType) {
         return builder()
-                .name(MoreTypes.asTypeElement(declaredType).getQualifiedName().toString())
+                .name(MoreElements.asType(declaredType.asElement()).getQualifiedName().toString())
                 .enclosingTypeFrom(declaredType)
                 .typeParamsFromTypeMirrors(declaredType.getTypeArguments())
                 .build();

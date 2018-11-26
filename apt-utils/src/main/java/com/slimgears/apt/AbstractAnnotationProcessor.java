@@ -102,6 +102,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
             return res;
         }
         catch (Exception e) {
+            log.error("Error: {}", e);
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
             return true;
         }
