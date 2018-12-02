@@ -48,9 +48,9 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         }
 
         @Override
-        public <V> PropertyMeta<SampleComparableGeneric<T>, Builder<T>, V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleComparableGeneric<T>, Builder<T>, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleComparableGeneric<T>, Builder<T>, V>)propertyMap.get(name);
+            return (PropertyMeta<SampleComparableGeneric<T>, Builder<T>, __V>)propertyMap.get(name);
         }
 
         @Override

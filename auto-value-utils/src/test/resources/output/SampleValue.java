@@ -55,9 +55,9 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         }
 
         @Override
-        public <V> PropertyMeta<SampleValue, Builder, V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleValue, Builder, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleValue, Builder, V>)propertyMap.get(name);
+            return (PropertyMeta<SampleValue, Builder, __V>)propertyMap.get(name);
         }
 
         @Override

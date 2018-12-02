@@ -49,9 +49,9 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         }
 
         @Override
-        public <V> PropertyMeta<SampleGenericField, Builder, V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleGenericField, Builder, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleGenericField, Builder, V>)propertyMap.get(name);
+            return (PropertyMeta<SampleGenericField, Builder, __V>)propertyMap.get(name);
         }
 
         @Override

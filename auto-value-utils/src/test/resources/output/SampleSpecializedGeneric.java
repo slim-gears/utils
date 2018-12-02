@@ -49,9 +49,9 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         }
 
         @Override
-        public <V> PropertyMeta<SampleSpecializedGeneric, Builder, V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleSpecializedGeneric, Builder, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleSpecializedGeneric, Builder, V>)propertyMap.get(name);
+            return (PropertyMeta<SampleSpecializedGeneric, Builder, __V>)propertyMap.get(name);
         }
 
         @Override

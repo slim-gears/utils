@@ -50,9 +50,9 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         }
 
         @Override
-        public <V> PropertyMeta<SampleCustomBuilderValue, Builder, V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleCustomBuilderValue, Builder, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleCustomBuilderValue, Builder, V>)propertyMap.get(name);
+            return (PropertyMeta<SampleCustomBuilderValue, Builder, __V>)propertyMap.get(name);
         }
 
         @Override

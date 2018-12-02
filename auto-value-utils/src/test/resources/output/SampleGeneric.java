@@ -50,9 +50,9 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         }
 
         @Override
-        public <V> PropertyMeta<SampleGeneric<T>, Builder<T>, V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleGeneric<T>, Builder<T>, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleGeneric<T>, Builder<T>, V>)propertyMap.get(name);
+            return (PropertyMeta<SampleGeneric<T>, Builder<T>, __V>)propertyMap.get(name);
         }
 
         @Override

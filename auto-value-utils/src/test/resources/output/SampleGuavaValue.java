@@ -61,9 +61,9 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         }
 
         @Override
-        public <V> PropertyMeta<SampleGuavaValue, Builder, V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleGuavaValue, Builder, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleGuavaValue, Builder, V>)propertyMap.get(name);
+            return (PropertyMeta<SampleGuavaValue, Builder, __V>)propertyMap.get(name);
         }
 
         @Override

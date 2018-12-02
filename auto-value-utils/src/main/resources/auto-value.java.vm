@@ -47,9 +47,9 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
         }
 
         @Override
-        public <V> PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), V> getProperty(String name) {
+        public <__V> PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), V>)propertyMap.get(name);
+            return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), __V>)propertyMap.get(name);
         }
 
         @Override
