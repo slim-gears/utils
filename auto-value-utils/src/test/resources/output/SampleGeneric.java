@@ -12,6 +12,8 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -22,12 +24,15 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
     public static final Meta metaClass = new Meta();
 
     public static class Meta<T> implements MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> {
+
+        private final Map<String, PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
         public final PropertyMeta<SampleGeneric<T>, Builder<T>, String> value = PropertyMeta.create("value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
         public final PropertyMeta<SampleGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create("tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
-        public final ImmutableList<PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> allProperties = ImmutableList.<PropertyMeta<SampleGeneric<T>, Builder<T>, ?>>builder()
-                .add(value)
-                .add(tValue)
-                .build();
+
+        Meta() {
+            propertyMap.put("value", value);
+            propertyMap.put("tValue", tValue);
+        }
 
         @Override
         public TypeToken<Builder<T>> builderClass() {
@@ -41,7 +46,13 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
 
         @Override
         public Iterable<PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> properties() {
-            return allProperties;
+            return propertyMap.values();
+        }
+
+        @Override
+        public <V> PropertyMeta<SampleGeneric<T>, Builder<T>, V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<SampleGeneric<T>, Builder<T>, V>)propertyMap.get(name);
         }
 
         @Override
@@ -56,8 +67,7 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
     @JsonIgnore
     @Override
     public MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> metaClass() {
-        //noinspection unchecked
-        return (MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>>)metaClass;
+        return new Meta<>();
     }
 
     public static <T> Builder<T> builder() {

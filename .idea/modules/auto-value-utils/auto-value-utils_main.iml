@@ -3,6 +3,9 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../auto-value-utils/out/production/classes" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../auto-value-utils/build/generated/source/apt/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/build/generated/source/apt/main" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../auto-value-utils/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/src/main/resources" type="java-resource" />
@@ -18,15 +21,15 @@
     <orderEntry type="library" name="Gradle: com.google.guava:guava:26.0-jre" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.escapevelocity:escapevelocity:0.9" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
-    <orderEntry type="library" name="Gradle: org.antlr:antlr4:4.7.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.antlr:antlr4:4.7.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-assistedinject:4.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject:guice:4.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:2.5.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.1.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="module" module-name="reflect-utils_main" />
     <orderEntry type="library" name="Gradle: org.antlr:antlr4-runtime:4.7.1" level="project" />
@@ -36,10 +39,10 @@
     <orderEntry type="library" name="Gradle: org.antlr:antlr-runtime:3.5.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: ch.qos.logback:logback-core:1.2.3" level="project" />
     <orderEntry type="library" name="Gradle: org.abego.treelayout:org.abego.treelayout.core:1.0.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish:javax.json:1.0.4" level="project" />
-    <orderEntry type="library" name="Gradle: com.ibm.icu:icu4j:58.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup:javapoet:1.11.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.ibm.icu:icu4j:58.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.commons:commons-lang3:3.7" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.auto.service:auto-service:1.0-rc4" level="project" />

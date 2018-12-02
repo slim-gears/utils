@@ -13,6 +13,8 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -23,10 +25,13 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
     public static final Meta metaClass = new Meta();
 
     public static class Meta implements MetaClass<SampleGenericField, SampleGenericField.Builder> {
+
+        private final Map<String, PropertyMeta<SampleGenericField, Builder, ?>> propertyMap = new LinkedHashMap<>();
         public final PropertyMeta<SampleGenericField, Builder, Class<? extends Collection>> value = PropertyMeta.create("value", new TypeToken<Class<? extends Collection>>(){}, SampleGenericField::value, Builder::value);
-        public final ImmutableList<PropertyMeta<SampleGenericField, Builder, ?>> allProperties = ImmutableList.<PropertyMeta<SampleGenericField, Builder, ?>>builder()
-                .add(value)
-                .build();
+
+        Meta() {
+            propertyMap.put("value", value);
+        }
 
         @Override
         public TypeToken<Builder> builderClass() {
@@ -40,7 +45,13 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
 
         @Override
         public Iterable<PropertyMeta<SampleGenericField, Builder, ?>> properties() {
-            return allProperties;
+            return propertyMap.values();
+        }
+
+        @Override
+        public <V> PropertyMeta<SampleGenericField, Builder, V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<SampleGenericField, Builder, V>)propertyMap.get(name);
         }
 
         @Override
@@ -55,8 +66,7 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
     @JsonIgnore
     @Override
     public MetaClass<SampleGenericField, SampleGenericField.Builder> metaClass() {
-        //noinspection unchecked
-        return (MetaClass<SampleGenericField, SampleGenericField.Builder>)metaClass;
+        return new Meta();
     }
 
     public static Builder builder() {

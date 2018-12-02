@@ -3,6 +3,9 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output-test url="file://$MODULE_DIR$/../../../auto-value-utils/out/test/classes" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../auto-value-utils/build/generated/source/apt/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/build/generated/source/apt/test" isTestSource="true" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../auto-value-utils/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/src/test/resources" type="java-test-resource" />
@@ -34,8 +37,8 @@
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
-    <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-assistedinject:4.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject:guice:4.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.mockito:mockito-core:2.21.0" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.6" level="project" />

@@ -17,6 +17,7 @@ dependencies {
     implementation libs.slf4j
 
     annotationsImplementation project(':reflect-utils')
+    annotationsImplementation libs.googleJsr305
 
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
     testImplementation libs.googleTruth

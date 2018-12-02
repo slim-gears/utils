@@ -12,6 +12,8 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -22,10 +24,13 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
     public static final Meta metaClass = new Meta();
 
     public static class Meta<T extends Comparable<T>> implements MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
+
+        private final Map<String, PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
         public final PropertyMeta<SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create("tValue", new TypeToken<T>(){}, SampleComparableGeneric::tValue, Builder::tValue);
-        public final ImmutableList<PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>> allProperties = ImmutableList.<PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>>builder()
-                .add(tValue)
-                .build();
+
+        Meta() {
+            propertyMap.put("tValue", tValue);
+        }
 
         @Override
         public TypeToken<Builder<T>> builderClass() {
@@ -39,7 +44,13 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
 
         @Override
         public Iterable<PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>> properties() {
-            return allProperties;
+            return propertyMap.values();
+        }
+
+        @Override
+        public <V> PropertyMeta<SampleComparableGeneric<T>, Builder<T>, V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<SampleComparableGeneric<T>, Builder<T>, V>)propertyMap.get(name);
         }
 
         @Override
@@ -54,8 +65,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
     @JsonIgnore
     @Override
     public MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> metaClass() {
-        //noinspection unchecked
-        return (MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>>)metaClass;
+        return new Meta<>();
     }
 
     public static <T extends Comparable<T>> Builder<T> builder() {

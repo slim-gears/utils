@@ -19,14 +19,17 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
     public static class Meta#typeParamsDeclaration($sourceClass) implements $[com.slimgears.util.autovalue.annotations.MetaClass]<##
         $targetClass.simpleName()#typeParams($sourceClass), ##
         ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> {
+
+        private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 #foreach ($p in $properties)
         public final PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create("$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
 #end
-        public final ImmutableList<PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> allProperties = ImmutableList.<PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>>builder()
+
+        Meta() {
 #foreach ($p in $properties)
-                .add($p.name())
+            propertyMap.put("$p.name()", $p.name());
 #end
-                .build();
+        }
 
         @Override
         public $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass() {
@@ -40,7 +43,13 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
 
         @Override
         public Iterable<PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> properties() {
-            return allProperties;
+            return propertyMap.values();
+        }
+
+        @Override
+        public <V> PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), V>)propertyMap.get(name);
         }
 
         @Override
@@ -56,8 +65,11 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
     @$[com.fasterxml.jackson.annotation.JsonIgnore]
     @Override
     public $[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
-        //noinspection unchecked
-        return ($[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>)metaClass;
+#if ($sourceClass.typeParams().isEmpty())
+        return new Meta();
+#else
+        return new Meta<>();
+#end
     }
 
     public static #typeParamsDeclaration($sourceClass) Builder#typeParams($sourceClass) builder() {

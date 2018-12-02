@@ -12,6 +12,8 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -22,12 +24,15 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
     public static final Meta metaClass = new Meta();
 
     public static class Meta implements MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
+
+        private final Map<String, PropertyMeta<SampleCustomBuilderValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
         public final PropertyMeta<SampleCustomBuilderValue, Builder, Integer> intValue = PropertyMeta.create("intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
         public final PropertyMeta<SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyMeta.create("doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
-        public final ImmutableList<PropertyMeta<SampleCustomBuilderValue, Builder, ?>> allProperties = ImmutableList.<PropertyMeta<SampleCustomBuilderValue, Builder, ?>>builder()
-                .add(intValue)
-                .add(doubleValue)
-                .build();
+
+        Meta() {
+            propertyMap.put("intValue", intValue);
+            propertyMap.put("doubleValue", doubleValue);
+        }
 
         @Override
         public TypeToken<Builder> builderClass() {
@@ -41,7 +46,13 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
 
         @Override
         public Iterable<PropertyMeta<SampleCustomBuilderValue, Builder, ?>> properties() {
-            return allProperties;
+            return propertyMap.values();
+        }
+
+        @Override
+        public <V> PropertyMeta<SampleCustomBuilderValue, Builder, V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<SampleCustomBuilderValue, Builder, V>)propertyMap.get(name);
         }
 
         @Override
@@ -56,8 +67,7 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
     @JsonIgnore
     @Override
     public MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> metaClass() {
-        //noinspection unchecked
-        return (MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder>)metaClass;
+        return new Meta();
     }
 
     public static Builder builder() {

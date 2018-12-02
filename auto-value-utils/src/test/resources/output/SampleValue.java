@@ -12,6 +12,8 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.annotation.Generated;
 import javax.annotation.Nullable;
 
@@ -23,16 +25,19 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
     public static final Meta metaClass = new Meta();
 
     public static class Meta implements MetaClass<SampleValue, SampleValue.Builder> {
+
+        private final Map<String, PropertyMeta<SampleValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
         public final PropertyMeta<SampleValue, Builder, Integer> intValue = PropertyMeta.create("intValue", new TypeToken<Integer>(){}, SampleValue::intValue, Builder::intValue);
         public final PropertyMeta<SampleValue, Builder, Double> doubleValue = PropertyMeta.create("doubleValue", new TypeToken<Double>(){}, SampleValue::doubleValue, Builder::doubleValue);
         public final PropertyMeta<SampleValue, Builder, String> strValue = PropertyMeta.create("strValue", new TypeToken<String>(){}, SampleValue::strValue, Builder::strValue);
         public final PropertyMeta<SampleValue, Builder, Boolean> foo = PropertyMeta.create("foo", new TypeToken<Boolean>(){}, SampleValue::foo, Builder::foo);
-        public final ImmutableList<PropertyMeta<SampleValue, Builder, ?>> allProperties = ImmutableList.<PropertyMeta<SampleValue, Builder, ?>>builder()
-                .add(intValue)
-                .add(doubleValue)
-                .add(strValue)
-                .add(foo)
-                .build();
+
+        Meta() {
+            propertyMap.put("intValue", intValue);
+            propertyMap.put("doubleValue", doubleValue);
+            propertyMap.put("strValue", strValue);
+            propertyMap.put("foo", foo);
+        }
 
         @Override
         public TypeToken<Builder> builderClass() {
@@ -46,7 +51,13 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
 
         @Override
         public Iterable<PropertyMeta<SampleValue, Builder, ?>> properties() {
-            return allProperties;
+            return propertyMap.values();
+        }
+
+        @Override
+        public <V> PropertyMeta<SampleValue, Builder, V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<SampleValue, Builder, V>)propertyMap.get(name);
         }
 
         @Override
@@ -61,8 +72,7 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
     @JsonIgnore
     @Override
     public MetaClass<SampleValue, SampleValue.Builder> metaClass() {
-        //noinspection unchecked
-        return (MetaClass<SampleValue, SampleValue.Builder>)metaClass;
+        return new Meta();
     }
 
     public static Builder builder() {

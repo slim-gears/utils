@@ -13,6 +13,8 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -23,10 +25,13 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
     public static final Meta metaClass = new Meta();
 
     public static class Meta implements MetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> {
+
+        private final Map<String, PropertyMeta<SampleSpecializedGeneric, Builder, ?>> propertyMap = new LinkedHashMap<>();
         public final PropertyMeta<SampleSpecializedGeneric, Builder, ImmutableList<String>> values = PropertyMeta.create("values", new TypeToken<ImmutableList<String>>(){}, SampleSpecializedGeneric::values, Builder::values);
-        public final ImmutableList<PropertyMeta<SampleSpecializedGeneric, Builder, ?>> allProperties = ImmutableList.<PropertyMeta<SampleSpecializedGeneric, Builder, ?>>builder()
-                .add(values)
-                .build();
+
+        Meta() {
+            propertyMap.put("values", values);
+        }
 
         @Override
         public TypeToken<Builder> builderClass() {
@@ -40,7 +45,13 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
 
         @Override
         public Iterable<PropertyMeta<SampleSpecializedGeneric, Builder, ?>> properties() {
-            return allProperties;
+            return propertyMap.values();
+        }
+
+        @Override
+        public <V> PropertyMeta<SampleSpecializedGeneric, Builder, V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<SampleSpecializedGeneric, Builder, V>)propertyMap.get(name);
         }
 
         @Override
@@ -55,8 +66,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
     @JsonIgnore
     @Override
     public MetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> metaClass() {
-        //noinspection unchecked
-        return (MetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder>)metaClass;
+        return new Meta();
     }
 
     public static Builder builder() {
