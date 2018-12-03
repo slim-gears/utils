@@ -1,5 +1,7 @@
 package com.slimgears.util.autovalue.annotations;
 
+import com.slimgears.util.reflect.TypeToken;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +12,10 @@ public class MetaClasses {
     public static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> MetaClass<T, TB> forClass(Class<T> cls) {
         //noinspection unchecked
         return (MetaClass<T, TB>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
+    }
+
+    public static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> MetaClass<T, TB> forToken(TypeToken<T> typeToken) {
+        return forClass(typeToken.asClass());
     }
 
     private static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> MetaClass<T, TB> fromField(Class<T> cls) {
