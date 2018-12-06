@@ -19,6 +19,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils.iml" group="reflect-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_main.iml" group="reflect-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_test.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils.iml" group="rx-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils/rx-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils/rx-utils_main.iml" group="rx-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils/rx-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils/rx-utils_test.iml" group="rx-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils.iml" group="stream-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_main.iml" group="stream-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_test.iml" group="stream-utils" />

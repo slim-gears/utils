@@ -4,4 +4,5 @@ include 'apt-utils'
 include 'generic-utils'
 include 'auto-value-utils'
 include 'reflect-utils'
+include 'rx-utils'
 
