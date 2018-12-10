@@ -5,8 +5,7 @@ import com.slimgears.util.autovalue.annotations.PropertyMeta;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -19,8 +18,6 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-@JsonDeserialize(builder = SampleGenericField.Builder.class)
-@JsonSerialize(as = SampleGenericField.class)
 public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<SampleGenericField, SampleGenericField.Builder> {
     public static final Meta metaClass = new Meta();
 
@@ -73,12 +70,19 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         return Builder.create();
     }
 
+    @JsonCreator
+    public static SampleGenericField create(
+            @JsonProperty("value") Class<? extends Collection> value) {
+        return SampleGenericField.builder()
+                .value(value)
+                .build();
+    }
+
     @Override
     public abstract Class<? extends Collection> value();
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleGenericField, Builder>, SampleGenericFieldPrototypeBuilder<Builder> {
-        @JsonCreator
         public static Builder create() {
             return new AutoValue_SampleGenericField.Builder();
         }

@@ -5,8 +5,7 @@ import com.slimgears.util.autovalue.annotations.PropertyMeta;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -19,8 +18,6 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-@JsonDeserialize(builder = SampleValue.Builder.class)
-@JsonSerialize(as = SampleValue.class)
 public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<SampleValue, SampleValue.Builder> {
     public static final Meta metaClass = new Meta();
 
@@ -79,6 +76,20 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         return Builder.create();
     }
 
+    @JsonCreator
+    public static SampleValue create(
+            @JsonProperty("intValue") int intValue,
+            @JsonProperty("doubleValue") double doubleValue,
+            @JsonProperty("strValue") String strValue,
+            @JsonProperty("foo") boolean foo) {
+        return SampleValue.builder()
+                .intValue(intValue)
+                .doubleValue(doubleValue)
+                .strValue(strValue)
+                .foo(foo)
+                .build();
+    }
+
     @Override
     public abstract int intValue();
 
@@ -96,7 +107,6 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleValue, Builder>, SampleValuePrototypeBuilder<Builder> {
-        @JsonCreator
         public static Builder create() {
             return new AutoValue_SampleValue.Builder();
         }

@@ -5,8 +5,7 @@ import com.slimgears.util.autovalue.annotations.PropertyMeta;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
@@ -23,8 +22,6 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-@JsonDeserialize(builder = SampleGuavaValue.Builder.class)
-@JsonSerialize(as = SampleGuavaValue.class)
 public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
     public static final Meta metaClass = new Meta();
 
@@ -85,6 +82,22 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         return Builder.create();
     }
 
+    @JsonCreator
+    public static SampleGuavaValue create(
+            @JsonProperty("intList") ImmutableList<Integer> intList,
+            @JsonProperty("stringSet") ImmutableSet<String> stringSet,
+            @JsonProperty("intToStringMap") ImmutableMap<Integer, String> intToStringMap,
+            @JsonProperty("intToStringBiMap") ImmutableBiMap<Integer, String> intToStringBiMap,
+            @JsonProperty("optionalList") ImmutableList<String> optionalList) {
+        return SampleGuavaValue.builder()
+                .intList(intList)
+                .stringSet(stringSet)
+                .intToStringMap(intToStringMap)
+                .intToStringBiMap(intToStringBiMap)
+                .optionalList(optionalList)
+                .build();
+    }
+
     @Override
     public abstract ImmutableList<Integer> intList();
 
@@ -103,7 +116,6 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleGuavaValue, Builder>, SampleGuavaValuePrototypeBuilder<Builder> {
-        @JsonCreator
         public static Builder create() {
             return new AutoValue_SampleGuavaValue.Builder();
         }
