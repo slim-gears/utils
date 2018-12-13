@@ -63,6 +63,16 @@ public class TypeToken<T> {
         return this.type;
     }
 
+    public TypeToken<?>[] typeArguments() {
+        if (!(type instanceof ParameterizedType)) {
+            return new TypeToken[0];
+        }
+        //noinspection ResultOfMethodCallIgnored
+        return Arrays.stream(((ParameterizedType)type).getActualTypeArguments())
+                .map(TypeToken::new)
+                .toArray(TypeToken[]::new);
+    }
+
     public Class<T> asClass() {
         //noinspection unchecked
         return type instanceof Class
