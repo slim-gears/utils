@@ -145,6 +145,10 @@ public class TypeToken<T> {
         return new TypeToken<>(CanonicalType.of(cls));
     }
 
+    public static <T> TypeToken<T> ofType(Type type) {
+        return new TypeToken<>(type);
+    }
+
     public static <T> TypeToken<T> ofParameterized(Class rawClass, Class... args) {
         return parameterizedBuilder(rawClass).typeArgs(args).build();
     }

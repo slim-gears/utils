@@ -49,7 +49,7 @@ public class TypeParameterScope {
         return instance.current();
     }
 
-    public static ScopedInstance.Closable scope() {
+    public static ScopedInstance.Closeable scope() {
         return instance.scope(new TypeParameterScope());
     }
 }

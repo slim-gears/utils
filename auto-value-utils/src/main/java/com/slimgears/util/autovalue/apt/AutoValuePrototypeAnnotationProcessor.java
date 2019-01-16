@@ -4,7 +4,6 @@ import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
 import com.google.auto.service.AutoService;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
@@ -12,7 +11,6 @@ import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
 import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.generic.ScopedInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +25,6 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.function.Predicate;
@@ -65,7 +62,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
             return instance.current();
         }
 
-        public static ScopedInstance.Closable scope() {
+        public static ScopedInstance.Closeable scope() {
             return instance.scope(new Registrar());
         }
     }

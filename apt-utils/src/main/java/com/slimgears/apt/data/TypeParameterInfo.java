@@ -8,7 +8,6 @@ import com.slimgears.util.generic.ScopedInstance;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.TypeParameterElement;
-import javax.lang.model.type.NullType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
@@ -63,7 +62,7 @@ public abstract class TypeParameterInfo implements HasName, HasType {
     }
 
     public static TypeParameterInfo of(TypeVariable typeVariable) {
-        try (ScopedInstance.Closable ignored = TypeParameterScope.scope()) {
+        try (ScopedInstance.Closeable ignored = TypeParameterScope.scope()) {
             Builder builder = builder()
                     .name(typeVariable.asElement().getSimpleName().toString())
                     .type(typeVariable);

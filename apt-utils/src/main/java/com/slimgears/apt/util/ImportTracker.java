@@ -35,7 +35,7 @@ public class ImportTracker {
         return scopedInstance.withScope(tracker, callable);
     }
 
-    public static ScopedInstance.Closable withTracker(ImportTracker tracker) {
+    public static ScopedInstance.Closeable withTracker(ImportTracker tracker) {
         return scopedInstance.scope(tracker);
     }
 

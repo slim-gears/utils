@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 
 @AutoValue
 public abstract class Environment implements Safe.Closable {
-    private final ScopedInstance.Closable closable;
+    private final ScopedInstance.Closeable closeable;
     private final static String configOptionName = "rxrpc.config";
     private final static String excludedTypesOptionName = "rxrpc.excludeTypes";
     private final static String includeTypesOptionName = "rxrpc.includeTypes";
@@ -32,12 +32,12 @@ public abstract class Environment implements Safe.Closable {
     public abstract ImmutableMap<String, String> properties();
 
     protected Environment() {
-        this.closable = instance.scope(this)
+        this.closeable = instance.scope(this)
                 .merge(TypeInfo.withRegistrar());
     }
 
     public void close() {
-        closable.close();
+        closeable.close();
     }
 
     protected abstract Predicate<TypeInfo> ignoredTypePredicate();

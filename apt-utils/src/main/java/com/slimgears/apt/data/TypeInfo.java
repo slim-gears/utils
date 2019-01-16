@@ -1,6 +1,5 @@
 package com.slimgears.apt.data;
 
-import com.google.auto.common.MoreTypes;
 import com.google.auto.common.MoreElements;
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Strings;
@@ -9,13 +8,11 @@ import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.apt.util.TypeInfoParserAdapter;
 import com.slimgears.util.generic.ScopedInstance;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.NoType;
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.Type;
 import java.util.Comparator;
@@ -228,7 +225,7 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
         return IntStream.range(0, arrayDimensions()).mapToObj(i -> "[]").collect(Collectors.joining());
     }
 
-    public static ScopedInstance.Closable withRegistrar() {
+    public static ScopedInstance.Closeable withRegistrar() {
         return typeRegistrar.scope(new HashMap<>());
     }
 

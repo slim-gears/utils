@@ -29,7 +29,7 @@ public class Scope {
         return scopedInstance.current();
     }
 
-    public static ScopedInstance.Closable scope(Consumer<ServiceResolvers.Builder> builder) {
+    public static ScopedInstance.Closeable scope(Consumer<ServiceResolvers.Builder> builder) {
         return scopedInstance.scope(fromBuilder(builder));
     }
 

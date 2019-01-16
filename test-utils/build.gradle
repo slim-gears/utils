@@ -1,0 +1,24 @@
+sourceSets {
+    guice {
+        java.srcDir 'src/guice/java'
+    }
+}
+
+dependencies {
+    implementation libs.junit, libs.mockito
+    implementation project(':stream-utils')
+    implementation project(':generic-utils')
+    guiceImplementation project.sourceSetDependency(sourceSets.main)
+    guiceImplementation project(':guice-utils')
+    guiceImplementation libs.guice
+    guiceImplementation libs.junit, libs.mockito
+    guiceImplementation project(':stream-utils')
+    guiceImplementation project(':generic-utils')
+    testImplementation libs.guice
+    testImplementation project.sourceSetDependency(sourceSets.guice)
+}
+
+configurations {
+    guiceImplementation.extendsFrom implementation
+    testImplementation.extendsFrom guiceImplementation
+}

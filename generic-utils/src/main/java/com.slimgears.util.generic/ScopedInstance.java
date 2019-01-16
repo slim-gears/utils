@@ -5,10 +5,10 @@ import java.util.concurrent.Callable;
 public class ScopedInstance<T> {
     private final ThreadLocal<T> instance = new ThreadLocal<>();
 
-    public interface Closable extends AutoCloseable {
+    public interface Closeable extends AutoCloseable {
         void close();
 
-        default Closable merge(Closable another) {
+        default Closeable merge(Closeable another) {
             return () -> { this.close(); another.close(); };
         }
     }
@@ -32,14 +32,14 @@ public class ScopedInstance<T> {
         return instance.get();
     }
 
-    public Closable scope(T instance) {
+    public Closeable scope(T instance) {
         T previous = this.instance.get();
         this.instance.set(instance);
         return () -> this.instance.set(previous);
     }
 
     public <R> R withScope(T instance, Callable<? extends R> callable) {
-        try (Closable scope = scope(instance)) {
+        try (Closeable scope = scope(instance)) {
             return callable.call();
         } catch (Exception e) {
             throw new RuntimeException(e);

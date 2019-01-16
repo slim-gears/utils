@@ -5,12 +5,11 @@ import com.slimgears.apt.util.AnnotationProcessingTester;
 import com.slimgears.util.generic.ScopedInstance;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.event.Level;
 
 public class AutoValuePrototypeAnnotationProcessorTest {
-    private ScopedInstance.Closable scope;
+    private ScopedInstance.Closeable scope;
 
     @Before
     public void setUp() {
