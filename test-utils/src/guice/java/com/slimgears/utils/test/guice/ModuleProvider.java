@@ -18,15 +18,15 @@ public interface ModuleProvider<A extends Annotation> {
         Class<? extends ModuleProvider<? extends Annotation>> value();
     }
 
-    Module createModule(A annotation, FrameworkMethod testMethod);
+    Module createModule(A annotation, FrameworkMethod testMethod, Object target);
 
-    static Module forMethod(FrameworkMethod testMethod) {
+    static Module forMethod(FrameworkMethod testMethod, Object target) {
         return TestReflectUtils
                 .providersForMethod(testMethod, ModuleProvider.Qualifier.class, item -> {
                     Class<? extends ModuleProvider<? extends Annotation>> moduleProviderClass = item.qualifier().value();
                     ModuleProvider moduleProvider = moduleProviderClass.newInstance();
                     //noinspection unchecked
-                    return moduleProvider.createModule(item.annotation(), testMethod);
+                    return moduleProvider.createModule(item.annotation(), testMethod, target);
                 })
                 .reduce((m1, m2) -> Modules.override(m1).with(m2))
                 .orElse(Modules.EMPTY_MODULE);

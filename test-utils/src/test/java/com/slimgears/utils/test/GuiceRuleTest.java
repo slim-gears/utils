@@ -1,6 +1,7 @@
 package com.slimgears.utils.test;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.slimgears.utils.test.guice.GuiceJUnit;
 import com.slimgears.utils.test.guice.UseModules;
@@ -27,7 +28,15 @@ import static org.mockito.Mockito.verify;
 public class GuiceRuleTest {
     @Rule public final MethodRule rule = GuiceJUnit.rule();
 
+    @UseModules.Field private final Module fieldModule = new AbstractModule() {
+        @Override
+        protected void configure() {
+            bind(String.class).annotatedWith(Names.named("fieldModule")).toInstance("fieldModuleWorks");
+        }
+    };
+
     @Inject @Named("test") private String injectedMagicString;
+    @Inject @Named("fieldModule") private String injectedFromFieldModule;
     @Mock private Runnable injectedMockFromMockito;
     @Inject private Runnable injectedMockFromGuice;
     private String magicStringFromAnnotation;
@@ -67,5 +76,10 @@ public class GuiceRuleTest {
 
         injectedMockFromMockito.run();
         verify(injectedMockFromMockito, times(1)).run();
+    }
+
+    @Test
+    public void testInjectionFromModuleField() {
+        Assert.assertEquals("fieldModuleWorks", injectedFromFieldModule);
     }
 }

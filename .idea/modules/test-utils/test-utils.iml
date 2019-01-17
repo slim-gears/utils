@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":test-utils" external.linked.project.path="$MODULE_DIR$/../../../test-utils" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.slimgears.utils" external.system.module.version="0.3-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../test-utils">
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/build/docs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/build/libs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/build/publications" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/build/test-results" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/build/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../test-utils/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

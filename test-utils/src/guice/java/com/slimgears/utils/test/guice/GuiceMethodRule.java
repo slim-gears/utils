@@ -8,6 +8,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.util.Modules;
 import com.slimgears.util.guice.GuiceServiceResolver;
 import com.slimgears.utils.test.MethodRules;
+import com.slimgears.utils.test.TestReflectUtils;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -32,9 +33,8 @@ class GuiceMethodRule implements MethodRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                Module module = Modules.override(GuiceMethodRule.this.module).with(ModuleProvider.forMethod(method));
+                Module module = Modules.override(GuiceMethodRule.this.module).with(ModuleProvider.forMethod(method, target));
                 MockitoAnnotations.initMocks(target);
-
                 module = Modules.override(module).with(createMockModule(target));
                 Injector injector = Guice.createInjector(module);
                 MethodRule annotationRule = MethodRules.annotationRule(GuiceServiceResolver.forInjector(injector));
