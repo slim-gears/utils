@@ -1,10 +1,12 @@
 package com.slimgears.utils.test;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.slimgears.utils.test.guice.GuiceJUnit;
 import com.slimgears.utils.test.guice.UseModules;
+import com.slimgears.utils.test.guice.UseProperties;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,7 +15,6 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import java.lang.annotation.ElementType;
@@ -40,6 +41,7 @@ public class GuiceRuleTest {
     @Mock private Runnable injectedMockFromMockito;
     @Inject private Runnable injectedMockFromGuice;
     private String magicStringFromAnnotation;
+    @Inject(optional = true) @Named("injectFromAnnotationProperties") String injectedFromAnnotationProperties;
 
     public static class TestModule extends AbstractModule {
         @Override
@@ -81,5 +83,13 @@ public class GuiceRuleTest {
     @Test
     public void testInjectionFromModuleField() {
         Assert.assertEquals("fieldModuleWorks", injectedFromFieldModule);
+    }
+
+    @Test
+    @UseProperties({
+            @UseProperties.Property(name = "injectFromAnnotationProperties", value = "injectFromAnnotationPropertiesWorks")
+    })
+    public void testWithInjectedParameters() {
+        Assert.assertEquals("injectFromAnnotationPropertiesWorks", injectedFromAnnotationProperties);
     }
 }
