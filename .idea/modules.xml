@@ -28,7 +28,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_main.iml" group="stream-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/stream-utils_test.iml" group="stream-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/test-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/test-utils.iml" group="test-utils" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/test-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/test-utils.iml" group="test-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/test-utils_guice.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/test-utils_guice.iml" group="test-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/test-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/test-utils_main.iml" group="test-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/test-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/test-utils_test.iml" group="test-utils" />

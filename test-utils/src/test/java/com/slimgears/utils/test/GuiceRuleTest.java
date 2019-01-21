@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
+import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
@@ -25,10 +26,9 @@ import java.lang.annotation.Target;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@RunWith(GuiceJUnit.class)
 @UseModules(GuiceRuleTest.TestModule.class)
 public class GuiceRuleTest {
-    @Rule public final MethodRule rule = GuiceJUnit.rule();
-
     @UseModules.Field private final Module fieldModule = new AbstractModule() {
         @Override
         protected void configure() {
