@@ -2,6 +2,7 @@ package com.slimgears.util.rx;
 
 import io.reactivex.Flowable;
 import io.reactivex.SingleTransformer;
+import io.reactivex.disposables.Disposable;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +24,14 @@ public class Singles {
                                 : Flowable.timer(delayMillis, TimeUnit.MILLISECONDS)
                                 .doOnNext(v -> log.warning("Error occurred: " + e.getMessage() + " Retry #" + attemptsMade + " (delay: " + delayMillis + " milliseconds)" + e));
                     }));
+        };
+    }
+
+    public static <T> SingleTransformer<T, T> startNow() {
+        return src -> {
+            src = src.cache();
+            Disposable subscription = src.subscribe();
+            return src.doAfterTerminate(subscription::dispose);
         };
     }
 }
