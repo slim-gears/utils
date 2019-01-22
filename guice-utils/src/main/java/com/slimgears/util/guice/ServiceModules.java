@@ -46,6 +46,10 @@ public class ServiceModules {
         return builder(serviceClass).build(toServiceMap(keyClass, keyGetter));
     }
 
+    public static <S> Module forServiceMap(Class<S> serviceClass) {
+        return builder(serviceClass).build(toServiceMap(String.class, Class::getSimpleName));
+    }
+
     public static <S> Builder<S> builder(Class<S> serviceClass) {
         return new Builder<>(serviceClass);
     }

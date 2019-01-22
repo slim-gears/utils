@@ -21,7 +21,13 @@ public class TypeConversionModuleTest {
         }
     }
 
+    enum CustomEnum {
+        Value1,
+        Value2
+    }
+
     @Inject @Named("test.class") CustomClass testValue;
+    @Inject @Named("test.enum") CustomEnum enumValue;
 
     @Test
     public void testCustomTypeConversionModule() {
@@ -33,9 +39,12 @@ public class TypeConversionModuleTest {
                         .build(),
                 PropertyModules.builder()
                         .add("test.class", "Hello, World!")
+                        .add("test.enum", "Value2")
                         .build());
+
         injector.injectMembers(this);
         Assert.assertNotNull(testValue);
         Assert.assertEquals("Hello, World!", testValue.value());
+        Assert.assertEquals(CustomEnum.Value2, enumValue);
     }
 }

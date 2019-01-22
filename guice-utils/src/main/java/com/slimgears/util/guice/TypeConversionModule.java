@@ -142,10 +142,18 @@ public class TypeConversionModule extends AbstractModule {
     }
 
     public static Matcher<TypeLiteral<?>> isArray() {
-        return new AbstractMatcher<TypeLiteral<?>>() {
+        return is(Class::isArray);
+    }
+
+    public static Matcher<TypeLiteral<?>> isEnum() {
+        return is(Class::isEnum);
+    }
+
+    public static <T> Matcher<TypeLiteral<? extends T>> is(Predicate<Class<?>> classPredicate) {
+        return new AbstractMatcher<TypeLiteral<? extends T>>() {
             @Override
-            public boolean matches(TypeLiteral<?> typeLiteral) {
-                return typeLiteral.getRawType().isArray();
+            public boolean matches(TypeLiteral<? extends T> typeLiteral) {
+                return classPredicate.test(typeLiteral.getRawType());
             }
         };
     }
@@ -156,6 +164,15 @@ public class TypeConversionModule extends AbstractModule {
 
     public static Matcher<Object> isOnly(Class<?> cls) {
         return Matchers.only(TypeLiteral.get(cls));
+    }
+
+    public static Matcher<TypeLiteral<?>> isAssignableFrom(Class<?> cls) {
+        return new AbstractMatcher<TypeLiteral<?>>() {
+            @Override
+            public boolean matches(TypeLiteral<?> typeLiteral) {
+                return cls.isAssignableFrom(typeLiteral.getRawType());
+            }
+        };
     }
 
     public static class Builder {
