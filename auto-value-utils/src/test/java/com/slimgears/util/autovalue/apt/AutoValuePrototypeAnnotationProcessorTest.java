@@ -106,29 +106,21 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testGenericListContainerPrototype() {
+        tester()
+                .inputFiles(
+                        "GenericListItemPrototype.java",
+                        "GenericListContainerPrototype.java")
+                .expectedSources(
+                        "GenericListItem.java",
+                        "GenericListContainer.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
                 .processedWith(new AutoValuePrototypeAnnotationProcessor(), new AutoValueProcessor());
     }
-
-//    public interface DummyValuePrototype {
-//        boolean isFoo();
-//    }
-//
-//    public interface DummyValueBuilder<B extends DummyValueBuilder<B>> {
-//        B setFoo(boolean foo);
-//    }
-//
-//    @AutoValue
-//    public static abstract class DummyValue implements DummyValuePrototype {
-//        public static Builder builder() {
-//            return new AutoValue_AutoValuePrototypeAnnotationProcessorTest_DummyValue.Builder();
-//        }
-//
-//        @AutoValue.Builder
-//        public interface Builder extends DummyValueBuilder<Builder> {
-//            DummyValue build();
-//        }
-//    }
 }

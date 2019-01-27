@@ -9,7 +9,11 @@ import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
-import com.slimgears.apt.util.*;
+import com.slimgears.apt.util.ElementUtils;
+import com.slimgears.apt.util.ImportTracker;
+import com.slimgears.apt.util.JavaUtils;
+import com.slimgears.apt.util.TemplateEvaluator;
+import com.slimgears.apt.util.TemplateUtils;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 import com.slimgears.util.generic.ScopedInstance;
 import org.slf4j.Logger;
@@ -97,7 +101,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         TypeInfo targetClass = TypeInfo.of(sourceClass.packageName() + "." + targetName);
         Collection<PropertyInfo> properties = getProperties(declaredType);
 
-        if (properties.stream().anyMatch(p -> p.propertyType().getKind() == TypeKind.ERROR)) {
+        if (properties.stream().anyMatch(p -> hasErrors(p.propertyType()))) {
             delayProcessing();
         }
 
@@ -119,6 +123,14 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         }
 
         return true;
+    }
+
+    private boolean hasErrors(TypeMirror typeMirror) {
+        return typeMirror.getKind() == TypeKind.ERROR || (typeMirror.getKind() == TypeKind.DECLARED && MoreTypes
+                .asDeclared(typeMirror)
+                .getTypeArguments()
+                .stream()
+                .anyMatch(this::hasErrors));
     }
 
     private Annotator getAnnotators(String[] annotatorIds) {
