@@ -19,9 +19,19 @@ public class ImportTrackerTest {
     @Test
     public void testArrayImport() {
         ImportTracker importTracker = ImportTracker.create();
-        importTracker.use(TypeInfo.of("com.slimgears.apt.util.ImportTrackerTest[]"));
+        String simplifiedType = importTracker.use(TypeInfo.of("com.slimgears.apt.util.ImportTrackerTest[]"));
         Assert.assertEquals(1, importTracker.imports().length);
         Assert.assertEquals("com.slimgears.apt.util.ImportTrackerTest", importTracker.imports()[0]);
+        Assert.assertEquals(simplifiedType, "ImportTrackerTest[]");
+    }
+
+    @Test
+    public void testGenericArrayImport() {
+        ImportTracker importTracker = ImportTracker.create();
+        String simplifiedType = importTracker.use(TypeInfo.of("com.slimgears.apt.util.ImportTrackerTest<T>[]"));
+        Assert.assertEquals(1, importTracker.imports().length);
+        Assert.assertEquals("com.slimgears.apt.util.ImportTrackerTest", importTracker.imports()[0]);
+        Assert.assertEquals(simplifiedType, "ImportTrackerTest<T>[]");
     }
 
     @Test

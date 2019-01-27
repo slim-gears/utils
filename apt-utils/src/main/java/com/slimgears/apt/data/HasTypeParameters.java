@@ -4,13 +4,13 @@
 package com.slimgears.apt.data;
 
 import com.google.common.collect.ImmutableList;
-import com.slimgears.util.generic.Scope;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Stream;
 
@@ -39,19 +39,23 @@ public interface HasTypeParameters {
         }
 
         default B typeParams(TypeParameterInfo... params) {
-            Stream.of(params).forEach(this::typeParam);
+            return typeParams(Arrays.asList(params));
+        }
+
+        default B typeParams(Collection<TypeParameterInfo> params) {
+            params.forEach(this::typeParam);
             //noinspection unchecked
             return (B)this;
         }
 
-        default B typeParams(Collection<? extends TypeParameterElement> params) {
+        default B typeParamsFromElements(Collection<? extends TypeParameterElement> params) {
             params.stream().map(TypeParameterInfo::of).forEach(this::typeParam);
             //noinspection unchecked
             return (B)this;
         }
 
         default B typeParamsFromMethod(ExecutableElement element) {
-            return typeParams(element.getTypeParameters());
+            return typeParamsFromElements(element.getTypeParameters());
         }
 
         default B typeParamsFromMethod(ExecutableType executableType) {

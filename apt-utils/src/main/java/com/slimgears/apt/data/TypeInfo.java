@@ -84,12 +84,16 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
     }
 
     public String simpleName() {
-        String packageName = packageName();
-        return (Strings.isNullOrEmpty(packageName) ? name() : name().substring(packageName.length() + 1)) + dimensionsToString();
+        return nameWithoutPackage() + dimensionsToString();
     }
 
     public String erasureName() {
         return name() + dimensionsToString();
+    }
+
+    public String nameWithoutPackage() {
+        String packageName = packageName();
+        return (Strings.isNullOrEmpty(packageName) ? name() : name().substring(packageName.length() + 1));
     }
 
     public String packageName() {
@@ -176,7 +180,7 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
         Builder builder = builder()
                 .name(typeElement.getQualifiedName().toString())
                 .annotationsFromElement(typeElement)
-                .typeParams(typeElement.getTypeParameters());
+                .typeParamsFromElements(typeElement.getTypeParameters());
 
         if (typeElement.getEnclosingElement() instanceof TypeElement) {
             builder.enclosingType(MoreElements.asType(typeElement.getEnclosingElement()));

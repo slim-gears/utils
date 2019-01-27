@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ImportTracker {
     private final static Pattern boundTypePattern = Pattern
@@ -99,12 +100,15 @@ public class ImportTracker {
             imports.add(importType.importName());
         }
 
-        TypeInfo.Builder builder = TypeInfo.builder().name(typeInfo.simpleName());
-        typeInfo.typeParams().stream()
-                .map(this::simplify)
-                .forEach(builder::typeParam);
-
-        return builder.build();
+        return TypeInfo.builder()
+                .name(typeInfo.nameWithoutPackage())
+                .arrayDimensions(typeInfo.arrayDimensions())
+                .typeParams(typeInfo
+                        .typeParams()
+                        .stream()
+                        .map(this::simplify)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     private TypeParameterInfo simplify(TypeParameterInfo typeParameter) {
