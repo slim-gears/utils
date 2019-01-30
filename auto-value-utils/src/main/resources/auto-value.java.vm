@@ -1,6 +1,5 @@
 package $targetClass.packageName();
 
-import com.google.common.collect.ImmutableList;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 
 #parse("type-params.java.vm")
