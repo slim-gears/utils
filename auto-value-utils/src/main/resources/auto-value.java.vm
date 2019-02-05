@@ -15,11 +15,19 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
 
     public static class Meta#typeParamsDeclaration($sourceClass) implements $[com.slimgears.util.autovalue.annotations.MetaClass]<##
         $targetClass.simpleName()#typeParams($sourceClass), ##
-        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> {
+        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>##
+#if ($hasKey), $[com.slimgears.util.autovalue.annotations.HasKeyProperty]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> #end {
 
         private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 #foreach ($p in $properties)
         public final PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create("$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
+#end
+
+#if ($hasKey)
+        @Override
+        public PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$keyProperty.type().asBoxed()]> keyProperty() {
+            return $keyProperty.name();
+        }
 #end
 
         Meta() {

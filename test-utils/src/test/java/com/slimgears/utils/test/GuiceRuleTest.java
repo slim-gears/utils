@@ -3,10 +3,12 @@ package com.slimgears.utils.test;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
+import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.slimgears.utils.test.guice.GuiceJUnit;
 import com.slimgears.utils.test.guice.UseModules;
 import com.slimgears.utils.test.guice.UseProperties;
+import com.slimgears.utils.test.guice.UseProviders;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +19,7 @@ import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -40,6 +43,11 @@ public class GuiceRuleTest {
     @Inject @Named("fieldModule") private String injectedFromFieldModule;
     @Mock private Runnable injectedMockFromMockito;
     @Inject private Runnable injectedMockFromGuice;
+    @Mock @Named("annotatedMock") private Runnable annotatedMock;
+    @Inject @Named("annotatedMock") private Runnable injectedAnnotatedMock;
+    @UseProviders.Binding @Named("annotatedProviderMock") private final Provider<String> annotatedProviderMock = () -> "annotatedProviderMockValue";
+    @Inject @Named("annotatedProviderMock") private String injectedAnnotatedProviderMock;
+
     private String magicStringFromAnnotation;
     @Inject(optional = true) @Named("injectFromAnnotationProperties") String injectedFromAnnotationProperties;
 
@@ -91,5 +99,18 @@ public class GuiceRuleTest {
     })
     public void testWithInjectedParameters() {
         Assert.assertEquals("injectFromAnnotationPropertiesWorks", injectedFromAnnotationProperties);
+    }
+
+    @Test
+    public void testMockAnnotatedBinding() {
+        Assert.assertNotNull(annotatedMock);
+        Assert.assertNotNull(injectedAnnotatedMock);
+        Assert.assertSame(annotatedMock, injectedAnnotatedMock);
+    }
+
+    @Test
+    public void testAnnotatedProviderMock() {
+        Assert.assertNotNull(annotatedProviderMock);
+        Assert.assertEquals("annotatedProviderMockValue", injectedAnnotatedProviderMock);
     }
 }
