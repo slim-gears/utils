@@ -18,6 +18,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import javax.inject.Provider;
 import javax.inject.Qualifier;
@@ -56,19 +57,20 @@ class GuiceMethodRule implements MethodRule {
         };
     }
 
-    public static Module createModuleFromFields(Object target, Class<? extends Annotation> annotationClass) {
+    @SafeVarargs
+    public static Module createModuleFromFields(Object target, Class<? extends Annotation>... annotationClasses) {
         return new AbstractModule() {
             @Override
             protected void configure() {
                 getAllFields(target.getClass())
-                        .filter(f -> f.isAnnotationPresent(annotationClass))
+                        .filter(f -> Stream.of(annotationClasses).anyMatch(f::isAnnotationPresent))
                         .forEach(f -> toBinding(f, target).accept(binder()));
             }
         };
     }
 
     private static Module createMockModule(Object target) {
-        return createModuleFromFields(target, Mock.class);
+        return createModuleFromFields(target, Mock.class, Spy.class);
     }
 
     private static Consumer<Binder> toBinding(Field field, Object target) {

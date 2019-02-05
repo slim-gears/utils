@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 import javax.inject.Named;
 import javax.inject.Provider;
