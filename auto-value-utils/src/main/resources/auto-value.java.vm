@@ -9,15 +9,26 @@ $imports
 @$[javax.annotation.Generated]("$processor")
 @$[com.google.auto.value.AutoValue]
 public abstract class $targetClass.simpleName()#typeParamsDeclaration($sourceClass) ##
-implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> ##
+implements $[$sourceClass], ##
+#if ($hasKey)##
+        $[com.slimgears.util.autovalue.annotations.HasMetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> ##
+#else##
+        $[com.slimgears.util.autovalue.annotations.HasMetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> ##
+#end##
 {
     public static final Meta metaClass = new Meta();
 
-    public static class Meta#typeParamsDeclaration($sourceClass) implements $[com.slimgears.util.autovalue.annotations.MetaClass]<##
+    public static class Meta#typeParamsDeclaration($sourceClass) implements ##
+#if ($hasKey)##
+        $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<##
+        $[$keyProperty.type().asBoxed()], ##
         $targetClass.simpleName()#typeParams($sourceClass), ##
         ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>##
-#if ($hasKey), $[com.slimgears.util.autovalue.annotations.HasKeyProperty]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> #end {
-
+#else##
+        $[com.slimgears.util.autovalue.annotations.MetaClass]<##
+        $targetClass.simpleName()#typeParams($sourceClass), ##
+        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>##
+#end {
         private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 #foreach ($p in $properties)
         public final PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create("$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
@@ -68,9 +79,13 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
 
     @$[com.fasterxml.jackson.annotation.JsonIgnore]
     @Override
+#if ($hasKey)
+    public $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
+#else
     public $[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
+#end
 #if ($sourceClass.typeParams().isEmpty())
-        return new Meta();
+        return metaClass;
 #else
         return new Meta<>();
 #end

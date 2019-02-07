@@ -62,7 +62,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
     @JsonIgnore
     @Override
     public MetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> metaClass() {
-        return new Meta();
+        return metaClass;
     }
 
     public static Builder builder() {

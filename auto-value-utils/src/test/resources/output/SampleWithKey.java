@@ -7,10 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasKeyProperty;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.Key;
-import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,11 +17,10 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClass<SampleWithKey, SampleWithKey.Builder> {
+public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
     public static final Meta metaClass = new Meta();
 
-    public static class Meta implements MetaClass<SampleWithKey, SampleWithKey.Builder>, HasKeyProperty<String, SampleWithKey, Builder> {
-
+    public static class Meta implements MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
         private final Map<String, PropertyMeta<SampleWithKey, Builder, ?>> propertyMap = new LinkedHashMap<>();
         public final PropertyMeta<SampleWithKey, Builder, String> id = PropertyMeta.create("id", new TypeToken<String>(){}, SampleWithKey::id, Builder::id);
         public final PropertyMeta<SampleWithKey, Builder, String> text = PropertyMeta.create("text", new TypeToken<String>(){}, SampleWithKey::text, Builder::text);
@@ -71,8 +69,8 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
 
     @JsonIgnore
     @Override
-    public MetaClass<SampleWithKey, SampleWithKey.Builder> metaClass() {
-        return new Meta();
+    public MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> metaClass() {
+        return metaClass;
     }
 
     public static Builder builder() {
