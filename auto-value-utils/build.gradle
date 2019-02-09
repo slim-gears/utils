@@ -2,6 +2,9 @@ sourceSets {
     annotations {
         java.srcDir 'src/annotations/java'
     }
+    expressions {
+        java.srcDir 'src/expressions/java'
+    }
 }
 
 dependencies {
@@ -18,6 +21,9 @@ dependencies {
 
     annotationsImplementation project(':reflect-utils')
     annotationsImplementation libs.googleJsr305
+
+    expressionsImplementation project.sourceSetDependency(sourceSets.annotations)
+    expressionsImplementation libs.jacksonAnnotations
 
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
     testImplementation libs.googleTruth

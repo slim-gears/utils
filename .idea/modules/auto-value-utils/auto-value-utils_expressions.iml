@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":auto-value-utils:expressions" external.linked.project.path="$MODULE_DIR$/../../../auto-value-utils" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.slimgears.utils" external.system.module.type="sourceSet" external.system.module.version="0.3-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/../../../auto-value-utils/out/expressions/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../auto-value-utils/src/expressions">
+      <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/src/expressions/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="auto-value-utils_annotations" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.6" level="project" />
+  </component>
+</module>

@@ -4,9 +4,6 @@
     <output-test url="file://$MODULE_DIR$/../../../apt-utils/out/test/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../apt-utils/build/generated-src/antlr/test" />
-    <content url="file://$MODULE_DIR$/../../../apt-utils/build/generated/source/apt/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../apt-utils/build/generated/source/apt/test" isTestSource="true" generated="true" />
-    </content>
     <content url="file://$MODULE_DIR$/../../../apt-utils/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../apt-utils/src/test/antlr" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../apt-utils/src/test/java" isTestSource="true" />
@@ -18,7 +15,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://C:/Program Files/Java/jdk1.8.0_152/lib/tools.jar!/" />
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_172/lib/tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -37,8 +34,8 @@
     <orderEntry type="library" name="Gradle: com.google.truth:truth:0.42" level="project" />
     <orderEntry type="library" name="Gradle: com.google.auto:auto-common:0.9" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:26.0-jre" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-multibindings:4.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject.extensions:guice-assistedinject:4.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject:guice:4.2.0" level="project" />

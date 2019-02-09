@@ -6,6 +6,7 @@
       <module name="apt-utils_main" target="1.8" />
       <module name="apt-utils_test" target="1.8" />
       <module name="auto-value-utils_annotations" target="1.8" />
+      <module name="auto-value-utils_expressions" target="1.8" />
       <module name="auto-value-utils_main" target="1.8" />
       <module name="auto-value-utils_test" target="1.8" />
       <module name="generic-utils_annotations" target="1.8" />
