@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 
 import java.io.IOException;
-import java.util.Optional;
 
 public class ExpressionTypeResolver implements TypeIdResolver {
     private JavaType baseType;
@@ -18,11 +17,7 @@ public class ExpressionTypeResolver implements TypeIdResolver {
 
     @Override
     public String idFromValue(Object value) {
-        String id = ((Expression)value).type().name();
-        return Optional.of(id)
-                .filter(n -> !n.isEmpty())
-                .map(n -> Character.toLowerCase(n.charAt(0)) + n.substring(1))
-                .orElse(id);
+        return ((Expression)value).type().toString();
     }
 
     @Override
@@ -37,13 +32,7 @@ public class ExpressionTypeResolver implements TypeIdResolver {
 
     @Override
     public JavaType typeFromId(DatabindContext context, String id) throws IOException {
-        return Optional.ofNullable(id)
-                .filter(n -> !n.isEmpty())
-                .map(n -> Character.toUpperCase(n.charAt(0)) + n.substring(1))
-                .map(ExpressionType::valueOf)
-                .map(ExpressionType::type)
-                .map(t -> context.constructSpecializedType(baseType, t))
-                .orElseThrow(() -> new IllegalStateException("Cannot recognize type " + id));
+        return context.constructSpecializedType(baseType, ExpressionType.fromString(id).type());
     }
 
     @Override
@@ -53,6 +42,6 @@ public class ExpressionTypeResolver implements TypeIdResolver {
 
     @Override
     public JsonTypeInfo.Id getMechanism() {
-        return JsonTypeInfo.Id.CUSTOM;
+        return JsonTypeInfo.Id.NAME;
     }
 }

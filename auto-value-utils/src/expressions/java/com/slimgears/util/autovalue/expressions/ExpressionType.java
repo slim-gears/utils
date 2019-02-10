@@ -1,5 +1,10 @@
 package com.slimgears.util.autovalue.expressions;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import java.util.Optional;
+import java.util.function.Function;
+
 public enum ExpressionType {
     And(BooleanBinaryOperationExpression.class),
     Or(BooleanBinaryOperationExpression.class),
@@ -46,5 +51,22 @@ public enum ExpressionType {
         return this.type;
     }
 
+    @JsonCreator
+    public static ExpressionType fromString(String key) {
+        return ExpressionType.valueOf(modifyCase(key, Character::toUpperCase));
+    }
+
     private final Class<? extends Expression> type;
+
+    @Override
+    public String toString() {
+        return modifyCase(super.toString(), Character::toLowerCase);
+    }
+
+    private static String modifyCase(String name, Function<Character, Character> modifier) {
+        return Optional.ofNullable(name)
+                .filter(n -> !n.isEmpty())
+                .map(n -> modifier.apply(n.charAt(0)) + n.substring(1))
+                .orElse(name);
+    }
 }

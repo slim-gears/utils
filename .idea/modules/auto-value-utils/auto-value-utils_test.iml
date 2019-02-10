@@ -3,9 +3,6 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output-test url="file://$MODULE_DIR$/../../../auto-value-utils/out/test/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../auto-value-utils/build/generated/source/apt/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/build/generated/source/apt/test" isTestSource="true" generated="true" />
-    </content>
     <content url="file://$MODULE_DIR$/../../../auto-value-utils/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../auto-value-utils/src/test/resources" type="java-test-resource" />
@@ -20,7 +17,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://C:/Program Files/Java/jdk1.8.0_152/lib/tools.jar!/" />
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_172/lib/tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -42,9 +39,9 @@
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.inject:guice:4.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.mockito:mockito-core:2.21.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.6" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.6" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.8" level="project" />
     <orderEntry type="library" name="Gradle: org.antlr:antlr4:4.7.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:2.5.3" level="project" />

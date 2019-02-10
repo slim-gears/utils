@@ -1,8 +1,6 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ArgumentExpression;
@@ -49,7 +47,7 @@ public class ExpressionSerializationTest {
         Assert.assertNotNull(json);
         System.out.println(json);
 
-        //Expression<Integer> deserializedExpression = objectMapper.readValue(json, new TypeReference<Expression<Integer>>(){});
-        //Assert.assertNotNull(deserializedExpression);
+//        Expression<Integer> deserializedExpression = objectMapper.readValue(json, new TypeReference<Expression<Integer>>(){});
+//        Assert.assertNotNull(deserializedExpression);
     }
 }
