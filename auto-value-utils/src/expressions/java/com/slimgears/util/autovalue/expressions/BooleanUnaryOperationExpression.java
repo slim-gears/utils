@@ -1,15 +1,21 @@
 package com.slimgears.util.autovalue.expressions;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public interface BooleanUnaryOperationExpression<V> extends UnaryOperationExpression<V, Boolean>, BooleanExpression {
-    static <V> BooleanUnaryOperationExpression<V> create(String type, ValueExpression<V> operand) {
+    @JsonCreator
+    static <V> BooleanUnaryOperationExpression<V> create(
+            @JsonProperty("type") ExpressionType type,
+            @JsonProperty("operand") Expression<V> operand) {
         return new BooleanUnaryOperationExpression<V>() {
             @Override
-            public ValueExpression<V> operand() {
+            public Expression<V> operand() {
                 return operand;
             }
 
             @Override
-            public String type() {
+            public ExpressionType type() {
                 return type;
             }
         };

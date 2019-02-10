@@ -1,21 +1,30 @@
 package com.slimgears.util.autovalue.expressions;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import javafx.beans.binding.StringExpression;
 
-public interface StringPropertyExpression<T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> extends ComparablePropertyExpression<T, TB, String>, StringValueExpression {
-    static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> StringPropertyExpression<T, TB> of(PropertyMeta<T, TB, String> property) {
-        return new StringPropertyExpression<T, TB>() {
+public interface StringPropertyExpression<T, B> extends ComparablePropertyExpression<T, B, String>, StringExpression {
+    @JsonCreator
+    static <T, B> StringPropertyExpression<T, B> of(
+            @JsonProperty("target") Expression<T> target,
+            @JsonProperty("property") PropertyMeta<T, B, String> property) {
+        return new StringPropertyExpression<T, B>() {
             @Override
-            public PropertyMeta<T, TB, String> property() {
+            public Expression<T> target() {
+                return target;
+            }
+
+            @Override
+            public PropertyMeta<T, B, String> property() {
                 return property;
             }
 
             @Override
-            public String type() {
-                return "stringProperty";
+            public ExpressionType type() {
+                return ExpressionType.StringProperty;
             }
         };
     }

@@ -1,6 +1,10 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface BinaryOperationExpression<T1, T2, R> extends ValueExpression<R> {
-    ValueExpression<T1> left();
-    ValueExpression<T2> right();
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public interface BinaryOperationExpression<T1, T2, R> extends Expression<R> {
+    @JsonProperty
+    Expression<T1> left();
+    @JsonProperty
+    Expression<T2> right();
 }

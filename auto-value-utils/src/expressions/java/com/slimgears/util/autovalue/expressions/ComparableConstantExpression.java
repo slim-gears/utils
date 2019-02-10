@@ -1,6 +1,6 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface ComparableConstantExpression<V extends Comparable<V>> extends ComparableValueExpression<V> {
+public interface ComparableConstantExpression<V extends Comparable<V>> extends ComparableExpression<V> {
     V value();
 
     static <V extends Comparable<V>> ComparableConstantExpression<V> of(V value) {
@@ -11,8 +11,8 @@ public interface ComparableConstantExpression<V extends Comparable<V>> extends C
             }
 
             @Override
-            public String type() {
-                return "comparableConstant";
+            public ExpressionType type() {
+                return ExpressionType.ComparableConstant;
             }
         };
     }

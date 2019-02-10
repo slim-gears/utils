@@ -1,20 +1,27 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface NumericBinaryOperationExpression<V extends Number & Comparable<V>> extends BinaryOperationExpression<V, V, V>, NumericValueExpression<V> {
-    static <V extends Number & Comparable<V>> NumericValueExpression<V> create(String type, ValueExpression<V> left, ValueExpression<V> right) {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public interface NumericBinaryOperationExpression<V extends Number & Comparable<V>> extends BinaryOperationExpression<V, V, V>, NumericExpression<V> {
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    static <V extends Number & Comparable<V>> NumericExpression<V> create(
+            @JsonProperty ExpressionType type,
+            @JsonProperty Expression<V> left,
+            @JsonProperty Expression<V> right) {
         return new NumericBinaryOperationExpression<V>() {
             @Override
-            public ValueExpression<V> left() {
+            public Expression<V> left() {
                 return left;
             }
 
             @Override
-            public ValueExpression<V> right() {
+            public Expression<V> right() {
                 return right;
             }
 
             @Override
-            public String type() {
+            public ExpressionType type() {
                 return type;
             }
         };

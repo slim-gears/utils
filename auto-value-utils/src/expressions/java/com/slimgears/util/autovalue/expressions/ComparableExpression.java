@@ -1,23 +1,23 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface ComparableValueExpression<V extends Comparable<V>> extends ValueExpression<V> {
+public interface ComparableExpression<V extends Comparable<V>> extends Expression<V> {
     default BooleanExpression lessThan(V value) {
         return lessThan(ConstantExpression.of(value));
     }
 
-    default BooleanExpression lessThan(ValueExpression<V> value) {
-        return BooleanBinaryOperationExpression.create("lessThan", this, value);
+    default BooleanExpression lessThan(Expression<V> value) {
+        return BooleanBinaryOperationExpression.create(ExpressionType.LessThan, this, value);
     }
 
     default BooleanExpression greaterThan(V value) {
         return greaterThan(ConstantExpression.of(value));
     }
 
-    default BooleanExpression greaterThan(ValueExpression<V> value) {
-        return BooleanBinaryOperationExpression.create("greaterThan", this, value);
+    default BooleanExpression greaterThan(Expression<V> value) {
+        return BooleanBinaryOperationExpression.create(ExpressionType.GreaterThan, this, value);
     }
 
-    default BooleanExpression lessOrEq(ValueExpression<V> value) {
+    default BooleanExpression lessOrEq(Expression<V> value) {
         return greaterThan(value).not();
     }
 
@@ -25,7 +25,7 @@ public interface ComparableValueExpression<V extends Comparable<V>> extends Valu
         return greaterThan(value).not();
     }
 
-    default BooleanExpression greaterOrEq(ValueExpression<V> value) {
+    default BooleanExpression greaterOrEq(Expression<V> value) {
         return lessThan(value).not();
     }
 

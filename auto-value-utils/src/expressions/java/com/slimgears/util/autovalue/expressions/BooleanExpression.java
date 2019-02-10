@@ -1,15 +1,15 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface BooleanExpression extends ComparableValueExpression<Boolean> {
+public interface BooleanExpression extends ComparableExpression<Boolean> {
     default BooleanExpression and(BooleanExpression value) {
-        return BooleanBinaryOperationExpression.create("and", this, value);
+        return BooleanBinaryOperationExpression.create(ExpressionType.And, this, value);
     }
 
     default BooleanExpression or(BooleanExpression value) {
-        return BooleanBinaryOperationExpression.create("or", this, value);
+        return BooleanBinaryOperationExpression.create(ExpressionType.Or, this, value);
     }
 
     default BooleanExpression not() {
-        return BooleanUnaryOperationExpression.create("not", this);
+        return BooleanUnaryOperationExpression.create(ExpressionType.Not, this);
     }
 }

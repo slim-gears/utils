@@ -1,15 +1,21 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface NumericUnaryOperationExpression<V extends Number & Comparable<V>> extends UnaryOperationExpression<V, V>, NumericValueExpression<V> {
-    static <V extends Number & Comparable<V>> NumericUnaryOperationExpression<V> create(String type, ValueExpression<V> value) {
-        return new NumericUnaryOperationExpression<V>() {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public interface NumericUnaryOperationExpression<T, V extends Number & Comparable<V>> extends UnaryOperationExpression<T, V>, NumericExpression<V> {
+    @JsonCreator
+    static <T, V extends Number & Comparable<V>> NumericUnaryOperationExpression<T, V> create(
+            @JsonProperty("type") ExpressionType type,
+            @JsonProperty("operand") Expression<T> operand) {
+        return new NumericUnaryOperationExpression<T, V>() {
             @Override
-            public ValueExpression<V> operand() {
-                return value;
+            public Expression<T> operand() {
+                return operand;
             }
 
             @Override
-            public String type() {
+            public ExpressionType type() {
                 return type;
             }
         };

@@ -4,8 +4,13 @@
     <output url="file://$MODULE_DIR$/../../../apt-utils/out/generated/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../apt-utils/build/generated-src/antlr/generated" />
-    <content url="file://$MODULE_DIR$/../../../apt-utils/generated-src" />
-    <content url="file://$MODULE_DIR$/../../../apt-utils/src/generated" />
+    <content url="file://$MODULE_DIR$/../../../apt-utils/generated-src">
+      <sourceFolder url="file://$MODULE_DIR$/../../../apt-utils/generated-src/antlr/main" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../apt-utils/src/generated">
+      <sourceFolder url="file://$MODULE_DIR$/../../../apt-utils/src/generated/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../apt-utils/src/generated/resources" type="java-resource" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

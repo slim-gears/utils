@@ -22,12 +22,15 @@ dependencies {
     annotationsImplementation project(':reflect-utils')
     annotationsImplementation libs.googleJsr305
 
+    expressionsImplementation project(':reflect-utils')
     expressionsImplementation project.sourceSetDependency(sourceSets.annotations)
-    expressionsImplementation libs.jacksonAnnotations
+    expressionsImplementation libs.jacksonAnnotations, libs.jacksonDataBind
 
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
     testImplementation libs.googleTruth
     testImplementation libs.jacksonAnnotations
     testImplementation libs.jacksonCore
     testImplementation libs.jacksonDataBind
+
+    testImplementation project.sourceSetDependency(sourceSets.expressions)
 }

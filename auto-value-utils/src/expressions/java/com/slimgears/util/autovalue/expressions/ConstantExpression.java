@@ -1,6 +1,6 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface ConstantExpression<V> extends ValueExpression<V> {
+public interface ConstantExpression<V> extends Expression<V> {
     V value();
 
     static <V> ConstantExpression<V> of(V value) {
@@ -11,8 +11,8 @@ public interface ConstantExpression<V> extends ValueExpression<V> {
             }
 
             @Override
-            public String type() {
-                return "constant";
+            public ExpressionType type() {
+                return ExpressionType.Constant;
             }
         };
     }

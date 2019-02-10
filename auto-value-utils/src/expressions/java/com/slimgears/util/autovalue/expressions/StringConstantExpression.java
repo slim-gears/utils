@@ -1,7 +1,11 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface StringConstantExpression extends ComparableConstantExpression<String>, StringValueExpression {
-    static StringConstantExpression of(String value) {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public interface StringConstantExpression extends ComparableConstantExpression<String>, StringExpression {
+    @JsonCreator
+    static StringConstantExpression of(@JsonProperty("value") String value) {
         return new StringConstantExpression() {
             @Override
             public String value() {
@@ -9,8 +13,8 @@ public interface StringConstantExpression extends ComparableConstantExpression<S
             }
 
             @Override
-            public String type() {
-                return "stringConstant";
+            public ExpressionType type() {
+                return ExpressionType.StringConstant;
             }
         };
     }
