@@ -14,6 +14,7 @@ import java.util.Arrays;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.METHOD})
 @UseModules.Field
+@UseProviders
 @ModuleProvider.Qualifier(UseModules.Provider.class)
 public @interface UseModules {
     Class<? extends Module>[] value() default {};

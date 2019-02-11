@@ -1,7 +1,6 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.common.MoreElements;
-import com.google.auto.common.MoreTypes;
 import com.google.common.collect.ImmutableList;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.MethodInfo;

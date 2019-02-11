@@ -14,6 +14,11 @@ public class MetaClasses {
         return (MetaClass<T, TB>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
     }
 
+    public static <K, T extends HasMetaClassWithKey<K, T, TB>, TB extends BuilderPrototype<T, TB>> MetaClassWithKey<K, T, TB> forClassWithKey(Class<T> cls) {
+        //noinspection unchecked
+        return (MetaClassWithKey<K, T, TB>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
+    }
+
     public static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> MetaClass<T, TB> forToken(TypeToken<T> typeToken) {
         return forClass(typeToken.asClass());
     }

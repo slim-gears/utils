@@ -14,6 +14,7 @@ dependencies {
     implementation project(':generic-utils')
     implementation project.sourceSetDependency(sourceSets.annotations)
     implementation libs.autoValueAnnotations
+    implementation libs.autoCommons
     annotationProcessor libs.autoValue
     compileOnly libs.autoService
     annotationProcessor libs.autoService

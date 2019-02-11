@@ -83,7 +83,7 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
     @JsonIgnore
     @Override
     public MetaClass<SampleValue, SampleValue.Builder> metaClass() {
-        return new Meta();
+        return metaClass;
     }
 
     public static Builder builder() {

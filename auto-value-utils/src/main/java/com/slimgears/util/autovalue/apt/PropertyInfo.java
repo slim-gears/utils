@@ -5,6 +5,7 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.slimgears.apt.data.*;
+import com.slimgears.util.autovalue.annotations.Key;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.ExecutableElement;
@@ -27,6 +28,7 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
     public boolean isOptional() {
         return executableElement().getAnnotation(Nullable.class) != null;
     }
+    public boolean isKey() { return executableElement().getAnnotation(Key.class) != null; }
 
     public boolean hasBuilder() {
         return PropertyUtils.hasBuilder(executableElement());

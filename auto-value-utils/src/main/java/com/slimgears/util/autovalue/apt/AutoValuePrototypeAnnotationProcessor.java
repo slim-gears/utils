@@ -30,6 +30,7 @@ import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ServiceLoader;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -107,6 +108,11 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         ensureBuildersForInterfaces(declaredType);
         ImportTracker importTracker = ImportTracker.create("java.lang", targetClass.packageName());
+        List<PropertyInfo> keyProperties = properties.stream().filter(PropertyInfo::isKey).collect(Collectors.toList());
+        if (keyProperties.size() > 1) {
+            throw new IllegalArgumentException("Type " + type.getSimpleName() + " contains more than 1 key property");
+        }
+        PropertyInfo keyProperty = keyProperties.isEmpty() ? null : keyProperties.get(0);
 
         try {
             TemplateEvaluator.forResource("auto-value.java.vm")
@@ -115,6 +121,8 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                     .variable("targetClass", targetClass)
                     .variable("properties", properties)
                     .variable("imports", importTracker)
+                    .variable("hasKey", keyProperty != null)
+                    .variable("keyProperty", keyProperty)
                     .apply(JavaUtils.imports(importTracker))
                     .write(JavaUtils.fileWriter(processingEnv, targetClass));
         } catch (Throwable e) {

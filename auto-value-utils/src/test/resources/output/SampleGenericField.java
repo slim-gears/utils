@@ -77,7 +77,7 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
     @JsonIgnore
     @Override
     public MetaClass<SampleGenericField, SampleGenericField.Builder> metaClass() {
-        return new Meta();
+        return metaClass;
     }
 
     public static Builder builder() {

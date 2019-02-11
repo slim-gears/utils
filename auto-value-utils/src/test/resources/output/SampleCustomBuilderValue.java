@@ -78,7 +78,7 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
     @JsonIgnore
     @Override
     public MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> metaClass() {
-        return new Meta();
+        return metaClass;
     }
 
     public static Builder builder() {

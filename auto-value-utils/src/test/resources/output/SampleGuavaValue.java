@@ -89,7 +89,7 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     @JsonIgnore
     @Override
     public MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> metaClass() {
-        return new Meta();
+        return metaClass;
     }
 
     public static Builder builder() {

@@ -118,6 +118,14 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testSampleWithKeyPrototype() {
+        tester()
+                .inputFiles("SampleWithKeyPrototype.java")
+                .expectedSources("SampleWithKey.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
