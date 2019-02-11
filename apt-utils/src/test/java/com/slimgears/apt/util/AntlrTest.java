@@ -4,7 +4,7 @@ import com.slimgears.apt.data.TypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.slimgears.apt.util.TypeInfoParserAdapter.toTypeInfo;
+import static com.slimgears.apt.util.TypeTokenParserAdapter.toTypeInfo;
 
 public class AntlrTest {
 

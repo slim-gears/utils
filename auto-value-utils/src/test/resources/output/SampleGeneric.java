@@ -12,6 +12,7 @@ import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -21,9 +22,11 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
 
     public static class Meta<T> implements MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> {
 
+        private final TypeToken<SampleGeneric<T>> objectClass = new TypeToken<SampleGeneric<T>>(){};
+        private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
-        public final PropertyMeta<SampleGeneric<T>, Builder<T>, String> value = PropertyMeta.create("value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
-        public final PropertyMeta<SampleGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create("tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
+        public final PropertyMeta<SampleGeneric<T>, Builder<T>, String> value = PropertyMeta.create(objectClass, "value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
+        public final PropertyMeta<SampleGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(objectClass, "tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
 
         Meta() {
             propertyMap.put("value", value);
@@ -32,12 +35,12 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
 
         @Override
         public TypeToken<Builder<T>> builderClass() {
-            return new TypeToken<Builder<T>>(){};
+            return this.builderClass;
         }
 
         @Override
         public TypeToken<SampleGeneric<T>> objectClass() {
-            return new TypeToken<SampleGeneric<T>>(){};
+            return this.objectClass;
         }
 
         @Override
@@ -54,6 +57,18 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         @Override
         public Builder<T> createBuilder() {
             return SampleGeneric.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
+                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 

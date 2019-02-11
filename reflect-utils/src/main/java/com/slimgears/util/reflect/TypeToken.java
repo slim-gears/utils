@@ -2,7 +2,9 @@ package com.slimgears.util.reflect;
 
 import com.slimgears.util.reflect.internal.CanonicalGenericArrayType;
 import com.slimgears.util.reflect.internal.CanonicalParameterizedType;
+import com.slimgears.util.reflect.internal.CanonicalWildcardType;
 import com.slimgears.util.reflect.internal.Require;
+import com.slimgears.util.reflect.internal.TypeTokenParserAdapter;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
@@ -14,9 +16,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TypeToken<T> {
     private final Type type;
+
+    public static TypeToken ofWildcard(Type[] lowerBounds, Type[] upperBounds) {
+        return TypeToken.ofType(new CanonicalWildcardType(lowerBounds, upperBounds));
+    }
+
+    public static TypeToken ofWildcard() {
+        return TypeToken.ofType(new CanonicalWildcardType(new Type[0], new Type[0]));
+    }
+
+    public static TypeToken ofWildcardUpper(Type... upperBounds) {
+        return TypeToken.ofType(new CanonicalWildcardType(new Type[0], upperBounds));
+    }
+
+    public static TypeToken ofWildcardLower(Type... lowerBounds) {
+        return TypeToken.ofType(new CanonicalWildcardType(new Type[0], lowerBounds));
+    }
 
     public interface Constructor<T> {
         T newInstance(Object... args);
@@ -57,6 +77,10 @@ public class TypeToken<T> {
                 .map(Class::getModifiers)
                 .map(modifierTester)
                 .orElse(false);
+    }
+
+    public TypeToken<T[]> toArray() {
+        return ofArray(this);
     }
 
     public Type type() {
@@ -130,7 +154,12 @@ public class TypeToken<T> {
 
     @Override
     public String toString() {
-        return type.getTypeName();
+        return typeArguments().length > 0
+                ? type().getTypeName() + Arrays
+                .stream(typeArguments())
+                .map(TypeToken::toString)
+                .collect(Collectors.joining(",", "<", ">"))
+                : type().getTypeName();
     }
 
     public static <T> TypeToken<T[]> ofArray(Class<T> componentType) {
@@ -150,11 +179,17 @@ public class TypeToken<T> {
     }
 
     public static <T> TypeToken<T> ofParameterized(Class rawClass, Class... args) {
-        return parameterizedBuilder(rawClass).typeArgs(args).build();
+        //noinspection unchecked
+        return (args.length == 0)
+                ? of(rawClass)
+                : parameterizedBuilder(rawClass).typeArgs(args).build();
     }
 
     public static <T> TypeToken<T> ofParameterized(Class rawClass, TypeToken<?>... args) {
-        return parameterizedBuilder(rawClass).typeArgs(args).build();
+        //noinspection unchecked
+        return (args.length == 0)
+                ? of(rawClass)
+                : parameterizedBuilder(rawClass).typeArgs(args).build();
     }
 
     public static ParameterizedBuilder parameterizedBuilder(Class rawClass) {
@@ -194,5 +229,10 @@ public class TypeToken<T> {
             Type[] args = params.toArray(new Type[0]);
             return new TypeToken<>(new CanonicalParameterizedType(rawClass, rawClass.getEnclosingClass(), params.toArray(args)));
         }
+    }
+
+    public static <T> TypeToken<T> valueOf(String str) {
+        //noinspection unchecked
+        return TypeTokenParserAdapter.toTypeToken(str);
     }
 }

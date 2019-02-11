@@ -1,27 +1,22 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface ConstantExpression<V> extends Expression<V> {
-    V value();
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.slimgears.util.autovalue.expressions.internal.NumericConstantExpression;
+import com.slimgears.util.autovalue.expressions.internal.ObjectConstantExpression;
+import com.slimgears.util.autovalue.expressions.internal.StringConstantExpression;
+
+public interface ConstantExpression<T> extends ObjectExpression<T> {
+    @JsonProperty T value();
 
     static <V> ConstantExpression<V> of(V value) {
-        return new ConstantExpression<V>() {
-            @Override
-            public V value() {
-                return value;
-            }
-
-            @Override
-            public ExpressionType type() {
-                return ExpressionType.Constant;
-            }
-        };
+        return ObjectConstantExpression.create(Type.Constant, value);
     }
 
     static <V extends Number & Comparable<V>> NumericConstantExpression<V> of(V value) {
-        return NumericConstantExpression.of(value);
+        return NumericConstantExpression.create(Type.NumericConstant, value);
     }
 
     static StringConstantExpression of(String value) {
-        return StringConstantExpression.of(value);
+        return StringConstantExpression.create(Type.StringConstant, value);
     }
 }

@@ -12,6 +12,7 @@ import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -21,8 +22,10 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
 
     public static class Meta<T extends Comparable<T>> implements MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
 
+        private final TypeToken<SampleComparableGeneric<T>> objectClass = new TypeToken<SampleComparableGeneric<T>>(){};
+        private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
-        public final PropertyMeta<SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create("tValue", new TypeToken<T>(){}, SampleComparableGeneric::tValue, Builder::tValue);
+        public final PropertyMeta<SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(objectClass, "tValue", new TypeToken<T>(){}, SampleComparableGeneric::tValue, Builder::tValue);
 
         Meta() {
             propertyMap.put("tValue", tValue);
@@ -30,12 +33,12 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
 
         @Override
         public TypeToken<Builder<T>> builderClass() {
-            return new TypeToken<Builder<T>>(){};
+            return this.builderClass;
         }
 
         @Override
         public TypeToken<SampleComparableGeneric<T>> objectClass() {
-            return new TypeToken<SampleComparableGeneric<T>>(){};
+            return this.objectClass;
         }
 
         @Override
@@ -52,6 +55,18 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         @Override
         public Builder<T> createBuilder() {
             return SampleComparableGeneric.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
+                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 

@@ -13,6 +13,7 @@ import com.slimgears.util.reflect.TypeToken;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -22,8 +23,10 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
 
     public static class Meta implements MetaClass<SampleGenericField, SampleGenericField.Builder> {
 
+        private final TypeToken<SampleGenericField> objectClass = new TypeToken<SampleGenericField>(){};
+        private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleGenericField, Builder, ?>> propertyMap = new LinkedHashMap<>();
-        public final PropertyMeta<SampleGenericField, Builder, Class<? extends Collection>> value = PropertyMeta.create("value", new TypeToken<Class<? extends Collection>>(){}, SampleGenericField::value, Builder::value);
+        public final PropertyMeta<SampleGenericField, Builder, Class<? extends Collection>> value = PropertyMeta.create(objectClass, "value", new TypeToken<Class<? extends Collection>>(){}, SampleGenericField::value, Builder::value);
 
         Meta() {
             propertyMap.put("value", value);
@@ -31,12 +34,12 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
 
         @Override
         public TypeToken<Builder> builderClass() {
-            return new TypeToken<Builder>(){};
+            return this.builderClass;
         }
 
         @Override
         public TypeToken<SampleGenericField> objectClass() {
-            return new TypeToken<SampleGenericField>(){};
+            return this.objectClass;
         }
 
         @Override
@@ -53,6 +56,18 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         @Override
         public Builder createBuilder() {
             return SampleGenericField.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
+                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 

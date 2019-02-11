@@ -1,0 +1,9 @@
+apply from: "$rootProject.scriptsDir/antlr.gradle"
+
+generateGrammarSource {
+    arguments += ['-package', 'com.slimgears.util.reflect.internal']
+}
+
+dependencies {
+    implementation project(':stream-utils')
+}

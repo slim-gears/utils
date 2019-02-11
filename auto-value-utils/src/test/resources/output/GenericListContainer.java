@@ -13,6 +13,7 @@ import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -22,8 +23,10 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
 
     public static class Meta<T> implements MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> {
 
+        private final TypeToken<GenericListContainer<T>> objectClass = new TypeToken<GenericListContainer<T>>(){};
+        private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericListContainer<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
-        public final PropertyMeta<GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyMeta.create("items", new TypeToken<List<GenericListItem<T>>>(){}, GenericListContainer::items, Builder::items);
+        public final PropertyMeta<GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyMeta.create(objectClass, "items", new TypeToken<List<GenericListItem<T>>>(){}, GenericListContainer::items, Builder::items);
 
         Meta() {
             propertyMap.put("items", items);
@@ -31,12 +34,12 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
 
         @Override
         public TypeToken<Builder<T>> builderClass() {
-            return new TypeToken<Builder<T>>(){};
+            return this.builderClass;
         }
 
         @Override
         public TypeToken<GenericListContainer<T>> objectClass() {
-            return new TypeToken<GenericListContainer<T>>(){};
+            return this.objectClass;
         }
 
         @Override
@@ -53,6 +56,18 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         @Override
         public Builder<T> createBuilder() {
             return GenericListContainer.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
+                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 

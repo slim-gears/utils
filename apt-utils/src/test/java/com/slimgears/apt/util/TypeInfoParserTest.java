@@ -20,7 +20,7 @@ public class TypeInfoParserTest {
 
     @Test
     public void testTypeInfoArrayParser() {
-        TypeInfo typeInfo = TypeInfoParserAdapter.toTypeInfo("java.util.List<java.lang.String[]>[]");
+        TypeInfo typeInfo = TypeTokenParserAdapter.toTypeInfo("java.util.List<java.lang.String[]>[]");
         Assert.assertEquals("java.lang.String[]", TypeInfo.of("java.lang.String[]").fullName());
 
         Assert.assertEquals("java.util.List<java.lang.String[]>[]", typeInfo.fullName());
@@ -34,7 +34,7 @@ public class TypeInfoParserTest {
 
     @Test
     public void testTypeInfoParser() {
-        TypeInfo typeInfo = TypeInfoParserAdapter.toTypeInfo("java.util.List<java.util.Map<java.lang.String, java.util.List<java.lang.String>>>");
+        TypeInfo typeInfo = TypeTokenParserAdapter.toTypeInfo("java.util.List<java.util.Map<java.lang.String, java.util.List<java.lang.String>>>");
         Assert.assertEquals("java.util.List", typeInfo.name());
         Assert.assertEquals("List", typeInfo.simpleName());
         Assert.assertEquals("java.util", typeInfo.packageName());
@@ -48,7 +48,7 @@ public class TypeInfoParserTest {
 
     @Test
     public void testTypeInfoParserForConstrainedArgs() {
-        TypeInfo typeInfo = TypeInfoParserAdapter.toTypeInfo("class<? extends java.lang.Object>");
+        TypeInfo typeInfo = TypeTokenParserAdapter.toTypeInfo("class<? extends java.lang.Object>");
         Assert.assertEquals(1, typeInfo.typeParams().size());
     }
 

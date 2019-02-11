@@ -1,35 +1,37 @@
 package com.slimgears.util.autovalue.expressions;
 
-public interface ComparableExpression<V extends Comparable<V>> extends Expression<V> {
-    default BooleanExpression lessThan(V value) {
+import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationExpression;
+
+public interface ComparableExpression<T extends Comparable<T>> extends ObjectExpression<T> {
+    default BooleanExpression lessThan(T value) {
         return lessThan(ConstantExpression.of(value));
     }
 
-    default BooleanExpression lessThan(Expression<V> value) {
-        return BooleanBinaryOperationExpression.create(ExpressionType.LessThan, this, value);
+    default BooleanExpression lessThan(ObjectExpression<T> value) {
+        return BooleanBinaryOperationExpression.create(Type.LessThan, this, value);
     }
 
-    default BooleanExpression greaterThan(V value) {
+    default BooleanExpression greaterThan(T value) {
         return greaterThan(ConstantExpression.of(value));
     }
 
-    default BooleanExpression greaterThan(Expression<V> value) {
-        return BooleanBinaryOperationExpression.create(ExpressionType.GreaterThan, this, value);
+    default BooleanExpression greaterThan(ObjectExpression<T> value) {
+        return BooleanBinaryOperationExpression.create(Type.GreaterThan, this, value);
     }
 
-    default BooleanExpression lessOrEq(Expression<V> value) {
+    default BooleanExpression lessOrEq(ObjectExpression<T> value) {
         return greaterThan(value).not();
     }
 
-    default BooleanExpression lessOrEq(V value) {
+    default BooleanExpression lessOrEq(T value) {
         return greaterThan(value).not();
     }
 
-    default BooleanExpression greaterOrEq(Expression<V> value) {
+    default BooleanExpression greaterOrEq(ObjectExpression<T> value) {
         return lessThan(value).not();
     }
 
-    default BooleanExpression greaterOrEq(V value) {
+    default BooleanExpression greaterOrEq(T value) {
         return lessThan(value).not();
     }
 }

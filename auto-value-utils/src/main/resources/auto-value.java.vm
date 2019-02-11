@@ -17,9 +17,11 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
         $targetClass.simpleName()#typeParams($sourceClass), ##
         ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> {
 
+        private final $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass = new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
+        private final $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass = new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
         private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 #foreach ($p in $properties)
-        public final PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create("$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
+        public final PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create(objectClass, "$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
 #end
 
         Meta() {
@@ -30,12 +32,12 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
 
         @Override
         public $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass() {
-            return new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
+            return this.builderClass;
         }
 
         @Override
         public $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass() {
-            return new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
+            return this.objectClass;
         }
 
         @Override
@@ -52,6 +54,18 @@ implements $[$sourceClass], $[com.slimgears.util.autovalue.annotations.HasMetaCl
         @Override
         public Builder#typeParams($sourceClass) createBuilder() {
            return ${targetClass.simpleName()}.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return $[java.util.Objects].hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+                && Objects.equals(((Meta)obj).objectClass(), objectClass())
+                && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 

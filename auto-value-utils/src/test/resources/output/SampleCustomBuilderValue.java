@@ -12,6 +12,7 @@ import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
@@ -21,9 +22,11 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
 
     public static class Meta implements MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
 
+        private final TypeToken<SampleCustomBuilderValue> objectClass = new TypeToken<SampleCustomBuilderValue>(){};
+        private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleCustomBuilderValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
-        public final PropertyMeta<SampleCustomBuilderValue, Builder, Integer> intValue = PropertyMeta.create("intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
-        public final PropertyMeta<SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyMeta.create("doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Builder, Integer> intValue = PropertyMeta.create(objectClass, "intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyMeta.create(objectClass, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
 
         Meta() {
             propertyMap.put("intValue", intValue);
@@ -32,12 +35,12 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
 
         @Override
         public TypeToken<Builder> builderClass() {
-            return new TypeToken<Builder>(){};
+            return this.builderClass;
         }
 
         @Override
         public TypeToken<SampleCustomBuilderValue> objectClass() {
-            return new TypeToken<SampleCustomBuilderValue>(){};
+            return this.objectClass;
         }
 
         @Override
@@ -54,6 +57,18 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         @Override
         public Builder createBuilder() {
             return SampleCustomBuilderValue.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
+                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 

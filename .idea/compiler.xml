@@ -16,6 +16,8 @@
       <module name="guice-utils_main" target="1.8" />
       <module name="guice-utils_test" target="1.8" />
       <module name="guice-utils_testUtils" target="1.8" />
+      <module name="reflect-utils_generated" target="1.8" />
+      <module name="reflect-utils_java" target="1.8" />
       <module name="reflect-utils_main" target="1.8" />
       <module name="reflect-utils_test" target="1.8" />
       <module name="rx-utils_main" target="1.8" />

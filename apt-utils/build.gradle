@@ -1,10 +1,4 @@
-apply from: "$rootProject.scriptsDir/antlr.gradle"
-
 import org.gradle.internal.jvm.Jvm
-
-generateGrammarSource {
-    arguments += ['-package', 'com.slimgears.apt.typeinfo']
-}
 
 configurations {
     testOutput.extendsFrom (testImplementation)
@@ -31,6 +25,7 @@ dependencies {
     implementation project(':guice-utils')
     implementation project(':generic-utils')
     implementation project(':stream-utils')
+    implementation project(':reflect-utils')
 
     compileOnly libs.autoService
     annotationProcessor libs.autoService

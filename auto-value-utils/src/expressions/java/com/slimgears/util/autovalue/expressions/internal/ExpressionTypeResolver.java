@@ -1,9 +1,10 @@
-package com.slimgears.util.autovalue.expressions;
+package com.slimgears.util.autovalue.expressions.internal;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+import com.slimgears.util.autovalue.expressions.Expression;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class ExpressionTypeResolver implements TypeIdResolver {
 
     @Override
     public JavaType typeFromId(DatabindContext context, String id) throws IOException {
-        return context.constructSpecializedType(baseType, ExpressionType.fromString(id).type());
+        return context.constructSpecializedType(baseType, Expression.Type.fromString(id).type());
     }
 
     @Override

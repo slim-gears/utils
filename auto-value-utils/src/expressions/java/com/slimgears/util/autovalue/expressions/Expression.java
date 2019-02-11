@@ -1,86 +1,97 @@
 package com.slimgears.util.autovalue.expressions;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.expressions.internal.ArgumentExpression;
+import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.BooleanUnaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.ComparableConstantExpression;
+import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.ExpressionTypeResolver;
+import com.slimgears.util.autovalue.expressions.internal.NumericBinaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.NumericConstantExpression;
+import com.slimgears.util.autovalue.expressions.internal.NumericUnaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.StringBinaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.StringConstantExpression;
+import com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.StringUnaryOperationExpression;
 
-import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Function;
 
 @JsonTypeIdResolver(ExpressionTypeResolver.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, property = "type", visible = true)
-//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
-//@JsonSubTypes({
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "And"),
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "Or"),
-//        @JsonSubTypes.Type(value = BooleanUnaryOperationExpression.class, name = "Not"),
-//
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "Equals"),
-//        @JsonSubTypes.Type(value = BooleanUnaryOperationExpression.class, name = "IsNull"),
-//
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "LessThan"),
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "GreaterThan"),
-//
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "Contains"),
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "StartsWith"),
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "EndsWith"),
-//        @JsonSubTypes.Type(value = BooleanBinaryOperationExpression.class, name = "Matches"),
-//
-//        @JsonSubTypes.Type(value = NumericBinaryOperationExpression.class, name = "Add"),
-//        @JsonSubTypes.Type(value = NumericBinaryOperationExpression.class, name = "Sub"),
-//        @JsonSubTypes.Type(value = NumericBinaryOperationExpression.class, name = "Mul"),
-//        @JsonSubTypes.Type(value = NumericBinaryOperationExpression.class, name = "Div"),
-//        @JsonSubTypes.Type(value = NumericUnaryOperationExpression.class, name = "Negate"),
-//
-//        @JsonSubTypes.Type(value = PropertyExpression.class, name = "Property"),
-//        @JsonSubTypes.Type(value = ComparablePropertyExpression.class, name = "ComparableProperty"),
-//        @JsonSubTypes.Type(value = NumericPropertyExpression.class, name = "NumericProperty"),
-//        @JsonSubTypes.Type(value = StringPropertyExpression.class, name = "StringProperty"),
-//
-//        @JsonSubTypes.Type(value = ConstantExpression.class, name = "Constant"),
-//        @JsonSubTypes.Type(value = NumericConstantExpression.class, name = "NumericConstant"),
-//        @JsonSubTypes.Type(value = StringConstantExpression.class, name = "StringConstant"),
-//})
-public interface Expression<V> {
-    ExpressionType type();
+public interface Expression {
+    Type type();
 
-    default BooleanExpression eq(Expression<V> value) {
-        return BooleanBinaryOperationExpression.create(ExpressionType.Equals, this, value);
-    }
+    enum Type {
+        And(BooleanBinaryOperationExpression.class),
+        Or(BooleanBinaryOperationExpression.class),
+        Not(BooleanUnaryOperationExpression.class),
 
-    default BooleanExpression eq(V value) {
-        return eq(ConstantExpression.of(value));
-    }
+        Equals(BooleanBinaryOperationExpression.class),
+        IsNull(BooleanUnaryOperationExpression.class),
 
-    default BooleanExpression notEq(Expression<V> value) {
-        return eq(value).not();
-    }
+        ValueInArray(BooleanBinaryOperationExpression.class),
+        ValueIn(BooleanBinaryOperationExpression.class),
 
-    default BooleanExpression notEq(V value) {
-        return eq(value).not();
-    }
+        LessThan(BooleanBinaryOperationExpression.class),
+        GreaterThan(BooleanBinaryOperationExpression.class),
 
-    default BooleanExpression isNull() {
-        return BooleanUnaryOperationExpression.create(ExpressionType.IsNull, this);
-    }
+        Contains(BooleanBinaryOperationExpression.class),
+        StartsWith(BooleanBinaryOperationExpression.class),
+        EndsWith(BooleanBinaryOperationExpression.class),
+        Matches(BooleanBinaryOperationExpression.class),
+        Length(NumericUnaryOperationExpression.class),
+        Concat(StringBinaryOperationExpression.class),
+        ToLower(StringUnaryOperationExpression.class),
+        ToUpper(StringUnaryOperationExpression.class),
+        Trim(StringUnaryOperationExpression.class),
 
-    default BooleanExpression isNotNull() {
-        return isNull().not();
-    }
+        Add(NumericBinaryOperationExpression.class),
+        Sub(NumericBinaryOperationExpression.class),
+        Negate(NumericUnaryOperationExpression.class),
+        Mul(NumericBinaryOperationExpression.class),
+        Div(NumericBinaryOperationExpression.class),
 
-    default BooleanExpression inArray(Expression<V[]> values) {
-        return BooleanBinaryOperationExpression.create(ExpressionType.ValueInArray, this, values);
-    }
+        Property(PropertyExpression.class),
+        ComparableProperty(ComparablePropertyExpression.class),
+        NumericProperty(ComparablePropertyExpression.class),
+        StringProperty(StringPropertyExpression.class),
 
-    default BooleanExpression inArray(V... values) {
-        return inArray(ConstantExpression.of(values));
-    }
+        Constant(ConstantExpression.class),
+        ComparableConstant(ComparableConstantExpression.class),
+        NumericConstant(NumericConstantExpression.class),
+        StringConstant(StringConstantExpression.class),
 
-    default BooleanExpression in(Expression<Collection<V>> values) {
-        return BooleanBinaryOperationExpression.create(ExpressionType.ValueIn, this, values);
-    }
+        Argument(ArgumentExpression.class);
 
-    default BooleanExpression in(Collection<V> values) {
-        return in(ConstantExpression.of(values));
+        Type(Class<? extends Expression> type) {
+            this.type = type;
+        }
+
+        public Class<? extends Expression> type() {
+            return this.type;
+        }
+
+        @JsonCreator
+        public static Type fromString(String key) {
+            return Type.valueOf(modifyCase(key, Character::toUpperCase));
+        }
+
+        private final Class<? extends Expression> type;
+
+        @Override
+        public String toString() {
+            return modifyCase(super.toString(), Character::toLowerCase);
+        }
+
+        private static String modifyCase(String name, Function<Character, Character> modifier) {
+            return Optional.ofNullable(name)
+                    .filter(n -> !n.isEmpty())
+                    .map(n -> modifier.apply(n.charAt(0)) + n.substring(1))
+                    .orElse(name);
+        }
     }
 }

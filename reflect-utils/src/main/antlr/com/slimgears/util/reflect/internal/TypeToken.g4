@@ -1,4 +1,4 @@
-grammar TypeInfo;
+grammar TypeToken;
 
 type: (primitiveType | referenceType) EOF;
 

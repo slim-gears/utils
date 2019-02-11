@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils.iml" group="apt-utils" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils_generated.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils_generated.iml" group="apt-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils_main.iml" group="apt-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/apt-utils_test.iml" group="apt-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils.iml" group="auto-value-utils" />
@@ -18,6 +17,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils/guice-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils/guice-utils_main.iml" group="guice-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils/guice-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils/guice-utils_test.iml" group="guice-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_generated.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_generated.iml" group="reflect-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_main.iml" group="reflect-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/reflect-utils_test.iml" group="reflect-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils/rx-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils/rx-utils.iml" group="rx-utils" />

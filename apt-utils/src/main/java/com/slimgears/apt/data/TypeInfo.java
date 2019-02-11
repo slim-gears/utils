@@ -5,7 +5,7 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.slimgears.apt.util.ElementUtils;
-import com.slimgears.apt.util.TypeInfoParserAdapter;
+import com.slimgears.apt.util.TypeTokenParserAdapter;
 import com.slimgears.util.generic.ScopedInstance;
 
 import javax.lang.model.element.ExecutableElement;
@@ -150,7 +150,7 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
     }
 
     public static TypeInfo of(String fullName) {
-        return register(TypeInfoParserAdapter.toTypeInfo(fullName));
+        return register(TypeTokenParserAdapter.toTypeInfo(fullName));
     }
 
     public static TypeInfo of(TypeMirror typeMirror) {

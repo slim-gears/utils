@@ -47,4 +47,17 @@ public class TypeTokenTest {
 
         Assert.assertEquals(mapToken1, mapToken2);
     }
+
+    @Test
+    public void testTokenToString() {
+        TypeToken<Map<String, List<Integer[]>[]>[]> mapToken1 = new TypeToken<Map<String, List<Integer[]>[]>[]>() {};
+        Assert.assertEquals("java.util.Map<java.lang.String,java.util.List<java.lang.Integer[]>[]>[]", mapToken1.toString());
+    }
+
+    @Test
+    public void testTokenFromString() {
+        TypeToken<Map<String, List<Integer[]>[]>[]> mapToken1 = new TypeToken<Map<String, List<Integer[]>[]>[]>() {};
+        TypeToken<Map<String, List<Integer[]>[]>[]> mapToken2 = TypeToken.valueOf("java.util.Map<java.lang.String,java.util.List<java.lang.Integer[]>[]>[]");
+        Assert.assertEquals(mapToken1, mapToken2);
+    }
 }

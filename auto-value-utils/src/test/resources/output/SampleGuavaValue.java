@@ -16,6 +16,7 @@ import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Generated;
 import javax.annotation.Nullable;
 
@@ -26,12 +27,14 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
 
     public static class Meta implements MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
 
+        private final TypeToken<SampleGuavaValue> objectClass = new TypeToken<SampleGuavaValue>(){};
+        private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleGuavaValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyMeta.create("intList", new TypeToken<ImmutableList<Integer>>(){}, SampleGuavaValue::intList, Builder::intList);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyMeta.create("stringSet", new TypeToken<ImmutableSet<String>>(){}, SampleGuavaValue::stringSet, Builder::stringSet);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.create("intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, SampleGuavaValue::intToStringMap, Builder::intToStringMap);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.create("intToStringBiMap", new TypeToken<ImmutableBiMap<Integer, String>>(){}, SampleGuavaValue::intToStringBiMap, Builder::intToStringBiMap);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyMeta.create("optionalList", new TypeToken<ImmutableList<String>>(){}, SampleGuavaValue::optionalList, Builder::optionalList);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyMeta.create(objectClass, "intList", new TypeToken<ImmutableList<Integer>>(){}, SampleGuavaValue::intList, Builder::intList);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyMeta.create(objectClass, "stringSet", new TypeToken<ImmutableSet<String>>(){}, SampleGuavaValue::stringSet, Builder::stringSet);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.create(objectClass, "intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, SampleGuavaValue::intToStringMap, Builder::intToStringMap);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.create(objectClass, "intToStringBiMap", new TypeToken<ImmutableBiMap<Integer, String>>(){}, SampleGuavaValue::intToStringBiMap, Builder::intToStringBiMap);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyMeta.create(objectClass, "optionalList", new TypeToken<ImmutableList<String>>(){}, SampleGuavaValue::optionalList, Builder::optionalList);
 
         Meta() {
             propertyMap.put("intList", intList);
@@ -43,12 +46,12 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
 
         @Override
         public TypeToken<Builder> builderClass() {
-            return new TypeToken<Builder>(){};
+            return this.builderClass;
         }
 
         @Override
         public TypeToken<SampleGuavaValue> objectClass() {
-            return new TypeToken<SampleGuavaValue>(){};
+            return this.objectClass;
         }
 
         @Override
@@ -65,6 +68,18 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         @Override
         public Builder createBuilder() {
             return SampleGuavaValue.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
+                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
