@@ -2,12 +2,12 @@ package com.slimgears.util.autovalue.expressions;
 
 import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationExpression;
 
-public interface ComparableExpression<T extends Comparable<T>> extends ObjectExpression<T> {
+public interface ComparableExpression<S, T extends Comparable<T>> extends ObjectExpression<S, T> {
     default BooleanExpression lessThan(T value) {
         return lessThan(ConstantExpression.of(value));
     }
 
-    default BooleanExpression lessThan(ObjectExpression<T> value) {
+    default BooleanExpression lessThan(ObjectExpression<S, T> value) {
         return BooleanBinaryOperationExpression.create(Type.LessThan, this, value);
     }
 
@@ -15,11 +15,11 @@ public interface ComparableExpression<T extends Comparable<T>> extends ObjectExp
         return greaterThan(ConstantExpression.of(value));
     }
 
-    default BooleanExpression greaterThan(ObjectExpression<T> value) {
+    default BooleanExpression greaterThan(ObjectExpression<S, T> value) {
         return BooleanBinaryOperationExpression.create(Type.GreaterThan, this, value);
     }
 
-    default BooleanExpression lessOrEq(ObjectExpression<T> value) {
+    default BooleanExpression lessOrEq(ObjectExpression<S, T> value) {
         return greaterThan(value).not();
     }
 
@@ -27,7 +27,7 @@ public interface ComparableExpression<T extends Comparable<T>> extends ObjectExp
         return greaterThan(value).not();
     }
 
-    default BooleanExpression greaterOrEq(ObjectExpression<T> value) {
+    default BooleanExpression greaterOrEq(ObjectExpression<S, T> value) {
         return lessThan(value).not();
     }
 

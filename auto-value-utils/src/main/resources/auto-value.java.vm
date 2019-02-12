@@ -1,6 +1,7 @@
 package $targetClass.packageName();
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 #parse("type-params.java.vm")
 
@@ -16,7 +17,65 @@ implements $[$sourceClass], ##
         $[com.slimgears.util.autovalue.annotations.HasMetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> ##
 #end##
 {
+    public static final Expressions<$targetClass.simpleName()#foreach ($tp in $sourceClass.typeParams()), ?#end> ${dollar} = new Expressions<>();
     public static final Meta metaClass = new Meta();
+
+    public static #typeParamsDeclaration($sourceClass) Expressions<$targetClass.simpleName()#foreach ($tp in $sourceClass.typeParams()), $tp.typeName()#end> ${dollar}() {
+#if ($sourceClass.typeParams().isEmpty())
+        return ${dollar};
+#else
+        return new Expressions<>();
+#end
+    }
+
+    public static class Expressions<S#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> {
+        private final ObjectExpression<S, $targetClass.simpleName()#typeParams($sourceClass)> self = ObjectExpression.arg();
+        private final Meta#typeParams($sourceClass) meta = #if ($sourceClass.typeParams().isEmpty())new Meta() #{else}new Meta<>()#end;
+#foreach ($p in $properties)
+#if ($p.isReferenceProperty())
+        public final $[$p.type()].ReferencePropertyExpression<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[$p.type()].ReferencePropertyExpression.create(self, meta.${p.name()});
+#elseif ($p.isStringProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofString(self, meta.${p.name()});
+#elseif ($p.isNumericProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofNumeric(self, meta.${p.name()});
+#elseif ($p.isComparableProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofComparable(self, meta.${p.name()});
+#elseif ($p.isBooleanProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofBoolean(self, meta.${p.name()});
+#else
+        public final $[com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofObject(self, meta.${p.name()});
+#end
+#end
+    }
+    
+    public static class ReferencePropertyExpression<__S, __T, __B#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> extends Expressions<__S#foreach ($tp in $sourceClass.typeParams()), $tp.typeName()#end> implements $[com.slimgears.util.autovalue.expressions.PropertyExpression]<__S, __T, __B, $targetClass.simpleName()#typeParams($sourceClass)> {
+        private final ObjectExpression<__S, __T> target;
+        private final PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property;
+
+        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property) {
+            this.target = target;
+            this.property = property;
+        }
+
+        static <__S, __T, __B#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> ReferencePropertyExpression<__S, __T, __B#foreach ($tp in $sourceClass.typeParams()), $tp.typeName()#end> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property) {
+            return new ReferencePropertyExpression<>(target, property);
+        }
+
+        @Override
+        public ObjectExpression<__S, __T> target() {
+            return target;
+        }
+
+        @Override
+        public PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property() {
+            return property;
+        }
+
+        @Override
+        public Type type() {
+            return Type.Property;
+        }
+    }
 
     public static class Meta#typeParamsDeclaration($sourceClass) implements ##
 #if ($hasKey)##
@@ -32,6 +91,7 @@ implements $[$sourceClass], ##
         private final $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass = new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
         private final $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass = new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
         private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
+
 #foreach ($p in $properties)
         public final PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create(objectClass, "$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
 #end

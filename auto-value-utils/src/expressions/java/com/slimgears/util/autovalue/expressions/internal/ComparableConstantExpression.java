@@ -7,9 +7,9 @@ import com.slimgears.util.autovalue.expressions.ComparableExpression;
 import com.slimgears.util.autovalue.expressions.ConstantExpression;
 
 @AutoValue
-public abstract class ComparableConstantExpression<V extends Comparable<V>> implements ConstantExpression<V>, ComparableExpression<V> {
+public abstract class ComparableConstantExpression<S, V extends Comparable<V>> implements ConstantExpression<S, V>, ComparableExpression<S, V> {
     @JsonCreator
-    public static <V extends Comparable<V>> ComparableConstantExpression<V> create(
+    public static <S, V extends Comparable<V>> ComparableConstantExpression<S, V> create(
             @JsonProperty Type type,
             @JsonProperty V value) {
         return new AutoValue_ComparableConstantExpression<>(type, value);

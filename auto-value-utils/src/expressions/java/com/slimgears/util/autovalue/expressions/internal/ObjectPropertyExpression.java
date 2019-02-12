@@ -8,11 +8,11 @@ import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 
 @AutoValue
-public abstract class ObjectPropertyExpression<T, B, V> implements PropertyExpression<T, B, V> {
+public abstract class ObjectPropertyExpression<S, T, B, V> implements PropertyExpression<S, T, B, V> {
     @JsonCreator
-    public static <T, B, V> ObjectPropertyExpression<T, B, V> create(
+    public static <S, T, B, V> ObjectPropertyExpression<S, T, B, V> create(
             @JsonProperty("type") Type type,
-            @JsonProperty("target") ObjectExpression<T> target,
+            @JsonProperty("target") ObjectExpression<S, T> target,
             @JsonProperty("property") PropertyMeta<T, B, V> property) {
         return new AutoValue_ObjectPropertyExpression<>(type, target, property);
     }

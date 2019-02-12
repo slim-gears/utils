@@ -1,6 +1,7 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +11,9 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.Key;
 import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
+import com.slimgears.util.autovalue.expressions.PropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,12 +23,55 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
+    public static final Expressions<SampleWithKey> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
+
+    public static Expressions<SampleWithKey> $() {
+        return $;
+    }
+
+    public static class Expressions<S> {
+        private final ObjectExpression<S, SampleWithKey> self = ObjectExpression.arg();
+        private final Meta meta = new Meta() ;
+        public final StringPropertyExpression<S, SampleWithKey, Builder> id = PropertyExpression.ofString(self, meta.id);
+        public final StringPropertyExpression<S, SampleWithKey, Builder> text = PropertyExpression.ofString(self, meta.text);
+        public final NumericPropertyExpression<S, SampleWithKey, Builder, Integer> number = PropertyExpression.ofNumeric(self, meta.number);
+    }
+
+    public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleWithKey> {
+        private final ObjectExpression<__S, __T> target;
+        private final PropertyMeta<__T, __B, SampleWithKey> property;
+
+        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleWithKey> property) {
+            this.target = target;
+            this.property = property;
+        }
+
+        static <__S, __T, __B> ReferencePropertyExpression<__S, __T, __B> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleWithKey> property) {
+            return new ReferencePropertyExpression<>(target, property);
+        }
+
+        @Override
+        public ObjectExpression<__S, __T> target() {
+            return target;
+        }
+
+        @Override
+        public PropertyMeta<__T, __B, SampleWithKey> property() {
+            return property;
+        }
+
+        @Override
+        public Type type() {
+            return Type.Property;
+        }
+    }
 
     public static class Meta implements MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
         private final TypeToken<SampleWithKey> objectClass = new TypeToken<SampleWithKey>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleWithKey, Builder, ?>> propertyMap = new LinkedHashMap<>();
+
         public final PropertyMeta<SampleWithKey, Builder, String> id = PropertyMeta.create(objectClass, "id", new TypeToken<String>(){}, SampleWithKey::id, Builder::id);
         public final PropertyMeta<SampleWithKey, Builder, String> text = PropertyMeta.create(objectClass, "text", new TypeToken<String>(){}, SampleWithKey::text, Builder::text);
         public final PropertyMeta<SampleWithKey, Builder, Integer> number = PropertyMeta.create(objectClass, "number", new TypeToken<Integer>(){}, SampleWithKey::number, Builder::number);

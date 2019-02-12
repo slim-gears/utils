@@ -8,12 +8,12 @@ import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.StringExpression;
 
 @AutoValue
-public abstract class StringBinaryOperationExpression<T1, T2> implements BinaryOperationExpression<T1, T2, String>, StringExpression {
+public abstract class StringBinaryOperationExpression<S, T1, T2> implements BinaryOperationExpression<S, T1, T2, String>, StringExpression<S> {
     @JsonCreator
-    public static <T1, T2> StringBinaryOperationExpression<T1, T2> create(
+    public static <S, T1, T2> StringBinaryOperationExpression<S, T1, T2> create(
             @JsonProperty("type") Type type,
-            @JsonProperty("left") ObjectExpression<T1> left,
-            @JsonProperty("right") ObjectExpression<T2> right) {
+            @JsonProperty("left") ObjectExpression<S, T1> left,
+            @JsonProperty("right") ObjectExpression<S, T2> right) {
         return new AutoValue_StringBinaryOperationExpression<>(type, left, right);
     }
 }

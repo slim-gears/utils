@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.slimgears.util.autovalue.expressions.internal.ArgumentExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.BooleanConstantExpression;
+import com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanUnaryOperationExpression;
 import com.slimgears.util.autovalue.expressions.internal.ComparableConstantExpression;
 import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
@@ -22,7 +24,7 @@ import java.util.function.Function;
 
 @JsonTypeIdResolver(ExpressionTypeResolver.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, property = "type", visible = true)
-public interface Expression {
+public interface Expression<S> {
     Type type();
 
     enum Type {
@@ -59,11 +61,13 @@ public interface Expression {
         ComparableProperty(ComparablePropertyExpression.class),
         NumericProperty(ComparablePropertyExpression.class),
         StringProperty(StringPropertyExpression.class),
+        BooleanProperty(BooleanPropertyExpression.class),
 
         Constant(ConstantExpression.class),
         ComparableConstant(ComparableConstantExpression.class),
         NumericConstant(NumericConstantExpression.class),
         StringConstant(StringConstantExpression.class),
+        BooleanConstant(BooleanConstantExpression.class),
 
         Argument(ArgumentExpression.class);
 

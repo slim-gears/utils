@@ -1,6 +1,7 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +14,8 @@ import com.google.common.collect.ImmutableSet;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.PropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,13 +26,57 @@ import javax.annotation.Nullable;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
+    public static final Expressions<SampleGuavaValue> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
-    public static class Meta implements MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
+    public static Expressions<SampleGuavaValue> $() {
+        return $;
+    }
 
+    public static class Expressions<S> {
+        private final ObjectExpression<S, SampleGuavaValue> self = ObjectExpression.arg();
+        private final Meta meta = new Meta() ;
+        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyExpression.ofObject(self, meta.intList);
+        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyExpression.ofObject(self, meta.stringSet);
+        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyExpression.ofObject(self, meta.intToStringMap);
+        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyExpression.ofObject(self, meta.intToStringBiMap);
+        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyExpression.ofObject(self, meta.optionalList);
+    }
+
+    public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleGuavaValue> {
+        private final ObjectExpression<__S, __T> target;
+        private final PropertyMeta<__T, __B, SampleGuavaValue> property;
+
+        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleGuavaValue> property) {
+            this.target = target;
+            this.property = property;
+        }
+
+        static <__S, __T, __B> ReferencePropertyExpression<__S, __T, __B> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleGuavaValue> property) {
+            return new ReferencePropertyExpression<>(target, property);
+        }
+
+        @Override
+        public ObjectExpression<__S, __T> target() {
+            return target;
+        }
+
+        @Override
+        public PropertyMeta<__T, __B, SampleGuavaValue> property() {
+            return property;
+        }
+
+        @Override
+        public Type type() {
+            return Type.Property;
+        }
+    }
+
+    public static class Meta implements MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
         private final TypeToken<SampleGuavaValue> objectClass = new TypeToken<SampleGuavaValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleGuavaValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
+
         public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyMeta.create(objectClass, "intList", new TypeToken<ImmutableList<Integer>>(){}, SampleGuavaValue::intList, Builder::intList);
         public final PropertyMeta<SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyMeta.create(objectClass, "stringSet", new TypeToken<ImmutableSet<String>>(){}, SampleGuavaValue::stringSet, Builder::stringSet);
         public final PropertyMeta<SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.create(objectClass, "intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, SampleGuavaValue::intToStringMap, Builder::intToStringMap);

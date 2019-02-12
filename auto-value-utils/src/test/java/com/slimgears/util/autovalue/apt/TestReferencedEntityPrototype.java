@@ -1,11 +1,9 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
-import com.slimgears.util.autovalue.annotations.Reference;
 
 @AutoValuePrototype
-interface TestEntityPrototype {
+interface TestReferencedEntityPrototype {
     String text();
     String description();
-    @Reference TestReferencedEntity referencedEntity();
 }

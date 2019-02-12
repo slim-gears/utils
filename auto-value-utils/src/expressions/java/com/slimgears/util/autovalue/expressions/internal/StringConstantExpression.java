@@ -7,9 +7,9 @@ import com.slimgears.util.autovalue.expressions.ConstantExpression;
 import com.slimgears.util.autovalue.expressions.StringExpression;
 
 @AutoValue
-public abstract class StringConstantExpression implements ConstantExpression<String>, StringExpression {
+public abstract class StringConstantExpression<S> implements ConstantExpression<S, String>, StringExpression<S> {
     @JsonCreator
-    public static StringConstantExpression create(@JsonProperty("type") Type type, @JsonProperty String value) {
-        return new AutoValue_StringConstantExpression(type, value);
+    public static <S> StringConstantExpression<S> create(@JsonProperty("type") Type type, @JsonProperty String value) {
+        return new AutoValue_StringConstantExpression<>(type, value);
     }
 }

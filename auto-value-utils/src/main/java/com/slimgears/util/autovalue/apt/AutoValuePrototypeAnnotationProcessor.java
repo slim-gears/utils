@@ -123,6 +123,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                     .variable("imports", importTracker)
                     .variable("hasKey", keyProperty != null)
                     .variable("keyProperty", keyProperty)
+                    .variable("dollar", "$")
                     .apply(JavaUtils.imports(importTracker))
                     .write(JavaUtils.fileWriter(processingEnv, targetClass));
         } catch (Throwable e) {

@@ -1,6 +1,7 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,6 +10,8 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.PropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,13 +22,53 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T>, HasMetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> {
+    public static final Expressions<GenericListContainer, ?> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
-    public static class Meta<T> implements MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> {
+    public static <T> Expressions<GenericListContainer, T> $() {
+        return new Expressions<>();
+    }
 
+    public static class Expressions<S, T> {
+        private final ObjectExpression<S, GenericListContainer<T>> self = ObjectExpression.arg();
+        private final Meta<T> meta = new Meta<>();
+        public final ObjectPropertyExpression<S, GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyExpression.ofObject(self, meta.items);
+    }
+
+    public static class ReferencePropertyExpression<__S, __T, __B, T> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, GenericListContainer<T>> {
+        private final ObjectExpression<__S, __T> target;
+        private final PropertyMeta<__T, __B, GenericListContainer<T>> property;
+
+        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, GenericListContainer<T>> property) {
+            this.target = target;
+            this.property = property;
+        }
+
+        static <__S, __T, __B, T> ReferencePropertyExpression<__S, __T, __B, T> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, GenericListContainer<T>> property) {
+            return new ReferencePropertyExpression<>(target, property);
+        }
+
+        @Override
+        public ObjectExpression<__S, __T> target() {
+            return target;
+        }
+
+        @Override
+        public PropertyMeta<__T, __B, GenericListContainer<T>> property() {
+            return property;
+        }
+
+        @Override
+        public Type type() {
+            return Type.Property;
+        }
+    }
+
+    public static class Meta<T> implements MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> {
         private final TypeToken<GenericListContainer<T>> objectClass = new TypeToken<GenericListContainer<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericListContainer<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
+
         public final PropertyMeta<GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyMeta.create(objectClass, "items", new TypeToken<List<GenericListItem<T>>>(){}, GenericListContainer::items, Builder::items);
 
         Meta() {

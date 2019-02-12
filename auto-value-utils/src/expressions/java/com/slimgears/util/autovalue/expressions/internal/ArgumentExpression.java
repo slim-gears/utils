@@ -6,13 +6,10 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 @AutoValue
-public abstract class ArgumentExpression<T> implements ObjectExpression<T> {
-    public abstract @JsonProperty String name();
-
+public abstract class ArgumentExpression<S, T> implements ObjectExpression<S, T> {
     @JsonCreator
-    public static <T> ArgumentExpression<T> create(
-            @JsonProperty("type") Type type,
-            @JsonProperty("name") String name) {
-        return new AutoValue_ArgumentExpression<>(type, name);
+    public static <S, T> ArgumentExpression<S, T> create(
+            @JsonProperty("type") Type type) {
+        return new AutoValue_ArgumentExpression<>(type);
     }
 }

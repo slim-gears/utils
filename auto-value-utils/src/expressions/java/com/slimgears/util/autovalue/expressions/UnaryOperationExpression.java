@@ -2,6 +2,6 @@ package com.slimgears.util.autovalue.expressions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public interface UnaryOperationExpression<T, R> extends ObjectExpression<R> {
-    @JsonProperty ObjectExpression<T> operand();
+public interface UnaryOperationExpression<S, T, R> extends ObjectExpression<S, R> {
+    @JsonProperty ObjectExpression<S, T> operand();
 }

@@ -8,11 +8,11 @@ import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.UnaryOperationExpression;
 
 @AutoValue
-public abstract class NumericUnaryOperationExpression<T, V extends Number & Comparable<V>> implements UnaryOperationExpression<T, V>, NumericExpression<V> {
+public abstract class NumericUnaryOperationExpression<S, T, V extends Number & Comparable<V>> implements UnaryOperationExpression<S, T, V>, NumericExpression<S, V> {
     @JsonCreator
-    public static <T, V extends Number & Comparable<V>> NumericUnaryOperationExpression<T, V> create(
+    public static <S, T, V extends Number & Comparable<V>> NumericUnaryOperationExpression<S, T, V> create(
             @JsonProperty("type") Type type,
-            @JsonProperty("operand") ObjectExpression<T> operand) {
+            @JsonProperty("operand") ObjectExpression<S, T> operand) {
         return new AutoValue_NumericUnaryOperationExpression<>(type, operand);
     }
 }
