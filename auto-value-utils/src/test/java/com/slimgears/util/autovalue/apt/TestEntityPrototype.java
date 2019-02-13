@@ -4,8 +4,9 @@ import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 import com.slimgears.util.autovalue.annotations.Reference;
 
 @AutoValuePrototype
-interface TestEntityPrototype {
+interface TestEntityPrototype<T extends Comparable<T>> {
     String text();
     String description();
-    @Reference TestReferencedEntity referencedEntity();
+    T value();
+    @Reference TestReferencedEntity<T> referencedEntity();
 }

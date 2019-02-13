@@ -65,7 +65,7 @@ public class ExpressionModule extends Module {
         simpleSerializers.addSerializer(TypeToken.class, new JsonSerializer<TypeToken>() {
             @Override
             public void serialize(TypeToken value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-                gen.writeString(value.toString());
+                gen.writeString(value.eliminateTypeVars().toString());
             }
         });
         simpleSerializers.addSerializer(PropertyMeta.class, new JsonSerializer<PropertyMeta>() {
@@ -73,7 +73,7 @@ public class ExpressionModule extends Module {
             public void serialize(PropertyMeta value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
                 gen.writeStartObject();
                 gen.writeFieldName("type");
-                gen.writeString(value.declaringType().toString());
+                gen.writeString(value.declaringType().eliminateTypeVars().toString());
                 gen.writeFieldName("name");
                 gen.writeString(value.name());
                 gen.writeEndObject();

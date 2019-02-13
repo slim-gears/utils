@@ -10,6 +10,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -154,12 +155,7 @@ public class TypeToken<T> {
 
     @Override
     public String toString() {
-        return typeArguments().length > 0
-                ? type().getTypeName() + Arrays
-                .stream(typeArguments())
-                .map(TypeToken::toString)
-                .collect(Collectors.joining(",", "<", ">"))
-                : type().getTypeName();
+        return type.getTypeName();
     }
 
     public static <T> TypeToken<T[]> ofArray(Class<T> componentType) {
@@ -229,6 +225,29 @@ public class TypeToken<T> {
             Type[] args = params.toArray(new Type[0]);
             return new TypeToken<>(new CanonicalParameterizedType(rawClass, rawClass.getEnclosingClass(), params.toArray(args)));
         }
+    }
+
+    public TypeToken<?> eliminateTypeVars() {
+        return TypeToken.ofType(eliminateTypeVars(type));
+    }
+
+    private static Type eliminateTypeVars(Type type) {
+        if (type instanceof TypeVariable) {
+            return new CanonicalWildcardType(new Type[0], ((TypeVariable) type).getBounds());
+        }
+        if (type instanceof ParameterizedType) {
+            return new CanonicalParameterizedType(
+                    ((ParameterizedType) type).getRawType(),
+                    ((ParameterizedType) type).getOwnerType(),
+                    Arrays.stream(((ParameterizedType)type).getActualTypeArguments())
+                    .map(TypeToken::eliminateTypeVars)
+                    .toArray(Type[]::new));
+        }
+        if (type instanceof GenericArrayType) {
+            return new CanonicalGenericArrayType(
+                    eliminateTypeVars(((GenericArrayType)type).getGenericComponentType()));
+        }
+        return type;
     }
 
     public static <T> TypeToken<T> valueOf(String str) {

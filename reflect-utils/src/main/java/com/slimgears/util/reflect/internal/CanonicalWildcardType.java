@@ -39,6 +39,11 @@ public class CanonicalWildcardType implements WildcardType, CanonicalType {
     }
 
     @Override
+    public String toString() {
+        return "?";
+    }
+
+    @Override
     public Class<?> asClass() {
         return null;
     }

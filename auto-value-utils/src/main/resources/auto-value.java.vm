@@ -33,7 +33,7 @@ implements $[$sourceClass], ##
         private final Meta#typeParams($sourceClass) meta = #if ($sourceClass.typeParams().isEmpty())new Meta() #{else}new Meta<>()#end;
 #foreach ($p in $properties)
 #if ($p.isReferenceProperty())
-        public final $[$p.type()].ReferencePropertyExpression<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[$p.type()].ReferencePropertyExpression.create(self, meta.${p.name()});
+        public final $[$p.type().erasureName()].ReferencePropertyExpression<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)#foreach ($tp in $p.type().typeParams()), $tp.typeName()#end> $p.name() = $[$p.type().erasureName()].ReferencePropertyExpression.create(self, meta.${p.name()});
 #elseif ($p.isStringProperty())
         public final $[com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofString(self, meta.${p.name()});
 #elseif ($p.isNumericProperty())
