@@ -1,23 +1,38 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.common.MoreElements;
+import com.google.auto.common.MoreTypes;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.MethodInfo;
 import com.slimgears.apt.util.ElementUtils;
+import com.slimgears.util.autovalue.annotations.Reference;
 import com.slimgears.util.stream.Optionals;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.ExecutableType;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.WildcardType;
 import java.util.Collections;
 import java.util.Optional;
 
 import static com.slimgears.util.stream.Streams.ofType;
 
 public class PropertyUtils {
+    private static final ImmutableSet<String> numericTypes = ImmutableSet.<String>builder()
+            .add(Byte.class.getName(), byte.class.getName())
+            .add(Short.class.getName(), short.class.getName())
+            .add(Integer.class.getName(), int.class.getName())
+            .add(Long.class.getName(), long.class.getName())
+            .add(Double.class.getName(), double.class.getName())
+            .add(Float.class.getName(), float.class.getName())
+            .build();
+
     public static TypeElement returnTypeElement(ExecutableElement element) {
         return Optional.of(element)
                 .map(ExecutableElement::getReturnType)
@@ -83,5 +98,27 @@ public class PropertyUtils {
                         .orElse(false))
                 .map(ee -> MethodInfo.create(ee, builderDeclaredType))
                 .collect(ImmutableList.toImmutableList());
+    }
+
+    public static boolean isReference(ExecutableElement propertyElement) {
+        return propertyElement.getAnnotation(Reference.class) != null;
+    }
+
+    public static boolean isString(TypeMirror type) {
+        return MoreTypes.isTypeOf(String.class, type);
+    }
+
+    public static boolean isNumeric(TypeMirror type) {
+        return (type.getKind().isPrimitive() && type.getKind() != TypeKind.BOOLEAN)
+            || ElementUtils.hasInterface(type, Number.class, Comparable.class);
+    }
+
+    public static boolean isComparable(TypeMirror type) {
+        return ElementUtils.hasInterface(type, Comparable.class);
+    }
+
+    public static boolean isBoolean(TypeMirror type) {
+        return type.getKind() == TypeKind.BOOLEAN
+                || type.getKind() == TypeKind.DECLARED && MoreTypes.isTypeOf(Boolean.class, type);
     }
 }

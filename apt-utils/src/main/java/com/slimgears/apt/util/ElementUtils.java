@@ -4,9 +4,13 @@
 package com.slimgears.apt.util;
 
 import com.google.auto.common.MoreElements;
+import com.google.auto.common.MoreTypes;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.util.stream.Optionals;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
@@ -14,9 +18,11 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.slimgears.util.stream.Streams.ofType;
@@ -75,6 +81,57 @@ public class ElementUtils {
 
     public static boolean hasAnnotation(Element elemenet, Class<? extends Annotation> annotationCls) {
         return MoreElements.isAnnotationPresent(elemenet, annotationCls);
+    }
+
+    public static boolean hasErrors(TypeMirror typeMirror) {
+        return typeMirror.getKind() == TypeKind.ERROR || (typeMirror.getKind() == TypeKind.DECLARED && MoreTypes
+                .asDeclared(typeMirror)
+                .getTypeArguments()
+                .stream()
+                .anyMatch(ElementUtils::hasErrors));
+    }
+
+    public static boolean hasInterface(TypeMirror type, Class... interfaceTypes) {
+        if (hasExtendsBound(type, interfaceTypes)) {
+            return true;
+        }
+
+        Set<TypeMirror> actualInterfaces = Optional.of(type)
+                .flatMap(Optionals.ofType(DeclaredType.class))
+                .map(ElementUtils::getHierarchy)
+                .orElseGet(Stream::empty)
+                .collect(Collectors.toSet());
+
+        return Arrays
+                .stream(interfaceTypes)
+                .allMatch(it -> actualInterfaces.stream().anyMatch(t -> MoreTypes.isTypeOf(it, t)));
+    }
+
+    private static boolean hasExtendsBound(TypeMirror type, Class... interfaceTypes) {
+        if (type.getKind() == TypeKind.WILDCARD) {
+            return boundHasInterface(((WildcardType)type).getExtendsBound(), interfaceTypes);
+        } else if (type.getKind() == TypeKind.TYPEVAR) {
+            return boundHasInterface(((TypeVariable)type).getUpperBound(), interfaceTypes);
+        }
+        return false;
+    }
+
+    private static boolean boundHasInterface(TypeMirror bound, Class... interfaceTypes) {
+        if (bound.getKind() == TypeKind.DECLARED) {
+            return hasInterface(bound, interfaceTypes);
+        }
+        if (bound.getKind() == TypeKind.WILDCARD || bound.getKind() == TypeKind.TYPEVAR) {
+            return hasExtendsBound(bound, interfaceTypes);
+        }
+        if (bound.getKind() == TypeKind.INTERSECTION) {
+            return ((IntersectionType)bound).getBounds()
+                    .stream()
+                    .flatMap(ofType(DeclaredType.class))
+                    .flatMap(ElementUtils::getHierarchy)
+                    .collect(Collectors.toSet())
+                    .containsAll(Arrays.asList(interfaceTypes));
+        }
+        return false;
     }
 
     public static <A extends Annotation> Stream<A> getMethodAnnotation(ExecutableElement element, Class<A> cls) {

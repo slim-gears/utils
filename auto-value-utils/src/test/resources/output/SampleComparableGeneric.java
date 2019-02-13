@@ -11,7 +11,7 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
     public static class Expressions<S, T extends java.lang.Comparable<T>> {
         private final ObjectExpression<S, SampleComparableGeneric<T>> self = ObjectExpression.arg();
         private final Meta<T> meta = new Meta<>();
-        public final ObjectPropertyExpression<S, SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofObject(self, meta.tValue);
+        public final ComparablePropertyExpression<S, SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofComparable(self, meta.tValue);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B, T extends java.lang.Comparable<T>> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, SampleComparableGeneric<T>> {

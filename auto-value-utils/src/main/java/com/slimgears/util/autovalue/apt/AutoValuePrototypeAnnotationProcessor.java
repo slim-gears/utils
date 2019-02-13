@@ -102,7 +102,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         TypeInfo targetClass = TypeInfo.of(sourceClass.packageName() + "." + targetName);
         Collection<PropertyInfo> properties = getProperties(declaredType);
 
-        if (properties.stream().anyMatch(p -> hasErrors(p.propertyType()))) {
+        if (properties.stream().anyMatch(p -> ElementUtils.hasErrors(p.propertyType()))) {
             delayProcessing();
         }
 
@@ -134,13 +134,6 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         return true;
     }
 
-    private boolean hasErrors(TypeMirror typeMirror) {
-        return typeMirror.getKind() == TypeKind.ERROR || (typeMirror.getKind() == TypeKind.DECLARED && MoreTypes
-                .asDeclared(typeMirror)
-                .getTypeArguments()
-                .stream()
-                .anyMatch(this::hasErrors));
-    }
 
     private Annotator getAnnotators(String[] annotatorIds) {
         return Arrays
