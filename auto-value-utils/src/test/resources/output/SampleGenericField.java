@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +9,7 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
@@ -22,9 +22,9 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<SampleGenericField, SampleGenericField.Builder> {
-    public static final Expressions<SampleGenericField> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<SampleGenericField> $ = new Expressions<>();
     public static Expressions<SampleGenericField> $() {
         return $;
     }
@@ -32,6 +32,7 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
     public static class Expressions<__S> {
         private final ObjectExpression<__S, SampleGenericField> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
+
         public final ObjectPropertyExpression<__S, SampleGenericField, Builder, Class<? extends Collection>> value = PropertyExpression.ofObject(self, meta.value);
     }
 

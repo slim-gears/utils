@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
@@ -27,9 +27,9 @@ import javax.annotation.Nullable;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
-    public static final Expressions<SampleGuavaValue> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<SampleGuavaValue> $ = new Expressions<>();
     public static Expressions<SampleGuavaValue> $() {
         return $;
     }
@@ -37,6 +37,7 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     public static class Expressions<__S> {
         private final ObjectExpression<__S, SampleGuavaValue> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
+
         public final CollectionPropertyExpression<__S, SampleGuavaValue, Builder, Integer> intList = PropertyExpression.ofCollection(self, meta.intList);
         public final CollectionPropertyExpression<__S, SampleGuavaValue, Builder, String> stringSet = PropertyExpression.ofCollection(self, meta.stringSet);
         public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyExpression.ofObject(self, meta.intToStringMap);

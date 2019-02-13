@@ -1,0 +1,62 @@
+#parse("type-params.java.vm")
+
+    public static final Expressions<$targetClass.simpleName()#foreach ($tp in $sourceClass.typeParams()), ?#end> ${dollar} = new Expressions<>();
+    public static #typeParamsDeclaration($sourceClass) Expressions<$targetClass.simpleName()#foreach ($tp in $sourceClass.typeParams()), $tp.typeName()#end> ${dollar}() {
+#if ($sourceClass.typeParams().isEmpty())
+        return ${dollar};
+#else
+        return new Expressions<>();
+#end
+    }
+
+    public static class Expressions<__S#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> {
+        private final $[com.slimgears.util.autovalue.expressions.ObjectExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass)> self = ObjectExpression.arg();
+        private final Meta#typeParams($sourceClass) meta = #if ($sourceClass.typeParams().isEmpty())new Meta() #{else}new Meta<>()#end;
+
+#foreach ($p in $properties)
+#if ($p.isReferenceProperty())
+        public final $[$p.type().erasureName()].ReferencePropertyExpression<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)#foreach ($tp in $p.type().typeParams()), $tp.typeName()#end> $p.name() = $[$p.type().erasureName()].ReferencePropertyExpression.create(self, meta.${p.name()});
+#elseif ($p.isStringProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofString(self, meta.${p.name()});
+#elseif ($p.isNumericProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofNumeric(self, meta.${p.name()});
+#elseif ($p.isComparableProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofComparable(self, meta.${p.name()});
+#elseif ($p.isBooleanProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofBoolean(self, meta.${p.name()});
+#elseif ($p.isCollectionProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.collectionElementType()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofCollection(self, meta.${p.name()});
+#else
+        public final $[com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofObject(self, meta.${p.name()});
+#end
+#end
+    }
+
+    public static class ReferencePropertyExpression<__S, __T, __B#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> extends Expressions<__S#foreach ($tp in $sourceClass.typeParams()), $tp.typeName()#end> implements $[com.slimgears.util.autovalue.expressions.PropertyExpression]<__S, __T, __B, $targetClass.simpleName()#typeParams($sourceClass)> {
+        private final ObjectExpression<__S, __T> target;
+        private final PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property;
+
+        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property) {
+            this.target = target;
+            this.property = property;
+        }
+
+        static <__S, __T, __B#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> ReferencePropertyExpression<__S, __T, __B#foreach ($tp in $sourceClass.typeParams()), $tp.typeName()#end> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property) {
+            return new ReferencePropertyExpression<>(target, property);
+        }
+
+        @Override
+        public ObjectExpression<__S, __T> target() {
+            return target;
+        }
+
+        @Override
+        public PropertyMeta<__T, __B, $targetClass.simpleName()#typeParams($sourceClass)> property() {
+            return property;
+        }
+
+        @Override
+        public Type type() {
+            return Type.Property;
+        }
+    }

@@ -25,7 +25,6 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.Collection;
@@ -114,15 +113,22 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         }
         PropertyInfo keyProperty = keyProperties.isEmpty() ? null : keyProperties.get(0);
 
+        Context context = Context.builder()
+                .sourceClass(sourceClass)
+                .targetClass(targetClass)
+                .properties(properties)
+                .imports(importTracker)
+                .keyProperty(keyProperty)
+                .build();
+
+        Extension extension = new CompositeExtension();
+
         try {
             TemplateEvaluator.forResource("auto-value.java.vm")
+                    .variables(context)
+                    .variable("context", context)
+                    .variable("extensions", extension)
                     .variable("processor", TypeInfo.of(getClass()))
-                    .variable("sourceClass", sourceClass)
-                    .variable("targetClass", targetClass)
-                    .variable("properties", properties)
-                    .variable("imports", importTracker)
-                    .variable("hasKey", keyProperty != null)
-                    .variable("keyProperty", keyProperty)
                     .variable("dollar", "$")
                     .apply(JavaUtils.imports(importTracker))
                     .write(JavaUtils.fileWriter(processingEnv, targetClass));

@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +9,7 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<SampleValue, SampleValue.Builder> {
-    public static final Expressions<SampleValue> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<SampleValue> $ = new Expressions<>();
     public static Expressions<SampleValue> $() {
         return $;
     }
@@ -34,6 +34,7 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
     public static class Expressions<__S> {
         private final ObjectExpression<__S, SampleValue> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
+
         public final NumericPropertyExpression<__S, SampleValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
         public final NumericPropertyExpression<__S, SampleValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
         public final StringPropertyExpression<__S, SampleValue, Builder> strValue = PropertyExpression.ofString(self, meta.strValue);

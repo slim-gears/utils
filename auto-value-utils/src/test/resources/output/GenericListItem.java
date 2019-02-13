@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +9,7 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
@@ -21,9 +21,9 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class GenericListItem<T> implements GenericListItemPrototype<T>, HasMetaClass<GenericListItem<T>, GenericListItem.Builder<T>> {
-    public static final Expressions<GenericListItem, ?> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<GenericListItem, ?> $ = new Expressions<>();
     public static <T> Expressions<GenericListItem, T> $() {
         return new Expressions<>();
     }
@@ -31,6 +31,7 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
     public static class Expressions<__S, T> {
         private final ObjectExpression<__S, GenericListItem<T>> self = ObjectExpression.arg();
         private final Meta<T> meta = new Meta<>();
+
         public final ObjectPropertyExpression<__S, GenericListItem<T>, Builder<T>, T> entry = PropertyExpression.ofObject(self, meta.entry);
     }
 

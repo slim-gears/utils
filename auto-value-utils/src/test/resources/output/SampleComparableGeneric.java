@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +9,7 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
@@ -21,9 +21,9 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T>, HasMetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
-    public static final Expressions<SampleComparableGeneric, ?> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<SampleComparableGeneric, ?> $ = new Expressions<>();
     public static <T extends Comparable<T>> Expressions<SampleComparableGeneric, T> $() {
         return new Expressions<>();
     }
@@ -31,6 +31,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
     public static class Expressions<__S, T extends java.lang.Comparable<T>> {
         private final ObjectExpression<__S, SampleComparableGeneric<T>> self = ObjectExpression.arg();
         private final Meta<T> meta = new Meta<>();
+
         public final ComparablePropertyExpression<__S, SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofComparable(self, meta.tValue);
     }
 

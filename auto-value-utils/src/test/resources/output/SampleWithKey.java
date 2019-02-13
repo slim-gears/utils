@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,6 +10,7 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.Key;
 import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression;
@@ -23,9 +23,9 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
-    public static final Expressions<SampleWithKey> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<SampleWithKey> $ = new Expressions<>();
     public static Expressions<SampleWithKey> $() {
         return $;
     }
@@ -33,6 +33,7 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
     public static class Expressions<__S> {
         private final ObjectExpression<__S, SampleWithKey> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
+
         public final StringPropertyExpression<__S, SampleWithKey, Builder> id = PropertyExpression.ofString(self, meta.id);
         public final StringPropertyExpression<__S, SampleWithKey, Builder> text = PropertyExpression.ofString(self, meta.text);
         public final NumericPropertyExpression<__S, SampleWithKey, Builder, Integer> number = PropertyExpression.ofNumeric(self, meta.number);

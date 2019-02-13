@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +9,7 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
@@ -21,9 +21,9 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype, HasMetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
-    public static final Expressions<SampleCustomBuilderValue> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<SampleCustomBuilderValue> $ = new Expressions<>();
     public static Expressions<SampleCustomBuilderValue> $() {
         return $;
     }
@@ -31,6 +31,7 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
     public static class Expressions<__S> {
         private final ObjectExpression<__S, SampleCustomBuilderValue> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
+
         public final NumericPropertyExpression<__S, SampleCustomBuilderValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
         public final NumericPropertyExpression<__S, SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
     }

@@ -1,7 +1,6 @@
 package com.slimgears.sample;
 
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
@@ -22,9 +22,9 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
 public abstract class SampleSpecializedGeneric implements SampleSpecializedGenericPrototype, HasMetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> {
-    public static final Expressions<SampleSpecializedGeneric> $ = new Expressions<>();
     public static final Meta metaClass = new Meta();
 
+    public static final Expressions<SampleSpecializedGeneric> $ = new Expressions<>();
     public static Expressions<SampleSpecializedGeneric> $() {
         return $;
     }
@@ -32,6 +32,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
     public static class Expressions<__S> {
         private final ObjectExpression<__S, SampleSpecializedGeneric> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
+
         public final CollectionPropertyExpression<__S, SampleSpecializedGeneric, Builder, String> values = PropertyExpression.ofCollection(self, meta.values);
     }
 
