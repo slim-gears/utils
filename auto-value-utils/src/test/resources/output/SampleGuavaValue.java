@@ -33,14 +33,14 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         return $;
     }
 
-    public static class Expressions<S> {
-        private final ObjectExpression<S, SampleGuavaValue> self = ObjectExpression.arg();
+    public static class Expressions<__S> {
+        private final ObjectExpression<__S, SampleGuavaValue> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
-        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyExpression.ofObject(self, meta.intList);
-        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyExpression.ofObject(self, meta.stringSet);
-        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyExpression.ofObject(self, meta.intToStringMap);
-        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyExpression.ofObject(self, meta.intToStringBiMap);
-        public final ObjectPropertyExpression<S, SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyExpression.ofObject(self, meta.optionalList);
+        public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyExpression.ofObject(self, meta.intList);
+        public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyExpression.ofObject(self, meta.stringSet);
+        public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyExpression.ofObject(self, meta.intToStringMap);
+        public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyExpression.ofObject(self, meta.intToStringBiMap);
+        public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyExpression.ofObject(self, meta.optionalList);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleGuavaValue> {

@@ -29,11 +29,11 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         return new Expressions<>();
     }
 
-    public static class Expressions<S, T> {
-        private final ObjectExpression<S, SampleGeneric<T>> self = ObjectExpression.arg();
+    public static class Expressions<__S, T> {
+        private final ObjectExpression<__S, SampleGeneric<T>> self = ObjectExpression.arg();
         private final Meta<T> meta = new Meta<>();
-        public final StringPropertyExpression<S, SampleGeneric<T>, Builder<T>> value = PropertyExpression.ofString(self, meta.value);
-        public final ObjectPropertyExpression<S, SampleGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofObject(self, meta.tValue);
+        public final StringPropertyExpression<__S, SampleGeneric<T>, Builder<T>> value = PropertyExpression.ofString(self, meta.value);
+        public final ObjectPropertyExpression<__S, SampleGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofObject(self, meta.tValue);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B, T> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, SampleGeneric<T>> {

@@ -28,10 +28,10 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         return new Expressions<>();
     }
 
-    public static class Expressions<S, T> {
-        private final ObjectExpression<S, GenericListItem<T>> self = ObjectExpression.arg();
+    public static class Expressions<__S, T> {
+        private final ObjectExpression<__S, GenericListItem<T>> self = ObjectExpression.arg();
         private final Meta<T> meta = new Meta<>();
-        public final ObjectPropertyExpression<S, GenericListItem<T>, Builder<T>, T> entry = PropertyExpression.ofObject(self, meta.entry);
+        public final ObjectPropertyExpression<__S, GenericListItem<T>, Builder<T>, T> entry = PropertyExpression.ofObject(self, meta.entry);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B, T> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, GenericListItem<T>> {

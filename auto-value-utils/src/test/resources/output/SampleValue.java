@@ -31,13 +31,13 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         return $;
     }
 
-    public static class Expressions<S> {
-        private final ObjectExpression<S, SampleValue> self = ObjectExpression.arg();
+    public static class Expressions<__S> {
+        private final ObjectExpression<__S, SampleValue> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
-        public final NumericPropertyExpression<S, SampleValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
-        public final NumericPropertyExpression<S, SampleValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
-        public final StringPropertyExpression<S, SampleValue, Builder> strValue = PropertyExpression.ofString(self, meta.strValue);
-        public final BooleanPropertyExpression<S, SampleValue, Builder> foo = PropertyExpression.ofBoolean(self, meta.foo);
+        public final NumericPropertyExpression<__S, SampleValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
+        public final NumericPropertyExpression<__S, SampleValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
+        public final StringPropertyExpression<__S, SampleValue, Builder> strValue = PropertyExpression.ofString(self, meta.strValue);
+        public final BooleanPropertyExpression<__S, SampleValue, Builder> foo = PropertyExpression.ofBoolean(self, meta.foo);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleValue> {

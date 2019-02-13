@@ -28,10 +28,10 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         return new Expressions<>();
     }
 
-    public static class Expressions<S, T extends java.lang.Comparable<T>> {
-        private final ObjectExpression<S, SampleComparableGeneric<T>> self = ObjectExpression.arg();
+    public static class Expressions<__S, T extends java.lang.Comparable<T>> {
+        private final ObjectExpression<__S, SampleComparableGeneric<T>> self = ObjectExpression.arg();
         private final Meta<T> meta = new Meta<>();
-        public final ComparablePropertyExpression<S, SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofComparable(self, meta.tValue);
+        public final ComparablePropertyExpression<__S, SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofComparable(self, meta.tValue);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B, T extends java.lang.Comparable<T>> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, SampleComparableGeneric<T>> {

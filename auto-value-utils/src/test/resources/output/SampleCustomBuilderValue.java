@@ -28,11 +28,11 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         return $;
     }
 
-    public static class Expressions<S> {
-        private final ObjectExpression<S, SampleCustomBuilderValue> self = ObjectExpression.arg();
+    public static class Expressions<__S> {
+        private final ObjectExpression<__S, SampleCustomBuilderValue> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
-        public final NumericPropertyExpression<S, SampleCustomBuilderValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
-        public final NumericPropertyExpression<S, SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
+        public final NumericPropertyExpression<__S, SampleCustomBuilderValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
+        public final NumericPropertyExpression<__S, SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleCustomBuilderValue> {

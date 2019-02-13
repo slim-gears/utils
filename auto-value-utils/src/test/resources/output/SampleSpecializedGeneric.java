@@ -29,10 +29,10 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         return $;
     }
 
-    public static class Expressions<S> {
-        private final ObjectExpression<S, SampleSpecializedGeneric> self = ObjectExpression.arg();
+    public static class Expressions<__S> {
+        private final ObjectExpression<__S, SampleSpecializedGeneric> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
-        public final ObjectPropertyExpression<S, SampleSpecializedGeneric, Builder, ImmutableList<String>> values = PropertyExpression.ofObject(self, meta.values);
+        public final ObjectPropertyExpression<__S, SampleSpecializedGeneric, Builder, ImmutableList<String>> values = PropertyExpression.ofObject(self, meta.values);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleSpecializedGeneric> {

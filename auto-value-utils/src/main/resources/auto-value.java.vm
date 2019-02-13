@@ -28,22 +28,22 @@ implements $[$sourceClass], ##
 #end
     }
 
-    public static class Expressions<S#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> {
-        private final ObjectExpression<S, $targetClass.simpleName()#typeParams($sourceClass)> self = ObjectExpression.arg();
+    public static class Expressions<__S#foreach ($tp in $sourceClass.typeParams()), $tp.fullDeclaration()#end> {
+        private final ObjectExpression<__S, $targetClass.simpleName()#typeParams($sourceClass)> self = ObjectExpression.arg();
         private final Meta#typeParams($sourceClass) meta = #if ($sourceClass.typeParams().isEmpty())new Meta() #{else}new Meta<>()#end;
 #foreach ($p in $properties)
 #if ($p.isReferenceProperty())
-        public final $[$p.type().erasureName()].ReferencePropertyExpression<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)#foreach ($tp in $p.type().typeParams()), $tp.typeName()#end> $p.name() = $[$p.type().erasureName()].ReferencePropertyExpression.create(self, meta.${p.name()});
+        public final $[$p.type().erasureName()].ReferencePropertyExpression<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)#foreach ($tp in $p.type().typeParams()), $tp.typeName()#end> $p.name() = $[$p.type().erasureName()].ReferencePropertyExpression.create(self, meta.${p.name()});
 #elseif ($p.isStringProperty())
-        public final $[com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofString(self, meta.${p.name()});
+        public final $[com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofString(self, meta.${p.name()});
 #elseif ($p.isNumericProperty())
-        public final $[com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofNumeric(self, meta.${p.name()});
+        public final $[com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofNumeric(self, meta.${p.name()});
 #elseif ($p.isComparableProperty())
-        public final $[com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofComparable(self, meta.${p.name()});
+        public final $[com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofComparable(self, meta.${p.name()});
 #elseif ($p.isBooleanProperty())
-        public final $[com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofBoolean(self, meta.${p.name()});
+        public final $[com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofBoolean(self, meta.${p.name()});
 #else
-        public final $[com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression]<S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofObject(self, meta.${p.name()});
+        public final $[com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofObject(self, meta.${p.name()});
 #end
 #end
     }

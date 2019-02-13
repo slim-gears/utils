@@ -30,12 +30,12 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         return $;
     }
 
-    public static class Expressions<S> {
-        private final ObjectExpression<S, SampleWithKey> self = ObjectExpression.arg();
+    public static class Expressions<__S> {
+        private final ObjectExpression<__S, SampleWithKey> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
-        public final StringPropertyExpression<S, SampleWithKey, Builder> id = PropertyExpression.ofString(self, meta.id);
-        public final StringPropertyExpression<S, SampleWithKey, Builder> text = PropertyExpression.ofString(self, meta.text);
-        public final NumericPropertyExpression<S, SampleWithKey, Builder, Integer> number = PropertyExpression.ofNumeric(self, meta.number);
+        public final StringPropertyExpression<__S, SampleWithKey, Builder> id = PropertyExpression.ofString(self, meta.id);
+        public final StringPropertyExpression<__S, SampleWithKey, Builder> text = PropertyExpression.ofString(self, meta.text);
+        public final NumericPropertyExpression<__S, SampleWithKey, Builder, Integer> number = PropertyExpression.ofNumeric(self, meta.number);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleWithKey> {

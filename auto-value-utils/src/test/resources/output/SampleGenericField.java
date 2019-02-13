@@ -29,10 +29,10 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         return $;
     }
 
-    public static class Expressions<S> {
-        private final ObjectExpression<S, SampleGenericField> self = ObjectExpression.arg();
+    public static class Expressions<__S> {
+        private final ObjectExpression<__S, SampleGenericField> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
-        public final ObjectPropertyExpression<S, SampleGenericField, Builder, Class<? extends Collection>> value = PropertyExpression.ofObject(self, meta.value);
+        public final ObjectPropertyExpression<__S, SampleGenericField, Builder, Class<? extends Collection>> value = PropertyExpression.ofObject(self, meta.value);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleGenericField> {
