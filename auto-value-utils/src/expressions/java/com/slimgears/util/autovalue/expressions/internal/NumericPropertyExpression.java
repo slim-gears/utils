@@ -14,7 +14,7 @@ public abstract class NumericPropertyExpression<S, T, B, V extends Number & Comp
     public static <S, T, B, V extends Number & Comparable<V>> NumericPropertyExpression<S, T, B, V> create(
             @JsonProperty("type") Type type,
             @JsonProperty("target") ObjectExpression<S, T> target,
-            @JsonProperty("property") PropertyMeta<T, B, V> property) {
+            @JsonProperty("property") PropertyMeta<T, B, ? extends V> property) {
         return new AutoValue_NumericPropertyExpression<>(type, target, property);
     }
 }

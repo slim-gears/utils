@@ -41,8 +41,12 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
     public boolean isComparableProperty() { return PropertyUtils.isComparable(propertyType()); }
     public boolean isNumericProperty() { return PropertyUtils.isNumeric(propertyType()); }
     public boolean isBooleanProperty() { return PropertyUtils.isBoolean(propertyType()); }
+    public boolean isCollectionProperty() { return PropertyUtils.isCollection(propertyType()); }
     public boolean isIncomplete() {
         return ElementUtils.hasErrors(propertyType());
+    }
+    public TypeInfo collectionElementType() {
+        return PropertyUtils.collectionElementType(propertyType());
     }
 
     public boolean hasBuilder() {

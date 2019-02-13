@@ -11,7 +11,7 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,7 +32,7 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
     public static class Expressions<__S, T> {
         private final ObjectExpression<__S, GenericListContainer<T>> self = ObjectExpression.arg();
         private final Meta<T> meta = new Meta<>();
-        public final ObjectPropertyExpression<__S, GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyExpression.ofObject(self, meta.items);
+        public final CollectionPropertyExpression<__S, GenericListContainer<T>, Builder<T>, GenericListItem<T>> items = PropertyExpression.ofCollection(self, meta.items);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B, T> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, GenericListContainer<T>> {

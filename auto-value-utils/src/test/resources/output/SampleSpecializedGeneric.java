@@ -12,7 +12,7 @@ import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
+import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
     public static class Expressions<__S> {
         private final ObjectExpression<__S, SampleSpecializedGeneric> self = ObjectExpression.arg();
         private final Meta meta = new Meta() ;
-        public final ObjectPropertyExpression<__S, SampleSpecializedGeneric, Builder, ImmutableList<String>> values = PropertyExpression.ofObject(self, meta.values);
+        public final CollectionPropertyExpression<__S, SampleSpecializedGeneric, Builder, String> values = PropertyExpression.ofCollection(self, meta.values);
     }
 
     public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleSpecializedGeneric> {

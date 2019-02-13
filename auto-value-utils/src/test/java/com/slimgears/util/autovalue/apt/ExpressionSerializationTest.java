@@ -36,9 +36,9 @@ public class ExpressionSerializationTest {
         Assert.assertEquals(intExpression, deserializedExpression);
 
         BooleanExpression<TestEntity> expression = BooleanExpression.and(
-                TestEntity.$().text.eq("5"),
-                TestEntity.$().referencedEntity.description.eq("22"),
-                TestEntity.$().referencedEntity.text.startsWith("3"));
+                TestEntity.$.text.eq("5"),
+                TestEntity.$.referencedEntity.description.eq("22"),
+                TestEntity.$.referencedEntity.text.startsWith("3"));
 
         System.out.println(objectMapper.writeValueAsString(expression));
     }

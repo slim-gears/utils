@@ -8,6 +8,9 @@ import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationE
 import com.slimgears.util.autovalue.expressions.internal.BooleanConstantExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanUnaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.CollectionConstantExpression;
+import com.slimgears.util.autovalue.expressions.internal.CollectionOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ComparableConstantExpression;
 import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ExpressionTypeResolver;
@@ -35,12 +38,12 @@ public interface Expression<S> {
         Equals(BooleanBinaryOperationExpression.class),
         IsNull(BooleanUnaryOperationExpression.class),
 
-        ValueInArray(BooleanBinaryOperationExpression.class),
         ValueIn(BooleanBinaryOperationExpression.class),
 
         LessThan(BooleanBinaryOperationExpression.class),
         GreaterThan(BooleanBinaryOperationExpression.class),
 
+        IsEmpty(BooleanUnaryOperationExpression.class),
         Contains(BooleanBinaryOperationExpression.class),
         StartsWith(BooleanBinaryOperationExpression.class),
         EndsWith(BooleanBinaryOperationExpression.class),
@@ -62,12 +65,18 @@ public interface Expression<S> {
         NumericProperty(ComparablePropertyExpression.class),
         StringProperty(StringPropertyExpression.class),
         BooleanProperty(BooleanPropertyExpression.class),
+        CollectionProperty(CollectionPropertyExpression.class),
 
         Constant(ConstantExpression.class),
         ComparableConstant(ComparableConstantExpression.class),
         NumericConstant(NumericConstantExpression.class),
         StringConstant(StringConstantExpression.class),
         BooleanConstant(BooleanConstantExpression.class),
+        CollectionConstant(CollectionConstantExpression.class),
+
+        MapCollection(CollectionOperationExpression.class),
+        FlatMapCollection(CollectionOperationExpression.class),
+        FilterCollection(CollectionOperationExpression.class),
 
         Argument(ArgumentExpression.class);
 

@@ -6,14 +6,26 @@ package com.slimgears.apt.util;
 import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.util.stream.Optionals;
 
-import javax.lang.model.element.*;
-import javax.lang.model.type.*;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.ArrayType;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.IntersectionType;
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.MirroredTypesException;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
+import javax.lang.model.type.WildcardType;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
@@ -285,6 +297,34 @@ public class ElementUtils {
 
     public static <A extends Annotation> TypeInfo typeFromAnnotation(A annotation, Function<A, Class> classRetriever) {
         return TypeInfo.of(Preconditions.checkNotNull(typeMirrorFromAnnotation(annotation, classRetriever)));
+    }
+
+    public static TypeMirror findInterface(TypeMirror typeMirror, Class interfaceType) {
+        Optional<TypeMirror> type = Optional.ofNullable(typeMirror);
+        return Stream.of(
+                type.flatMap(Optionals.ofType(IntersectionType.class))
+                        .map(it -> it.getBounds().stream())
+                        .orElseGet(Stream::empty),
+                type
+                        .flatMap(Optionals.ofType(TypeVariable.class))
+                        .map(TypeVariable::getUpperBound)
+                        .map(t -> findInterface(t, interfaceType))
+                        .map(Stream::of)
+                        .orElseGet(Stream::empty),
+                type
+                        .flatMap(Optionals.ofType(WildcardType.class))
+                        .map(WildcardType::getExtendsBound)
+                        .map(t -> findInterface(t, interfaceType))
+                        .map(Stream::of)
+                        .orElseGet(Stream::empty),
+                type
+                        .flatMap(Optionals.ofType(DeclaredType.class))
+                        .map(ElementUtils::getHierarchy)
+                        .orElseGet(Stream::empty))
+                .flatMap(Function.identity())
+                .filter(t -> MoreTypes.isTypeOf(interfaceType, t))
+                .findFirst()
+                .orElse(null);
     }
 
     public static <A extends Annotation> TypeMirror typeMirrorFromAnnotation(A annotation, Function<A, Class> classRetriever) {

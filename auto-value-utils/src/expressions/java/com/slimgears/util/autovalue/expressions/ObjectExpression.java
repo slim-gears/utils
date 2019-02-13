@@ -4,6 +4,7 @@ import com.slimgears.util.autovalue.expressions.internal.ArgumentExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanUnaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
@@ -36,12 +37,8 @@ public interface ObjectExpression<S, T> extends Expression {
         return isNull().not();
     }
 
-    default BooleanExpression<S> inArray(ObjectExpression<S, T[]> values) {
-        return BooleanBinaryOperationExpression.create(Type.ValueInArray, this, values);
-    }
-
-    default BooleanExpression<S> inArray(T... values) {
-        return inArray(ConstantExpression.of(values));
+    default BooleanExpression<S> in(T... values) {
+        return in(ConstantExpression.of(values));
     }
 
     default BooleanExpression<S> in(ObjectExpression<S, Collection<T>> values) {
@@ -70,6 +67,10 @@ public interface ObjectExpression<S, T> extends Expression {
 
     default <B> StringExpression<S> ref(StringPropertyExpression<?, T, B> expression) {
         return PropertyExpression.ofString(this, expression.property());
+    }
+
+    default <B, E> CollectionExpression<S, E> ref(CollectionPropertyExpression<?, T, B, E> expression) {
+        return PropertyExpression.ofCollection(this, expression.property());
     }
 
     default BooleanExpression<S> matches(ObjectExpression<S, String> pattern) {

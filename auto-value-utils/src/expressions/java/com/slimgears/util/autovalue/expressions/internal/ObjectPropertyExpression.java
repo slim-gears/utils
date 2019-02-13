@@ -13,7 +13,7 @@ public abstract class ObjectPropertyExpression<S, T, B, V> implements PropertyEx
     public static <S, T, B, V> ObjectPropertyExpression<S, T, B, V> create(
             @JsonProperty("type") Type type,
             @JsonProperty("target") ObjectExpression<S, T> target,
-            @JsonProperty("property") PropertyMeta<T, B, V> property) {
+            @JsonProperty("property") PropertyMeta<T, B, ? extends V> property) {
         return new AutoValue_ObjectPropertyExpression<>(type, target, property);
     }
 }

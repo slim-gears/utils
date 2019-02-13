@@ -6,20 +6,28 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.MethodInfo;
+import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.util.autovalue.annotations.Reference;
 import com.slimgears.util.stream.Optionals;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.ExecutableType;
-import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.WildcardType;
+import javax.lang.model.type.TypeVariable;
+import javax.lang.model.util.SimpleTypeVisitor8;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 import static com.slimgears.util.stream.Streams.ofType;
 
@@ -120,5 +128,43 @@ public class PropertyUtils {
     public static boolean isBoolean(TypeMirror type) {
         return type.getKind() == TypeKind.BOOLEAN
                 || type.getKind() == TypeKind.DECLARED && MoreTypes.isTypeOf(Boolean.class, type);
+    }
+
+    public static boolean isCollection(TypeMirror type) {
+        return ElementUtils.hasInterface(type, Collection.class);
+    }
+
+    public static TypeInfo collectionElementType(TypeMirror type) {
+        AtomicReference<TypeInfo> elementType = new AtomicReference<>();
+        Map<String, TypeMirror> argsMap = new HashMap<>();
+        new SimpleTypeVisitor8<Void, Void>() {
+            @Override
+            public Void visitDeclared(DeclaredType t, Void aVoid) {
+                List<? extends TypeMirror> args = t.getTypeArguments();
+                List<? extends TypeParameterElement> params = MoreTypes.asTypeElement(t).getTypeParameters();
+                IntStream.range(0, args.size())
+                        .forEach(i -> {
+                            TypeMirror arg = args.get(i);
+                            if (arg.getKind() == TypeKind.TYPEVAR) {
+                                arg = argsMap.get(((TypeVariable)arg).asElement().getSimpleName().toString());
+                            }
+                            argsMap.put(params.get(i).getSimpleName().toString(), arg);
+                        });
+
+                MoreTypes.asTypeElement(t).getInterfaces().forEach(this::visit);
+                if (MoreTypes.isTypeOf(Collection.class, t)) {
+                    TypeMirror arg = args.get(0);
+                    if (arg.getKind() == TypeKind.TYPEVAR) {
+                        arg = Optional.ofNullable(argsMap.get(((TypeVariable)arg).asElement().getSimpleName().toString()))
+                                .orElse(arg);
+                    }
+                    elementType.set(TypeInfo.of(arg));
+                }
+
+                return null;
+            }
+        }.visit(type);
+
+        return Optional.ofNullable(elementType.get()).orElseGet(() -> TypeInfo.of(Object.class));
     }
 }

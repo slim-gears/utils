@@ -1,7 +1,6 @@
-package $targetClass.packageName();
+package $targetClass.packageName()import com.slimgears.util.autovalue.expressions.ObjectExpression;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
+;
 
 #parse("type-params.java.vm")
 
@@ -42,6 +41,8 @@ implements $[$sourceClass], ##
         public final $[com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofComparable(self, meta.${p.name()});
 #elseif ($p.isBooleanProperty())
         public final $[com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass)> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofBoolean(self, meta.${p.name()});
+#elseif ($p.isCollectionProperty())
+        public final $[com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.collectionElementType()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofCollection(self, meta.${p.name()});
 #else
         public final $[com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression]<__S, $targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = $[com.slimgears.util.autovalue.expressions.PropertyExpression].ofObject(self, meta.${p.name()});
 #end
