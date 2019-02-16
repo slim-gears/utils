@@ -1,10 +1,12 @@
 package com.slimgears.sample;
 
+import com.slimgears.util.autovalue.annotations.AutoValueExpressions;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 import javax.annotation.Nullable;
 
-@AutoValuePrototype()
+@AutoValuePrototype
+@AutoValueExpressions
 public interface SampleValuePrototype {
     int intValue();
 

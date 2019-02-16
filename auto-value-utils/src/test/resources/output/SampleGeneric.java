@@ -1,14 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
@@ -21,12 +19,11 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, HasMetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> {
-    public static final Meta metaClass = new Meta();
+public abstract class SampleGeneric<T> implements SampleGenericPrototype<T> {
 
     public static final Expressions<SampleGeneric, ?> $ = new Expressions<>();
     public static <T> Expressions<SampleGeneric, T> $() {
-        return new Expressions<>();
+        return (Expressions<SampleGeneric, T>)$;
     }
 
     public static class Expressions<__S, T> {
@@ -66,6 +63,11 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         }
     }
 
+    public MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> metaClass() {
+        return (MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>>)metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta<T> implements MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> {
         private final TypeToken<SampleGeneric<T>> objectClass = new TypeToken<SampleGeneric<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
@@ -120,12 +122,6 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
 
     @JsonIgnore
     public abstract Builder<T> toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> metaClass() {
-        return new Meta<>();
-    }
 
     public static <T> Builder<T> builder() {
         return Builder.create();

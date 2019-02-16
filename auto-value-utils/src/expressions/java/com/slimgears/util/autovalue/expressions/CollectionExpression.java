@@ -3,7 +3,6 @@ package com.slimgears.util.autovalue.expressions;
 import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanUnaryOperationExpression;
 import com.slimgears.util.autovalue.expressions.internal.CollectionOperationExpression;
-import com.slimgears.util.autovalue.expressions.internal.NumericUnaryOperationExpression;
 
 import java.util.Collection;
 
@@ -51,7 +50,7 @@ public interface CollectionExpression<S, E> extends ObjectExpression<S, Collecti
                 .isEmpty();
     }
 
-    default NumericExpression<S, Long> count() {
-        return NumericUnaryOperationExpression.create(Type.Length, this);
+    default <R, OE extends UnaryOperationExpression<S, Collection<E>, R>> OE aggregate(Aggregator<S, E, R, OE> aggregator) {
+        return aggregator.apply(this);
     }
 }

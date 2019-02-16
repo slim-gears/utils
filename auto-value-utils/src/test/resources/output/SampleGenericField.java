@@ -1,14 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
@@ -21,8 +19,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<SampleGenericField, SampleGenericField.Builder> {
-    public static final Meta metaClass = new Meta();
+public abstract class SampleGenericField implements SampleGenericFieldPrototype {
 
     public static final Expressions<SampleGenericField> $ = new Expressions<>();
     public static Expressions<SampleGenericField> $() {
@@ -65,6 +62,11 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         }
     }
 
+    public MetaClass<SampleGenericField, SampleGenericField.Builder> metaClass() {
+        return metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClass<SampleGenericField, SampleGenericField.Builder> {
         private final TypeToken<SampleGenericField> objectClass = new TypeToken<SampleGenericField>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
@@ -117,12 +119,6 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
 
     @JsonIgnore
     public abstract Builder toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClass<SampleGenericField, SampleGenericField.Builder> metaClass() {
-        return metaClass;
-    }
 
     public static Builder builder() {
         return Builder.create();

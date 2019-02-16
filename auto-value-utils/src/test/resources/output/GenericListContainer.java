@@ -1,14 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
@@ -21,12 +19,11 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T>, HasMetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> {
-    public static final Meta metaClass = new Meta();
+public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T> {
 
     public static final Expressions<GenericListContainer, ?> $ = new Expressions<>();
     public static <T> Expressions<GenericListContainer, T> $() {
-        return new Expressions<>();
+        return (Expressions<GenericListContainer, T>)$;
     }
 
     public static class Expressions<__S, T> {
@@ -65,6 +62,11 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         }
     }
 
+    public MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> metaClass() {
+        return (MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>>)metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta<T> implements MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> {
         private final TypeToken<GenericListContainer<T>> objectClass = new TypeToken<GenericListContainer<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
@@ -117,12 +119,6 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
 
     @JsonIgnore
     public abstract Builder<T> toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> metaClass() {
-        return new Meta<>();
-    }
 
     public static <T> Builder<T> builder() {
         return Builder.create();

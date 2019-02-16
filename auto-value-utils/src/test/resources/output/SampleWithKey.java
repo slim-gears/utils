@@ -1,15 +1,13 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.Key;
 import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
@@ -22,8 +20,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
-    public static final Meta metaClass = new Meta();
+public abstract class SampleWithKey implements SampleWithKeyPrototype {
 
     public static final Expressions<SampleWithKey> $ = new Expressions<>();
     public static Expressions<SampleWithKey> $() {
@@ -68,6 +65,11 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         }
     }
 
+    public MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> metaClass() {
+        return metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
         private final TypeToken<SampleWithKey> objectClass = new TypeToken<SampleWithKey>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
@@ -129,12 +131,6 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
 
     @JsonIgnore
     public abstract Builder toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> metaClass() {
-        return metaClass;
-    }
 
     public static Builder builder() {
         return Builder.create();

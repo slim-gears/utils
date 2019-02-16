@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -98,7 +100,28 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 : annotation.value();
 
         TypeInfo sourceClass = TypeInfo.of(type);
+        TypeInfo[] sourceClassParams = sourceClass.typeParams().stream().map(TypeParameterInfo::typeName).map(TypeInfo::of).toArray(TypeInfo[]::new);
+
         TypeInfo targetClass = TypeInfo.of(sourceClass.packageName() + "." + targetName);
+        TypeInfo targetClassDeclaration = targetClass
+                .toBuilder()
+                .typeParams(sourceClass.typeParams())
+                .build();
+        TypeInfo targetClassWithParams = targetClass
+                .toBuilder()
+                .typeParams(sourceClassParams)
+                .build();
+        TypeInfo builderClass = TypeInfo.of(targetName + ".Builder");
+        TypeInfo builderClassDeclaration = builderClass
+                .toBuilder()
+                .typeParams(sourceClass.typeParams())
+                .build();
+
+        TypeInfo builderClassWithParams = builderClass
+                .toBuilder()
+                .typeParams(sourceClassParams)
+                .build();
+
         Collection<PropertyInfo> properties = getProperties(declaredType);
 
         if (properties.stream().anyMatch(p -> ElementUtils.hasErrors(p.propertyType()))) {
@@ -107,6 +130,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         ensureBuildersForInterfaces(declaredType);
         ImportTracker importTracker = ImportTracker.create("java.lang", targetClass.packageName());
+
         List<PropertyInfo> keyProperties = properties.stream().filter(PropertyInfo::isKey).collect(Collectors.toList());
         if (keyProperties.size() > 1) {
             throw new IllegalArgumentException("Type " + type.getSimpleName() + " contains more than 1 key property");
@@ -114,14 +138,26 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         PropertyInfo keyProperty = keyProperties.isEmpty() ? null : keyProperties.get(0);
 
         Context context = Context.builder()
+                .meta(annotation)
                 .sourceClass(sourceClass)
-                .targetClass(targetClass)
+                .sourceElement(type)
+                .targetClassDeclaration(targetClassDeclaration)
+                .targetClassWithParams(targetClassWithParams)
+                .builderClassDeclaration(builderClassDeclaration)
+                .builderClassWithParams(builderClassWithParams)
                 .properties(properties)
                 .imports(importTracker)
                 .keyProperty(keyProperty)
                 .build();
 
-        Extension extension = new CompositeExtension();
+        importTracker.knownClass(builderClassWithParams);
+        String[] extensions = type.getAnnotationMirrors()
+                .stream()
+                .flatMap(this::getExtensions)
+                .distinct()
+                .toArray(String[]::new);
+
+        Extension extension = new CompositeExtension(extensions);
 
         try {
             TemplateEvaluator.forResource("auto-value.java.vm")
@@ -129,7 +165,6 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                     .variable("context", context)
                     .variable("extensions", extension)
                     .variable("processor", TypeInfo.of(getClass()))
-                    .variable("dollar", "$")
                     .apply(JavaUtils.imports(importTracker))
                     .write(JavaUtils.fileWriter(processingEnv, targetClass));
         } catch (Throwable e) {
@@ -140,6 +175,14 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         return true;
     }
 
+    private Stream<String> getExtensions(AnnotationMirror annotationMirror) {
+        return Optional
+                .ofNullable(MoreTypes
+                        .asTypeElement(annotationMirror.getAnnotationType())
+                        .getAnnotation(AutoValuePrototype.Extension.class))
+                .map(e -> Arrays.stream(e.value()))
+                .orElseGet(Stream::empty);
+    }
 
     private Annotator getAnnotators(String[] annotatorIds) {
         return Arrays

@@ -1,14 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression;
@@ -23,8 +21,7 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<SampleValue, SampleValue.Builder> {
-    public static final Meta metaClass = new Meta();
+public abstract class SampleValue implements SampleValuePrototype {
 
     public static final Expressions<SampleValue> $ = new Expressions<>();
     public static Expressions<SampleValue> $() {
@@ -70,6 +67,11 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         }
     }
 
+    public MetaClass<SampleValue, SampleValue.Builder> metaClass() {
+        return metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClass<SampleValue, SampleValue.Builder> {
         private final TypeToken<SampleValue> objectClass = new TypeToken<SampleValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
@@ -128,12 +130,6 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
 
     @JsonIgnore
     public abstract Builder toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClass<SampleValue, SampleValue.Builder> metaClass() {
-        return metaClass;
-    }
 
     public static Builder builder() {
         return Builder.create();

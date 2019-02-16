@@ -1,0 +1,85 @@
+#parse("type-params.java.vm")
+
+#if ($hasKey)
+    public $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
+#else
+    public $[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
+#end
+#if ($sourceClass.typeParams().isEmpty())
+        return metaClass;
+#else
+        return ($[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>)metaClass;
+#end
+    }
+
+    public static final Meta metaClass = new Meta();
+    public static class Meta#typeParamsDeclaration($sourceClass) implements ##
+#if ($hasKey)##
+        $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<##
+        $[$keyProperty.type().asBoxed()], ##
+        $targetClass.simpleName()#typeParams($sourceClass), ##
+        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>##
+#else##
+        $[com.slimgears.util.autovalue.annotations.MetaClass]<##
+        $targetClass.simpleName()#typeParams($sourceClass), ##
+        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>##
+#end {
+        private final $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass = new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
+        private final $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass = new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
+        private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
+
+#foreach ($p in $properties)
+        public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create(objectClass, "$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
+#end
+
+#if ($hasKey)
+        @Override
+        public $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$keyProperty.type().asBoxed()]> keyProperty() {
+            return $keyProperty.name();
+        }
+#end
+
+        Meta() {
+#foreach ($p in $properties)
+            propertyMap.put("$p.name()", $p.name());
+#end
+        }
+
+        @Override
+        public $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass() {
+            return this.builderClass;
+        }
+
+        @Override
+        public $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass() {
+            return this.objectClass;
+        }
+
+        @Override
+        public Iterable<PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> properties() {
+            return propertyMap.values();
+        }
+
+        @Override
+        public <__V> PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), __V> getProperty(String name) {
+            //noinspection unchecked
+            return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), __V>)propertyMap.get(name);
+        }
+
+        @Override
+        public Builder#typeParams($sourceClass) createBuilder() {
+            return ${targetClass.simpleName()}.builder();
+        }
+
+        @Override
+        public int hashCode() {
+            return $[java.util.Objects].hash(objectClass, builderClass);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Meta
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
+        }
+    }

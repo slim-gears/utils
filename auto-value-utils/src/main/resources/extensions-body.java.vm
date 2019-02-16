@@ -5,7 +5,7 @@
 #if ($sourceClass.typeParams().isEmpty())
         return ${dollar};
 #else
-        return new Expressions<>();
+        return (Expressions<$targetClass.simpleName()#foreach ($tp in $sourceClass.typeParams()), $tp.typeName()#end>)${dollar};
 #end
     }
 

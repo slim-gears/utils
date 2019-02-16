@@ -91,6 +91,19 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
         return name() + dimensionsToString();
     }
 
+    public TypeInfo erasure() {
+        return TypeInfo.of(erasureName());
+    }
+
+    public String fullDeclaration() {
+        return !hasTypeParams()
+                ? fullName()
+                : typeParams()
+                .stream()
+                .map(TypeParameterInfo::fullDeclaration)
+                .collect(Collectors.joining(", ", name() + "<", ">"));
+    }
+
     public String nameWithoutPackage() {
         String packageName = packageName();
         return (Strings.isNullOrEmpty(packageName) ? name() : name().substring(packageName.length() + 1));

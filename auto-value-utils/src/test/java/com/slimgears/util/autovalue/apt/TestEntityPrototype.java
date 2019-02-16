@@ -1,11 +1,13 @@
 package com.slimgears.util.autovalue.apt;
 
+import com.slimgears.util.autovalue.annotations.AutoValueExpressions;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 import com.slimgears.util.autovalue.annotations.Reference;
 
 import java.util.Collection;
 
 @AutoValuePrototype
+@AutoValueExpressions
 interface TestEntityPrototype<T extends Comparable<T>> {
     String text();
     String description();

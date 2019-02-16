@@ -1,14 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
@@ -20,12 +18,11 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T>, HasMetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
-    public static final Meta metaClass = new Meta();
+public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T> {
 
     public static final Expressions<SampleComparableGeneric, ?> $ = new Expressions<>();
     public static <T extends Comparable<T>> Expressions<SampleComparableGeneric, T> $() {
-        return new Expressions<>();
+        return (Expressions<SampleComparableGeneric, T>)$;
     }
 
     public static class Expressions<__S, T extends java.lang.Comparable<T>> {
@@ -64,6 +61,11 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         }
     }
 
+    public MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> metaClass() {
+        return (MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>>)metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta<T extends Comparable<T>> implements MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
         private final TypeToken<SampleComparableGeneric<T>> objectClass = new TypeToken<SampleComparableGeneric<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
@@ -116,12 +118,6 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
 
     @JsonIgnore
     public abstract Builder<T> toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> metaClass() {
-        return new Meta<>();
-    }
 
     public static <T extends Comparable<T>> Builder<T> builder() {
         return Builder.create();

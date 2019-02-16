@@ -3,9 +3,16 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../reflect-utils/out/generated/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../reflect-utils/build/generated-src/antlr/generated" />
-    <content url="file://$MODULE_DIR$/../../../reflect-utils/generated-src" />
-    <content url="file://$MODULE_DIR$/../../../reflect-utils/src/generated" />
+    <content url="file://$MODULE_DIR$/../../../reflect-utils/build/generated-src/antlr/generated">
+      <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/generated-src/antlr/generated" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../reflect-utils/generated-src">
+      <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/generated-src/antlr/main" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../reflect-utils/src/generated">
+      <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/src/generated/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/src/generated/resources" type="java-resource" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

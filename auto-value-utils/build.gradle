@@ -27,16 +27,14 @@ dependencies {
     expressionsImplementation project(':reflect-utils')
     expressionsImplementation project.sourceSetDependency(sourceSets.annotations)
     expressionsImplementation libs.jacksonAnnotations, libs.jacksonDataBind
-    expressionsImplementation libs.autoValueAnnotations
-    expressionsAnnotationProcessor libs.autoValue
-    expressionsAnnotationProcessor libs.autoService
+    expressionsAnnotationProcessor libs.autoService, libs.autoValue
     expressionsCompileOnly libs.autoService
+    expressionsImplementation libs.autoValueAnnotations
 
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
     testImplementation libs.googleTruth
     testImplementation libs.jacksonAnnotations
     testImplementation libs.jacksonCore
     testImplementation libs.jacksonDataBind
-
     testImplementation project.sourceSetDependency(sourceSets.expressions)
 }

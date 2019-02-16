@@ -3,24 +3,7 @@ package com.slimgears.util.autovalue.expressions;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import com.slimgears.util.autovalue.expressions.internal.ArgumentExpression;
-import com.slimgears.util.autovalue.expressions.internal.BooleanBinaryOperationExpression;
-import com.slimgears.util.autovalue.expressions.internal.BooleanConstantExpression;
-import com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.BooleanUnaryOperationExpression;
-import com.slimgears.util.autovalue.expressions.internal.CollectionConstantExpression;
-import com.slimgears.util.autovalue.expressions.internal.CollectionOperationExpression;
-import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ComparableConstantExpression;
-import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ExpressionTypeResolver;
-import com.slimgears.util.autovalue.expressions.internal.NumericBinaryOperationExpression;
-import com.slimgears.util.autovalue.expressions.internal.NumericConstantExpression;
-import com.slimgears.util.autovalue.expressions.internal.NumericUnaryOperationExpression;
-import com.slimgears.util.autovalue.expressions.internal.StringBinaryOperationExpression;
-import com.slimgears.util.autovalue.expressions.internal.StringConstantExpression;
-import com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.StringUnaryOperationExpression;
+import com.slimgears.util.autovalue.expressions.internal.*;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -74,9 +57,22 @@ public interface Expression<S> {
         BooleanConstant(BooleanConstantExpression.class),
         CollectionConstant(CollectionConstantExpression.class),
 
+        Composition(ObjectComposedExpression.class),
+        ComparableComposition(ComparableComposedExpression.class),
+        NumericComposition(NumericComposedExpression.class),
+        StringComposition(StringComposedExpression.class),
+        BooleanComposition(BooleanComposedExpression.class),
+        CollectionComposition(CollectionComposedExpression.class),
+
         MapCollection(CollectionOperationExpression.class),
         FlatMapCollection(CollectionOperationExpression.class),
         FilterCollection(CollectionOperationExpression.class),
+
+        Count(ObjectBinaryOperationExpression.class),
+        Min(ComparableBinaryOperationExpression.class),
+        Max(ComparableBinaryOperationExpression.class),
+        Average(NumericBinaryOperationExpression.class),
+        Sum(NumericBinaryOperationExpression.class),
 
         Argument(ArgumentExpression.class);
 

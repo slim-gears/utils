@@ -9,6 +9,7 @@
       <module name="auto-value-utils_expressions" target="1.8" />
       <module name="auto-value-utils_expressions-apt" target="1.8" />
       <module name="auto-value-utils_main" target="1.8" />
+      <module name="auto-value-utils_repository" target="1.8" />
       <module name="auto-value-utils_test" target="1.8" />
       <module name="generic-utils_annotations" target="1.8" />
       <module name="generic-utils_apt" target="1.8" />
@@ -21,6 +22,8 @@
       <module name="reflect-utils_java" target="1.8" />
       <module name="reflect-utils_main" target="1.8" />
       <module name="reflect-utils_test" target="1.8" />
+      <module name="repository_main" target="1.8" />
+      <module name="repository_test" target="1.8" />
       <module name="rx-utils_main" target="1.8" />
       <module name="rx-utils_test" target="1.8" />
       <module name="stream-utils_main" target="1.8" />

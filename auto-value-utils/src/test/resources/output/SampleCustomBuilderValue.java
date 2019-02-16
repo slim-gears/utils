@@ -1,14 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
@@ -20,8 +18,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype, HasMetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
-    public static final Meta metaClass = new Meta();
+public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype {
 
     public static final Expressions<SampleCustomBuilderValue> $ = new Expressions<>();
     public static Expressions<SampleCustomBuilderValue> $() {
@@ -65,6 +62,11 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         }
     }
 
+    public MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> metaClass() {
+        return metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
         private final TypeToken<SampleCustomBuilderValue> objectClass = new TypeToken<SampleCustomBuilderValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
@@ -119,12 +121,6 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
 
     @JsonIgnore
     public abstract Builder toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> metaClass() {
-        return metaClass;
-    }
 
     public static Builder builder() {
         return Builder.create();

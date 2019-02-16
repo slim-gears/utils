@@ -9,10 +9,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface AutoValuePrototype {
     String value() default "";
-    boolean expressions() default false;
-    String[] annotators() default {};
 
     @Retention(RetentionPolicy.SOURCE)
     @Target(ElementType.TYPE)
     @interface Builder {}
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.ANNOTATION_TYPE)
+    @interface Extension {
+        String[] value();
+    }
 }

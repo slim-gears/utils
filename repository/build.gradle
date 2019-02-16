@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':auto-value-utils').sourceSetDependency('annotations')
+    implementation project(':auto-value-utils').sourceSetDependency('expressions')
+    implementation libs.autoValueAnnotations
+    implementation libs.rxJava
+    implementation libs.googleJsr305
+    implementation libs.jacksonAnnotations, libs.jacksonDataBind
+    implementation libs.guava
+    implementation project(':reflect-utils')
+    annotationProcessor libs.autoValue
+    annotationProcessor project(':auto-value-utils')
+}

@@ -1,7 +1,5 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.PropertyMeta;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,8 +9,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
-import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
+import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.autovalue.expressions.ObjectExpression;
 import com.slimgears.util.autovalue.expressions.PropertyExpression;
 import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
@@ -26,8 +24,7 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
-    public static final Meta metaClass = new Meta();
+public abstract class SampleGuavaValue implements SampleGuavaValuePrototype {
 
     public static final Expressions<SampleGuavaValue> $ = new Expressions<>();
     public static Expressions<SampleGuavaValue> $() {
@@ -74,6 +71,11 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         }
     }
 
+    public MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> metaClass() {
+        return metaClass;
+    }
+
+    public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
         private final TypeToken<SampleGuavaValue> objectClass = new TypeToken<SampleGuavaValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
@@ -134,12 +136,6 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
 
     @JsonIgnore
     public abstract Builder toBuilder();
-
-    @JsonIgnore
-    @Override
-    public MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> metaClass() {
-        return metaClass;
-    }
 
     public static Builder builder() {
         return Builder.create();
