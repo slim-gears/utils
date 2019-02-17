@@ -8,7 +8,11 @@ import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
 import com.slimgears.util.generic.ScopedInstance;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +25,7 @@ public class ImportTracker {
     private final static String importsMagicWord = "`imports`";
     private final Collection<String> imports = new TreeSet<>();
     private final Collection<TypeInfo> usedClasses = new TreeSet<>(TypeInfo.comparator);
-    private final Collection<TypeInfo> knownClasses = new HashSet<>();
+    private final Collection<String> knownClasses = new HashSet<>();
     private final ImmutableSet<String> knownPackageNames;
 
     public static ImportTracker create(String... knownPackageNames) {
@@ -60,12 +64,12 @@ public class ImportTracker {
     }
 
     public ImportTracker knownClass(TypeInfo... typeInfo) {
-        knownClasses.addAll(Arrays.asList(typeInfo));
+        knownClasses.addAll(Arrays.stream(typeInfo).map(TypeInfo::importName).collect(Collectors.toList()));
         return this;
     }
 
     public String use(TypeInfo typeInfo) {
-        return simplify(typeInfo).fullName();
+        return simplify(typeInfo).fullName().replace('$', '.');
     }
 
     public String use(String cls) {
@@ -85,8 +89,8 @@ public class ImportTracker {
             return typeInfo;
         }
 
-        if (knownClasses.contains(typeInfo) ||
-                (typeInfo.isArray() && knownClasses.contains(typeInfo.elementTypeOrSelf()))) {
+        if (knownClasses.contains(typeInfo.importName()) ||
+                (typeInfo.isArray() && knownClasses.contains(typeInfo.elementTypeOrSelf().importName()))) {
             return typeInfo;
         }
 

@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
-import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -19,48 +17,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGenericField implements SampleGenericFieldPrototype {
-
-    public static final Expressions<SampleGenericField> $ = new Expressions<>();
-    public static Expressions<SampleGenericField> $() {
-        return $;
-    }
-
-    public static class Expressions<__S> {
-        private final ObjectExpression<__S, SampleGenericField> self = ObjectExpression.arg();
-        private final Meta meta = new Meta() ;
-
-        public final ObjectPropertyExpression<__S, SampleGenericField, Builder, Class<? extends Collection>> value = PropertyExpression.ofObject(self, meta.value);
-    }
-
-    public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleGenericField> {
-        private final ObjectExpression<__S, __T> target;
-        private final PropertyMeta<__T, __B, SampleGenericField> property;
-
-        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleGenericField> property) {
-            this.target = target;
-            this.property = property;
-        }
-
-        static <__S, __T, __B> ReferencePropertyExpression<__S, __T, __B> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleGenericField> property) {
-            return new ReferencePropertyExpression<>(target, property);
-        }
-
-        @Override
-        public ObjectExpression<__S, __T> target() {
-            return target;
-        }
-
-        @Override
-        public PropertyMeta<__T, __B, SampleGenericField> property() {
-            return property;
-        }
-
-        @Override
-        public Type type() {
-            return Type.Property;
-        }
-    }
+public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<com.slimgears.sample.SampleGenericField, SampleGenericField.Builder> {
 
     public MetaClass<SampleGenericField, SampleGenericField.Builder> metaClass() {
         return metaClass;

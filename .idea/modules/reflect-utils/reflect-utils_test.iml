@@ -3,9 +3,7 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output-test url="file://$MODULE_DIR$/../../../reflect-utils/out/test/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../reflect-utils/build/generated-src/antlr/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/generated-src/antlr/test" isTestSource="true" />
-    </content>
+    <content url="file://$MODULE_DIR$/../../../reflect-utils/build/generated-src/antlr/test" />
     <content url="file://$MODULE_DIR$/../../../reflect-utils/build/generated/source/apt/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/build/generated/source/apt/test" isTestSource="true" generated="true" />
     </content>

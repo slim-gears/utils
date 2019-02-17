@@ -2,10 +2,6 @@ sourceSets {
     annotations {
         java.srcDir 'src/annotations/java'
     }
-    expressions {
-        java.srcDir 'src/expressions/java'
-        java.srcDir "$buildDir/generated/source/apt/expressions"
-    }
 }
 
 dependencies {
@@ -24,17 +20,9 @@ dependencies {
     annotationsImplementation project(':reflect-utils')
     annotationsImplementation libs.googleJsr305
 
-    expressionsImplementation project(':reflect-utils')
-    expressionsImplementation project.sourceSetDependency(sourceSets.annotations)
-    expressionsImplementation libs.jacksonAnnotations, libs.jacksonDataBind
-    expressionsAnnotationProcessor libs.autoService, libs.autoValue
-    expressionsCompileOnly libs.autoService
-    expressionsImplementation libs.autoValueAnnotations
-
     testImplementation project(path: ':apt-utils', configuration: 'testOutput')
     testImplementation libs.googleTruth
     testImplementation libs.jacksonAnnotations
     testImplementation libs.jacksonCore
     testImplementation libs.jacksonDataBind
-    testImplementation project.sourceSetDependency(sourceSets.expressions)
 }

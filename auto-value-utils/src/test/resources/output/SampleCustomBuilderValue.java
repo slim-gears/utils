@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
-import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,49 +16,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype {
-
-    public static final Expressions<SampleCustomBuilderValue> $ = new Expressions<>();
-    public static Expressions<SampleCustomBuilderValue> $() {
-        return $;
-    }
-
-    public static class Expressions<__S> {
-        private final ObjectExpression<__S, SampleCustomBuilderValue> self = ObjectExpression.arg();
-        private final Meta meta = new Meta() ;
-
-        public final NumericPropertyExpression<__S, SampleCustomBuilderValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
-        public final NumericPropertyExpression<__S, SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
-    }
-
-    public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleCustomBuilderValue> {
-        private final ObjectExpression<__S, __T> target;
-        private final PropertyMeta<__T, __B, SampleCustomBuilderValue> property;
-
-        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleCustomBuilderValue> property) {
-            this.target = target;
-            this.property = property;
-        }
-
-        static <__S, __T, __B> ReferencePropertyExpression<__S, __T, __B> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleCustomBuilderValue> property) {
-            return new ReferencePropertyExpression<>(target, property);
-        }
-
-        @Override
-        public ObjectExpression<__S, __T> target() {
-            return target;
-        }
-
-        @Override
-        public PropertyMeta<__T, __B, SampleCustomBuilderValue> property() {
-            return property;
-        }
-
-        @Override
-        public Type type() {
-            return Type.Property;
-        }
-    }
+public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype, HasMetaClass<com.slimgears.sample.SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
 
     public MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> metaClass() {
         return metaClass;

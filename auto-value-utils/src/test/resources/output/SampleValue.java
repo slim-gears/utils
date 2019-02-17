@@ -5,13 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
-import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.BooleanPropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.NumericPropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.StringPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,51 +17,7 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleValue implements SampleValuePrototype {
-
-    public static final Expressions<SampleValue> $ = new Expressions<>();
-    public static Expressions<SampleValue> $() {
-        return $;
-    }
-
-    public static class Expressions<__S> {
-        private final ObjectExpression<__S, SampleValue> self = ObjectExpression.arg();
-        private final Meta meta = new Meta() ;
-
-        public final NumericPropertyExpression<__S, SampleValue, Builder, Integer> intValue = PropertyExpression.ofNumeric(self, meta.intValue);
-        public final NumericPropertyExpression<__S, SampleValue, Builder, Double> doubleValue = PropertyExpression.ofNumeric(self, meta.doubleValue);
-        public final StringPropertyExpression<__S, SampleValue, Builder> strValue = PropertyExpression.ofString(self, meta.strValue);
-        public final BooleanPropertyExpression<__S, SampleValue, Builder> foo = PropertyExpression.ofBoolean(self, meta.foo);
-    }
-
-    public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleValue> {
-        private final ObjectExpression<__S, __T> target;
-        private final PropertyMeta<__T, __B, SampleValue> property;
-
-        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleValue> property) {
-            this.target = target;
-            this.property = property;
-        }
-
-        static <__S, __T, __B> ReferencePropertyExpression<__S, __T, __B> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleValue> property) {
-            return new ReferencePropertyExpression<>(target, property);
-        }
-
-        @Override
-        public ObjectExpression<__S, __T> target() {
-            return target;
-        }
-
-        @Override
-        public PropertyMeta<__T, __B, SampleValue> property() {
-            return property;
-        }
-
-        @Override
-        public Type type() {
-            return Type.Property;
-        }
-    }
+public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<com.slimgears.sample.SampleValue, SampleValue.Builder> {
 
     public MetaClass<SampleValue, SampleValue.Builder> metaClass() {
         return metaClass;

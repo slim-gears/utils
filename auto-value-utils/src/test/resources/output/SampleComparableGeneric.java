@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
-import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ComparablePropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,48 +16,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T> {
-
-    public static final Expressions<SampleComparableGeneric, ?> $ = new Expressions<>();
-    public static <T extends Comparable<T>> Expressions<SampleComparableGeneric, T> $() {
-        return (Expressions<SampleComparableGeneric, T>)$;
-    }
-
-    public static class Expressions<__S, T extends java.lang.Comparable<T>> {
-        private final ObjectExpression<__S, SampleComparableGeneric<T>> self = ObjectExpression.arg();
-        private final Meta<T> meta = new Meta<>();
-
-        public final ComparablePropertyExpression<__S, SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyExpression.ofComparable(self, meta.tValue);
-    }
-
-    public static class ReferencePropertyExpression<__S, __T, __B, T extends java.lang.Comparable<T>> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, SampleComparableGeneric<T>> {
-        private final ObjectExpression<__S, __T> target;
-        private final PropertyMeta<__T, __B, SampleComparableGeneric<T>> property;
-
-        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleComparableGeneric<T>> property) {
-            this.target = target;
-            this.property = property;
-        }
-
-        static <__S, __T, __B, T extends java.lang.Comparable<T>> ReferencePropertyExpression<__S, __T, __B, T> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleComparableGeneric<T>> property) {
-            return new ReferencePropertyExpression<>(target, property);
-        }
-
-        @Override
-        public ObjectExpression<__S, __T> target() {
-            return target;
-        }
-
-        @Override
-        public PropertyMeta<__T, __B, SampleComparableGeneric<T>> property() {
-            return property;
-        }
-
-        @Override
-        public Type type() {
-            return Type.Property;
-        }
-    }
+public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T>, HasMetaClass<com.slimgears.sample.SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
 
     public MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> metaClass() {
         return (MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>>)metaClass;

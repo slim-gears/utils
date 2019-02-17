@@ -9,12 +9,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
-import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.ObjectPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,52 +21,7 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGuavaValue implements SampleGuavaValuePrototype {
-
-    public static final Expressions<SampleGuavaValue> $ = new Expressions<>();
-    public static Expressions<SampleGuavaValue> $() {
-        return $;
-    }
-
-    public static class Expressions<__S> {
-        private final ObjectExpression<__S, SampleGuavaValue> self = ObjectExpression.arg();
-        private final Meta meta = new Meta() ;
-
-        public final CollectionPropertyExpression<__S, SampleGuavaValue, Builder, Integer> intList = PropertyExpression.ofCollection(self, meta.intList);
-        public final CollectionPropertyExpression<__S, SampleGuavaValue, Builder, String> stringSet = PropertyExpression.ofCollection(self, meta.stringSet);
-        public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyExpression.ofObject(self, meta.intToStringMap);
-        public final ObjectPropertyExpression<__S, SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyExpression.ofObject(self, meta.intToStringBiMap);
-        public final CollectionPropertyExpression<__S, SampleGuavaValue, Builder, String> optionalList = PropertyExpression.ofCollection(self, meta.optionalList);
-    }
-
-    public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleGuavaValue> {
-        private final ObjectExpression<__S, __T> target;
-        private final PropertyMeta<__T, __B, SampleGuavaValue> property;
-
-        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleGuavaValue> property) {
-            this.target = target;
-            this.property = property;
-        }
-
-        static <__S, __T, __B> ReferencePropertyExpression<__S, __T, __B> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleGuavaValue> property) {
-            return new ReferencePropertyExpression<>(target, property);
-        }
-
-        @Override
-        public ObjectExpression<__S, __T> target() {
-            return target;
-        }
-
-        @Override
-        public PropertyMeta<__T, __B, SampleGuavaValue> property() {
-            return property;
-        }
-
-        @Override
-        public Type type() {
-            return Type.Property;
-        }
-    }
+public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<com.slimgears.sample.SampleGuavaValue, SampleGuavaValue.Builder> {
 
     public MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> metaClass() {
         return metaClass;

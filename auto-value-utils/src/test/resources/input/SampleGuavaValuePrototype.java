@@ -4,13 +4,13 @@ import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.slimgears.util.autovalue.annotations.AutoValueExpressions;
+import com.slimgears.util.autovalue.annotations.AutoValueMetaData;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 import javax.annotation.Nullable;
 
 @AutoValuePrototype
-@AutoValueExpressions
+@AutoValueMetaData
 public interface SampleGuavaValuePrototype {
     ImmutableList<Integer> intList();
     ImmutableSet<String> stringSet();

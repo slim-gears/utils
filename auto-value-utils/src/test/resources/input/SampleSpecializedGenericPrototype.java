@@ -1,9 +1,9 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.AutoValueExpressions;
+import com.slimgears.util.autovalue.annotations.AutoValueMetaData;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 @AutoValuePrototype
-@AutoValueExpressions
+@AutoValueMetaData
 public interface SampleSpecializedGenericPrototype extends SampleGuavaInterface<String> {
 }

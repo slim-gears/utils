@@ -111,7 +111,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .toBuilder()
                 .typeParams(sourceClassParams)
                 .build();
-        TypeInfo builderClass = TypeInfo.of(targetName + ".Builder");
+        TypeInfo builderClass = TypeInfo.of(targetClass.name() + "$Builder");
         TypeInfo builderClassDeclaration = builderClass
                 .toBuilder()
                 .typeParams(sourceClass.typeParams())
@@ -150,7 +150,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .keyProperty(keyProperty)
                 .build();
 
-        importTracker.knownClass(builderClassWithParams);
+        importTracker.knownClass(TypeInfo.of(builderClassWithParams.erasureName()));
         String[] extensions = type.getAnnotationMirrors()
                 .stream()
                 .flatMap(this::getExtensions)

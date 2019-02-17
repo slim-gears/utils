@@ -15,9 +15,7 @@ import java.util.Optional;
 
 public class TypeTokenParserAdapter {
     public static TypeInfo toTypeInfo(String str) {
-        String[] parts = str.split("\\$");
-
-        TypeTokenLexer lexer = new TypeTokenLexer(CharStreams.fromString(str.replace('$', '.')));
+        TypeTokenLexer lexer = new TypeTokenLexer(CharStreams.fromString(str));
         lexer.removeErrorListeners();
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         TypeTokenParser parser = new TypeTokenParser(tokenStream);
@@ -28,6 +26,8 @@ public class TypeTokenParserAdapter {
         typeInfo = (parser.getNumberOfSyntaxErrors() > 0)
                 ? TypeInfo.builder().name(str).build()
                 : typeInfo;
+
+        String[] parts = typeInfo.name().split("\\$");
 
         if (parts.length > 1) {
             typeInfo = typeInfo

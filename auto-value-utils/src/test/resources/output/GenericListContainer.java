@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
-import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,48 +17,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T> {
-
-    public static final Expressions<GenericListContainer, ?> $ = new Expressions<>();
-    public static <T> Expressions<GenericListContainer, T> $() {
-        return (Expressions<GenericListContainer, T>)$;
-    }
-
-    public static class Expressions<__S, T> {
-        private final ObjectExpression<__S, GenericListContainer<T>> self = ObjectExpression.arg();
-        private final Meta<T> meta = new Meta<>();
-
-        public final CollectionPropertyExpression<__S, GenericListContainer<T>, Builder<T>, GenericListItem<T>> items = PropertyExpression.ofCollection(self, meta.items);
-    }
-
-    public static class ReferencePropertyExpression<__S, __T, __B, T> extends Expressions<__S, T> implements PropertyExpression<__S, __T, __B, GenericListContainer<T>> {
-        private final ObjectExpression<__S, __T> target;
-        private final PropertyMeta<__T, __B, GenericListContainer<T>> property;
-
-        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, GenericListContainer<T>> property) {
-            this.target = target;
-            this.property = property;
-        }
-
-        static <__S, __T, __B, T> ReferencePropertyExpression<__S, __T, __B, T> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, GenericListContainer<T>> property) {
-            return new ReferencePropertyExpression<>(target, property);
-        }
-
-        @Override
-        public ObjectExpression<__S, __T> target() {
-            return target;
-        }
-
-        @Override
-        public PropertyMeta<__T, __B, GenericListContainer<T>> property() {
-            return property;
-        }
-
-        @Override
-        public Type type() {
-            return Type.Property;
-        }
-    }
+public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T>, HasMetaClass<com.slimgears.sample.GenericListContainer<T>, GenericListContainer.Builder<T>> {
 
     public MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> metaClass() {
         return (MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>>)metaClass;

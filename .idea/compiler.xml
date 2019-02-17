@@ -22,6 +22,9 @@
       <module name="reflect-utils_java" target="1.8" />
       <module name="reflect-utils_main" target="1.8" />
       <module name="reflect-utils_test" target="1.8" />
+      <module name="repository_apt" target="1.8" />
+      <module name="repository_expres" target="1.8" />
+      <module name="repository_expressions" target="1.8" />
       <module name="repository_main" target="1.8" />
       <module name="repository_test" target="1.8" />
       <module name="rx-utils_main" target="1.8" />

@@ -52,4 +52,9 @@ public class MetaDataExtension implements Extension {
     public String generateClassBody(Context context) {
         return context.evaluateResource("metadata-body.java.vm");
     }
+
+    @Override
+    public Iterable<TypeInfo> getInterfaces(Context context) {
+        return extension.getInterfaces(context);
+    }
 }

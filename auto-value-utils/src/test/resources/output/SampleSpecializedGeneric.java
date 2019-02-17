@@ -6,11 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
+import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.autovalue.expressions.ObjectExpression;
-import com.slimgears.util.autovalue.expressions.PropertyExpression;
-import com.slimgears.util.autovalue.expressions.internal.CollectionPropertyExpression;
 import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,48 +17,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleSpecializedGeneric implements SampleSpecializedGenericPrototype {
-
-    public static final Expressions<SampleSpecializedGeneric> $ = new Expressions<>();
-    public static Expressions<SampleSpecializedGeneric> $() {
-        return $;
-    }
-
-    public static class Expressions<__S> {
-        private final ObjectExpression<__S, SampleSpecializedGeneric> self = ObjectExpression.arg();
-        private final Meta meta = new Meta() ;
-
-        public final CollectionPropertyExpression<__S, SampleSpecializedGeneric, Builder, String> values = PropertyExpression.ofCollection(self, meta.values);
-    }
-
-    public static class ReferencePropertyExpression<__S, __T, __B> extends Expressions<__S> implements PropertyExpression<__S, __T, __B, SampleSpecializedGeneric> {
-        private final ObjectExpression<__S, __T> target;
-        private final PropertyMeta<__T, __B, SampleSpecializedGeneric> property;
-
-        private ReferencePropertyExpression(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleSpecializedGeneric> property) {
-            this.target = target;
-            this.property = property;
-        }
-
-        static <__S, __T, __B> ReferencePropertyExpression<__S, __T, __B> create(ObjectExpression<__S, __T> target, PropertyMeta<__T, __B, SampleSpecializedGeneric> property) {
-            return new ReferencePropertyExpression<>(target, property);
-        }
-
-        @Override
-        public ObjectExpression<__S, __T> target() {
-            return target;
-        }
-
-        @Override
-        public PropertyMeta<__T, __B, SampleSpecializedGeneric> property() {
-            return property;
-        }
-
-        @Override
-        public Type type() {
-            return Type.Property;
-        }
-    }
+public abstract class SampleSpecializedGeneric implements SampleSpecializedGenericPrototype, HasMetaClass<com.slimgears.sample.SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> {
 
     public MetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> metaClass() {
         return metaClass;

@@ -225,7 +225,8 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
 
     @Override
     public String toString() {
-        return fullName().replace('$', '.');
+        //return fullName().replace('$', '.');
+        return fullName();
     }
 
     public static String packageName(String qualifiedName) {
