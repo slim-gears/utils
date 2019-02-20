@@ -9,19 +9,18 @@ import java.util.Map;
 
 public class DefaultRepository implements Repository {
     private final QueryProvider queryProvider;
-    private final Map<MetaClassWithKey, Query> queryMap = new HashMap<>();
+    private final Map<MetaClassWithKey, EntitySet> entitySetMap = new HashMap<>();
 
     public DefaultRepository(QueryProvider queryProvider) {
         this.queryProvider = queryProvider;
     }
 
-    @Override
-    public <K, S extends HasMetaClassWithKey<K, S, B>, B extends BuilderPrototype<S, B>> Query<S, S> collection(MetaClassWithKey<K, S, B> metaClass) {
-        //noinspection unchecked
-        return (Query<S, S>)queryMap.computeIfAbsent(metaClass, this::createQuery);
+    private <K, S extends HasMetaClassWithKey<K, S, B>, B extends BuilderPrototype<S, B>> EntitySet<K, S, B> createEntitySet(MetaClassWithKey<K, S, B> metaClass) {
+        return DefaultQuery.create(queryProvider, metaClass);
     }
 
-    private <K, S extends HasMetaClassWithKey<K, S, B>, B extends BuilderPrototype<S, B>> Query<S, S> createQuery(MetaClassWithKey<K, S, B> metaClass) {
-        return DefaultQuery.create(queryProvider, metaClass);
+    @Override
+    public <K, S extends HasMetaClassWithKey<K, S, B>, B extends BuilderPrototype<S, B>> EntitySet<K, S, B> entities(MetaClassWithKey<K, S, B> meta) {
+        return null;
     }
 }

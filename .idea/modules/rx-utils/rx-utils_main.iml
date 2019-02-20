@@ -8,7 +8,6 @@
     </content>
     <content url="file://$MODULE_DIR$/../../../rx-utils/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../../rx-utils/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../rx-utils/src/main/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
