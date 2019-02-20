@@ -1,16 +1,23 @@
 package com.slimgears.util.repository.query;
 
+import com.google.common.collect.ImmutableList;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
+import com.slimgears.util.repository.expressions.Aggregator;
+import com.slimgears.util.repository.expressions.BooleanExpression;
 import com.slimgears.util.repository.expressions.ObjectExpression;
 import com.slimgears.util.repository.expressions.PropertyExpression;
+import com.slimgears.util.repository.expressions.UnaryOperationExpression;
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DefaultEntitySet<K, S extends HasMetaClassWithKey<K, S, B>, B extends BuilderPrototype<S, B>> implements EntitySet<K, S, B> {
     private final QueryProvider queryProvider;
@@ -99,61 +106,103 @@ public class DefaultEntitySet<K, S extends HasMetaClassWithKey<K, S, B>, B exten
     @Override
     public SelectQueryBuilder<K, S, B> query() {
         return new SelectQueryBuilder<K, S, B>() {
+            private final ImmutableList.Builder<SortingInfo<S, ?>> sortingInfos = ImmutableList.builder();
+            private final AtomicReference<BooleanExpression<S>> predicate = new AtomicReference<>(BooleanExpression.ofTrue());
+            private Long limit;
+            private Long skip;
 
             @Override
             public SelectQueryBuilder<K, S, B> orderBy(PropertyExpression<S, ?, ?, ?> field, boolean ascending) {
-                return null;
-            }
-
-            @Override
-            public EntitySelectQuery<S, K, S, B> select() {
-                return null;
+                sortingInfos.add(SortingInfo.create(field, ascending));
+                return this;
             }
 
             @Override
             public <T> SelectQuery<S, T> select(ObjectExpression<S, T> expression) {
-                return null;
-            }
+                return new SelectQuery<S, T>() {
+                    private final QueryInfo.Builder<K, S, T, B> builder = QueryInfo.<K, S, T, B>builder()
+                            .metaClass(metaClass)
+                            .predicate(predicate.get())
+                            .limit(limit)
+                            .skip(skip)
+                            .sorting(sortingInfos.build())
+                            .mapping(expression);
 
-            @Override
-            public <TK, T extends HasMetaClassWithKey<TK, T, TB>, TB extends BuilderPrototype<T, TB>> EntitySelectQuery<S, TK, T, TB> select(PropertyExpression<S, ?, ?, T> expression) {
-                return null;
-            }
+                    @Override
+                    public Maybe<T> first() {
+                        return queryProvider.query(builder.limit(1L).build()).singleElement();
+                    }
 
-            @Override
-            public EntityLiveSelectQuery<S, K, S, B> liveSelect() {
-                return null;
+                    @Override
+                    public <R, E extends UnaryOperationExpression<S, Collection<T>, R>> Single<R> aggregate(Aggregator<S, T, R, E> aggregator) {
+                        return queryProvider.aggregate(builder.build(), aggregator);
+                    }
+
+                    @Override
+                    public Observable<T> retrieve() {
+                        return queryProvider.query(builder.limit(1L).build());
+                    }
+                };
             }
 
             @Override
             public <T> LiveSelectQuery<S, T> liveSelect(ObjectExpression<S, T> expression) {
-                return null;
-            }
+                return new LiveSelectQuery<S, T>() {
+                    private final QueryInfo.Builder<K, S, T, B> builder = QueryInfo.<K, S, T, B>builder()
+                            .metaClass(metaClass)
+                            .predicate(predicate.get())
+                            .mapping(expression);
 
-            @Override
-            public <TK, T extends HasMetaClassWithKey<TK, T, TB>, TB extends BuilderPrototype<T, TB>> EntityLiveSelectQuery<S, TK, T, TB> liveSelect(PropertyExpression<S, ?, ?, T> expression) {
-                return null;
+                    @Override
+                    public Observable<T> first() {
+                        QueryInfo<K, S, T, B> query = builder.limit(1L).build();
+                        return queryProvider
+                                .liveQuery(query)
+                                .flatMapMaybe(n -> queryProvider.query(query).singleElement());
+                    }
+
+                    @Override
+                    public Observable<List<T>> toList() {
+                        QueryInfo<K, S, T, B> query = builder.build();
+                        return queryProvider
+                                .liveQuery(query)
+                                .flatMapSingle(n -> queryProvider.query(query).toList());
+                    }
+
+                    @Override
+                    public <R, E extends UnaryOperationExpression<S, Collection<T>, R>> Observable<R> aggregate(Aggregator<S, T, R, E> aggregator) {
+                        return queryProvider.liveAggregate(builder.build(), aggregator);
+                    }
+
+                    @Override
+                    public Observable<Notification<T>> observe() {
+                        return queryProvider.liveQuery(builder.build());
+                    }
+                };
             }
 
             @Override
             public SelectQueryBuilder<K, S, B> where(ObjectExpression<S, Boolean> predicate) {
-                return null;
+                this.predicate.updateAndGet(exp -> exp.and(predicate));
+                return this;
             }
 
             @Override
             public SelectQueryBuilder<K, S, B> limit(long limit) {
-                return null;
+                this.limit = limit;
+                return this;
             }
 
             @Override
             public SelectQueryBuilder<K, S, B> skip(long skip) {
-                return null;
+                this.skip = skip;
+                return this;
             }
         };
     }
 
     @Override
     public Single<List<S>> update(Iterable<S> entities) {
-        return null;
+        return queryProvider.update(entities);
     }
 }

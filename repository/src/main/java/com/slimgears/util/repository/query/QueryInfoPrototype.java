@@ -8,7 +8,8 @@ import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 public interface QueryInfoPrototype<K, S extends HasMetaClassWithKey<K, S, B>, T, B extends BuilderPrototype<S, B>> extends
         HasEntityMeta<K, S, B>,
         HasPredicate<S>,
-        HasProperties<S>,
+        HasProperties<T>,
         HasMapping<S, T>,
+        HasSortingInfo<S>,
         HasPagination {
 }

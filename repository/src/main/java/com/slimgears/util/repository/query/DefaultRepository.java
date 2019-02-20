@@ -16,11 +16,12 @@ public class DefaultRepository implements Repository {
     }
 
     private <K, S extends HasMetaClassWithKey<K, S, B>, B extends BuilderPrototype<S, B>> EntitySet<K, S, B> createEntitySet(MetaClassWithKey<K, S, B> metaClass) {
-        return DefaultQuery.create(queryProvider, metaClass);
+        return DefaultEntitySet.create(queryProvider, metaClass);
     }
 
     @Override
     public <K, S extends HasMetaClassWithKey<K, S, B>, B extends BuilderPrototype<S, B>> EntitySet<K, S, B> entities(MetaClassWithKey<K, S, B> meta) {
-        return null;
+        //noinspection unchecked
+        return (EntitySet<K, S, B>)entitySetMap.computeIfAbsent(meta, this::createEntitySet);
     }
 }

@@ -20,14 +20,12 @@ public class RepositoryTest {
 
     @Test
     public void testRepositoryQuery() {
-        repository.collection(TestEntity.metaClass)
-                .filter(TestEntity.$.key.eq(TestKey.create("aaa"))
+        repository.entities(TestEntity.metaClass)
+                .query()
+                .where(TestEntity.$.key.eq(TestKey.create("aaa"))
                         .and(TestEntity.$.number.greaterThan(5))
                         .and(TestEntity.$.refEntity.text.contains("bbb")))
-                .flatMap(TestEntity.$.refEntities)
-                .filter(TestRefEntity.$.text.endsWith("ccc"))
-                .map(TestRefEntity.$.text)
-                .retrieve()
-                .execute();
+                .select(TestEntity.$.refEntities)
+                .retrieve();
     }
 }

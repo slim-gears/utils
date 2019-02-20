@@ -22,6 +22,7 @@ public interface QueryProvider {
             & HasPredicate<S>
             & HasMapping<S, T>
             & HasPagination
+            & HasSortingInfo<S>
             & HasProperties<T>> Observable<T> query(Q query);
 
     <K, S extends HasMetaClassWithKey<K, S, B>, T, B extends BuilderPrototype<S, B>, Q extends
@@ -29,6 +30,7 @@ public interface QueryProvider {
             & HasPredicate<S>
             & HasMapping<S, T>
             & HasPagination
+            & HasSortingInfo<S>
             & HasProperties<T>> Observable<Notification<T>> liveQuery(Q query);
 
     <K, S extends HasMetaClassWithKey<K, S, B>, T, R, B extends BuilderPrototype<S, B>, Q extends

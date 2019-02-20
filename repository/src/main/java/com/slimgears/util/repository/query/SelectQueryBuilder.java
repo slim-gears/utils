@@ -13,13 +13,15 @@ public interface SelectQueryBuilder<K, S extends HasMetaClassWithKey<K, S, B>, B
         return orderBy(field, true);
     }
 
-    EntitySelectQuery<S, K, S, B> select();
-    <T> SelectQuery<S, T> select(ObjectExpression<S, T> expression);
-    <TK, T extends HasMetaClassWithKey<TK, T, TB>, TB extends BuilderPrototype<T, TB>>
-    EntitySelectQuery<S, TK, T, TB> select(PropertyExpression<S, ?, ?, T> expression);
+    default SelectQuery<S, S> select() {
+        return select(ObjectExpression.arg());
+    }
 
-    EntityLiveSelectQuery<S, K, S, B> liveSelect();
+    <T> SelectQuery<S, T> select(ObjectExpression<S, T> expression);
+
+    default LiveSelectQuery<S, S> liveSelect() {
+        return liveSelect(ObjectExpression.arg());
+    }
+
     <T> LiveSelectQuery<S, T> liveSelect(ObjectExpression<S, T> expression);
-    <TK, T extends HasMetaClassWithKey<TK, T, TB>, TB extends BuilderPrototype<T, TB>>
-    EntityLiveSelectQuery<S, TK, T, TB> liveSelect(PropertyExpression<S, ?, ?, T> expression);
 }

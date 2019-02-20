@@ -6,7 +6,7 @@ import com.slimgears.util.repository.expressions.internal.BooleanUnaryOperationE
 
 import java.util.Arrays;
 
-public interface BooleanExpression<S> extends ComparableExpression<S, Boolean> {
+public interface BooleanExpression<S> extends ObjectExpression<S, Boolean> {
     default BooleanExpression<S> and(ObjectExpression<S, Boolean> value) {
         return BooleanBinaryOperationExpression.create(Type.And, this, value);
     }
