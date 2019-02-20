@@ -12,6 +12,7 @@
     <content url="file://$MODULE_DIR$/../../../reflect-utils/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/src/main/antlr" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../reflect-utils/src/main/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

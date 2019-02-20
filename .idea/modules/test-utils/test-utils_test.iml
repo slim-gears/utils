@@ -8,6 +8,7 @@
     </content>
     <content url="file://$MODULE_DIR$/../../../test-utils/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../test-utils/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../test-utils/src/test/resources" type="java-test-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
