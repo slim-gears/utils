@@ -5,6 +5,7 @@ import com.google.auto.common.MoreTypes;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.slimgears.apt.data.Environment;
+import com.slimgears.apt.data.HasName;
 import com.slimgears.apt.data.MethodInfo;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.ElementUtils;
@@ -22,6 +23,7 @@ import javax.lang.model.type.TypeVariable;
 import javax.lang.model.util.SimpleTypeVisitor8;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +107,7 @@ public class PropertyUtils {
                         .map(el -> el.equals(builderType))
                         .orElse(false))
                 .map(ee -> MethodInfo.create(ee, builderDeclaredType))
+                .sorted(Comparator.comparing(HasName::name))
                 .collect(ImmutableList.toImmutableList());
     }
 

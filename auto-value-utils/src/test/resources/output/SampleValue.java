@@ -29,16 +29,16 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleValue, Builder, Integer> intValue = PropertyMeta.create(objectClass, "intValue", new TypeToken<Integer>(){}, SampleValue::intValue, Builder::intValue);
-        public final PropertyMeta<SampleValue, Builder, Double> doubleValue = PropertyMeta.create(objectClass, "doubleValue", new TypeToken<Double>(){}, SampleValue::doubleValue, Builder::doubleValue);
-        public final PropertyMeta<SampleValue, Builder, String> strValue = PropertyMeta.create(objectClass, "strValue", new TypeToken<String>(){}, SampleValue::strValue, Builder::strValue);
-        public final PropertyMeta<SampleValue, Builder, Boolean> foo = PropertyMeta.create(objectClass, "foo", new TypeToken<Boolean>(){}, SampleValue::foo, Builder::foo);
+        public final PropertyMeta<SampleValue, Builder, Double> doubleValue = PropertyMeta.create(this, "doubleValue", new TypeToken<Double>(){}, SampleValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleValue, Builder, Boolean> foo = PropertyMeta.create(this, "foo", new TypeToken<Boolean>(){}, SampleValue::foo, Builder::foo);
+        public final PropertyMeta<SampleValue, Builder, Integer> intValue = PropertyMeta.create(this, "intValue", new TypeToken<Integer>(){}, SampleValue::intValue, Builder::intValue);
+        public final PropertyMeta<SampleValue, Builder, String> strValue = PropertyMeta.create(this, "strValue", new TypeToken<String>(){}, SampleValue::strValue, Builder::strValue);
 
         Meta() {
-            propertyMap.put("intValue", intValue);
             propertyMap.put("doubleValue", doubleValue);
-            propertyMap.put("strValue", strValue);
             propertyMap.put("foo", foo);
+            propertyMap.put("intValue", intValue);
+            propertyMap.put("strValue", strValue);
         }
 
         @Override
@@ -89,32 +89,32 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
 
     @JsonCreator
     public static SampleValue create(
-            @JsonProperty("intValue") int intValue,
             @JsonProperty("doubleValue") double doubleValue,
-            @JsonProperty("strValue") String strValue,
-            @JsonProperty("foo") boolean foo) {
+            @JsonProperty("foo") boolean foo,
+            @JsonProperty("intValue") int intValue,
+            @JsonProperty("strValue") String strValue) {
         return SampleValue.builder()
-                .intValue(intValue)
                 .doubleValue(doubleValue)
-                .strValue(strValue)
                 .foo(foo)
+                .intValue(intValue)
+                .strValue(strValue)
                 .build();
     }
-
-    @Override
-    public abstract int intValue();
 
     @Override
     @SampleFieldAnnotation(strValue = "test")
     public abstract double doubleValue();
 
     @Override
+    public abstract boolean foo();
+
+    @Override
+    public abstract int intValue();
+
+    @Override
     @SampleFieldAnnotation
     @Nullable
     public abstract String strValue();
-
-    @Override
-    public abstract boolean foo();
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleValue, Builder>, SampleValuePrototypeBuilder<Builder> {
@@ -123,17 +123,17 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         }
 
         @Override
-        Builder intValue(int intValue);
-
-        @Override
         @SampleFieldAnnotation(strValue = "test")
         Builder doubleValue(double doubleValue);
 
         @Override
-        @SampleFieldAnnotation
-        Builder strValue(String strValue);
+        Builder foo(boolean foo);
 
         @Override
-        Builder foo(boolean foo);
+        Builder intValue(int intValue);
+
+        @Override
+        @SampleFieldAnnotation
+        Builder strValue(String strValue);
     }
 }

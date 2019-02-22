@@ -33,18 +33,18 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleGuavaValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyMeta.create(objectClass, "intList", new TypeToken<ImmutableList<Integer>>(){}, SampleGuavaValue::intList, Builder::intList);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyMeta.create(objectClass, "stringSet", new TypeToken<ImmutableSet<String>>(){}, SampleGuavaValue::stringSet, Builder::stringSet);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.create(objectClass, "intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, SampleGuavaValue::intToStringMap, Builder::intToStringMap);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.create(objectClass, "intToStringBiMap", new TypeToken<ImmutableBiMap<Integer, String>>(){}, SampleGuavaValue::intToStringBiMap, Builder::intToStringBiMap);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyMeta.create(objectClass, "optionalList", new TypeToken<ImmutableList<String>>(){}, SampleGuavaValue::optionalList, Builder::optionalList);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyMeta.create(this, "intList", new TypeToken<ImmutableList<Integer>>(){}, SampleGuavaValue::intList, Builder::intList);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.create(this, "intToStringBiMap", new TypeToken<ImmutableBiMap<Integer, String>>(){}, SampleGuavaValue::intToStringBiMap, Builder::intToStringBiMap);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.create(this, "intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, SampleGuavaValue::intToStringMap, Builder::intToStringMap);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyMeta.create(this, "optionalList", new TypeToken<ImmutableList<String>>(){}, SampleGuavaValue::optionalList, Builder::optionalList);
+        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyMeta.create(this, "stringSet", new TypeToken<ImmutableSet<String>>(){}, SampleGuavaValue::stringSet, Builder::stringSet);
 
         Meta() {
             propertyMap.put("intList", intList);
-            propertyMap.put("stringSet", stringSet);
-            propertyMap.put("intToStringMap", intToStringMap);
             propertyMap.put("intToStringBiMap", intToStringBiMap);
+            propertyMap.put("intToStringMap", intToStringMap);
             propertyMap.put("optionalList", optionalList);
+            propertyMap.put("stringSet", stringSet);
         }
 
         @Override
@@ -96,16 +96,16 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     @JsonCreator
     public static SampleGuavaValue create(
             @JsonProperty("intList") ImmutableList<Integer> intList,
-            @JsonProperty("stringSet") ImmutableSet<String> stringSet,
-            @JsonProperty("intToStringMap") ImmutableMap<Integer, String> intToStringMap,
             @JsonProperty("intToStringBiMap") ImmutableBiMap<Integer, String> intToStringBiMap,
-            @JsonProperty("optionalList") ImmutableList<String> optionalList) {
+            @JsonProperty("intToStringMap") ImmutableMap<Integer, String> intToStringMap,
+            @JsonProperty("optionalList") ImmutableList<String> optionalList,
+            @JsonProperty("stringSet") ImmutableSet<String> stringSet) {
         return SampleGuavaValue.builder()
                 .intList(intList)
-                .stringSet(stringSet)
-                .intToStringMap(intToStringMap)
                 .intToStringBiMap(intToStringBiMap)
+                .intToStringMap(intToStringMap)
                 .optionalList(optionalList)
+                .stringSet(stringSet)
                 .build();
     }
 
@@ -113,17 +113,17 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     public abstract ImmutableList<Integer> intList();
 
     @Override
-    public abstract ImmutableSet<String> stringSet();
+    public abstract ImmutableBiMap<Integer, String> intToStringBiMap();
 
     @Override
     public abstract ImmutableMap<Integer, String> intToStringMap();
 
     @Override
-    public abstract ImmutableBiMap<Integer, String> intToStringBiMap();
-
-    @Override
     @Nullable
     public abstract ImmutableList<String> optionalList();
+
+    @Override
+    public abstract ImmutableSet<String> stringSet();
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleGuavaValue, Builder>, SampleGuavaValuePrototypeBuilder<Builder> {
@@ -136,18 +136,19 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         ImmutableList.Builder<Integer> intListBuilder();
 
         @Override
-        Builder stringSet(ImmutableSet<String> stringSet);
-        ImmutableSet.Builder<String> stringSetBuilder();
+        Builder intToStringBiMap(ImmutableBiMap<Integer, String> intToStringBiMap);
+        ImmutableBiMap.Builder<Integer, String> intToStringBiMapBuilder();
 
         @Override
         Builder intToStringMap(ImmutableMap<Integer, String> intToStringMap);
         ImmutableMap.Builder<Integer, String> intToStringMapBuilder();
 
         @Override
-        Builder intToStringBiMap(ImmutableBiMap<Integer, String> intToStringBiMap);
-        ImmutableBiMap.Builder<Integer, String> intToStringBiMapBuilder();
+        Builder optionalList(ImmutableList<String> optionalList);
 
         @Override
-        Builder optionalList(ImmutableList<String> optionalList);
+        Builder stringSet(ImmutableSet<String> stringSet);
+        ImmutableSet.Builder<String> stringSetBuilder();
+
     }
 }

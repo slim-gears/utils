@@ -7,8 +7,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public interface PropertyMeta<T, B, V> {
-    TypeToken<T> declaringType();
+public interface PropertyMeta<T, B extends BuilderPrototype<T, B>, V> {
+    MetaClass<T, B> declaringType();
     String name();
     TypeToken<V> type();
     void setValue(B builder, V value);
@@ -28,10 +28,10 @@ public interface PropertyMeta<T, B, V> {
         return create(MetaClasses.forToken(declaringType), name);
     }
 
-    static <T, B, V> PropertyMeta<T, B, V> create(TypeToken<T> declaringType, String name, TypeToken<V> type, Function<T, V> getter, BiConsumer<B, V> setter) {
+    static <T, B extends BuilderPrototype<T, B>, V> PropertyMeta<T, B, V> create(MetaClass<T, B> declaringType, String name, TypeToken<V> type, Function<T, V> getter, BiConsumer<B, V> setter) {
         return new PropertyMeta<T, B, V>() {
             @Override
-            public TypeToken<T> declaringType() {
+            public MetaClass<T, B> declaringType() {
                 return declaringType;
             }
 

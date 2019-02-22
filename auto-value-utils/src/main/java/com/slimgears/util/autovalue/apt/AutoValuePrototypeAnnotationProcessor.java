@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMultimap;
 import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
+import com.slimgears.apt.data.HasName;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
 import com.slimgears.apt.util.ElementUtils;
@@ -29,6 +30,7 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -301,6 +303,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         return elements
                 .stream()
                 .map(ee -> PropertyInfo.create(type, ee, hasPrefix))
+                .sorted(Comparator.comparing(HasName::name))
                 .collect(Collectors.toList());
     }
 

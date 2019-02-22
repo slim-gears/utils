@@ -28,12 +28,12 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGeneric<T>, Builder<T>, String> value = PropertyMeta.create(objectClass, "value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
-        public final PropertyMeta<SampleGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(objectClass, "tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
+        public final PropertyMeta<SampleGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(this, "tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
+        public final PropertyMeta<SampleGeneric<T>, Builder<T>, String> value = PropertyMeta.create(this, "value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
 
         Meta() {
-            propertyMap.put("value", value);
             propertyMap.put("tValue", tValue);
+            propertyMap.put("value", value);
         }
 
         @Override
@@ -84,19 +84,19 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
 
     @JsonCreator
     public static <T> SampleGeneric<T> create(
-            @JsonProperty("value") String value,
-            @JsonProperty("tValue") T tValue) {
+            @JsonProperty("tValue") T tValue,
+            @JsonProperty("value") String value) {
         return SampleGeneric.<T>builder()
-                .value(value)
                 .tValue(tValue)
+                .value(value)
                 .build();
     }
 
     @Override
-    public abstract String value();
+    public abstract T tValue();
 
     @Override
-    public abstract T tValue();
+    public abstract String value();
 
     @AutoValue.Builder
     public interface Builder<T> extends BuilderPrototype<SampleGeneric<T>, Builder<T>>, SampleGenericPrototypeBuilder<T, Builder<T>> {
@@ -105,9 +105,9 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         }
 
         @Override
-        Builder<T> value(String value);
+        Builder<T> tValue(T tValue);
 
         @Override
-        Builder<T> tValue(T tValue);
+        Builder<T> value(String value);
     }
 }

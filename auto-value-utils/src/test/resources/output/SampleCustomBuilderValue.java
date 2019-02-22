@@ -28,12 +28,12 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleCustomBuilderValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleCustomBuilderValue, Builder, Integer> intValue = PropertyMeta.create(objectClass, "intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
-        public final PropertyMeta<SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyMeta.create(objectClass, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyMeta.create(this, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Builder, Integer> intValue = PropertyMeta.create(this, "intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
 
         Meta() {
-            propertyMap.put("intValue", intValue);
             propertyMap.put("doubleValue", doubleValue);
+            propertyMap.put("intValue", intValue);
         }
 
         @Override
@@ -84,19 +84,19 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
 
     @JsonCreator
     public static SampleCustomBuilderValue create(
-            @JsonProperty("intValue") int intValue,
-            @JsonProperty("doubleValue") double doubleValue) {
+            @JsonProperty("doubleValue") double doubleValue,
+            @JsonProperty("intValue") int intValue) {
         return SampleCustomBuilderValue.builder()
-                .intValue(intValue)
                 .doubleValue(doubleValue)
+                .intValue(intValue)
                 .build();
     }
 
     @Override
-    public abstract int intValue();
+    public abstract double doubleValue();
 
     @Override
-    public abstract double doubleValue();
+    public abstract int intValue();
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleCustomBuilderValue, Builder>, SampleCustomBuilderValuePrototypeBuilder<Builder> {
@@ -105,9 +105,9 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         }
 
         @Override
-        Builder intValue(int intValue);
+        Builder doubleValue(double doubleValue);
 
         @Override
-        Builder doubleValue(double doubleValue);
+        Builder intValue(int intValue);
     }
 }

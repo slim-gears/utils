@@ -29,9 +29,9 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleWithKey, Builder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleWithKey, Builder, String> id = PropertyMeta.create(objectClass, "id", new TypeToken<String>(){}, SampleWithKey::id, Builder::id);
-        public final PropertyMeta<SampleWithKey, Builder, String> text = PropertyMeta.create(objectClass, "text", new TypeToken<String>(){}, SampleWithKey::text, Builder::text);
-        public final PropertyMeta<SampleWithKey, Builder, Integer> number = PropertyMeta.create(objectClass, "number", new TypeToken<Integer>(){}, SampleWithKey::number, Builder::number);
+        public final PropertyMeta<SampleWithKey, Builder, String> id = PropertyMeta.create(this, "id", new TypeToken<String>(){}, SampleWithKey::id, Builder::id);
+        public final PropertyMeta<SampleWithKey, Builder, Integer> number = PropertyMeta.create(this, "number", new TypeToken<Integer>(){}, SampleWithKey::number, Builder::number);
+        public final PropertyMeta<SampleWithKey, Builder, String> text = PropertyMeta.create(this, "text", new TypeToken<String>(){}, SampleWithKey::text, Builder::text);
 
         @Override
         public PropertyMeta<SampleWithKey, Builder, String> keyProperty() {
@@ -40,8 +40,8 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
 
         Meta() {
             propertyMap.put("id", id);
-            propertyMap.put("text", text);
             propertyMap.put("number", number);
+            propertyMap.put("text", text);
         }
 
         @Override
@@ -93,12 +93,12 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
     @JsonCreator
     public static SampleWithKey create(
             @JsonProperty("id") String id,
-            @JsonProperty("text") String text,
-            @JsonProperty("number") int number) {
+            @JsonProperty("number") int number,
+            @JsonProperty("text") String text) {
         return SampleWithKey.builder()
                 .id(id)
-                .text(text)
                 .number(number)
+                .text(text)
                 .build();
     }
 
@@ -107,10 +107,10 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
     public abstract String id();
 
     @Override
-    public abstract String text();
+    public abstract int number();
 
     @Override
-    public abstract int number();
+    public abstract String text();
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleWithKey, Builder>, SampleWithKeyPrototypeBuilder<Builder> {
@@ -123,9 +123,9 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         Builder id(String id);
 
         @Override
-        Builder text(String text);
+        Builder number(int number);
 
         @Override
-        Builder number(int number);
+        Builder text(String text);
     }
 }

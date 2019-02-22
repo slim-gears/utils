@@ -28,7 +28,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(objectClass, "tValue", new TypeToken<T>(){}, SampleComparableGeneric::tValue, Builder::tValue);
+        public final PropertyMeta<SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(this, "tValue", new TypeToken<T>(){}, SampleComparableGeneric::tValue, Builder::tValue);
 
         Meta() {
             propertyMap.put("tValue", tValue);

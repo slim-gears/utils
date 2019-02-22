@@ -29,7 +29,7 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericListContainer<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyMeta.create(objectClass, "items", new TypeToken<List<GenericListItem<T>>>(){}, GenericListContainer::items, Builder::items);
+        public final PropertyMeta<GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyMeta.create(this, "items", new TypeToken<List<GenericListItem<T>>>(){}, GenericListContainer::items, Builder::items);
 
         Meta() {
             propertyMap.put("items", items);
