@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class TypeToken<T> {
     private final Type type;
@@ -231,17 +229,19 @@ public class TypeToken<T> {
         return TypeToken.ofType(eliminateTypeVars(type));
     }
 
+    private static Type[] eliminateTypeVars(Type[] types) {
+        return Arrays.stream(types).map(TypeToken::eliminateTypeVars).toArray(Type[]::new);
+    }
+
     private static Type eliminateTypeVars(Type type) {
         if (type instanceof TypeVariable) {
-            return new CanonicalWildcardType(new Type[0], ((TypeVariable) type).getBounds());
+            return new CanonicalWildcardType(new Type[0], eliminateTypeVars(((TypeVariable) type).getBounds()));
         }
         if (type instanceof ParameterizedType) {
             return new CanonicalParameterizedType(
-                    ((ParameterizedType) type).getRawType(),
-                    ((ParameterizedType) type).getOwnerType(),
-                    Arrays.stream(((ParameterizedType)type).getActualTypeArguments())
-                    .map(TypeToken::eliminateTypeVars)
-                    .toArray(Type[]::new));
+                    eliminateTypeVars(((ParameterizedType) type).getRawType()),
+                    eliminateTypeVars(((ParameterizedType) type).getOwnerType()),
+                    eliminateTypeVars(((ParameterizedType)type).getActualTypeArguments()));
         }
         if (type instanceof GenericArrayType) {
             return new CanonicalGenericArrayType(

@@ -49,9 +49,16 @@ public class TypeTokenTest {
     }
 
     @Test
+    public void testTokenEquality() {
+        Assert.assertEquals(new TypeToken<List<?>>(){}, new TypeToken<List<?>>(){});
+    }
+
+    @Test
     public void testTokenToString() {
         TypeToken<Map<String, List<Integer[]>[]>[]> mapToken1 = new TypeToken<Map<String, List<Integer[]>[]>[]>() {};
         Assert.assertEquals("java.util.Map<java.lang.String,java.util.List<java.lang.Integer[]>[]>[]", mapToken1.toString());
+
+        Assert.assertEquals("java.util.List<? extends java.lang.Comparable<?>>", new TypeToken<List<? extends Comparable<?>>>(){}.toString());
     }
 
     @Test

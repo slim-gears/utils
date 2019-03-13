@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CanonicalWildcardType implements WildcardType, CanonicalType {
     private final Type[] lowerBounds;
@@ -40,7 +41,15 @@ public class CanonicalWildcardType implements WildcardType, CanonicalType {
 
     @Override
     public String toString() {
-        return "?";
+        return "?" + boundsToString(" extends ", upperBounds) + boundsToString(" super ", lowerBounds);
+    }
+
+    private String boundsToString(String prefix, Type[] bounds) {
+
+        return (bounds.length > 0) && !(bounds.length == 1 && Object.class.equals(bounds[0]))
+                ? Arrays.stream(bounds)
+                    .map(Object::toString).collect(Collectors.joining(" & ", prefix, ""))
+                : "";
     }
 
     @Override
