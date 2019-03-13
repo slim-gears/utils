@@ -13,8 +13,12 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -226,7 +230,7 @@ public class TypeToken<T> {
     }
 
     public TypeToken<?> eliminateTypeVars() {
-        return TypeToken.ofType(eliminateTypeVars(type));
+        return TypeVarContext.runInContext(() -> TypeToken.ofType(eliminateTypeVars(type)));
     }
 
     private static Type[] eliminateTypeVars(Type[] types) {
@@ -235,7 +239,11 @@ public class TypeToken<T> {
 
     private static Type eliminateTypeVars(Type type) {
         if (type instanceof TypeVariable) {
-            return new CanonicalWildcardType(new Type[0], eliminateTypeVars(((TypeVariable) type).getBounds()));
+            return new CanonicalWildcardType(
+                    new Type[0],
+                    TypeVarContext.visit((TypeVariable)type)
+                            ? eliminateTypeVars(((TypeVariable) type).getBounds())
+                            : new Type[]{Object.class});
         }
         if (type instanceof ParameterizedType) {
             return new CanonicalParameterizedType(
@@ -253,5 +261,33 @@ public class TypeToken<T> {
     public static <T> TypeToken<T> valueOf(String str) {
         //noinspection unchecked
         return TypeTokenParserAdapter.toTypeToken(str);
+    }
+
+    private static class TypeVarContext {
+        private final static ThreadLocal<TypeVarContext> instance = new ThreadLocal<>();
+        private final Set<TypeVariable> visitedVars;
+
+        public TypeVarContext(TypeVarContext parent) {
+            this.visitedVars = Optional.ofNullable(parent)
+                    .map(p -> p.visitedVars)
+                    .map(HashSet::new)
+                    .orElseGet(HashSet::new);
+        }
+
+        public static boolean visit(TypeVariable typeVariable) {
+            return Objects.requireNonNull(instance.get()).visitedVars.add(typeVariable);
+        }
+
+        public static <T> T runInContext(Callable<T> callable) {
+            TypeVarContext prev = instance.get();
+            instance.set(new TypeVarContext(prev));
+            try {
+                return callable.call();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                instance.set(prev);
+            }
+        }
     }
 }

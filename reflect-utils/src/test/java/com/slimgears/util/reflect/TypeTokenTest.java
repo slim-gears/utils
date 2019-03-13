@@ -7,6 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 public class TypeTokenTest {
+    static class Dummy<T extends Comparable<T>> {
+        private final TypeToken<Dummy<T>> token = new TypeToken<Dummy<T>>(){};
+
+        public TypeToken<Dummy<T>> typeToken() {
+            return token;
+        }
+    }
+
     @Test
     public void testParameterizedTypeToken() {
         TypeToken<Map<String, List<Integer>>> token1 = new TypeToken<Map<String, List<Integer>>>() {};
@@ -66,5 +74,13 @@ public class TypeTokenTest {
         TypeToken<Map<String, List<Integer[]>[]>[]> mapToken1 = new TypeToken<Map<String, List<Integer[]>[]>[]>() {};
         TypeToken<Map<String, List<Integer[]>[]>[]> mapToken2 = TypeToken.valueOf("java.util.Map<java.lang.String,java.util.List<java.lang.Integer[]>[]>[]");
         Assert.assertEquals(mapToken1, mapToken2);
+    }
+
+    @Test
+    public void testEliminateTypeVars() {
+        Dummy<?> dummy = new Dummy<>();
+        Assert.assertEquals(
+                dummy.typeToken().eliminateTypeVars(),
+                new TypeToken<Dummy<? extends Comparable<?>>>(){});
     }
 }
