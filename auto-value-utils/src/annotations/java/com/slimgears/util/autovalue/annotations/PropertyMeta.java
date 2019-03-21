@@ -7,31 +7,31 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public interface PropertyMeta<T, B extends BuilderPrototype<T, B>, V> {
-    MetaClass<T, B> declaringType();
+public interface PropertyMeta<T, V> {
+    MetaClass<T> declaringType();
     String name();
     TypeToken<V> type();
-    void setValue(B builder, V value);
+    void setValue(MetaBuilder<T> builder, V value);
     V getValue(T instance);
 
-    default void mergeValue(B builder, T instance) {
+    default void mergeValue(MetaBuilder<T> builder, T instance) {
         Optional
                 .ofNullable(getValue(instance))
                 .ifPresent(val -> setValue(builder, val));
     }
 
-    static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>, V> PropertyMeta<T, TB, V> create(MetaClass<T, TB> metaClass, String name) {
+    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(MetaClass<T> metaClass, String name) {
         return metaClass.getProperty(name);
     }
 
-    static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>, V> PropertyMeta<T, TB, V> create(TypeToken<T> declaringType, String name) {
+    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(TypeToken<T> declaringType, String name) {
         return create(MetaClasses.forToken(declaringType), name);
     }
 
-    static <T, B extends BuilderPrototype<T, B>, V> PropertyMeta<T, B, V> create(MetaClass<T, B> declaringType, String name, TypeToken<V> type, Function<T, V> getter, BiConsumer<B, V> setter) {
-        return new PropertyMeta<T, B, V>() {
+    static <T, V, B extends BuilderPrototype<T, B>> PropertyMeta<T, V> create(MetaClass<T> declaringType, String name, TypeToken<V> type, Function<T, V> getter, BiConsumer<B, V> setter) {
+        return new PropertyMeta<T, V>() {
             @Override
-            public MetaClass<T, B> declaringType() {
+            public MetaClass<T> declaringType() {
                 return declaringType;
             }
 
@@ -46,8 +46,9 @@ public interface PropertyMeta<T, B extends BuilderPrototype<T, B>, V> {
             }
 
             @Override
-            public void setValue(B builder, V value) {
-                setter.accept(builder, value);
+            public void setValue(MetaBuilder<T> builder, V value) {
+                //noinspection unchecked
+                setter.accept((B)builder, value);
             }
 
             @Override

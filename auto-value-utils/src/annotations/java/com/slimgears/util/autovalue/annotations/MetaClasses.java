@@ -9,26 +9,30 @@ import java.util.Map;
 public class MetaClasses {
     private final static Map<Class, MetaClass> metaClassMap = new HashMap<>();
 
-    public static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> MetaClass<T, TB> forClass(Class<T> cls) {
+    public static <T extends HasMetaClass<T>> MetaClass<T> forClass(Class<T> cls) {
         //noinspection unchecked
-        return (MetaClass<T, TB>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
+        return (MetaClass<T>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
     }
 
-    public static <K, T extends HasMetaClassWithKey<K, T, TB>, TB extends BuilderPrototype<T, TB>> MetaClassWithKey<K, T, TB> forClassWithKey(Class<T> cls) {
+    public static <K, T extends HasMetaClassWithKey<K, T>> MetaClassWithKey<K, T> forClassWithKey(Class<T> cls) {
         //noinspection unchecked
-        return (MetaClassWithKey<K, T, TB>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
+        return (MetaClassWithKey<K, T>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
     }
 
-    public static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> MetaClass<T, TB> forToken(TypeToken<T> typeToken) {
+    public static <T extends HasMetaClass<T>> MetaClass<T> forToken(TypeToken<T> typeToken) {
         return forClass(typeToken.asClass());
     }
 
-    private static <T extends HasMetaClass<T, TB>, TB extends BuilderPrototype<T, TB>> MetaClass<T, TB> fromField(Class<T> cls) {
+    public static <K, T extends HasMetaClassWithKey<K, T>> MetaClassWithKey<K, T> forTokenWithKey(TypeToken<T> typeToken) {
+        return forClassWithKey(typeToken.asClass());
+    }
+
+    private static <T extends HasMetaClass<T>> MetaClass<T> fromField(Class<T> cls) {
         try {
             Field field = cls.getField("metaClass");
             field.setAccessible(true);
             //noinspection unchecked
-            return (MetaClass<T, TB>)field.get(null);
+            return (MetaClass<T>)field.get(null);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             return null;
         }

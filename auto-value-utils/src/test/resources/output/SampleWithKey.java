@@ -17,24 +17,24 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, com.slimgears.sample.SampleWithKey, SampleWithKey.Builder> {
+public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, com.slimgears.sample.SampleWithKey> {
 
-    public MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> metaClass() {
+    public MetaClassWithKey<String, SampleWithKey> metaClass() {
         return metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta implements MetaClassWithKey<String, SampleWithKey, SampleWithKey.Builder> {
+    public static class Meta implements MetaClassWithKey<String, SampleWithKey> {
         private final TypeToken<SampleWithKey> objectClass = new TypeToken<SampleWithKey>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
-        private final Map<String, PropertyMeta<SampleWithKey, Builder, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleWithKey, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleWithKey, Builder, String> id = PropertyMeta.create(this, "id", new TypeToken<String>(){}, SampleWithKey::id, Builder::id);
-        public final PropertyMeta<SampleWithKey, Builder, Integer> number = PropertyMeta.create(this, "number", new TypeToken<Integer>(){}, SampleWithKey::number, Builder::number);
-        public final PropertyMeta<SampleWithKey, Builder, String> text = PropertyMeta.create(this, "text", new TypeToken<String>(){}, SampleWithKey::text, Builder::text);
+        public final PropertyMeta<SampleWithKey, String> id = PropertyMeta.<SampleWithKey, String, Builder>create(this, "id", new TypeToken<String>(){}, SampleWithKey::id, Builder::id);
+        public final PropertyMeta<SampleWithKey, Integer> number = PropertyMeta.<SampleWithKey, Integer, Builder>create(this, "number", new TypeToken<Integer>(){}, SampleWithKey::number, Builder::number);
+        public final PropertyMeta<SampleWithKey, String> text = PropertyMeta.<SampleWithKey, String, Builder>create(this, "text", new TypeToken<String>(){}, SampleWithKey::text, Builder::text);
 
         @Override
-        public PropertyMeta<SampleWithKey, Builder, String> keyProperty() {
+        public PropertyMeta<SampleWithKey, String> keyProperty() {
             return id;
         }
 
@@ -55,14 +55,14 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleWithKey, Builder, ?>> properties() {
+        public Iterable<PropertyMeta<SampleWithKey, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleWithKey, Builder, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleWithKey, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleWithKey, Builder, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleWithKey, __V>)propertyMap.get(name);
         }
 
         @Override

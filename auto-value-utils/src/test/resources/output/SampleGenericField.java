@@ -17,19 +17,19 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<com.slimgears.sample.SampleGenericField, SampleGenericField.Builder> {
+public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<com.slimgears.sample.SampleGenericField> {
 
-    public MetaClass<SampleGenericField, SampleGenericField.Builder> metaClass() {
+    public MetaClass<SampleGenericField> metaClass() {
         return metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta implements MetaClass<SampleGenericField, SampleGenericField.Builder> {
+    public static class Meta implements MetaClass<SampleGenericField> {
         private final TypeToken<SampleGenericField> objectClass = new TypeToken<SampleGenericField>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
-        private final Map<String, PropertyMeta<SampleGenericField, Builder, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleGenericField, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGenericField, Builder, Class<? extends Collection>> value = PropertyMeta.create(this, "value", new TypeToken<Class<? extends Collection>>(){}, SampleGenericField::value, Builder::value);
+        public final PropertyMeta<SampleGenericField, Class<? extends Collection>> value = PropertyMeta.<SampleGenericField, Class<? extends Collection>, Builder>create(this, "value", new TypeToken<Class<? extends Collection>>(){}, SampleGenericField::value, Builder::value);
 
         Meta() {
             propertyMap.put("value", value);
@@ -46,14 +46,14 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleGenericField, Builder, ?>> properties() {
+        public Iterable<PropertyMeta<SampleGenericField, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleGenericField, Builder, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleGenericField, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleGenericField, Builder, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleGenericField, __V>)propertyMap.get(name);
         }
 
         @Override

@@ -21,23 +21,23 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<com.slimgears.sample.SampleGuavaValue, SampleGuavaValue.Builder> {
+public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<com.slimgears.sample.SampleGuavaValue> {
 
-    public MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> metaClass() {
+    public MetaClass<SampleGuavaValue> metaClass() {
         return metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta implements MetaClass<SampleGuavaValue, SampleGuavaValue.Builder> {
+    public static class Meta implements MetaClass<SampleGuavaValue> {
         private final TypeToken<SampleGuavaValue> objectClass = new TypeToken<SampleGuavaValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
-        private final Map<String, PropertyMeta<SampleGuavaValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleGuavaValue, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<Integer>> intList = PropertyMeta.create(this, "intList", new TypeToken<ImmutableList<Integer>>(){}, SampleGuavaValue::intList, Builder::intList);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.create(this, "intToStringBiMap", new TypeToken<ImmutableBiMap<Integer, String>>(){}, SampleGuavaValue::intToStringBiMap, Builder::intToStringBiMap);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.create(this, "intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, SampleGuavaValue::intToStringMap, Builder::intToStringMap);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableList<String>> optionalList = PropertyMeta.create(this, "optionalList", new TypeToken<ImmutableList<String>>(){}, SampleGuavaValue::optionalList, Builder::optionalList);
-        public final PropertyMeta<SampleGuavaValue, Builder, ImmutableSet<String>> stringSet = PropertyMeta.create(this, "stringSet", new TypeToken<ImmutableSet<String>>(){}, SampleGuavaValue::stringSet, Builder::stringSet);
+        public final PropertyMeta<SampleGuavaValue, ImmutableList<Integer>> intList = PropertyMeta.<SampleGuavaValue, ImmutableList<Integer>, Builder>create(this, "intList", new TypeToken<ImmutableList<Integer>>(){}, SampleGuavaValue::intList, Builder::intList);
+        public final PropertyMeta<SampleGuavaValue, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.<SampleGuavaValue, ImmutableBiMap<Integer, String>, Builder>create(this, "intToStringBiMap", new TypeToken<ImmutableBiMap<Integer, String>>(){}, SampleGuavaValue::intToStringBiMap, Builder::intToStringBiMap);
+        public final PropertyMeta<SampleGuavaValue, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.<SampleGuavaValue, ImmutableMap<Integer, String>, Builder>create(this, "intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, SampleGuavaValue::intToStringMap, Builder::intToStringMap);
+        public final PropertyMeta<SampleGuavaValue, ImmutableList<String>> optionalList = PropertyMeta.<SampleGuavaValue, ImmutableList<String>, Builder>create(this, "optionalList", new TypeToken<ImmutableList<String>>(){}, SampleGuavaValue::optionalList, Builder::optionalList);
+        public final PropertyMeta<SampleGuavaValue, ImmutableSet<String>> stringSet = PropertyMeta.<SampleGuavaValue, ImmutableSet<String>, Builder>create(this, "stringSet", new TypeToken<ImmutableSet<String>>(){}, SampleGuavaValue::stringSet, Builder::stringSet);
 
         Meta() {
             propertyMap.put("intList", intList);
@@ -58,14 +58,14 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleGuavaValue, Builder, ?>> properties() {
+        public Iterable<PropertyMeta<SampleGuavaValue, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleGuavaValue, Builder, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleGuavaValue, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleGuavaValue, Builder, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleGuavaValue, __V>)propertyMap.get(name);
         }
 
         @Override

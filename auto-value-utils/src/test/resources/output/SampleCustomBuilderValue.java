@@ -16,20 +16,20 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype, HasMetaClass<com.slimgears.sample.SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
+public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype, HasMetaClass<com.slimgears.sample.SampleCustomBuilderValue> {
 
-    public MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> metaClass() {
+    public MetaClass<SampleCustomBuilderValue> metaClass() {
         return metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta implements MetaClass<SampleCustomBuilderValue, SampleCustomBuilderValue.Builder> {
+    public static class Meta implements MetaClass<SampleCustomBuilderValue> {
         private final TypeToken<SampleCustomBuilderValue> objectClass = new TypeToken<SampleCustomBuilderValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
-        private final Map<String, PropertyMeta<SampleCustomBuilderValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleCustomBuilderValue, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleCustomBuilderValue, Builder, Double> doubleValue = PropertyMeta.create(this, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
-        public final PropertyMeta<SampleCustomBuilderValue, Builder, Integer> intValue = PropertyMeta.create(this, "intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Double> doubleValue = PropertyMeta.<SampleCustomBuilderValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Integer> intValue = PropertyMeta.<SampleCustomBuilderValue, Integer, Builder>create(this, "intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
 
         Meta() {
             propertyMap.put("doubleValue", doubleValue);
@@ -47,14 +47,14 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleCustomBuilderValue, Builder, ?>> properties() {
+        public Iterable<PropertyMeta<SampleCustomBuilderValue, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleCustomBuilderValue, Builder, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleCustomBuilderValue, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleCustomBuilderValue, Builder, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleCustomBuilderValue, __V>)propertyMap.get(name);
         }
 
         @Override

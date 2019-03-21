@@ -17,22 +17,22 @@ import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<com.slimgears.sample.SampleValue, SampleValue.Builder> {
+public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<com.slimgears.sample.SampleValue> {
 
-    public MetaClass<SampleValue, SampleValue.Builder> metaClass() {
+    public MetaClass<SampleValue> metaClass() {
         return metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta implements MetaClass<SampleValue, SampleValue.Builder> {
+    public static class Meta implements MetaClass<SampleValue> {
         private final TypeToken<SampleValue> objectClass = new TypeToken<SampleValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
-        private final Map<String, PropertyMeta<SampleValue, Builder, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleValue, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleValue, Builder, Double> doubleValue = PropertyMeta.create(this, "doubleValue", new TypeToken<Double>(){}, SampleValue::doubleValue, Builder::doubleValue);
-        public final PropertyMeta<SampleValue, Builder, Boolean> foo = PropertyMeta.create(this, "foo", new TypeToken<Boolean>(){}, SampleValue::foo, Builder::foo);
-        public final PropertyMeta<SampleValue, Builder, Integer> intValue = PropertyMeta.create(this, "intValue", new TypeToken<Integer>(){}, SampleValue::intValue, Builder::intValue);
-        public final PropertyMeta<SampleValue, Builder, String> strValue = PropertyMeta.create(this, "strValue", new TypeToken<String>(){}, SampleValue::strValue, Builder::strValue);
+        public final PropertyMeta<SampleValue, Double> doubleValue = PropertyMeta.<SampleValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, SampleValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleValue, Boolean> foo = PropertyMeta.<SampleValue, Boolean, Builder>create(this, "foo", new TypeToken<Boolean>(){}, SampleValue::foo, Builder::foo);
+        public final PropertyMeta<SampleValue, Integer> intValue = PropertyMeta.<SampleValue, Integer, Builder>create(this, "intValue", new TypeToken<Integer>(){}, SampleValue::intValue, Builder::intValue);
+        public final PropertyMeta<SampleValue, String> strValue = PropertyMeta.<SampleValue, String, Builder>create(this, "strValue", new TypeToken<String>(){}, SampleValue::strValue, Builder::strValue);
 
         Meta() {
             propertyMap.put("doubleValue", doubleValue);
@@ -52,14 +52,14 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleValue, Builder, ?>> properties() {
+        public Iterable<PropertyMeta<SampleValue, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleValue, Builder, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleValue, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleValue, Builder, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleValue, __V>)propertyMap.get(name);
         }
 
         @Override

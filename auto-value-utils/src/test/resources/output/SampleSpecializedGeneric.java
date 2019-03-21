@@ -17,19 +17,19 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleSpecializedGeneric implements SampleSpecializedGenericPrototype, HasMetaClass<com.slimgears.sample.SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> {
+public abstract class SampleSpecializedGeneric implements SampleSpecializedGenericPrototype, HasMetaClass<com.slimgears.sample.SampleSpecializedGeneric> {
 
-    public MetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> metaClass() {
+    public MetaClass<SampleSpecializedGeneric> metaClass() {
         return metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta implements MetaClass<SampleSpecializedGeneric, SampleSpecializedGeneric.Builder> {
+    public static class Meta implements MetaClass<SampleSpecializedGeneric> {
         private final TypeToken<SampleSpecializedGeneric> objectClass = new TypeToken<SampleSpecializedGeneric>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
-        private final Map<String, PropertyMeta<SampleSpecializedGeneric, Builder, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleSpecializedGeneric, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleSpecializedGeneric, Builder, ImmutableList<String>> values = PropertyMeta.create(this, "values", new TypeToken<ImmutableList<String>>(){}, SampleSpecializedGeneric::values, Builder::values);
+        public final PropertyMeta<SampleSpecializedGeneric, ImmutableList<String>> values = PropertyMeta.<SampleSpecializedGeneric, ImmutableList<String>, Builder>create(this, "values", new TypeToken<ImmutableList<String>>(){}, SampleSpecializedGeneric::values, Builder::values);
 
         Meta() {
             propertyMap.put("values", values);
@@ -46,14 +46,14 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleSpecializedGeneric, Builder, ?>> properties() {
+        public Iterable<PropertyMeta<SampleSpecializedGeneric, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleSpecializedGeneric, Builder, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleSpecializedGeneric, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleSpecializedGeneric, Builder, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleSpecializedGeneric, __V>)propertyMap.get(name);
         }
 
         @Override

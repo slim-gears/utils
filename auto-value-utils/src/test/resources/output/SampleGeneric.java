@@ -16,20 +16,20 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, HasMetaClass<com.slimgears.sample.SampleGeneric<T>, SampleGeneric.Builder<T>> {
+public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, HasMetaClass<com.slimgears.sample.SampleGeneric<T>> {
 
-    public MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> metaClass() {
-        return (MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>>)metaClass;
+    public MetaClass<SampleGeneric<T>> metaClass() {
+        return (MetaClass<SampleGeneric<T>>)metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta<T> implements MetaClass<SampleGeneric<T>, SampleGeneric.Builder<T>> {
+    public static class Meta<T> implements MetaClass<SampleGeneric<T>> {
         private final TypeToken<SampleGeneric<T>> objectClass = new TypeToken<SampleGeneric<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
-        private final Map<String, PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleGeneric<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(this, "tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
-        public final PropertyMeta<SampleGeneric<T>, Builder<T>, String> value = PropertyMeta.create(this, "value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
+        public final PropertyMeta<SampleGeneric<T>, T> tValue = PropertyMeta.<SampleGeneric<T>, T, Builder<T>>create(this, "tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
+        public final PropertyMeta<SampleGeneric<T>, String> value = PropertyMeta.<SampleGeneric<T>, String, Builder<T>>create(this, "value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
 
         Meta() {
             propertyMap.put("tValue", tValue);
@@ -47,14 +47,14 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleGeneric<T>, Builder<T>, ?>> properties() {
+        public Iterable<PropertyMeta<SampleGeneric<T>, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleGeneric<T>, Builder<T>, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleGeneric<T>, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleGeneric<T>, Builder<T>, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleGeneric<T>, __V>)propertyMap.get(name);
         }
 
         @Override

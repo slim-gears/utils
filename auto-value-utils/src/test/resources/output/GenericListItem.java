@@ -16,19 +16,19 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class GenericListItem<T> implements GenericListItemPrototype<T>, HasMetaClass<com.slimgears.sample.GenericListItem<T>, GenericListItem.Builder<T>> {
+public abstract class GenericListItem<T> implements GenericListItemPrototype<T>, HasMetaClass<com.slimgears.sample.GenericListItem<T>> {
 
-    public MetaClass<GenericListItem<T>, GenericListItem.Builder<T>> metaClass() {
-        return (MetaClass<GenericListItem<T>, GenericListItem.Builder<T>>)metaClass;
+    public MetaClass<GenericListItem<T>> metaClass() {
+        return (MetaClass<GenericListItem<T>>)metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta<T> implements MetaClass<GenericListItem<T>, GenericListItem.Builder<T>> {
+    public static class Meta<T> implements MetaClass<GenericListItem<T>> {
         private final TypeToken<GenericListItem<T>> objectClass = new TypeToken<GenericListItem<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
-        private final Map<String, PropertyMeta<GenericListItem<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<GenericListItem<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<GenericListItem<T>, Builder<T>, T> entry = PropertyMeta.create(this, "entry", new TypeToken<T>(){}, GenericListItem::entry, Builder::entry);
+        public final PropertyMeta<GenericListItem<T>, T> entry = PropertyMeta.<GenericListItem<T>, T, Builder<T>>create(this, "entry", new TypeToken<T>(){}, GenericListItem::entry, Builder::entry);
 
         Meta() {
             propertyMap.put("entry", entry);
@@ -45,14 +45,14 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         }
 
         @Override
-        public Iterable<PropertyMeta<GenericListItem<T>, Builder<T>, ?>> properties() {
+        public Iterable<PropertyMeta<GenericListItem<T>, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<GenericListItem<T>, Builder<T>, __V> getProperty(String name) {
+        public <__V> PropertyMeta<GenericListItem<T>, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<GenericListItem<T>, Builder<T>, __V>)propertyMap.get(name);
+            return (PropertyMeta<GenericListItem<T>, __V>)propertyMap.get(name);
         }
 
         @Override

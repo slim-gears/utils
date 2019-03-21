@@ -16,19 +16,19 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T>, HasMetaClass<com.slimgears.sample.SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
+public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T>, HasMetaClass<com.slimgears.sample.SampleComparableGeneric<T>> {
 
-    public MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> metaClass() {
-        return (MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>>)metaClass;
+    public MetaClass<SampleComparableGeneric<T>> metaClass() {
+        return (MetaClass<SampleComparableGeneric<T>>)metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta<T extends Comparable<T>> implements MetaClass<SampleComparableGeneric<T>, SampleComparableGeneric.Builder<T>> {
+    public static class Meta<T extends Comparable<T>> implements MetaClass<SampleComparableGeneric<T>> {
         private final TypeToken<SampleComparableGeneric<T>> objectClass = new TypeToken<SampleComparableGeneric<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
-        private final Map<String, PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleComparableGeneric<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleComparableGeneric<T>, Builder<T>, T> tValue = PropertyMeta.create(this, "tValue", new TypeToken<T>(){}, SampleComparableGeneric::tValue, Builder::tValue);
+        public final PropertyMeta<SampleComparableGeneric<T>, T> tValue = PropertyMeta.<SampleComparableGeneric<T>, T, Builder<T>>create(this, "tValue", new TypeToken<T>(){}, SampleComparableGeneric::tValue, Builder::tValue);
 
         Meta() {
             propertyMap.put("tValue", tValue);
@@ -45,14 +45,14 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleComparableGeneric<T>, Builder<T>, ?>> properties() {
+        public Iterable<PropertyMeta<SampleComparableGeneric<T>, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleComparableGeneric<T>, Builder<T>, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleComparableGeneric<T>, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleComparableGeneric<T>, Builder<T>, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleComparableGeneric<T>, __V>)propertyMap.get(name);
         }
 
         @Override

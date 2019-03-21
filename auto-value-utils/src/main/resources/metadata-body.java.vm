@@ -1,14 +1,18 @@
 #parse("type-params.java.vm")
 
 #if ($hasKey)
-    public $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
+    public $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass)> metaClass() {
 #else
-    public $[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)> metaClass() {
+    public $[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass)> metaClass() {
 #end
 #if ($sourceClass.typeParams().isEmpty())
         return metaClass;
 #else
-        return ($[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass), ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>)metaClass;
+#if ($hasKey)
+        return ($[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass)>)metaClass;
+#else
+        return ($[com.slimgears.util.autovalue.annotations.MetaClass]<$targetClass.simpleName()#typeParams($sourceClass)>)metaClass;
+#end
 #end
     }
 
@@ -17,24 +21,22 @@
 #if ($hasKey)##
         $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<##
         $[$keyProperty.type().asBoxed()], ##
-        $targetClass.simpleName()#typeParams($sourceClass), ##
-        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>##
+        $targetClass.simpleName()#typeParams($sourceClass)>##
 #else##
         $[com.slimgears.util.autovalue.annotations.MetaClass]<##
-        $targetClass.simpleName()#typeParams($sourceClass), ##
-        ${targetClass.simpleName()}.Builder#typeParams($sourceClass)>##
+        $targetClass.simpleName()#typeParams($sourceClass)>##
 #end {
         private final $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass = new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
         private final $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass = new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
-        private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
+        private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 
 #foreach ($p in $properties)
-        public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.create(this, "$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
+        public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()], Builder#typeParams($sourceClass)>create(this, "$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
 #end
 
 #if ($hasKey)
         @Override
-        public $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), Builder#typeParams($sourceClass), $[$keyProperty.type().asBoxed()]> keyProperty() {
+        public $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), $[$keyProperty.type().asBoxed()]> keyProperty() {
             return $keyProperty.name();
         }
 #end
@@ -56,14 +58,14 @@
         }
 
         @Override
-        public Iterable<PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), ?>> properties() {
+        public Iterable<PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), __V> getProperty(String name) {
+        public <__V> PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), Builder#typeParams($sourceClass), __V>)propertyMap.get(name);
+            return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), __V>)propertyMap.get(name);
         }
 
         @Override

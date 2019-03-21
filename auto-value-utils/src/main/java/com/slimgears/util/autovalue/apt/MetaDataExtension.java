@@ -24,8 +24,7 @@ public class MetaDataExtension implements Extension {
                     .toBuilder()
                     .typeParams(
                             Objects.requireNonNull(context.keyProperty()).type().asBoxed(),
-                            context.targetClassWithParams(),
-                            context.builderClassWithParams())
+                            context.targetClassWithParams())
                     .build());
         }
     }
@@ -41,9 +40,7 @@ public class MetaDataExtension implements Extension {
         public Iterable<TypeInfo> getInterfaces(Context context) {
             return Collections.singletonList(TypeInfo.of(HasMetaClass.class)
                     .toBuilder()
-                    .typeParams(
-                            context.targetClassWithParams(),
-                            context.builderClassWithParams())
+                    .typeParams(context.targetClassWithParams())
                     .build());
         }
     }

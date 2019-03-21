@@ -17,19 +17,19 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T>, HasMetaClass<com.slimgears.sample.GenericListContainer<T>, GenericListContainer.Builder<T>> {
+public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T>, HasMetaClass<com.slimgears.sample.GenericListContainer<T>> {
 
-    public MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> metaClass() {
-        return (MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>>)metaClass;
+    public MetaClass<GenericListContainer<T>> metaClass() {
+        return (MetaClass<GenericListContainer<T>>)metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta<T> implements MetaClass<GenericListContainer<T>, GenericListContainer.Builder<T>> {
+    public static class Meta<T> implements MetaClass<GenericListContainer<T>> {
         private final TypeToken<GenericListContainer<T>> objectClass = new TypeToken<GenericListContainer<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
-        private final Map<String, PropertyMeta<GenericListContainer<T>, Builder<T>, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<GenericListContainer<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<GenericListContainer<T>, Builder<T>, List<GenericListItem<T>>> items = PropertyMeta.create(this, "items", new TypeToken<List<GenericListItem<T>>>(){}, GenericListContainer::items, Builder::items);
+        public final PropertyMeta<GenericListContainer<T>, List<GenericListItem<T>>> items = PropertyMeta.<GenericListContainer<T>, List<GenericListItem<T>>, Builder<T>>create(this, "items", new TypeToken<List<GenericListItem<T>>>(){}, GenericListContainer::items, Builder::items);
 
         Meta() {
             propertyMap.put("items", items);
@@ -46,14 +46,14 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         }
 
         @Override
-        public Iterable<PropertyMeta<GenericListContainer<T>, Builder<T>, ?>> properties() {
+        public Iterable<PropertyMeta<GenericListContainer<T>, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<GenericListContainer<T>, Builder<T>, __V> getProperty(String name) {
+        public <__V> PropertyMeta<GenericListContainer<T>, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<GenericListContainer<T>, Builder<T>, __V>)propertyMap.get(name);
+            return (PropertyMeta<GenericListContainer<T>, __V>)propertyMap.get(name);
         }
 
         @Override
