@@ -9,6 +9,25 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_annotations.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_annotations.iml" group="auto-value-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_main.iml" group="auto-value-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/auto-value-utils_test.iml" group="auto-value-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/com.slimgears.utils-apt-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/com.slimgears.utils-apt-utils_main.iml" group="apt-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/com.slimgears.utils-apt-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/com.slimgears.utils-apt-utils_test.iml" group="apt-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/com.slimgears.utils-auto-value-utils_annotations.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/com.slimgears.utils-auto-value-utils_annotations.iml" group="auto-value-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/com.slimgears.utils-auto-value-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/com.slimgears.utils-auto-value-utils_main.iml" group="auto-value-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/com.slimgears.utils-auto-value-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/com.slimgears.utils-auto-value-utils_test.iml" group="auto-value-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/com.slimgears.utils-generic-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/com.slimgears.utils-generic-utils_main.iml" group="generic-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/com.slimgears.utils-generic-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/com.slimgears.utils-generic-utils_test.iml" group="generic-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils/com.slimgears.utils-guice-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils/com.slimgears.utils-guice-utils_main.iml" group="guice-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils/com.slimgears.utils-guice-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils/com.slimgears.utils-guice-utils_test.iml" group="guice-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/com.slimgears.utils-reflect-utils_generated.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/com.slimgears.utils-reflect-utils_generated.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/com.slimgears.utils-reflect-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/com.slimgears.utils-reflect-utils_main.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/com.slimgears.utils-reflect-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/com.slimgears.utils-reflect-utils_test.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils/com.slimgears.utils-rx-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils/com.slimgears.utils-rx-utils_main.iml" group="rx-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils/com.slimgears.utils-rx-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils/com.slimgears.utils-rx-utils_test.iml" group="rx-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/com.slimgears.utils-stream-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/com.slimgears.utils-stream-utils_main.iml" group="stream-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/com.slimgears.utils-stream-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/com.slimgears.utils-stream-utils_test.iml" group="stream-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/com.slimgears.utils-test-utils_guice.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/com.slimgears.utils-test-utils_guice.iml" group="test-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/com.slimgears.utils-test-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/com.slimgears.utils-test-utils_main.iml" group="test-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/com.slimgears.utils-test-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/com.slimgears.utils-test-utils_test.iml" group="test-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils.iml" group="generic-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_main.iml" group="generic-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/generic-utils_test.iml" group="generic-utils" />
@@ -30,6 +49,25 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/test-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/test-utils_main.iml" group="test-utils" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/test-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/test-utils_test.iml" group="test-utils" />
       <module fileurl="file://$PROJECT_DIR$/utils.iml" filepath="$PROJECT_DIR$/utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/utils-apt-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/utils-apt-utils_main.iml" group="apt-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apt-utils/utils-apt-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/apt-utils/utils-apt-utils_test.iml" group="apt-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/utils-auto-value-utils_annotations.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/utils-auto-value-utils_annotations.iml" group="auto-value-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/utils-auto-value-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/utils-auto-value-utils_main.iml" group="auto-value-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auto-value-utils/utils-auto-value-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/auto-value-utils/utils-auto-value-utils_test.iml" group="auto-value-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/utils-generic-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/utils-generic-utils_main.iml" group="generic-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/generic-utils/utils-generic-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/generic-utils/utils-generic-utils_test.iml" group="generic-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils/utils-guice-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils/utils-guice-utils_main.iml" group="guice-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/guice-utils/utils-guice-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/guice-utils/utils-guice-utils_test.iml" group="guice-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/utils-reflect-utils_generated.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/utils-reflect-utils_generated.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/utils-reflect-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/utils-reflect-utils_main.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reflect-utils/utils-reflect-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/reflect-utils/utils-reflect-utils_test.iml" group="reflect-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils/utils-rx-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils/utils-rx-utils_main.iml" group="rx-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-utils/utils-rx-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-utils/utils-rx-utils_test.iml" group="rx-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/utils-stream-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/utils-stream-utils_main.iml" group="stream-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stream-utils/utils-stream-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stream-utils/utils-stream-utils_test.iml" group="stream-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/utils-test-utils_guice.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/utils-test-utils_guice.iml" group="test-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/utils-test-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/utils-test-utils_main.iml" group="test-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test-utils/utils-test-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/test-utils/utils-test-utils_test.iml" group="test-utils" />
     </modules>
   </component>
 </project>

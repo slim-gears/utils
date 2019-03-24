@@ -11,6 +11,25 @@
       <module name="auto-value-utils_main" target="1.8" />
       <module name="auto-value-utils_repository" target="1.8" />
       <module name="auto-value-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-apt-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-apt-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-auto-value-utils_annotations" target="1.8" />
+      <module name="com.slimgears.utils-auto-value-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-auto-value-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-generic-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-generic-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-guice-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-guice-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-reflect-utils_generated" target="1.8" />
+      <module name="com.slimgears.utils-reflect-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-reflect-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-rx-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-rx-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-stream-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-stream-utils_test" target="1.8" />
+      <module name="com.slimgears.utils-test-utils_guice" target="1.8" />
+      <module name="com.slimgears.utils-test-utils_main" target="1.8" />
+      <module name="com.slimgears.utils-test-utils_test" target="1.8" />
       <module name="generic-utils_annotations" target="1.8" />
       <module name="generic-utils_apt" target="1.8" />
       <module name="generic-utils_main" target="1.8" />
@@ -34,6 +53,25 @@
       <module name="test-utils_guice" target="1.8" />
       <module name="test-utils_main" target="1.8" />
       <module name="test-utils_test" target="1.8" />
+      <module name="utils-apt-utils_main" target="1.8" />
+      <module name="utils-apt-utils_test" target="1.8" />
+      <module name="utils-auto-value-utils_annotations" target="1.8" />
+      <module name="utils-auto-value-utils_main" target="1.8" />
+      <module name="utils-auto-value-utils_test" target="1.8" />
+      <module name="utils-generic-utils_main" target="1.8" />
+      <module name="utils-generic-utils_test" target="1.8" />
+      <module name="utils-guice-utils_main" target="1.8" />
+      <module name="utils-guice-utils_test" target="1.8" />
+      <module name="utils-reflect-utils_generated" target="1.8" />
+      <module name="utils-reflect-utils_main" target="1.8" />
+      <module name="utils-reflect-utils_test" target="1.8" />
+      <module name="utils-rx-utils_main" target="1.8" />
+      <module name="utils-rx-utils_test" target="1.8" />
+      <module name="utils-stream-utils_main" target="1.8" />
+      <module name="utils-stream-utils_test" target="1.8" />
+      <module name="utils-test-utils_guice" target="1.8" />
+      <module name="utils-test-utils_main" target="1.8" />
+      <module name="utils-test-utils_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
