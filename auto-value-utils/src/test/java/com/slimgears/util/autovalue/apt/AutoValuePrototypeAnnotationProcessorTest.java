@@ -126,6 +126,14 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testCircularDependencyPrototype() {
+        tester()
+                .inputFiles("SampleCircularDependencyPrototype.java")
+                .expectedSources("SampleCircularDependency.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)

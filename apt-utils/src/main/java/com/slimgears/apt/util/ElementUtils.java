@@ -103,6 +103,22 @@ public class ElementUtils {
                 .anyMatch(ElementUtils::hasErrors));
     }
 
+    public static Stream<TypeMirror> findErrors(TypeMirror typeMirror) {
+        Stream<TypeMirror> thisError = typeMirror.getKind() == TypeKind.ERROR
+                ? Stream.of(typeMirror)
+                : Stream.empty();
+
+        return typeMirror.getKind() == TypeKind.DECLARED
+                ? Stream.concat(
+                        thisError,
+                        MoreTypes
+                                .asDeclared(typeMirror)
+                                .getTypeArguments()
+                                .stream()
+                                .flatMap(ElementUtils::findErrors))
+                : thisError;
+    }
+
     public static boolean hasInterface(TypeMirror type, Class... interfaceTypes) {
         if (hasExtendsBound(type, interfaceTypes)) {
             return true;

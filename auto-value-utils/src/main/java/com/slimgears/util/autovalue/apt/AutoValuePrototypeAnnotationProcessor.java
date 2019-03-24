@@ -126,7 +126,10 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         Collection<PropertyInfo> properties = getProperties(declaredType);
 
-        if (properties.stream().anyMatch(p -> ElementUtils.hasErrors(p.propertyType()))) {
+        if (properties.stream().anyMatch(p -> ElementUtils
+                .findErrors(p.propertyType())
+                .map(TypeInfo::of)
+                .anyMatch(t -> !targetClass.equals(t) && !targetClass.simpleName().equals(t.toString())))) {
             delayProcessing();
         }
 
