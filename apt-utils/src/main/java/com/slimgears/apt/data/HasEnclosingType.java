@@ -31,18 +31,31 @@ public interface HasEnclosingType {
             return enclosingType(TypeInfo.of(type.getQualifiedName().toString()));
         }
 
-        default B enclosingTypeFrom(DeclaredType type) {
-            TypeMirror enclosingType = type.getEnclosingType();
-            if (enclosingType.getKind() != TypeKind.NONE) {
-                return enclosingType(enclosingType);
-            } else {
-                Element element = type.asElement().getEnclosingElement();
-                if (element instanceof TypeElement) {
-                    return enclosingType(MoreElements.asType(element));
-                }
-            }
+        default B enclosingType(DeclaredType type) {
+            enclosingType(HasEnclosingType.enclosingType(type));
             //noinspection unchecked
             return (B)this;
         }
+    }
+
+    static TypeInfo enclosingType(TypeMirror type) {
+        return TypeInfo.of(type.toString());
+    }
+
+    static TypeInfo enclosingType(TypeElement type) {
+        return TypeInfo.of(type.getQualifiedName().toString());
+    }
+
+    static TypeInfo enclosingType(DeclaredType type) {
+        TypeMirror enclosingType = type.getEnclosingType();
+        if (enclosingType.getKind() != TypeKind.NONE) {
+            return enclosingType(enclosingType);
+        } else {
+            Element element = type.asElement().getEnclosingElement();
+            if (element instanceof TypeElement) {
+                return enclosingType(MoreElements.asType(element));
+            }
+        }
+        return null;
     }
 }

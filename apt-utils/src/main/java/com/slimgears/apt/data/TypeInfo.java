@@ -177,9 +177,15 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
     }
 
     public static TypeInfo of(DeclaredType declaredType) {
+        TypeInfo enclosingType = HasEnclosingType.enclosingType(declaredType);
+        String name = MoreElements.asType(declaredType.asElement()).getQualifiedName().toString();
+        if (enclosingType != null) {
+            name = name.replace(enclosingType.name() + ".", enclosingType.name() + "$");
+        }
+
         return builder()
-                .name(MoreElements.asType(declaredType.asElement()).getQualifiedName().toString())
-                .enclosingTypeFrom(declaredType)
+                .name(name)
+                .enclosingType(enclosingType)
                 .typeParamsFromTypeMirrors(declaredType.getTypeArguments())
                 .build();
     }
