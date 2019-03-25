@@ -18,6 +18,7 @@ import javax.annotation.Generated;
 @AutoValue
 public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype, HasMetaClass<com.slimgears.sample.SampleCustomBuilderValue> {
 
+    @Override
     public MetaClass<SampleCustomBuilderValue> metaClass() {
         return metaClass;
     }

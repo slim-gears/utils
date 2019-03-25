@@ -1,5 +1,6 @@
 #parse("type-params.java.vm")
 
+    @Override
 #if ($hasKey)
     public $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass)> metaClass() {
 #else
@@ -28,7 +29,7 @@
 #end {
         private final $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass = new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
         private final $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass = new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
-        private final $[java.util.Map]<String, PropertyMeta<$targetClass.simpleName()#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
+        private final $[java.util.Map]<String, $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 
 #foreach ($p in $properties)
         public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.name() = PropertyMeta.<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()], Builder#typeParams($sourceClass)>create(this, "$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, ${targetClass.simpleName()}::$p.name(), Builder::$p.name());
@@ -58,12 +59,12 @@
         }
 
         @Override
-        public Iterable<PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), ?>> properties() {
+        public Iterable<$[com.slimgears.util.autovalue.annotations.PropertyMeta]<${targetClass.simpleName()}#typeParams($sourceClass), ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), __V> getProperty(String name) {
+        public <__V> $[com.slimgears.util.autovalue.annotations.PropertyMeta]<${targetClass.simpleName()}#typeParams($sourceClass), __V> getProperty(String name) {
             //noinspection unchecked
             return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), __V>)propertyMap.get(name);
         }

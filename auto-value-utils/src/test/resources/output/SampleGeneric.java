@@ -18,6 +18,7 @@ import javax.annotation.Generated;
 @AutoValue
 public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, HasMetaClass<com.slimgears.sample.SampleGeneric<T>> {
 
+    @Override
     public MetaClass<SampleGeneric<T>> metaClass() {
         return (MetaClass<SampleGeneric<T>>)metaClass;
     }

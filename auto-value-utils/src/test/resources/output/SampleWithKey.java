@@ -19,6 +19,7 @@ import javax.annotation.Generated;
 @AutoValue
 public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, com.slimgears.sample.SampleWithKey> {
 
+    @Override
     public MetaClassWithKey<String, SampleWithKey> metaClass() {
         return metaClass;
     }

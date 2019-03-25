@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<com.slimgears.sample.SampleValue> {
 
+    @Override
     public MetaClass<SampleValue> metaClass() {
         return metaClass;
     }
