@@ -59,13 +59,22 @@ public class TypeTokenParserAdapter {
     }
 
     private static TypeInfo toTypeInfo(TypeTokenParser.ClassOrInterfaceTypeContext ctx) {
-        return TypeInfo
+        String identifier = ctx.TypeIdentifier().getText();
+        TypeInfo typeInfo = TypeInfo
                 .builder()
-                .name(ctx.TypeIdentifier().getText())
+                .name(identifier)
                 .typeParams(Optional.ofNullable(ctx.classOrInterfaceArgs())
                         .map(args -> args.typeArgument().stream().map(TypeTokenParserAdapter::toTypeParamInfo).toArray(TypeParameterInfo[]::new))
                         .orElseGet(() -> new TypeParameterInfo[0]))
                 .build();
+
+        int enclosingTypeLen = identifier.lastIndexOf('$');
+        return enclosingTypeLen > 0
+                ? typeInfo
+                .toBuilder()
+                .enclosingType(toTypeInfo(identifier.substring(0, enclosingTypeLen)))
+                .build()
+                : typeInfo;
     }
 
     private static TypeParameterInfo toTypeParamInfo(TypeTokenParser.TypeArgumentContext typeArgument) {

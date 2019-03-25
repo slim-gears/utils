@@ -6,10 +6,6 @@ import org.junit.Test;
 
 
 public class TypeInfoParserTest {
-    static class NestedClass {
-
-    }
-
     @Test
     public void testElementType() {
         TypeInfo typeInfo = TypeInfo.of("java.util.List<java.lang.String[]>[][][]");
@@ -58,5 +54,11 @@ public class TypeInfoParserTest {
         String simplified = importTracker.use("java.util.List<java.util.Map<java.lang.String, java.util.List<java.lang.String>>>");
         Assert.assertEquals("List<Map<String, List<String>>>", simplified);
         Assert.assertEquals(3, importTracker.imports().length);
+    }
+
+    @Test
+    public void testNestedTypeParsing() {
+        TypeInfo typeInfoWithParam = TypeInfo.of("java.util.List<com.slimgears.apt.util.TypeInfoParserTest$NestedType>");
+        Assert.assertTrue(typeInfoWithParam.typeParams().get(0).type().hasEnclosingType());
     }
 }

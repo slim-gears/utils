@@ -4,6 +4,8 @@ import com.slimgears.apt.data.TypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collection;
+
 public class ImportTrackerTest {
     @Test
     public void testImportComplexType() {
@@ -41,5 +43,17 @@ public class ImportTrackerTest {
         Assert.assertEquals("T extends Comparable<T>", simplifiedType);
         Assert.assertEquals(1, importTracker.imports().length);
         Assert.assertEquals("java.util.Comparable", importTracker.imports()[0]);
+    }
+
+    @Test
+    public void testNestedClassImport() {
+        ImportTracker importTracker = ImportTracker.create();
+        TypeInfo nestedType = TypeInfo.of("java.util.Collection<com.slimgears.apt.util.ImportTrackerTest$NestedClass>");
+
+        String simplifiedName = importTracker.use(nestedType);
+        Assert.assertEquals("Collection<ImportTrackerTest.NestedClass>", simplifiedName);
+        Assert.assertEquals(2, importTracker.imports().length);
+        Assert.assertEquals("com.slimgears.apt.util.ImportTrackerTest", importTracker.imports()[0]);
+        Assert.assertEquals(Collection.class.getName(), importTracker.imports()[1]);
     }
 }

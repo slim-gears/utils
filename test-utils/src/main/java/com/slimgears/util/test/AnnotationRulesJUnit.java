@@ -11,7 +11,7 @@ public class AnnotationRulesJUnit extends BlockJUnit4ClassRunner{
     /**
      * Creates a BlockJUnit4ClassRunner to run {@code klass}
      *
-     * @param klass
+     * @param klass Test class
      * @throws InitializationError if the test class is malformed.
      */
     public AnnotationRulesJUnit(Class<?> klass) throws InitializationError {

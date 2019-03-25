@@ -134,6 +134,14 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testNestedTypePrototype() {
+        tester()
+                .inputFiles("SampleNestedTypePrototype.java")
+                .expectedSources("SampleNestedType.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
