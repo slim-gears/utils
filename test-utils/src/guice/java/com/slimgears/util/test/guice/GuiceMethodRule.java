@@ -48,9 +48,13 @@ class GuiceMethodRule implements MethodRule {
                 module = Modules.override(module).with(createMockModule(target));
                 Injector injector = Guice.createInjector(module);
                 MethodRule annotationRule = MethodRules.annotationRule(GuiceServiceResolver.forInjector(injector));
-                injector.injectMembers(target);
-
-                annotationRule.apply(base, method, target).evaluate();
+                annotationRule.apply(new Statement() {
+                    @Override
+                    public void evaluate() throws Throwable {
+                        injector.injectMembers(target);
+                        base.evaluate();
+                    }
+                }, method, target).evaluate();
             }
         };
     }
