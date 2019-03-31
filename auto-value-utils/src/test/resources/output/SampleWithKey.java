@@ -67,8 +67,8 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleWithKey.builder();
+        public <B extends BuilderPrototype<SampleWithKey, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleWithKey.builder();
         }
 
         @Override

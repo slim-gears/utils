@@ -58,8 +58,8 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleSpecializedGeneric.builder();
+        public <B extends BuilderPrototype<SampleSpecializedGeneric, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleSpecializedGeneric.builder();
         }
 
         @Override

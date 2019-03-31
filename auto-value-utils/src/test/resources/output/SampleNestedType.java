@@ -57,8 +57,8 @@ public abstract class SampleNestedType implements SampleNestedTypePrototype, Has
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleNestedType.builder();
+        public <B extends BuilderPrototype<SampleNestedType, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleNestedType.builder();
         }
 
         @Override

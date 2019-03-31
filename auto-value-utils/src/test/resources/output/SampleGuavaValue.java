@@ -70,8 +70,8 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleGuavaValue.builder();
+        public <B extends BuilderPrototype<SampleGuavaValue, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleGuavaValue.builder();
         }
 
         @Override

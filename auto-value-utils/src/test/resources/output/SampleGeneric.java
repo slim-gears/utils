@@ -59,8 +59,8 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         }
 
         @Override
-        public Builder<T> createBuilder() {
-            return SampleGeneric.builder();
+        public <B extends BuilderPrototype<SampleGeneric<T>, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleGeneric.builder();
         }
 
         @Override

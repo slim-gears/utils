@@ -57,8 +57,8 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         }
 
         @Override
-        public Builder<T> createBuilder() {
-            return GenericListItem.builder();
+        public <B extends BuilderPrototype<GenericListItem<T>, B>> B createBuilder() {
+            return (B)(BuilderPrototype)GenericListItem.builder();
         }
 
         @Override

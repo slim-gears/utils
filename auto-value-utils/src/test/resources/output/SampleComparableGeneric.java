@@ -57,8 +57,8 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         }
 
         @Override
-        public Builder<T> createBuilder() {
-            return SampleComparableGeneric.builder();
+        public <B extends BuilderPrototype<SampleComparableGeneric<T>, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleComparableGeneric.builder();
         }
 
         @Override

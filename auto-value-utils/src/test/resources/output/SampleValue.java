@@ -64,8 +64,8 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleValue.builder();
+        public <B extends BuilderPrototype<SampleValue, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleValue.builder();
         }
 
         @Override

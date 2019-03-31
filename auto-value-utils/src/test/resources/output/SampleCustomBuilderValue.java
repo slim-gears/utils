@@ -59,8 +59,8 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleCustomBuilderValue.builder();
+        public <B extends BuilderPrototype<SampleCustomBuilderValue, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleCustomBuilderValue.builder();
         }
 
         @Override

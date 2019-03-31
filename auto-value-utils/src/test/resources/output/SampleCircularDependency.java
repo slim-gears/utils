@@ -57,8 +57,8 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleCircularDependency.builder();
+        public <B extends BuilderPrototype<SampleCircularDependency, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleCircularDependency.builder();
         }
 
         @Override

@@ -7,5 +7,5 @@ public interface MetaClass<T> {
     TypeToken<T> objectClass();
     Iterable<PropertyMeta<T, ?>> properties();
     <V> PropertyMeta<T, V> getProperty(String propertyName);
-    MetaBuilder<T> createBuilder();
+    <B extends BuilderPrototype<T, B>> B createBuilder();
 }

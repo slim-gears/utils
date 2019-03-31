@@ -58,8 +58,8 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         }
 
         @Override
-        public Builder createBuilder() {
-            return SampleGenericField.builder();
+        public <B extends BuilderPrototype<SampleGenericField, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleGenericField.builder();
         }
 
         @Override

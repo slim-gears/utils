@@ -58,8 +58,8 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         }
 
         @Override
-        public Builder<T> createBuilder() {
-            return GenericListContainer.builder();
+        public <B extends BuilderPrototype<GenericListContainer<T>, B>> B createBuilder() {
+            return (B)(BuilderPrototype)GenericListContainer.builder();
         }
 
         @Override
