@@ -14,7 +14,6 @@ public class Equality {
 
     public static <T> Checker<T> of(BiFunction<T, Object, Boolean> equalityTester, Function<T, Integer> hashCodeGen) {
         return new Checker<T>() {
-            @Override
             public boolean equals(T self, Object other) {
                 return equalityTester.apply(self, other);
             }
@@ -35,8 +34,8 @@ public class Equality {
         return (self, other) -> (other == self) || (other != null) && equalityTester.apply(self, other);
     }
 
+    @SuppressWarnings("unchecked")
     private static <T> Checker<T> ofField(Class<T> cls, Function<T, Object> field) {
-        //noinspection unchecked
         BiFunction<T, Object, Boolean> equalityTester = (self, other) ->
                 cls.isInstance(other) &&
                 Objects.equals(field.apply(self), field.apply((T)other));
@@ -61,8 +60,8 @@ public class Equality {
             return this;
         }
 
+        @SuppressWarnings("unchecked")
         public Checker<T> build() {
-            //noinspection unchecked
             BiFunction<T, Object, Boolean> equalityChecker = (self, other) -> (other == self) ||
                     (cls.isInstance(other) && fields.stream()
                             .allMatch(f -> Objects.equals(f.apply(self), f.apply((T)other))));

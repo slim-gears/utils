@@ -3,7 +3,11 @@
  */
 package com.slimgears.util.guice;
 
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.Scope;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.multibindings.MapBinder;
@@ -20,7 +24,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -203,9 +211,9 @@ public class ServiceModules {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static <S> Class<? extends S> safeClassByName(String className) {
         try {
-            //noinspection unchecked
             return (Class<? extends S>)Class.forName(className);
         } catch (ClassNotFoundException e) {
             LOG.error("Cannot find service class {}", className, e);

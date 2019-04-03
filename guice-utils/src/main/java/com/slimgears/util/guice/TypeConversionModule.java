@@ -7,7 +7,12 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Primitives;
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
@@ -24,7 +29,12 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -196,8 +206,8 @@ public class TypeConversionModule extends AbstractModule {
             }
         }
 
+        @SuppressWarnings("unchecked")
         public <T> ConversionBuilder<T> matchClass(Predicate<Class<T>> classPredicate) {
-            //noinspection unchecked
             return matchTypeLiteral(tl -> classPredicate.test((Class<T>)tl.getRawType()));
         }
 
@@ -233,9 +243,9 @@ public class TypeConversionModule extends AbstractModule {
 
     private static <T> Matcher<? super TypeLiteral<?>> toMatcher(Predicate<? super TypeLiteral<T>> predicate) {
         return new AbstractMatcher<TypeLiteral<?>>() {
+            @SuppressWarnings("unchecked")
             @Override
             public boolean matches(TypeLiteral<?> typeLiteral) {
-                //noinspection unchecked
                 return predicate.test((TypeLiteral<T>)typeLiteral);
             }
         };

@@ -17,6 +17,7 @@ public interface HasMethods {
                 .collect(ImmutableList.toImmutableList());
     }
 
+    @SuppressWarnings("unchecked")
     interface Builder<B extends Builder<B>> {
         ImmutableList.Builder<MethodInfo> methodsBuilder();
 
@@ -26,7 +27,6 @@ public interface HasMethods {
 
         default B method(MethodInfo method) {
             methodsBuilder().add(method);
-            //noinspection unchecked
             return (B)this;
         }
     }

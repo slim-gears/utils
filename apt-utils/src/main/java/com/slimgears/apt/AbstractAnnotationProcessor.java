@@ -39,8 +39,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         private final ElementSupplier<? extends Element> elementSupplier;
         private final TypeElement annotation;
 
+        @SuppressWarnings("unchecked")
         <E extends Element> E element() {
-            //noinspection unchecked
             return (E)elementSupplier.getElement(Environment.instance().elements());
         }
 

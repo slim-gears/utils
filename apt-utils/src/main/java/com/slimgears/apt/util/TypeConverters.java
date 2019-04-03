@@ -9,7 +9,11 @@ import com.slimgears.util.stream.Safe;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -46,8 +50,8 @@ public class TypeConverters {
                 .orElse(empty);
     }
 
+    @SuppressWarnings("unchecked")
     public static TypeConverter fromEnvironmentConverters(String typeConvertersKey) {
-        //noinspection unchecked
         return Optional
                 .ofNullable(Environment.instance().properties().get(typeConvertersKey))
                 .map(converters -> converters.split(","))

@@ -6,18 +6,18 @@ import com.slimgears.apt.data.TypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
-@interface TestAnnotation {
-    Class value() default Object.class;
-    Item[] items() default {};
-    Item singleItem() default @Item;
-
-    @interface Item {
-        String value() default "";
-        int[] items() default {};
-    }
-}
-
 public class AnnotationInfoTest {
+    @interface TestAnnotation {
+        Class value() default Object.class;
+        Item[] items() default {};
+        Item singleItem() default @Item;
+
+        @interface Item {
+            String value() default "";
+            int[] items() default {};
+        }
+    }
+
     @Test
     public void testAnnotationInfoAsString() {
         AnnotationInfo annotation = AnnotationInfo
@@ -48,12 +48,12 @@ public class AnnotationInfoTest {
                 .build();
 
         Assert.assertEquals(
-                "@TestAnnotation(value = AnnotationInfoTest.class, " +
+                "@AnnotationInfoTest.TestAnnotation(value = AnnotationInfoTest.class, " +
                 "items = {" +
-                        "@TestAnnotation.Item(\"TestValue1\"), " +
-                        "@TestAnnotation.Item(value = \"TestValue2\", items = {1, 2, 3}), " +
-                        "@TestAnnotation.Item(\"TestValue3\")}, " +
-                        "item = @TestAnnotation.Item)", annotation.asString());
+                        "@AnnotationInfoTest.TestAnnotation.Item(\"TestValue1\"), " +
+                        "@AnnotationInfoTest.TestAnnotation.Item(value = \"TestValue2\", items = {1, 2, 3}), " +
+                        "@AnnotationInfoTest.TestAnnotation.Item(\"TestValue3\")}, " +
+                        "item = @AnnotationInfoTest.TestAnnotation.Item)", annotation.asString());
     }
 
     @Test
@@ -65,6 +65,6 @@ public class AnnotationInfoTest {
                 .build()
                 .asString();
 
-        Assert.assertEquals("@TestAnnotation.Item(\"TestValue3\")", annotation);
+        Assert.assertEquals("@AnnotationInfoTest.TestAnnotation.Item(\"TestValue3\")", annotation);
     }
 }

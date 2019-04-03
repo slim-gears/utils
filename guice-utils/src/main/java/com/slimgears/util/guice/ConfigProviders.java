@@ -74,12 +74,11 @@ public class ConfigProviders {
         return properties;
     }
 
+    @SuppressWarnings("unchecked")
     private static void setProperty(Properties properties, String key, Object value) {
         if (value instanceof Map) {
-            //noinspection unchecked
             setProperties(properties, key + ".", (Map<String, Object>)value);
         } if (value instanceof List) {
-            //noinspection unchecked
             properties.setProperty(key, ((List<Object>)value).stream().map(String::valueOf).collect(Collectors.joining(",")));
         } else if (value instanceof Double) {
             properties.setProperty(key, DoubleUtils.toString((double)value));

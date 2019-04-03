@@ -47,13 +47,13 @@ public class Extensions {
                         .orElseGet(Stream::empty);
     }
 
+    @SuppressWarnings("unchecked")
     private static <E> E fromString(Class<E> extensionClass, String qualifiedName) {
         try {
             Class cls = Class.forName(qualifiedName);
             if (!extensionClass.isAssignableFrom(cls)) {
                 throw new RuntimeException("Class " + qualifiedName + " is not a valid extension of type " + extensionClass.getSimpleName());
             }
-            //noinspection unchecked
             return (E)cls.newInstance();
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             throw new RuntimeException(e);

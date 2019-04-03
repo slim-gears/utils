@@ -3,8 +3,18 @@
  */
 package com.slimgears.apt.util;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class VisitorUtils {
@@ -66,8 +76,8 @@ public class VisitorUtils {
             return self();
         }
 
+        @SuppressWarnings("unchecked")
         public <E extends T> B on(Class<E> elementClass, BiFunction<E, P, R> listener) {
-            //noinspection unchecked
             BiFunction<E, P, R> newListener = Optional
                     .ofNullable(listeners.get(elementClass))
                     .map(l -> combine((BiFunction<E, P, R>) l, listener))
@@ -127,8 +137,8 @@ public class VisitorUtils {
                     .orElse(null);
         }
 
+        @SuppressWarnings("unchecked")
         protected <E extends T> BiFunction<E, P, R> listenerOf(Class<E> cls) {
-            //noinspection unchecked
             return Optional
                     .ofNullable(listeners.get(cls))
                     .map(l -> (BiFunction<E, P, R>)l)

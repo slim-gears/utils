@@ -32,13 +32,12 @@ public interface HasAnnotations {
         return hasAnnotation(TypeInfo.of(aclass));
     }
 
+    @SuppressWarnings("unchecked")
     interface Builder<B extends Builder<B>> {
         ImmutableList.Builder<AnnotationInfo> annotationsBuilder();
 
         default B annotationsFromElement(Element element) {
             element.getAnnotationMirrors().forEach(this::annotation);
-
-            //noinspection unchecked
             return (B)this;
         }
 
@@ -48,7 +47,6 @@ public interface HasAnnotations {
 
         default B annotation(AnnotationInfo annotation) {
             annotationsBuilder().add(annotation);
-            //noinspection unchecked
             return (B)this;
         }
     }

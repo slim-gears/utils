@@ -15,9 +15,9 @@ public class ThreadSingletonScope implements Scope {
     private ThreadSingletonScope() {
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
-        //noinspection unchecked
         return () -> (T)getObjects().computeIfAbsent(key, k -> unscoped.get());
     }
 

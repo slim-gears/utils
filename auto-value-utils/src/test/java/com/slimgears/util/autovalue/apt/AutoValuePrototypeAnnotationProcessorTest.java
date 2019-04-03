@@ -1,48 +1,26 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.value.processor.AutoValueProcessor;
-import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.util.AnnotationProcessingTester;
+import com.slimgears.apt.util.StoreWrittenFilesRule;
 import com.slimgears.util.generic.ScopedInstance;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.event.Level;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.Objects;
-
 public class AutoValuePrototypeAnnotationProcessorTest {
     private ScopedInstance.Closeable registrarScope;
-    private ScopedInstance.Closeable fileListenerScope;
-    private final static File outputFolder = new File("./build/test");
-
-    @BeforeClass
-    public static void setUpClass() {
-        if (outputFolder.exists()) {
-            Arrays.asList(Objects.requireNonNull(outputFolder.listFiles()))
-                    .forEach(File::delete);
-        } else {
-            outputFolder.mkdirs();
-        }
-        System.out.println("Output folder: " + outputFolder.getAbsolutePath());
-    }
+    @Rule public final StoreWrittenFilesRule storeWrittenFilesRule = StoreWrittenFilesRule.forPath("build/test");
 
     @Before
     public void setUp() {
         registrarScope = AutoValuePrototypeAnnotationProcessor.Registrar.scope();
-        fileListenerScope = Environment.withFileListener(this::writeFile);
     }
 
     @After
     public void tearDown() {
-        fileListenerScope.close();
         registrarScope.close();
     }
 
@@ -191,13 +169,5 @@ public class AutoValuePrototypeAnnotationProcessorTest {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
                 .processedWith(new AutoValuePrototypeAnnotationProcessor(), new AutoValueProcessor());
-    }
-
-    private void writeFile(String filename, String content) {
-        try (BufferedWriter writer = Files.newBufferedWriter(outputFolder.toPath().resolve(filename), StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
-            writer.write(content);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

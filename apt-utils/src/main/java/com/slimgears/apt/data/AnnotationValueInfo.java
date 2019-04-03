@@ -9,7 +9,6 @@ import com.slimgears.util.stream.Optionals;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.type.TypeMirror;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,6 +143,7 @@ public abstract class AnnotationValueInfo implements HasName, HasType {
                 .build();
     }
 
+    @SafeVarargs
     public static <T> AnnotationValueInfo ofArray(String name, Class cls, T... values) {
         return builder()
                 .name(name)

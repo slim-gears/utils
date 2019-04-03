@@ -21,12 +21,12 @@ public interface HasTypeParameters {
         return !typeParams().isEmpty();
     }
 
+    @SuppressWarnings("unchecked")
     interface Builder<B extends Builder<B>> {
         ImmutableList.Builder<TypeParameterInfo> typeParamsBuilder();
 
         default B typeParamsFromTypeMirrors(Collection<? extends TypeMirror> args) {
             args.forEach(this::typeParam);
-            //noinspection unchecked
             return (B)this;
         }
 
@@ -34,7 +34,6 @@ public interface HasTypeParameters {
             Stream.of(types)
                     .map(t -> TypeParameterInfo.of("", t))
                     .forEach(this::typeParam);
-            //noinspection unchecked
             return (B)this;
         }
 
@@ -44,13 +43,11 @@ public interface HasTypeParameters {
 
         default B typeParams(Collection<TypeParameterInfo> params) {
             params.forEach(this::typeParam);
-            //noinspection unchecked
             return (B)this;
         }
 
         default B typeParamsFromElements(Collection<? extends TypeParameterElement> params) {
             params.stream().map(TypeParameterInfo::of).forEach(this::typeParam);
-            //noinspection unchecked
             return (B)this;
         }
 
@@ -60,7 +57,6 @@ public interface HasTypeParameters {
 
         default B typeParamsFromMethod(ExecutableType executableType) {
             executableType.getTypeVariables().stream().map(TypeParameterInfo::of).forEach(this::typeParam);
-            //noinspection unchecked
             return (B)this;
         }
 
@@ -70,7 +66,6 @@ public interface HasTypeParameters {
 
         default B typeParam(TypeParameterInfo param) {
             typeParamsBuilder().add(param);
-            //noinspection unchecked
             return (B)this;
         }
 

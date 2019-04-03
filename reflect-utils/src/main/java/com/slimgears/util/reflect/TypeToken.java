@@ -94,14 +94,13 @@ public class TypeToken<T> {
         if (!(type instanceof ParameterizedType)) {
             return new TypeToken[0];
         }
-        //noinspection ResultOfMethodCallIgnored
         return Arrays.stream(((ParameterizedType)type).getActualTypeArguments())
                 .map(TypeToken::new)
                 .toArray(TypeToken[]::new);
     }
 
+    @SuppressWarnings("unchecked")
     public Class<T> asClass() {
-        //noinspection unchecked
         return type instanceof Class
                 ? (Class<T>)type
                 : (Class<T>)((CanonicalType)type).asClass();
@@ -176,15 +175,15 @@ public class TypeToken<T> {
         return new TypeToken<>(type);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> TypeToken<T> ofParameterized(Class rawClass, Class... args) {
-        //noinspection unchecked
         return (args.length == 0)
                 ? of(rawClass)
                 : parameterizedBuilder(rawClass).typeArgs(args).build();
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> TypeToken<T> ofParameterized(Class rawClass, TypeToken<?>... args) {
-        //noinspection unchecked
         return (args.length == 0)
                 ? of(rawClass)
                 : parameterizedBuilder(rawClass).typeArgs(args).build();
@@ -258,8 +257,8 @@ public class TypeToken<T> {
         return type;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> TypeToken<T> valueOf(String str) {
-        //noinspection unchecked
         return TypeTokenParserAdapter.toTypeToken(str);
     }
 

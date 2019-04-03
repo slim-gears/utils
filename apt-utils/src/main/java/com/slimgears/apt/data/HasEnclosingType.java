@@ -31,9 +31,9 @@ public interface HasEnclosingType {
             return enclosingType(TypeInfo.of(type.getQualifiedName().toString()));
         }
 
+        @SuppressWarnings("unchecked")
         default B enclosingType(DeclaredType type) {
             enclosingType(HasEnclosingType.enclosingType(type));
-            //noinspection unchecked
             return (B)this;
         }
     }

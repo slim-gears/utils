@@ -16,10 +16,10 @@ public abstract class EnumInfo implements HasType {
         return new AutoValue_EnumInfo.Builder();
     }
 
+    @SuppressWarnings("unchecked")
     public static EnumInfo of(Class cls) {
         Preconditions.checkArgument(cls.isEnum());
         Builder builder = builder().type(cls);
-        //noinspection unchecked
         Arrays.asList(((Class<? extends Enum>)cls).getEnumConstants()).forEach(builder::enumValue);
         return builder.build();
     }
