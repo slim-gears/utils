@@ -115,7 +115,7 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         }
 
         @Override
-            @SampleFieldAnnotation(strValue = "test")
+        @SampleFieldAnnotation(strValue = "test")
         Builder doubleValue(double doubleValue);
 
         @Override
@@ -125,7 +125,7 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         Builder intValue(int intValue);
 
         @Override
-            @SampleFieldAnnotation
+        @SampleFieldAnnotation
         Builder strValue(String strValue);
     }
 

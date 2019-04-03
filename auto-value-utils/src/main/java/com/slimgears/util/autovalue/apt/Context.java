@@ -1,6 +1,7 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.value.AutoValue;
+import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.ImportTracker;
 import com.slimgears.apt.util.TemplateEvaluator;
@@ -27,6 +28,10 @@ public abstract class Context {
     public abstract Collection<PropertyInfo> properties();
     public abstract ImportTracker imports();
     @Nullable public abstract PropertyInfo keyProperty();
+
+    public Environment environment() {
+        return Environment.instance();
+    }
 
     public Context context() {
         return this;

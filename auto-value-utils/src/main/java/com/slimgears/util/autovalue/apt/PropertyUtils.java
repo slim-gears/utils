@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.slimgears.util.stream.Streams.ofType;
 
@@ -67,6 +69,41 @@ public class PropertyUtils {
                 .map(te -> Environment.instance().types().getDeclaredType(te, type.getTypeArguments().toArray(new TypeMirror[0])))
                 .orElse(null);
     }
+
+    private static boolean propertyHasPrefix(ExecutableElement element) {
+        String getterName = element.getSimpleName().toString();
+        return !PropertyInfo.propertyName(getterName).equals(getterName);
+    }
+
+    public static Collection<PropertyInfo> getProperties(DeclaredType type) {
+        Collection<ExecutableElement> elements = MoreElements
+                .getLocalAndInheritedMethods(
+                        MoreTypes.asTypeElement(type),
+                        Environment.instance().types(),
+                        Environment.instance().elements())
+                .stream()
+                .flatMap(PropertyUtils::isPropertyMethod)
+                .collect(Collectors.toList());
+
+        boolean hasPrefix = elements.stream()
+                .allMatch(PropertyUtils::propertyHasPrefix);
+
+        return elements
+                .stream()
+                .map(ee -> PropertyInfo.create(type, ee, hasPrefix))
+                .sorted(Comparator.comparing(HasName::name))
+                .collect(Collectors.toList());
+    }
+
+    private static Stream<ExecutableElement> isPropertyMethod(ExecutableElement executableElement) {
+        return Stream
+                .of(executableElement)
+                .filter(ElementUtils::isAbstract)
+                .filter(ElementUtils::isNotStatic)
+                .filter(ElementUtils::isPublic)
+                .filter(element -> element.getParameters().isEmpty());
+    }
+
 
     public static boolean hasBuilder(TypeElement element) {
         return builderTypeFor(element).isPresent();

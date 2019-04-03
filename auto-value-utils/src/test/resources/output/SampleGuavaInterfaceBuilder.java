@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.Iterator;
 import javax.annotation.Generated;
 
-@Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
+@Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleGuavaInterfaceBuilder<T, _B extends SampleGuavaInterfaceBuilder<T, _B>> {
 
     _B values(ImmutableList<T> values);

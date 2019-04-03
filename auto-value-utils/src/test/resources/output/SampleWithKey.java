@@ -105,7 +105,7 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         }
 
         @Override
-            @Key
+        @Key
         Builder id(String id);
 
         @Override

@@ -6,17 +6,17 @@ import com.slimgears.apt.util.StoreWrittenFilesRule;
 import com.slimgears.util.generic.ScopedInstance;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.event.Level;
 
 public class AutoValuePrototypeAnnotationProcessorTest {
     private ScopedInstance.Closeable registrarScope;
-    @Rule public final StoreWrittenFilesRule storeWrittenFilesRule = StoreWrittenFilesRule.forPath("build/test");
+    @ClassRule public final static StoreWrittenFilesRule storeWrittenFilesRule = StoreWrittenFilesRule.forPath("build/test");
 
     @Before
     public void setUp() {
-        registrarScope = AutoValuePrototypeAnnotationProcessor.Registrar.scope();
+        registrarScope = Registrar.scope();
     }
 
     @After

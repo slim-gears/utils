@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.annotation.Generated;
 
-@Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
+@Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePrototypeBuilder<_B>> {
 
     _B intList(ImmutableList<Integer> intList);

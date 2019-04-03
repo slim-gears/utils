@@ -2,7 +2,7 @@ package com.slimgears.sample;
 
 import javax.annotation.Generated;
 
-@Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
+@Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleValuePrototypeBuilder<_B extends SampleValuePrototypeBuilder<_B>> {
 
     @SampleFieldAnnotation(strValue = "test")

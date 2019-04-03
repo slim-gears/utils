@@ -4,7 +4,7 @@ import com.slimgears.sample.a.SampleA;
 import com.slimgears.sample.a.SampleAPrototype;
 import javax.annotation.Generated;
 
-@Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
+@Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleBPrototypeBuilder<_B extends SampleBPrototypeBuilder<_B>> {
 
     _B nestedEnum(SampleAPrototype.NestedEnum nestedEnum);
