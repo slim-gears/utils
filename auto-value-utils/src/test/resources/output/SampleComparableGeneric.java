@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -69,28 +66,23 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static <T extends Comparable<T>> SampleComparableGeneric<T> create(
+         T tValue) {
+        return SampleComparableGeneric.<T>builder()
+            .tValue(tValue)
+            .build();
+    }
+
     public abstract Builder<T> toBuilder();
 
     public static <T extends Comparable<T>> Builder<T> builder() {
         return Builder.create();
     }
-
-    @JsonCreator
-    public static <T extends Comparable<T>> SampleComparableGeneric<T> create(
-            @JsonProperty("tValue") T tValue) {
-        return SampleComparableGeneric.<T>builder()
-                .tValue(tValue)
-                .build();
-    }
-
-    @Override
-    public abstract T tValue();
 
     @AutoValue.Builder
     public interface Builder<T extends Comparable<T>> extends BuilderPrototype<SampleComparableGeneric<T>, Builder<T>>, SampleComparableGenericPrototypeBuilder<T, Builder<T>> {
@@ -101,4 +93,8 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         @Override
         Builder<T> tValue(T tValue);
     }
+
+    @Override
+    public abstract T tValue();
+
 }

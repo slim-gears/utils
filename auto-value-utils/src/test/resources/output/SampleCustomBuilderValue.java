@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -71,33 +68,25 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static SampleCustomBuilderValue create(
+         double doubleValue,
+         int intValue) {
+        return SampleCustomBuilderValue.builder()
+            .doubleValue(doubleValue)
+            .intValue(intValue)
+            .build();
+    }
+
     public abstract Builder toBuilder();
 
     public static Builder builder() {
         return Builder.create();
     }
-
-    @JsonCreator
-    public static SampleCustomBuilderValue create(
-            @JsonProperty("doubleValue") double doubleValue,
-            @JsonProperty("intValue") int intValue) {
-        return SampleCustomBuilderValue.builder()
-                .doubleValue(doubleValue)
-                .intValue(intValue)
-                .build();
-    }
-
-    @Override
-    public abstract double doubleValue();
-
-    @Override
-    public abstract int intValue();
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleCustomBuilderValue, Builder>, SampleCustomBuilderValuePrototypeBuilder<Builder> {
@@ -111,4 +100,11 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         @Override
         Builder intValue(int intValue);
     }
+
+    @Override
+    public abstract double doubleValue();
+
+    @Override
+    public abstract int intValue();
+
 }

@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -69,28 +66,23 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static <T> GenericListItem<T> create(
+         T entry) {
+        return GenericListItem.<T>builder()
+            .entry(entry)
+            .build();
+    }
+
     public abstract Builder<T> toBuilder();
 
     public static <T> Builder<T> builder() {
         return Builder.create();
     }
-
-    @JsonCreator
-    public static <T> GenericListItem<T> create(
-            @JsonProperty("entry") T entry) {
-        return GenericListItem.<T>builder()
-                .entry(entry)
-                .build();
-    }
-
-    @Override
-    public abstract T entry();
 
     @AutoValue.Builder
     public interface Builder<T> extends BuilderPrototype<GenericListItem<T>, Builder<T>>, GenericListItemPrototypeBuilder<T, Builder<T>> {
@@ -101,4 +93,8 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         @Override
         Builder<T> entry(T entry);
     }
+
+    @Override
+    public abstract T entry();
+
 }

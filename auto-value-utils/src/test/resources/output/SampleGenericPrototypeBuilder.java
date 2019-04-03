@@ -8,5 +8,5 @@ public interface SampleGenericPrototypeBuilder<T, _B extends SampleGenericProtot
     _B tValue(T tValue);
 
     _B value(String value);
-
+    
 }

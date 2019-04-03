@@ -1,24 +1,49 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.value.processor.AutoValueProcessor;
+import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.util.AnnotationProcessingTester;
 import com.slimgears.util.generic.ScopedInstance;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.event.Level;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.Objects;
+
 public class AutoValuePrototypeAnnotationProcessorTest {
-    private ScopedInstance.Closeable scope;
+    private ScopedInstance.Closeable registrarScope;
+    private ScopedInstance.Closeable fileListenerScope;
+    private final static File outputFolder = new File("./build/test");
+
+    @BeforeClass
+    public static void setUpClass() {
+        if (outputFolder.exists()) {
+            Arrays.asList(Objects.requireNonNull(outputFolder.listFiles()))
+                    .forEach(File::delete);
+        } else {
+            outputFolder.mkdirs();
+        }
+        System.out.println("Output folder: " + outputFolder.getAbsolutePath());
+    }
 
     @Before
     public void setUp() {
-        scope = AutoValuePrototypeAnnotationProcessor.Registrar.scope();
+        registrarScope = AutoValuePrototypeAnnotationProcessor.Registrar.scope();
+        fileListenerScope = Environment.withFileListener(this::writeFile);
     }
 
     @After
     public void tearDown() {
-        scope.close();
+        fileListenerScope.close();
+        registrarScope.close();
     }
 
     @Test
@@ -142,9 +167,37 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testCustomAutoAnnotationWithBuilder() {
+        tester()
+                .inputFiles(
+                        "CustomAutoAnnotationWithBuilder.java",
+                        "SampleValueUsingCustomProto.java")
+                .expectedSources("SampleValueUsingCustomConcreteWithBuilder.java")
+                .test();
+    }
+
+    @Test
+    public void testCustomAutoAnnotationWithCreator() {
+        tester()
+                .inputFiles(
+                        "CustomAutoAnnotationWithCreator.java",
+                        "SampleValueUsingCustomProto.java")
+                .expectedSources("SampleValueUsingCustomConcreteWithCreator.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
                 .processedWith(new AutoValuePrototypeAnnotationProcessor(), new AutoValueProcessor());
+    }
+
+    private void writeFile(String filename, String content) {
+        try (BufferedWriter writer = Files.newBufferedWriter(outputFolder.toPath().resolve(filename), StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
+            writer.write(content);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

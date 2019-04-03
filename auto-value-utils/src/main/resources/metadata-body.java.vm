@@ -1,4 +1,4 @@
-#parse("type-params.java.vm")
+#parse("macros.vm")
 
     @Override
 #if ($hasKey)

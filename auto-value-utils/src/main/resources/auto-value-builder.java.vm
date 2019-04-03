@@ -1,6 +1,6 @@
 package $targetClass.packageName();
 
-#parse("type-params.java.vm")
+#parse("macros.vm")
 
 $imports
 

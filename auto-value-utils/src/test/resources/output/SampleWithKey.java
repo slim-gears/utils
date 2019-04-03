@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
@@ -79,28 +76,43 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static SampleWithKey create(
+         String id,
+         int number,
+         String text) {
+        return SampleWithKey.builder()
+            .id(id)
+            .number(number)
+            .text(text)
+            .build();
+    }
+
     public abstract Builder toBuilder();
 
     public static Builder builder() {
         return Builder.create();
     }
 
-    @JsonCreator
-    public static SampleWithKey create(
-            @JsonProperty("id") String id,
-            @JsonProperty("number") int number,
-            @JsonProperty("text") String text) {
-        return SampleWithKey.builder()
-                .id(id)
-                .number(number)
-                .text(text)
-                .build();
+    @AutoValue.Builder
+    public interface Builder extends BuilderPrototype<SampleWithKey, Builder>, SampleWithKeyPrototypeBuilder<Builder> {
+        public static Builder create() {
+            return new AutoValue_SampleWithKey.Builder();
+        }
+
+        @Override
+            @Key
+        Builder id(String id);
+
+        @Override
+        Builder number(int number);
+
+        @Override
+        Builder text(String text);
     }
 
     @Override
@@ -113,20 +125,4 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
     @Override
     public abstract String text();
 
-    @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleWithKey, Builder>, SampleWithKeyPrototypeBuilder<Builder> {
-        public static Builder create() {
-            return new AutoValue_SampleWithKey.Builder();
-        }
-
-        @Override
-        @Key
-        Builder id(String id);
-
-        @Override
-        Builder number(int number);
-
-        @Override
-        Builder text(String text);
-    }
 }

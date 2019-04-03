@@ -14,5 +14,5 @@ public interface SampleValuePrototypeBuilder<_B extends SampleValuePrototypeBuil
 
     @SampleFieldAnnotation
     _B strValue(String strValue);
-
+    
 }

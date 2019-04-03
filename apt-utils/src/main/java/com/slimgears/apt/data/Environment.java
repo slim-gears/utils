@@ -26,10 +26,27 @@ public abstract class Environment implements Safe.Closable {
     private final static String excludedTypesOptionName = "rxrpc.excludeTypes";
     private final static String includeTypesOptionName = "rxrpc.includeTypes";
     private final static ScopedInstance<Environment> instance = ScopedInstance.create();
+    private final static ScopedInstance<FileListener> fileListenerInstance = ScopedInstance.create(FileListener.empty);
+
+    public interface FileListener {
+        FileListener empty = (f, c) -> {};
+        void onFileWrite(String filename, String content);
+
+        default FileListener add(FileListener listener) {
+            return (f, c) -> {
+                onFileWrite(f, c);
+                listener.onFileWrite(f, c);
+            };
+        }
+    }
 
     public abstract ProcessingEnvironment processingEnvironment();
     public abstract RoundEnvironment roundEnvironment();
     public abstract ImmutableMap<String, String> properties();
+
+    public FileListener fileListener() {
+        return fileListenerInstance.current();
+    }
 
     protected Environment() {
         this.closeable = instance.scope(this)
@@ -56,6 +73,10 @@ public abstract class Environment implements Safe.Closable {
 
     public Elements elements() {
         return processingEnvironment().getElementUtils();
+    }
+
+    public static ScopedInstance.Closeable withFileListener(FileListener listener) {
+        return fileListenerInstance.scope(fileListenerInstance.current().add(listener));
     }
 
     protected abstract Builder toBuilderInternal();

@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -71,33 +68,25 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static <T> SampleGeneric<T> create(
+         T tValue,
+         String value) {
+        return SampleGeneric.<T>builder()
+            .tValue(tValue)
+            .value(value)
+            .build();
+    }
+
     public abstract Builder<T> toBuilder();
 
     public static <T> Builder<T> builder() {
         return Builder.create();
     }
-
-    @JsonCreator
-    public static <T> SampleGeneric<T> create(
-            @JsonProperty("tValue") T tValue,
-            @JsonProperty("value") String value) {
-        return SampleGeneric.<T>builder()
-                .tValue(tValue)
-                .value(value)
-                .build();
-    }
-
-    @Override
-    public abstract T tValue();
-
-    @Override
-    public abstract String value();
 
     @AutoValue.Builder
     public interface Builder<T> extends BuilderPrototype<SampleGeneric<T>, Builder<T>>, SampleGenericPrototypeBuilder<T, Builder<T>> {
@@ -111,4 +100,11 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         @Override
         Builder<T> value(String value);
     }
+
+    @Override
+    public abstract T tValue();
+
+    @Override
+    public abstract String value();
+
 }

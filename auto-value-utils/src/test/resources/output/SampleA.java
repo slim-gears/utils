@@ -1,4 +1,4 @@
-package com.slimgears.sample;
+package com.slimgears.sample.a;
 
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
@@ -6,7 +6,6 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -14,20 +13,20 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<com.slimgears.sample.SampleGenericField> {
+public abstract class SampleA implements SampleAPrototype, HasMetaClass<com.slimgears.sample.a.SampleA> {
 
     @Override
-    public MetaClass<SampleGenericField> metaClass() {
+    public MetaClass<SampleA> metaClass() {
         return metaClass;
     }
 
     public static final Meta metaClass = new Meta();
-    public static class Meta implements MetaClass<SampleGenericField> {
-        private final TypeToken<SampleGenericField> objectClass = new TypeToken<SampleGenericField>(){};
+    public static class Meta implements MetaClass<SampleA> {
+        private final TypeToken<SampleA> objectClass = new TypeToken<SampleA>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
-        private final Map<String, PropertyMeta<SampleGenericField, ?>> propertyMap = new LinkedHashMap<>();
+        private final Map<String, PropertyMeta<SampleA, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGenericField, Class<? extends Collection>> value = PropertyMeta.<SampleGenericField, Class<? extends Collection>, Builder>create(this, "value", new TypeToken<Class<? extends Collection>>(){}, SampleGenericField::value, Builder::value);
+        public final PropertyMeta<SampleA, Integer> value = PropertyMeta.<SampleA, Integer, Builder>create(this, "value", new TypeToken<Integer>(){}, SampleA::value, Builder::value);
 
         Meta() {
             propertyMap.put("value", value);
@@ -39,24 +38,24 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         }
 
         @Override
-        public TypeToken<SampleGenericField> objectClass() {
+        public TypeToken<SampleA> objectClass() {
             return this.objectClass;
         }
 
         @Override
-        public Iterable<PropertyMeta<SampleGenericField, ?>> properties() {
+        public Iterable<PropertyMeta<SampleA, ?>> properties() {
             return propertyMap.values();
         }
 
         @Override
-        public <__V> PropertyMeta<SampleGenericField, __V> getProperty(String name) {
+        public <__V> PropertyMeta<SampleA, __V> getProperty(String name) {
             //noinspection unchecked
-            return (PropertyMeta<SampleGenericField, __V>)propertyMap.get(name);
+            return (PropertyMeta<SampleA, __V>)propertyMap.get(name);
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleGenericField, B>> B createBuilder() {
-            return (B)(BuilderPrototype)SampleGenericField.builder();
+        public <B extends BuilderPrototype<SampleA, B>> B createBuilder() {
+            return (B)(BuilderPrototype)SampleA.builder();
         }
 
         @Override
@@ -72,9 +71,9 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         }
     }
 
-    public static SampleGenericField create(
-         Class<? extends Collection> value) {
-        return SampleGenericField.builder()
+    public static SampleA create(
+         int value) {
+        return SampleA.builder()
             .value(value)
             .build();
     }
@@ -86,16 +85,16 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleGenericField, Builder>, SampleGenericFieldPrototypeBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleA, Builder>, SampleAPrototypeBuilder<Builder> {
         public static Builder create() {
-            return new AutoValue_SampleGenericField.Builder();
+            return new AutoValue_SampleA.Builder();
         }
 
         @Override
-        Builder value(Class<? extends Collection> value);
+        Builder value(int value);
     }
 
     @Override
-    public abstract Class<? extends Collection> value();
+    public abstract int value();
 
 }

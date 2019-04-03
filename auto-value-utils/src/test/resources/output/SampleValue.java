@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -76,30 +73,60 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static SampleValue create(
+         double doubleValue,
+         boolean foo,
+         int intValue,
+         String strValue) {
+        return SampleValue.builder()
+            .doubleValue(doubleValue)
+            .foo(foo)
+            .intValue(intValue)
+            .strValue(strValue)
+            .build();
+    }
+
+    public static SampleValue create(
+        double doubleValue,
+        boolean foo,
+        int intValue) {
+        return SampleValue.builder()
+            .doubleValue(doubleValue)
+            .foo(foo)
+            .intValue(intValue)
+            .build();
+    }
+
     public abstract Builder toBuilder();
 
     public static Builder builder() {
         return Builder.create();
     }
 
-    @JsonCreator
-    public static SampleValue create(
-            @JsonProperty("doubleValue") double doubleValue,
-            @JsonProperty("foo") boolean foo,
-            @JsonProperty("intValue") int intValue,
-            @JsonProperty("strValue") String strValue) {
-        return SampleValue.builder()
-                .doubleValue(doubleValue)
-                .foo(foo)
-                .intValue(intValue)
-                .strValue(strValue)
-                .build();
+    @AutoValue.Builder
+    public interface Builder extends BuilderPrototype<SampleValue, Builder>, SampleValuePrototypeBuilder<Builder> {
+        public static Builder create() {
+            return new AutoValue_SampleValue.Builder();
+        }
+
+        @Override
+            @SampleFieldAnnotation(strValue = "test")
+        Builder doubleValue(double doubleValue);
+
+        @Override
+        Builder foo(boolean foo);
+
+        @Override
+        Builder intValue(int intValue);
+
+        @Override
+            @SampleFieldAnnotation
+        Builder strValue(String strValue);
     }
 
     @Override
@@ -117,24 +144,4 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
     @Nullable
     public abstract String strValue();
 
-    @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleValue, Builder>, SampleValuePrototypeBuilder<Builder> {
-        public static Builder create() {
-            return new AutoValue_SampleValue.Builder();
-        }
-
-        @Override
-        @SampleFieldAnnotation(strValue = "test")
-        Builder doubleValue(double doubleValue);
-
-        @Override
-        Builder foo(boolean foo);
-
-        @Override
-        Builder intValue(int intValue);
-
-        @Override
-        @SampleFieldAnnotation
-        Builder strValue(String strValue);
-    }
 }

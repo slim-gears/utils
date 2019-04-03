@@ -1,9 +1,10 @@
-package com.slimgears.util.autovalue.apt;
+package com.slimgears.util.autovalue.apt.extensions;
 
 import com.google.auto.service.AutoService;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
+import com.slimgears.util.autovalue.apt.Context;
 
 import java.util.Collections;
 import java.util.Objects;

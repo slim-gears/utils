@@ -1,6 +1,7 @@
-package com.slimgears.util.autovalue.apt;
+package com.slimgears.util.autovalue.apt.extensions;
 
 import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.util.autovalue.apt.Context;
 import com.slimgears.util.stream.Streams;
 
 import java.util.Arrays;
@@ -12,13 +13,19 @@ public class CompositeExtension implements Extension {
     private final Collection<Extension> extensions;
 
     public CompositeExtension(String... extensions) {
-        this.extensions = Arrays
-                .stream(extensions)
-                .map(CompositeExtension::createExtension)
-                .collect(Collectors.toList());
+        this.extensions = Extensions.fromStrings(Extension.class, extensions);
     }
 
-    private CompositeExtension(Extension... extensions) {
+    public CompositeExtension(String[]... extensions) {
+        String[] allExtensions = Arrays.stream(extensions)
+                .flatMap(Arrays::stream)
+                .distinct()
+                .toArray(String[]::new);
+
+        this.extensions = Extensions.fromStrings(Extension.class, allExtensions);
+    }
+
+    private CompositeExtension(Extension[] extensions) {
         this.extensions = Arrays.asList(extensions);
     }
 
@@ -26,29 +33,10 @@ public class CompositeExtension implements Extension {
         return new CompositeExtension(extensions);
     }
 
-    private static Extension createExtension(String fullname) {
-        try {
-            Class cls = Class.forName(fullname);
-            if (!Extension.class.isAssignableFrom(cls)) {
-                throw new RuntimeException("Class " + fullname + " is not a valid extension");
-            }
-            return (Extension)cls.newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public String generateClassBody(Context context) {
         return extensions(context)
                 .map(e -> e.generateClassBody(context))
-                .collect(Collectors.joining("\n"));
-    }
-
-    @Override
-    public String generateBuilderBody(Context context) {
-        return extensions(context)
-                .map(e -> e.generateBuilderBody(context))
                 .collect(Collectors.joining("\n"));
     }
 

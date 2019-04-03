@@ -8,5 +8,5 @@ public interface SampleCustomBuilderValuePrototypeBuilder<_B extends SampleCusto
     _B doubleValue(double doubleValue);
 
     _B intValue(int intValue);
-
+    
 }

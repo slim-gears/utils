@@ -1,6 +1,7 @@
-package com.slimgears.util.autovalue.apt;
+package com.slimgears.util.autovalue.apt.extensions;
 
 import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.util.autovalue.apt.Context;
 
 import java.util.Collections;
 
@@ -10,10 +11,6 @@ public interface Extension {
     }
 
     default String generateClassBody(Context context) {
-        return "";
-    }
-
-    default String generateBuilderBody(Context context) {
         return "";
     }
 

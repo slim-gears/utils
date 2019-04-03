@@ -1,6 +1,6 @@
 package $targetClass.packageName();
 
-#parse("type-params.java.vm")
+#parse("macros.vm")
 
 $imports
 
@@ -10,31 +10,6 @@ public abstract class $targetClass.simpleName()#typeParamsDeclaration($sourceCla
 implements $[$sourceClass]#foreach ($iface in $extensions.getInterfaces($context)), $[$iface]#end ##
 {
 ${extensions.generateClassBody($context)}
-    @$[com.fasterxml.jackson.annotation.JsonIgnore]
-    public abstract Builder#typeParams($sourceClass) toBuilder();
-
-    public static #typeParamsDeclaration($sourceClass) Builder#typeParams($sourceClass) builder() {
-        return Builder.create();
-    }
-
-    @$[com.fasterxml.jackson.annotation.JsonCreator]
-    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) create(
-#foreach($p in $properties)
-        @$[com.fasterxml.jackson.annotation.JsonProperty]("$p.name()") $[$p.type()] $p.name()##
-    #if ($foreach.hasNext),##
-##
-
-##
-    #end##
-#end) {
-        return ${targetClass.simpleName()}.#typeParams($sourceClass)builder()
-#foreach($p in $properties)
-            .${p.name()}($p.name())##
-##
-
-#end
-            .build();
-    }
 
 #foreach ($p in $properties)
     @Override##
@@ -44,50 +19,14 @@ ${extensions.generateClassBody($context)}
     $a.asString()##
     #end##
 ##
+    #foreach ($a in $annotators.annotatePropertyMethod($context, $p))##
+##
+
+    $a.asString()##
+    #end##
+##
 
     public abstract $[$p.type()] $p.getterName()();
 
 #end
-
-    @$[com.google.auto.value.AutoValue].Builder
-    public interface Builder#typeParamsDeclaration($sourceClass) extends ##
-        $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<$targetClass.simpleName()#typeParams($sourceClass), ##
-        Builder#typeParams($sourceClass)>, ##
-        $[${sourceClass.erasureName()}Builder]<##
-        #foreach ($tp in $sourceClass.typeParams())##
-            $[$tp.type()], ##
-        #end##
-        Builder#typeParams($sourceClass)> ##
-        {
-        public static #typeParamsDeclaration($sourceClass) Builder#typeParams($sourceClass) create() {
-            return new AutoValue_${targetClass.simpleName()}.Builder#if ($sourceClass.hasTypeParams())<>#end();
-        }
-#foreach ($p in $properties)##
-##
-
-        @Override##
-    #foreach ($a in $p.annotations())##
-        #if ($a.type().simpleName() != "Nullable")##
-##
-
-        $a.asString()##
-        #end##
-    #end##
-##
-
-        Builder#typeParams($sourceClass) ${p.setterName()}($[$p.type()] $p.name());##
-    #if ($p.hasBuilder() && !$p.isOptional())##
-##
-
-        $[$p.builderType()] ${p.name()}Builder();##
-
-##
-    #end##
-    #if ($foreach.hasNext)##
-
-##
-    #end##
-#end
-
-    }
 }

@@ -5,28 +5,28 @@ import java.util.Iterator;
 import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
-public interface SampleSpecializedGenericPrototypeBuilder<_B extends SampleSpecializedGenericPrototypeBuilder<_B>> extends SampleGuavaInterfaceBuilder<java.lang.String, _B> {
+public interface SampleGuavaInterfaceBuilder<T, _B extends SampleGuavaInterfaceBuilder<T, _B>> {
 
-    _B values(ImmutableList<String> values);
+    _B values(ImmutableList<T> values);
     
-    ImmutableList.Builder<String> valuesBuilder();
+    ImmutableList.Builder<T> valuesBuilder();
         
-    default _B valuesAdd(String element) {
+    default _B valuesAdd(T element) {
         valuesBuilder().add(element); 
         return (_B)this;
     }
 
-    default _B valuesAdd(String... elements) {
+    default _B valuesAdd(T... elements) {
         valuesBuilder().add(elements); 
         return (_B)this;
     }
 
-    default _B valuesAddAll(Iterable<? extends String> elements) {
+    default _B valuesAddAll(Iterable<? extends T> elements) {
         valuesBuilder().addAll(elements); 
         return (_B)this;
     }
 
-    default _B valuesAddAll(Iterator<? extends String> elements) {
+    default _B valuesAddAll(Iterator<? extends T> elements) {
         valuesBuilder().addAll(elements); 
         return (_B)this;
     }

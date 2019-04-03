@@ -1,0 +1,37 @@
+#parse("macros.vm")
+
+    #annotate($annotators.annotateCreator($context))##
+
+    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) create(
+#foreach($p in $properties)
+        #annotate($annotators.annotateCreatorParameter($context, $p)) $[$p.type()] $p.name()##
+    #if ($foreach.hasNext),##
+
+##
+    #end##
+#end) {
+        return new AutoValue_${targetClass.simpleName()}#if ($sourceClass.hasTypeParams())<>#end(##
+#foreach($p in $properties)
+
+            $p.name()##
+    #if ($foreach.hasNext),#end##
+#end);
+    }
+
+#if ($properties.size() > $mandatoryProperties.size())
+    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) create(
+#foreach($p in $mandatoryProperties)
+        $[$p.type()] $p.name()##
+    #if ($foreach.hasNext),##
+
+##
+    #end##
+#end) {
+        return new AutoValue_${targetClass.simpleName()}#if ($sourceClass.hasTypeParams())<>#end(##
+#foreach($p in $properties)
+
+            #if ($p.isOptional())null#else$p.name()#end##
+    #if ($foreach.hasNext),#end##
+#end);
+    }
+#end

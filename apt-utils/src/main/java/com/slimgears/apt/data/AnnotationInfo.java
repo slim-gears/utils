@@ -11,8 +11,8 @@ import com.slimgears.apt.util.TemplateEvaluator;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Function;
 
 @AutoValue
 public abstract class AnnotationInfo implements HasType {
@@ -48,6 +48,18 @@ public abstract class AnnotationInfo implements HasType {
 
     public static Builder builder() {
         return new AutoValue_AnnotationInfo.Builder();
+    }
+
+    public static AnnotationInfo ofType(TypeInfo type, AnnotationValueInfo... values) {
+        Builder builder = builder().type(type);
+        builder.valuesBuilder().addAll(Arrays.asList(values));
+        return builder.build();
+    }
+
+    public static AnnotationInfo ofType(String type, AnnotationValueInfo... values) {
+        Builder builder = builder().type(TypeInfo.of(type));
+        builder.valuesBuilder().addAll(Arrays.asList(values));
+        return builder.build();
     }
 
     public static AnnotationInfo of(AnnotationMirror annotationMirror) {

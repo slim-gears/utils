@@ -4,7 +4,7 @@ import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
 import com.google.auto.service.AutoService;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Sets;
 import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.HasName;
@@ -16,6 +16,11 @@ import com.slimgears.apt.util.JavaUtils;
 import com.slimgears.apt.util.TemplateEvaluator;
 import com.slimgears.apt.util.TemplateUtils;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
+import com.slimgears.util.autovalue.apt.extensions.Annotator;
+import com.slimgears.util.autovalue.apt.extensions.CompositeAnnotator;
+import com.slimgears.util.autovalue.apt.extensions.CompositeExtension;
+import com.slimgears.util.autovalue.apt.extensions.Extension;
+import com.slimgears.util.autovalue.apt.extensions.Extensions;
 import com.slimgears.util.generic.ScopedInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,22 +28,26 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static com.slimgears.util.stream.Streams.ofType;
 
@@ -46,6 +55,23 @@ import static com.slimgears.util.stream.Streams.ofType;
 @SupportedAnnotationTypes("com.slimgears.util.autovalue.annotations.AutoValuePrototype")
 public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationProcessor {
     private final static Logger log = LoggerFactory.getLogger(AutoValuePrototypeAnnotationProcessor.class);
+    private final Map<String, MetaAnnotationInfo> metaAnnotationInfoMap = new HashMap<>();
+
+    public static class MetaAnnotationInfo {
+        final AutoValuePrototype prototypeAnnotation;
+        final Extension extension;
+        final Annotator annotator;
+
+        public MetaAnnotationInfo(TypeElement typeElement) {
+            this.prototypeAnnotation = typeElement.getAnnotation(AutoValuePrototype.class);
+            this.extension = new CompositeExtension(
+                    Extensions.namesFromType(typeElement, AutoValuePrototype.Extension.class, AutoValuePrototype.Extension::value),
+                    prototypeAnnotation.extensions());
+            this.annotator = new CompositeAnnotator(
+                    Extensions.namesFromType(typeElement, AutoValuePrototype.Annotator.class, AutoValuePrototype.Annotator::value),
+                    prototypeAnnotation.annotators());
+        }
+    }
 
     public static class Registrar {
         private final Collection<String> processedElements = new HashSet<>();
@@ -75,31 +101,43 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         }
     }
 
-    private final ImmutableMultimap<String, Annotator> valueAnnotators;
-
     public AutoValuePrototypeAnnotationProcessor() {
-        ImmutableMultimap.Builder<String, Annotator> builder = ImmutableMultimap.builder();
-        StreamSupport
-                .stream(ServiceLoader.load(Annotator.class, getClass().getClassLoader()).spliterator(), false)
-                .filter(service -> service.getClass().isAnnotationPresent(AnnotatorId.class))
-                .forEach(service -> {
-                    String[] keys = service.getClass().getAnnotation(AnnotatorId.class).value();
-                    Arrays.asList(keys).forEach(key -> builder.put(key, service));
-                });
-        valueAnnotators = builder.build();
     }
 
     @Override
     protected boolean processType(TypeElement annotationElement, TypeElement type) {
-        validatePrototype(type);
+        MetaAnnotationInfo metaAnnotation = resolveMetaAnnotation(annotationElement, type);
+        if (metaAnnotation == null) {
+            delayProcessing();
+        }
+
+        if (type.getKind() == ElementKind.ANNOTATION_TYPE) {
+            processMetaAnnotation(type, metaAnnotation);
+            process(Collections.singleton(type), Environment.instance().roundEnvironment());
+        } else {
+            processPrototype(type, metaAnnotation);
+        }
+
+        return true;
+    }
+
+    private void processMetaAnnotation(TypeElement type, MetaAnnotationInfo metaAnnotation) {
+        metaAnnotationInfoMap.put(type.getQualifiedName().toString(), metaAnnotation);
+    }
+
+    private void processPrototype(TypeElement type, MetaAnnotationInfo metaAnnotation) {
+        validatePrototype(type, metaAnnotation);
 
         DeclaredType declaredType = ElementUtils.toDeclaredType(type);
         //generateInterfaceBuilder(declaredType);
 
-        AutoValuePrototype annotation = type.getAnnotation(AutoValuePrototype.class);
-        String targetName = annotation.value().isEmpty()
-                ? type.getSimpleName().toString().replace("Prototype", "")
-                : annotation.value();
+        AutoValuePrototype annotation = metaAnnotation.prototypeAnnotation;
+        String pattern = annotation.pattern().isEmpty()
+                ? "Prototype"
+                : annotation.pattern();
+
+
+        String targetName = type.getSimpleName().toString().replaceAll(pattern, annotation.value());
 
         TypeInfo sourceClass = TypeInfo.of(type);
         TypeInfo[] sourceClassParams = sourceClass.typeParams().stream().map(TypeParameterInfo::typeName).map(TypeInfo::of).toArray(TypeInfo[]::new);
@@ -113,16 +151,16 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .toBuilder()
                 .typeParams(sourceClassParams)
                 .build();
-        TypeInfo builderClass = TypeInfo.of(targetClass.name() + "$Builder");
-        TypeInfo builderClassDeclaration = builderClass
-                .toBuilder()
-                .typeParams(sourceClass.typeParams())
-                .build();
-
-        TypeInfo builderClassWithParams = builderClass
-                .toBuilder()
-                .typeParams(sourceClassParams)
-                .build();
+//        TypeInfo builderClass = TypeInfo.of(targetClass.name() + "$Builder");
+//        TypeInfo builderClassDeclaration = builderClass
+//                .toBuilder()
+//                .typeParams(sourceClass.typeParams())
+//                .build();
+//
+//        TypeInfo builderClassWithParams = builderClass
+//                .toBuilder()
+//                .typeParams(sourceClassParams)
+//                .build();
 
         Collection<PropertyInfo> properties = getProperties(declaredType);
 
@@ -148,54 +186,27 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .sourceElement(type)
                 .targetClassDeclaration(targetClassDeclaration)
                 .targetClassWithParams(targetClassWithParams)
-                .builderClassDeclaration(builderClassDeclaration)
-                .builderClassWithParams(builderClassWithParams)
+                .extensions(metaAnnotation.extension)
+                .annotators(metaAnnotation.annotator)
+//                .builderClassDeclaration(builderClassDeclaration)
+//                .builderClassWithParams(builderClassWithParams)
                 .properties(properties)
                 .imports(importTracker)
                 .keyProperty(keyProperty)
                 .build();
 
-        importTracker.knownClass(TypeInfo.of(builderClassWithParams.erasureName()));
-        String[] extensions = type.getAnnotationMirrors()
-                .stream()
-                .flatMap(this::getExtensions)
-                .distinct()
-                .toArray(String[]::new);
-
-        Extension extension = new CompositeExtension(extensions);
+        importTracker.knownClass(targetClass);
+        //importTracker.knownClass(TypeInfo.of(builderClassWithParams.erasureName()));
 
         try {
             TemplateEvaluator.forResource("auto-value.java.vm")
                     .variables(context)
-                    .variable("context", context)
-                    .variable("extensions", extension)
                     .variable("processor", TypeInfo.of(getClass()))
                     .apply(JavaUtils.imports(importTracker))
                     .write(JavaUtils.fileWriter(processingEnv, targetClass));
         } catch (Throwable e) {
             log.error("Error occurred: {}", e);
-            return true;
         }
-
-        return true;
-    }
-
-    private Stream<String> getExtensions(AnnotationMirror annotationMirror) {
-        return Optional
-                .ofNullable(MoreTypes
-                        .asTypeElement(annotationMirror.getAnnotationType())
-                        .getAnnotation(AutoValuePrototype.Extension.class))
-                .map(e -> Arrays.stream(e.value()))
-                .orElseGet(Stream::empty);
-    }
-
-    private Annotator getAnnotators(String[] annotatorIds) {
-        return Arrays
-                .stream(annotatorIds)
-                .flatMap(id -> valueAnnotators.get(id).stream())
-                .distinct()
-                .reduce(Annotator::combine)
-                .orElse(Annotator.empty);
     }
 
     private void ensureBuildersForInterfaces(DeclaredType declaredType) {
@@ -319,8 +330,8 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .filter(element -> element.getParameters().isEmpty());
     }
 
-    private void validatePrototype(TypeElement type) {
-        AutoValuePrototype annotation = type.getAnnotation(AutoValuePrototype.class);
+    private void validatePrototype(TypeElement type, MetaAnnotationInfo metaAnnotation) {
+        AutoValuePrototype annotation = metaAnnotation.prototypeAnnotation;
 
         Preconditions.checkArgument(ElementUtils.isInterface(type), "AutoValue Prototype should be interface");
         Preconditions.checkArgument(
@@ -328,5 +339,28 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 type.getSimpleName().toString().startsWith("Prototype") ||
                 type.getSimpleName().toString().endsWith("Prototype"),
                 "AutoValue Prototype name should start or end with 'Prototype'");
+    }
+
+    private static Stream<String> getAnnotators(AnnotationMirror annotationMirror) {
+        return Optional
+                .ofNullable(MoreTypes
+                        .asTypeElement(annotationMirror.getAnnotationType())
+                        .getAnnotation(AutoValuePrototype.Annotator.class))
+                .map(e -> Arrays.stream(e.value()))
+                .orElseGet(Stream::empty);
+    }
+
+    private MetaAnnotationInfo resolveMetaAnnotation(TypeElement annotationElement, TypeElement typeElement) {
+        return AutoValuePrototype.class.getName().equals(annotationElement.getQualifiedName().toString())
+                ? new MetaAnnotationInfo(typeElement)
+                : Optional.ofNullable(annotationElement.getQualifiedName())
+                .map(Name::toString)
+                .map(metaAnnotationInfoMap::get)
+                .orElse(null);
+    }
+
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return Sets.union(super.getSupportedAnnotationTypes(), metaAnnotationInfoMap.keySet());
     }
 }

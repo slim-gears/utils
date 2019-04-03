@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
@@ -82,32 +79,70 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static SampleGuavaValue create(
+         ImmutableList<Integer> intList,
+         ImmutableBiMap<Integer, String> intToStringBiMap,
+         ImmutableMap<Integer, String> intToStringMap,
+         ImmutableList<String> optionalList,
+         ImmutableSet<String> stringSet) {
+        return SampleGuavaValue.builder()
+            .intList(intList)
+            .intToStringBiMap(intToStringBiMap)
+            .intToStringMap(intToStringMap)
+            .optionalList(optionalList)
+            .stringSet(stringSet)
+            .build();
+    }
+
+    public static SampleGuavaValue create(
+        ImmutableList<Integer> intList,
+        ImmutableBiMap<Integer, String> intToStringBiMap,
+        ImmutableMap<Integer, String> intToStringMap,
+        ImmutableSet<String> stringSet) {
+        return SampleGuavaValue.builder()
+            .intList(intList)
+            .intToStringBiMap(intToStringBiMap)
+            .intToStringMap(intToStringMap)
+            .stringSet(stringSet)
+            .build();
+    }
+
     public abstract Builder toBuilder();
 
     public static Builder builder() {
         return Builder.create();
     }
 
-    @JsonCreator
-    public static SampleGuavaValue create(
-            @JsonProperty("intList") ImmutableList<Integer> intList,
-            @JsonProperty("intToStringBiMap") ImmutableBiMap<Integer, String> intToStringBiMap,
-            @JsonProperty("intToStringMap") ImmutableMap<Integer, String> intToStringMap,
-            @JsonProperty("optionalList") ImmutableList<String> optionalList,
-            @JsonProperty("stringSet") ImmutableSet<String> stringSet) {
-        return SampleGuavaValue.builder()
-                .intList(intList)
-                .intToStringBiMap(intToStringBiMap)
-                .intToStringMap(intToStringMap)
-                .optionalList(optionalList)
-                .stringSet(stringSet)
-                .build();
+    @AutoValue.Builder
+    public interface Builder extends BuilderPrototype<SampleGuavaValue, Builder>, SampleGuavaValuePrototypeBuilder<Builder> {
+        public static Builder create() {
+            return new AutoValue_SampleGuavaValue.Builder();
+        }
+
+        @Override
+        Builder intList(ImmutableList<Integer> intList);
+            ImmutableList.Builder<Integer> intListBuilder();
+
+        @Override
+        Builder intToStringBiMap(ImmutableBiMap<Integer, String> intToStringBiMap);
+            ImmutableBiMap.Builder<Integer, String> intToStringBiMapBuilder();
+
+        @Override
+        Builder intToStringMap(ImmutableMap<Integer, String> intToStringMap);
+            ImmutableMap.Builder<Integer, String> intToStringMapBuilder();
+
+        @Override
+        Builder optionalList(ImmutableList<String> optionalList);
+
+        @Override
+        Builder stringSet(ImmutableSet<String> stringSet);
+            ImmutableSet.Builder<String> stringSetBuilder();
+
     }
 
     @Override
@@ -126,30 +161,4 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     @Override
     public abstract ImmutableSet<String> stringSet();
 
-    @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleGuavaValue, Builder>, SampleGuavaValuePrototypeBuilder<Builder> {
-        public static Builder create() {
-            return new AutoValue_SampleGuavaValue.Builder();
-        }
-
-        @Override
-        Builder intList(ImmutableList<Integer> intList);
-        ImmutableList.Builder<Integer> intListBuilder();
-
-        @Override
-        Builder intToStringBiMap(ImmutableBiMap<Integer, String> intToStringBiMap);
-        ImmutableBiMap.Builder<Integer, String> intToStringBiMapBuilder();
-
-        @Override
-        Builder intToStringMap(ImmutableMap<Integer, String> intToStringMap);
-        ImmutableMap.Builder<Integer, String> intToStringMapBuilder();
-
-        @Override
-        Builder optionalList(ImmutableList<String> optionalList);
-
-        @Override
-        Builder stringSet(ImmutableSet<String> stringSet);
-        ImmutableSet.Builder<String> stringSetBuilder();
-
-    }
 }

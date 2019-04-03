@@ -3,6 +3,7 @@
  */
 package com.slimgears.apt.util;
 
+import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.util.generic.ScopedInstance;
 import org.slf4j.Logger;
@@ -46,6 +47,9 @@ public class JavaUtils extends TemplateUtils {
             JavaFileObject sourceFile = environment.getFiler().createSourceFile(targetClass.name());
             try (Writer writer = sourceFile.openWriter()) {
                 writer.write(code);
+                Environment.instance()
+                        .fileListener()
+                        .onFileWrite(targetClass.simpleName() + ".java", code);
             }
         } catch (IOException e) {
             log.error(code, e);

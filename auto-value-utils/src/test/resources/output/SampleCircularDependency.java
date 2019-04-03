@@ -1,8 +1,5 @@
 package com.slimgears.sample;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
@@ -69,28 +66,23 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-                    && Objects.equals(((Meta)obj).objectClass(), objectClass())
-                    && Objects.equals(((Meta)obj).builderClass(), builderClass());
+            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }
 
-    @JsonIgnore
+    public static SampleCircularDependency create(
+         SampleCircularDependency parent) {
+        return SampleCircularDependency.builder()
+            .parent(parent)
+            .build();
+    }
+
     public abstract Builder toBuilder();
 
     public static Builder builder() {
         return Builder.create();
     }
-
-    @JsonCreator
-    public static SampleCircularDependency create(
-            @JsonProperty("parent") SampleCircularDependency parent) {
-        return SampleCircularDependency.builder()
-                .parent(parent)
-                .build();
-    }
-
-    @Override
-    public abstract SampleCircularDependency parent();
 
     @AutoValue.Builder
     public interface Builder extends BuilderPrototype<SampleCircularDependency, Builder>, SampleCircularDependencyPrototypeBuilder<Builder> {
@@ -101,4 +93,8 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         @Override
         Builder parent(SampleCircularDependency parent);
     }
+
+    @Override
+    public abstract SampleCircularDependency parent();
+
 }
