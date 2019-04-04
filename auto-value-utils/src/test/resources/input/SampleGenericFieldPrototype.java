@@ -1,12 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.AutoValueMetaData;
+import com.slimgears.util.autovalue.annotations.UseMetaDataExtension;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 import java.util.Collection;
 
 @AutoValuePrototype
-@AutoValueMetaData
+@UseMetaDataExtension
 public interface SampleGenericFieldPrototype {
     Class<? extends Collection> value();
 }

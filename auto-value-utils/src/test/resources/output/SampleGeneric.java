@@ -26,12 +26,12 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleGeneric<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGeneric<T>, T> tValue = PropertyMeta.<SampleGeneric<T>, T, Builder<T>>create(this, "tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
         public final PropertyMeta<SampleGeneric<T>, String> value = PropertyMeta.<SampleGeneric<T>, String, Builder<T>>create(this, "value", new TypeToken<String>(){}, SampleGeneric::value, Builder::value);
+        public final PropertyMeta<SampleGeneric<T>, T> tValue = PropertyMeta.<SampleGeneric<T>, T, Builder<T>>create(this, "tValue", new TypeToken<T>(){}, SampleGeneric::tValue, Builder::tValue);
 
         Meta() {
-            propertyMap.put("tValue", tValue);
             propertyMap.put("value", value);
+            propertyMap.put("tValue", tValue);
         }
 
         @Override
@@ -74,11 +74,11 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
     }
 
     public static <T> SampleGeneric<T> create(
-         T tValue,
-         String value) {
+         String value,
+         T tValue) {
         return SampleGeneric.<T>builder()
-            .tValue(tValue)
             .value(value)
+            .tValue(tValue)
             .build();
     }
 
@@ -95,16 +95,16 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         }
 
         @Override
-        Builder<T> tValue(T tValue);
+        Builder<T> value(String value);
 
         @Override
-        Builder<T> value(String value);
+        Builder<T> tValue(T tValue);
     }
 
     @Override
-    public abstract T tValue();
+    public abstract String value();
 
     @Override
-    public abstract String value();
+    public abstract T tValue();
 
 }

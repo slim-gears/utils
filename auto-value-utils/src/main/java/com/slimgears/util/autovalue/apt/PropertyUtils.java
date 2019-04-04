@@ -9,6 +9,7 @@ import com.slimgears.apt.data.HasName;
 import com.slimgears.apt.data.MethodInfo;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.ElementUtils;
+import com.slimgears.util.autovalue.annotations.NonProperty;
 import com.slimgears.util.autovalue.annotations.Reference;
 import com.slimgears.util.stream.Optionals;
 
@@ -91,7 +92,6 @@ public class PropertyUtils {
         return elements
                 .stream()
                 .map(ee -> PropertyInfo.create(type, ee, hasPrefix))
-                .sorted(Comparator.comparing(HasName::name))
                 .collect(Collectors.toList());
     }
 
@@ -101,7 +101,8 @@ public class PropertyUtils {
                 .filter(ElementUtils::isAbstract)
                 .filter(ElementUtils::isNotStatic)
                 .filter(ElementUtils::isPublic)
-                .filter(element -> element.getParameters().isEmpty());
+                .filter(element -> element.getParameters().isEmpty())
+                .filter(element -> element.getAnnotation(NonProperty.class) == null);
     }
 
 

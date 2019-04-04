@@ -4,35 +4,33 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import javax.annotation.Generated;
-import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleValueUsingCustomConcrete implements SampleValueUsingCustomProto {
+public abstract class SampleValueUsingCustomConcreteWithCreator implements SampleValueUsingCustomProto {
 
     @JsonCreator
-    public static SampleValueUsingCustomConcrete create(
-            @JsonProperty("optionalValue") Integer optionalValue,
-            @JsonProperty("value") int value) {
-        return new AutoValue_SampleValueUsingCustomConcrete(
-                optionalValue,
-                value);
+    public static SampleValueUsingCustomConcreteWithCreator create(
+        @JsonProperty("value") int value,
+        @JsonProperty("optionalValue") Integer optionalValue) {
+        return new AutoValue_SampleValueUsingCustomConcreteWithCreator(
+            value,
+            optionalValue);
     }
 
-    public static SampleValueUsingCustomConcrete create(
-            int value) {
-        return new AutoValue_SampleValueUsingCustomConcrete(
-                null,
-                value);
+    public static SampleValueUsingCustomConcreteWithCreator create(
+        int value) {
+        return new AutoValue_SampleValueUsingCustomConcreteWithCreator(
+            value,
+            null);
     }
-
-    @Override
-    @Nullable
-    @JsonProperty
-    public abstract Integer optionalValue();
 
     @Override
     @JsonProperty
     public abstract int value();
+
+    @Override
+    @JsonProperty
+    public abstract Integer optionalValue();
 
 }

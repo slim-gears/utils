@@ -5,14 +5,14 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleValuePrototypeBuilder<_B extends SampleValuePrototypeBuilder<_B>> {
 
+    _B intValue(int intValue);
+
     @SampleFieldAnnotation(strValue = "test")
     _B doubleValue(double doubleValue);
 
-    _B foo(boolean foo);
-
-    _B intValue(int intValue);
-
     @SampleFieldAnnotation
     _B strValue(String strValue);
+
+    _B foo(boolean foo);
     
 }

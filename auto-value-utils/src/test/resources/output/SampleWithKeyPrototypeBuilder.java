@@ -9,8 +9,8 @@ public interface SampleWithKeyPrototypeBuilder<_B extends SampleWithKeyPrototype
     @Key
     _B id(String id);
 
-    _B number(int number);
-
     _B text(String text);
+
+    _B number(int number);
     
 }

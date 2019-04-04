@@ -1,7 +1,7 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.AutoValueBuilder;
-import com.slimgears.util.autovalue.annotations.AutoValueMetaData;
+import com.slimgears.util.autovalue.annotations.UseBuilderExtension;
+import com.slimgears.util.autovalue.annotations.UseMetaDataExtension;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 import java.lang.annotation.ElementType;
@@ -13,10 +13,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @AutoValuePrototype(
         pattern = "(.*)Proto(.*)",
-        value = "$1Concrete$2",
+        value = "$1ConcreteWithBuilder$2",
         annotators = "com.slimgears.util.autovalue.apt.extensions.JacksonAnnotator")
-@AutoValueMetaData
-@AutoValueBuilder
+@UseMetaDataExtension
+@UseBuilderExtension
 @interface CustomAutoAnnotation {
 
 }

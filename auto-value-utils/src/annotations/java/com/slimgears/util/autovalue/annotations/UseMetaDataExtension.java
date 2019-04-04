@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@AutoValuePrototype.Annotator("com.slimgears.util.autovalue.apt.extensions.JacksonAnnotator")
-public @interface JacksonAnnotator {
+@AutoValuePrototype.Extension("com.slimgears.util.autovalue.apt.extensions.MetaDataExtension")
+@UseBuilderExtension
+public @interface UseMetaDataExtension {
 }

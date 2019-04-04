@@ -7,8 +7,6 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleBPrototypeBuilder<_B extends SampleBPrototypeBuilder<_B>> {
 
-    _B nestedEnum(SampleAPrototype.NestedEnum nestedEnum);
-
     _B value(SampleA value);
     
     SampleA.Builder valueBuilder();
@@ -18,4 +16,6 @@ public interface SampleBPrototypeBuilder<_B extends SampleBPrototypeBuilder<_B>>
         return (_B)this;
     }
 
+    _B nestedEnum(SampleAPrototype.NestedEnum nestedEnum);
+    
 }

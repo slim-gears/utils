@@ -8,6 +8,8 @@ import com.slimgears.util.stream.Streams;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -57,6 +59,11 @@ public class CompositeAnnotator implements Annotator {
     private Iterable<AnnotationInfo> combine(Function<Annotator, Iterable<AnnotationInfo>> func) {
         return annotators.stream()
                 .flatMap(a -> Streams.fromIterable(func.apply(a)))
-                .collect(Collectors.toCollection(Sets::newLinkedHashSet));
+                .collect(Collectors.groupingBy(AnnotationInfo::type, LinkedHashMap::new, Collectors.toCollection(Sets::newLinkedHashSet)))
+                .entrySet()
+                .stream()
+                .map(g -> g.getValue().stream().findFirst().orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

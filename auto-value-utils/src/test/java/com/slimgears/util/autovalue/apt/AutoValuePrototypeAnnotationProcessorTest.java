@@ -12,7 +12,8 @@ import org.slf4j.event.Level;
 
 public class AutoValuePrototypeAnnotationProcessorTest {
     private ScopedInstance.Closeable registrarScope;
-    @ClassRule public final static StoreWrittenFilesRule storeWrittenFilesRule = StoreWrittenFilesRule.forPath("build/test");
+    @ClassRule public final static StoreWrittenFilesRule storeWrittenFilesRule = StoreWrittenFilesRule
+            .forPath("build/test-results/files");
 
     @Before
     public void setUp() {

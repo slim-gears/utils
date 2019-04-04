@@ -26,12 +26,12 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleCustomBuilderValue, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleCustomBuilderValue, Double> doubleValue = PropertyMeta.<SampleCustomBuilderValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
         public final PropertyMeta<SampleCustomBuilderValue, Integer> intValue = PropertyMeta.<SampleCustomBuilderValue, Integer, Builder>create(this, "intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Double> doubleValue = PropertyMeta.<SampleCustomBuilderValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
 
         Meta() {
-            propertyMap.put("doubleValue", doubleValue);
             propertyMap.put("intValue", intValue);
+            propertyMap.put("doubleValue", doubleValue);
         }
 
         @Override
@@ -74,11 +74,11 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
     }
 
     public static SampleCustomBuilderValue create(
-         double doubleValue,
-         int intValue) {
+         int intValue,
+         double doubleValue) {
         return SampleCustomBuilderValue.builder()
-            .doubleValue(doubleValue)
             .intValue(intValue)
+            .doubleValue(doubleValue)
             .build();
     }
 
@@ -95,16 +95,16 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         }
 
         @Override
-        Builder doubleValue(double doubleValue);
+        Builder intValue(int intValue);
 
         @Override
-        Builder intValue(int intValue);
+        Builder doubleValue(double doubleValue);
     }
 
     @Override
-    public abstract double doubleValue();
+    public abstract int intValue();
 
     @Override
-    public abstract int intValue();
+    public abstract double doubleValue();
 
 }

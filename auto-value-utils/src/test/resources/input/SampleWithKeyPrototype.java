@@ -1,11 +1,11 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.AutoValueMetaData;
+import com.slimgears.util.autovalue.annotations.UseMetaDataExtension;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 import com.slimgears.util.autovalue.annotations.Key;
 
 @AutoValuePrototype
-@AutoValueMetaData
+@UseMetaDataExtension
 public interface SampleWithKeyPrototype {
     @Key String id();
     String text();

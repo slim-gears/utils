@@ -13,12 +13,6 @@ ${extensions.generateClassBody($context)}
 
 #foreach ($p in $properties)
     @Override##
-    #foreach ($a in $p.annotations())##
-##
-
-    $a.asString()##
-    #end##
-##
     #foreach ($a in $annotators.annotatePropertyMethod($context, $p))##
 ##
 

@@ -28,12 +28,12 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<com.slim
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleB, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleB, SampleAPrototype.NestedEnum> nestedEnum = PropertyMeta.<SampleB, SampleAPrototype.NestedEnum, Builder>create(this, "nestedEnum", new TypeToken<SampleAPrototype.NestedEnum>(){}, SampleB::nestedEnum, Builder::nestedEnum);
         public final PropertyMeta<SampleB, SampleA> value = PropertyMeta.<SampleB, SampleA, Builder>create(this, "value", new TypeToken<SampleA>(){}, SampleB::value, Builder::value);
+        public final PropertyMeta<SampleB, SampleAPrototype.NestedEnum> nestedEnum = PropertyMeta.<SampleB, SampleAPrototype.NestedEnum, Builder>create(this, "nestedEnum", new TypeToken<SampleAPrototype.NestedEnum>(){}, SampleB::nestedEnum, Builder::nestedEnum);
 
         Meta() {
-            propertyMap.put("nestedEnum", nestedEnum);
             propertyMap.put("value", value);
+            propertyMap.put("nestedEnum", nestedEnum);
         }
 
         @Override
@@ -76,11 +76,11 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<com.slim
     }
 
     public static SampleB create(
-         SampleAPrototype.NestedEnum nestedEnum,
-         SampleA value) {
+         SampleA value,
+         SampleAPrototype.NestedEnum nestedEnum) {
         return SampleB.builder()
-            .nestedEnum(nestedEnum)
             .value(value)
+            .nestedEnum(nestedEnum)
             .build();
     }
 
@@ -97,18 +97,17 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<com.slim
         }
 
         @Override
-        Builder nestedEnum(SampleAPrototype.NestedEnum nestedEnum);
-
-        @Override
         Builder value(SampleA value);
             SampleA.Builder valueBuilder();
 
+        @Override
+        Builder nestedEnum(SampleAPrototype.NestedEnum nestedEnum);
     }
 
     @Override
-    public abstract SampleAPrototype.NestedEnum nestedEnum();
+    public abstract SampleA value();
 
     @Override
-    public abstract SampleA value();
+    public abstract SampleAPrototype.NestedEnum nestedEnum();
 
 }

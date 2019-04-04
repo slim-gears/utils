@@ -37,32 +37,27 @@ public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePro
         return (_B)this;
     }
 
-    _B intToStringBiMap(ImmutableBiMap<Integer, String> intToStringBiMap);
+    _B stringSet(ImmutableSet<String> stringSet);
     
-    ImmutableBiMap.Builder<Integer, String> intToStringBiMapBuilder();
+    ImmutableSet.Builder<String> stringSetBuilder();
         
-    default _B intToStringBiMapOrderEntriesByValue(Comparator<? super String> valueComparator) {
-        intToStringBiMapBuilder().orderEntriesByValue(valueComparator); 
+    default _B stringSetAdd(String element) {
+        stringSetBuilder().add(element); 
         return (_B)this;
     }
 
-    default _B intToStringBiMapPut(Integer key, String value) {
-        intToStringBiMapBuilder().put(key, value); 
+    default _B stringSetAdd(String... elements) {
+        stringSetBuilder().add(elements); 
         return (_B)this;
     }
 
-    default _B intToStringBiMapPut(Map.Entry<? extends Integer, ? extends String> entry) {
-        intToStringBiMapBuilder().put(entry); 
+    default _B stringSetAddAll(Iterable<? extends String> elements) {
+        stringSetBuilder().addAll(elements); 
         return (_B)this;
     }
 
-    default _B intToStringBiMapPutAll(Map<? extends Integer, ? extends String> map) {
-        intToStringBiMapBuilder().putAll(map); 
-        return (_B)this;
-    }
-
-    default _B intToStringBiMapPutAll(Iterable<? extends Entry<? extends Integer, ? extends String>> entries) {
-        intToStringBiMapBuilder().putAll(entries); 
+    default _B stringSetAddAll(Iterator<? extends String> elements) {
+        stringSetBuilder().addAll(elements); 
         return (_B)this;
     }
 
@@ -95,30 +90,35 @@ public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePro
         return (_B)this;
     }
 
-    _B optionalList(ImmutableList<String> optionalList);
-
-    _B stringSet(ImmutableSet<String> stringSet);
+    _B intToStringBiMap(ImmutableBiMap<Integer, String> intToStringBiMap);
     
-    ImmutableSet.Builder<String> stringSetBuilder();
+    ImmutableBiMap.Builder<Integer, String> intToStringBiMapBuilder();
         
-    default _B stringSetAdd(String element) {
-        stringSetBuilder().add(element); 
+    default _B intToStringBiMapOrderEntriesByValue(Comparator<? super String> valueComparator) {
+        intToStringBiMapBuilder().orderEntriesByValue(valueComparator); 
         return (_B)this;
     }
 
-    default _B stringSetAdd(String... elements) {
-        stringSetBuilder().add(elements); 
+    default _B intToStringBiMapPut(Integer key, String value) {
+        intToStringBiMapBuilder().put(key, value); 
         return (_B)this;
     }
 
-    default _B stringSetAddAll(Iterable<? extends String> elements) {
-        stringSetBuilder().addAll(elements); 
+    default _B intToStringBiMapPut(Map.Entry<? extends Integer, ? extends String> entry) {
+        intToStringBiMapBuilder().put(entry); 
         return (_B)this;
     }
 
-    default _B stringSetAddAll(Iterator<? extends String> elements) {
-        stringSetBuilder().addAll(elements); 
+    default _B intToStringBiMapPutAll(Map<? extends Integer, ? extends String> map) {
+        intToStringBiMapBuilder().putAll(map); 
         return (_B)this;
     }
 
+    default _B intToStringBiMapPutAll(Iterable<? extends Entry<? extends Integer, ? extends String>> entries) {
+        intToStringBiMapBuilder().putAll(entries); 
+        return (_B)this;
+    }
+
+    _B optionalList(ImmutableList<String> optionalList);
+    
 }

@@ -28,8 +28,8 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         private final Map<String, PropertyMeta<SampleWithKey, ?>> propertyMap = new LinkedHashMap<>();
 
         public final PropertyMeta<SampleWithKey, String> id = PropertyMeta.<SampleWithKey, String, Builder>create(this, "id", new TypeToken<String>(){}, SampleWithKey::id, Builder::id);
-        public final PropertyMeta<SampleWithKey, Integer> number = PropertyMeta.<SampleWithKey, Integer, Builder>create(this, "number", new TypeToken<Integer>(){}, SampleWithKey::number, Builder::number);
         public final PropertyMeta<SampleWithKey, String> text = PropertyMeta.<SampleWithKey, String, Builder>create(this, "text", new TypeToken<String>(){}, SampleWithKey::text, Builder::text);
+        public final PropertyMeta<SampleWithKey, Integer> number = PropertyMeta.<SampleWithKey, Integer, Builder>create(this, "number", new TypeToken<Integer>(){}, SampleWithKey::number, Builder::number);
 
         @Override
         public PropertyMeta<SampleWithKey, String> keyProperty() {
@@ -38,8 +38,8 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
 
         Meta() {
             propertyMap.put("id", id);
-            propertyMap.put("number", number);
             propertyMap.put("text", text);
+            propertyMap.put("number", number);
         }
 
         @Override
@@ -83,12 +83,12 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
 
     public static SampleWithKey create(
          String id,
-         int number,
-         String text) {
+         String text,
+         int number) {
         return SampleWithKey.builder()
             .id(id)
-            .number(number)
             .text(text)
+            .number(number)
             .build();
     }
 
@@ -109,20 +109,19 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         Builder id(String id);
 
         @Override
-        Builder number(int number);
+        Builder text(String text);
 
         @Override
-        Builder text(String text);
+        Builder number(int number);
     }
 
     @Override
-    @Key
     public abstract String id();
 
     @Override
-    public abstract int number();
+    public abstract String text();
 
     @Override
-    public abstract String text();
+    public abstract int number();
 
 }

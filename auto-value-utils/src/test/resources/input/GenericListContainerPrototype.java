@@ -1,12 +1,12 @@
 package com.slimgears.sample;
 
-import com.slimgears.util.autovalue.annotations.AutoValueMetaData;
+import com.slimgears.util.autovalue.annotations.UseMetaDataExtension;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 
 import java.util.List;
 
 @AutoValuePrototype
-@AutoValueMetaData
+@UseMetaDataExtension
 public interface GenericListContainerPrototype<T> {
     List<com.slimgears.sample.GenericListItem<T>> items();
 }
