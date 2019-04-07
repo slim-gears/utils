@@ -48,8 +48,8 @@ public abstract class SampleA implements SampleAPrototype, HasMetaClass<com.slim
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleA, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleA, __V>)propertyMap.get(name);
         }
 
@@ -94,7 +94,5 @@ public abstract class SampleA implements SampleAPrototype, HasMetaClass<com.slim
         Builder value(int value);
     }
 
-    @Override
-    public abstract int value();
-
+    @Override public abstract int value();
 }

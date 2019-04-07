@@ -50,8 +50,8 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleCustomBuilderValue, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleCustomBuilderValue, __V>)propertyMap.get(name);
         }
 
@@ -101,10 +101,6 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         Builder doubleValue(double doubleValue);
     }
 
-    @Override
-    public abstract int intValue();
-
-    @Override
-    public abstract double doubleValue();
-
+    @Override public abstract int intValue();
+    @Override public abstract double doubleValue();
 }

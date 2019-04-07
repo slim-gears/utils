@@ -12,15 +12,6 @@ implements $[$sourceClass]#foreach ($iface in $extensions.getInterfaces($context
 ${extensions.generateClassBody($context)}
 
 #foreach ($p in $properties)
-    @Override##
-    #foreach ($a in $annotators.annotatePropertyMethod($context, $p))##
-##
-
-    $a.asString()##
-    #end##
-##
-
-    public abstract $[$p.type()] $p.getterName()();
-
+    @Override #annotatePropertyMethod($context, $p) public abstract $[$p.type()] $p.getterName()();
 #end
 }

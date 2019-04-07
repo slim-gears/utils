@@ -48,8 +48,8 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<GenericListItem<T>, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<GenericListItem<T>, __V>)propertyMap.get(name);
         }
 
@@ -94,7 +94,5 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         Builder<T> entry(T entry);
     }
 
-    @Override
-    public abstract T entry();
-
+    @Override public abstract T entry();
 }

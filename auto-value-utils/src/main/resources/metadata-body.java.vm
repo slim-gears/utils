@@ -64,8 +64,8 @@
         }
 
         @Override
+        @$[java.lang.SuppressWarnings]("unchecked")
         public <__V> $[com.slimgears.util.autovalue.annotations.PropertyMeta]<${targetClass.simpleName()}#typeParams($sourceClass), __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<${targetClass.simpleName()}#typeParams($sourceClass), __V>)propertyMap.get(name);
         }
 

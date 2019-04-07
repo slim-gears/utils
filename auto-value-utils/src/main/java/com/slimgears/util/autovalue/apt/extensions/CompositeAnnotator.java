@@ -42,11 +42,6 @@ public class CompositeAnnotator implements Annotator {
     }
 
     @Override
-    public Iterable<AnnotationInfo> annotateBuilderClass(Context context) {
-        return combine(annotator -> annotator.annotateBuilderClass(context));
-    }
-
-    @Override
     public Iterable<AnnotationInfo> annotateClass(Context context) {
         return combine(annotator -> annotator.annotateClass(context));
     }

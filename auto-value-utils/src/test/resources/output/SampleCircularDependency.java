@@ -48,8 +48,8 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleCircularDependency, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleCircularDependency, __V>)propertyMap.get(name);
         }
 
@@ -94,7 +94,5 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         Builder parent(SampleCircularDependency parent);
     }
 
-    @Override
-    public abstract SampleCircularDependency parent();
-
+    @Override public abstract SampleCircularDependency parent();
 }

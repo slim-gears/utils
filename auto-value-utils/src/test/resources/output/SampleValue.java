@@ -54,8 +54,8 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleValue, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleValue, __V>)propertyMap.get(name);
         }
 
@@ -128,16 +128,8 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         Builder foo(boolean foo);
     }
 
-    @Override
-    public abstract int intValue();
-
-    @Override
-    public abstract double doubleValue();
-
-    @Override
-    public abstract String strValue();
-
-    @Override
-    public abstract boolean foo();
-
+    @Override public abstract int intValue();
+    @Override public abstract double doubleValue();
+    @Override public abstract String strValue();
+    @Override public abstract boolean foo();
 }

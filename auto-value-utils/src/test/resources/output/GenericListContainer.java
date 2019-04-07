@@ -49,8 +49,8 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<GenericListContainer<T>, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<GenericListContainer<T>, __V>)propertyMap.get(name);
         }
 
@@ -95,7 +95,5 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         Builder<T> items(List<GenericListItem<T>> items);
     }
 
-    @Override
-    public abstract List<GenericListItem<T>> items();
-
+    @Override public abstract List<GenericListItem<T>> items();
 }

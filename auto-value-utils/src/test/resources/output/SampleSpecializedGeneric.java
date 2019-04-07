@@ -49,8 +49,8 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleSpecializedGeneric, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleSpecializedGeneric, __V>)propertyMap.get(name);
         }
 
@@ -97,7 +97,5 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
 
     }
 
-    @Override
-    public abstract ImmutableList<String> values();
-
+    @Override public abstract ImmutableList<String> values();
 }

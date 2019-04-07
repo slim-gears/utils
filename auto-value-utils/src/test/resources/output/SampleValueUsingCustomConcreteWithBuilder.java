@@ -53,8 +53,8 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, __V>)propertyMap.get(name);
         }
 
@@ -113,12 +113,6 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
         Builder optionalValue(Integer optionalValue);
     }
 
-    @Override
-    @JsonProperty
-    public abstract int value();
-
-    @Override
-    @JsonProperty
-    public abstract Integer optionalValue();
-
+    @Override @JsonProperty public abstract int value();
+    @Override @JsonProperty public abstract Integer optionalValue();
 }

@@ -52,8 +52,8 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<com.slim
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleB, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleB, __V>)propertyMap.get(name);
         }
 
@@ -104,10 +104,6 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<com.slim
         Builder nestedEnum(SampleAPrototype.NestedEnum nestedEnum);
     }
 
-    @Override
-    public abstract SampleA value();
-
-    @Override
-    public abstract SampleAPrototype.NestedEnum nestedEnum();
-
+    @Override public abstract SampleA value();
+    @Override public abstract SampleAPrototype.NestedEnum nestedEnum();
 }

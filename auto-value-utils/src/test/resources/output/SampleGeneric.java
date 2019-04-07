@@ -50,8 +50,8 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleGeneric<T>, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleGeneric<T>, __V>)propertyMap.get(name);
         }
 
@@ -101,10 +101,6 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         Builder<T> tValue(T tValue);
     }
 
-    @Override
-    public abstract String value();
-
-    @Override
-    public abstract T tValue();
-
+    @Override public abstract String value();
+    @Override public abstract T tValue();
 }

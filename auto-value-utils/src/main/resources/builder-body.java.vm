@@ -1,10 +1,10 @@
 #parse("macros.vm")
 
-    #annotate($annotators.annotateCreator($context))
+    #annotateCreator($context)
 
     public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) create(
 #foreach($p in $properties)
-        #annotate($annotators.annotateCreatorParameter($context, $p)) $[$p.type()] $p.name()##
+        #annotateCreatorParameter($context, $p) $[$p.type()] $p.name()##
     #if ($foreach.hasNext),##
 ##
 
@@ -40,7 +40,7 @@
     }
 #end
 
-    #annotate($annotators.annotateNonPropertyMethod($context))
+    #annotateNonPropertyMethod($context)
 
     public abstract Builder#typeParams($sourceClass) toBuilder();
 

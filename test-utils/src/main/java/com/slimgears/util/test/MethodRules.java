@@ -6,6 +6,7 @@ import org.junit.rules.MethodRule;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class MethodRules {
     public final static MethodRule empty = (base, method, target) -> base;
@@ -23,7 +24,7 @@ public class MethodRules {
                 .providersForMethod(
                         method,
                         AnnotationMethodRule.Qualifier.class,
-                        annotatedItem -> toMethodRule(resolver.resolve(annotatedItem.qualifier().value()), annotatedItem.annotation()))
+                        annotatedItem -> toMethodRule(() -> resolver.resolve(annotatedItem.qualifier().value()), annotatedItem.annotation()))
                 .reduce(MethodRules::combine)
                 .orElse(empty)
                 .apply(base, method, target);
@@ -33,8 +34,8 @@ public class MethodRules {
         return annotationRule(ServiceResolvers.defaultConstructorResolver());
     }
 
-    private static MethodRule toMethodRule(AnnotationMethodRule rule, Annotation annotation) {
-        //noinspection unchecked
-        return rule.toMethodRule(annotation);
+    @SuppressWarnings("unchecked")
+    private static MethodRule toMethodRule(Supplier<AnnotationMethodRule> rule, Annotation annotation) {
+        return (base, method, target) -> rule.get().toMethodRule(annotation).apply(base, method, target);
     }
 }

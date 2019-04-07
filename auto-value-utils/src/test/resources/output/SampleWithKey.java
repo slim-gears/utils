@@ -58,8 +58,8 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleWithKey, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleWithKey, __V>)propertyMap.get(name);
         }
 
@@ -115,13 +115,7 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         Builder number(int number);
     }
 
-    @Override
-    public abstract String id();
-
-    @Override
-    public abstract String text();
-
-    @Override
-    public abstract int number();
-
+    @Override public abstract String id();
+    @Override public abstract String text();
+    @Override public abstract int number();
 }

@@ -60,8 +60,8 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleGuavaValue, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleGuavaValue, __V>)propertyMap.get(name);
         }
 
@@ -143,19 +143,9 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         Builder optionalList(ImmutableList<String> optionalList);
     }
 
-    @Override
-    public abstract ImmutableList<Integer> intList();
-
-    @Override
-    public abstract ImmutableSet<String> stringSet();
-
-    @Override
-    public abstract ImmutableMap<Integer, String> intToStringMap();
-
-    @Override
-    public abstract ImmutableBiMap<Integer, String> intToStringBiMap();
-
-    @Override
-    public abstract ImmutableList<String> optionalList();
-
+    @Override public abstract ImmutableList<Integer> intList();
+    @Override public abstract ImmutableSet<String> stringSet();
+    @Override public abstract ImmutableMap<Integer, String> intToStringMap();
+    @Override public abstract ImmutableBiMap<Integer, String> intToStringBiMap();
+    @Override public abstract ImmutableList<String> optionalList();
 }

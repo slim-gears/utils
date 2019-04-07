@@ -48,8 +48,8 @@ public abstract class SampleNestedType implements SampleNestedTypePrototype, Has
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleNestedType, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleNestedType, __V>)propertyMap.get(name);
         }
 
@@ -94,7 +94,5 @@ public abstract class SampleNestedType implements SampleNestedTypePrototype, Has
         Builder value(SampleNestedTypePrototype.NestedEnum value);
     }
 
-    @Override
-    public abstract SampleNestedTypePrototype.NestedEnum value();
-
+    @Override public abstract SampleNestedTypePrototype.NestedEnum value();
 }

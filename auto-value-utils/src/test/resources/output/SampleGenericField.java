@@ -49,8 +49,8 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleGenericField, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleGenericField, __V>)propertyMap.get(name);
         }
 
@@ -95,7 +95,5 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         Builder value(Class<? extends Collection> value);
     }
 
-    @Override
-    public abstract Class<? extends Collection> value();
-
+    @Override public abstract Class<? extends Collection> value();
 }

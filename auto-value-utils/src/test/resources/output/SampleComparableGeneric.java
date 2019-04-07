@@ -48,8 +48,8 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <__V> PropertyMeta<SampleComparableGeneric<T>, __V> getProperty(String name) {
-            //noinspection unchecked
             return (PropertyMeta<SampleComparableGeneric<T>, __V>)propertyMap.get(name);
         }
 
@@ -94,7 +94,5 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         Builder<T> tValue(T tValue);
     }
 
-    @Override
-    public abstract T tValue();
-
+    @Override public abstract T tValue();
 }
