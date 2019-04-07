@@ -14,4 +14,37 @@ ${extensions.generateClassBody($context)}
 #foreach ($p in $properties)
     @Override #annotatePropertyMethod($context, $p) public abstract $[$p.type()] $p.getterName()();
 #end
+
+#foreach ($m in $staticMethods)
+    #foreach ($a in $m.annotations())##
+
+    $a.asString()
+##
+    #end##
+    public static #typeParamsDeclaration($m) ##
+    #if ($m.returnType().erasureName() == $sourceClass.erasureName())##
+        $targetClass.simpleName()#typeParams($m.returnType())##
+    #else##
+        $[$m.returnType()]##
+    #end ##
+         $m.name()(##
+    #foreach ($param in $m.params())##
+
+        $[$param.type()] $param.name()##
+        #if ($foreach.hasNext),#end##
+    #end##
+        ) {
+        #if ($m.hasReturnType())return ##
+            #if ($m.returnType().erasureName() == $sourceClass.erasureName())##
+                ($targetClass.simpleName()#typeParams($m.returnType()))##
+            #end ##
+        #end${sourceClass.simpleName()}.${m.name()}(##
+    #foreach ($param in $m.params())##
+
+            $param.name()##
+        #if ($foreach.hasNext),#end##
+    #end##
+        );
+    }
+#end
 }

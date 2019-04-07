@@ -103,4 +103,5 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
 
     @Override public abstract int intValue();
     @Override public abstract double doubleValue();
+
 }

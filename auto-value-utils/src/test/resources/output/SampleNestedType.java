@@ -95,4 +95,5 @@ public abstract class SampleNestedType implements SampleNestedTypePrototype, Has
     }
 
     @Override public abstract SampleNestedTypePrototype.NestedEnum value();
+
 }

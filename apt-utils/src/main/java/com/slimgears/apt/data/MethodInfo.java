@@ -14,6 +14,10 @@ import java.util.stream.IntStream;
 public abstract class MethodInfo implements HasName, HasEnclosingType, HasAnnotations, HasParameters, HasTypeParameters {
     public abstract TypeInfo returnType();
 
+    public boolean hasReturnType() {
+        return !TypeInfo.of(void.class).equals(returnType());
+    }
+
     public static Builder builder() {
         return new AutoValue_MethodInfo.Builder();
     }

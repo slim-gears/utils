@@ -103,4 +103,10 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
 
     @Override public abstract String value();
     @Override public abstract T tValue();
+
+    public static <T> SampleGeneric<T> createDefault(
+        T value) {
+        return (SampleGeneric<T>) SampleGenericPrototype.createDefault(
+            value);
+    }
 }

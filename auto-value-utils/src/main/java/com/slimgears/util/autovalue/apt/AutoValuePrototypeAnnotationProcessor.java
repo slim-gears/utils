@@ -134,6 +134,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .extensions(metaAnnotation.extension)
                 .annotators(metaAnnotation.annotator)
                 .properties(properties)
+                .staticMethods(PropertyUtils.getStaticMethonds(declaredType))
                 .imports(importTracker)
                 .keyProperty(keyProperty)
                 .build();

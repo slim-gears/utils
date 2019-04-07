@@ -106,4 +106,5 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<com.slim
 
     @Override public abstract SampleA value();
     @Override public abstract SampleAPrototype.NestedEnum nestedEnum();
+
 }

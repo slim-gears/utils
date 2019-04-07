@@ -95,4 +95,5 @@ public abstract class SampleA implements SampleAPrototype, HasMetaClass<com.slim
     }
 
     @Override public abstract int value();
+
 }

@@ -98,4 +98,5 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
     }
 
     @Override public abstract ImmutableList<String> values();
+
 }

@@ -12,8 +12,10 @@ import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.util.autovalue.annotations.NonProperty;
 import com.slimgears.util.autovalue.annotations.Reference;
 import com.slimgears.util.stream.Optionals;
+import com.slimgears.util.stream.Streams;
 
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
@@ -74,6 +76,16 @@ public class PropertyUtils {
     private static boolean propertyHasPrefix(ExecutableElement element) {
         String getterName = element.getSimpleName().toString();
         return !PropertyInfo.propertyName(getterName).equals(getterName);
+    }
+
+    public static Collection<MethodInfo> getStaticMethonds(DeclaredType type) {
+        return MoreElements.asType(type.asElement())
+                .getEnclosedElements()
+                .stream()
+                .flatMap(Streams.ofType(ExecutableElement.class))
+                .filter(m -> m.getModifiers().contains(Modifier.STATIC))
+                .map(m -> MethodInfo.create(m, type))
+                .collect(Collectors.toList());
     }
 
     public static Collection<PropertyInfo> getProperties(DeclaredType type) {

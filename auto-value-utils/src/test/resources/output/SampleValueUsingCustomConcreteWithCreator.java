@@ -27,4 +27,5 @@ public abstract class SampleValueUsingCustomConcreteWithCreator implements Sampl
 
     @Override @JsonProperty public abstract int value();
     @Override @JsonProperty public abstract Integer optionalValue();
+
 }

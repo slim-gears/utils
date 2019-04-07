@@ -96,4 +96,5 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
     }
 
     @Override public abstract List<GenericListItem<T>> items();
+
 }

@@ -95,4 +95,5 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
     }
 
     @Override public abstract T entry();
+
 }

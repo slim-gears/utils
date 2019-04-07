@@ -95,4 +95,5 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
     }
 
     @Override public abstract T tValue();
+
 }

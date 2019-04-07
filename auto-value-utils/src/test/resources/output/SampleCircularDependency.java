@@ -95,4 +95,5 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
     }
 
     @Override public abstract SampleCircularDependency parent();
+
 }

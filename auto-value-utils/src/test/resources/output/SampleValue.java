@@ -132,4 +132,8 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
     @Override public abstract double doubleValue();
     @Override public abstract String strValue();
     @Override public abstract boolean foo();
+
+    public static SampleValue createDefault() {
+        return SampleValuePrototype.createDefault();
+    }
 }

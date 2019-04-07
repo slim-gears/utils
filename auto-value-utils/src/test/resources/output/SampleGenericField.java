@@ -96,4 +96,5 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
     }
 
     @Override public abstract Class<? extends Collection> value();
+
 }

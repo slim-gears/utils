@@ -118,4 +118,5 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
     @Override public abstract String id();
     @Override public abstract String text();
     @Override public abstract int number();
+
 }

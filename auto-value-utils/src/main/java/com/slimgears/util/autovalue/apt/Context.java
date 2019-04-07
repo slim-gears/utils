@@ -2,6 +2,7 @@ package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.value.AutoValue;
 import com.slimgears.apt.data.Environment;
+import com.slimgears.apt.data.MethodInfo;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.ImportTracker;
 import com.slimgears.apt.util.TemplateEvaluator;
@@ -23,6 +24,7 @@ public abstract class Context {
     public abstract TypeInfo targetClassWithParams();
     public abstract Extension extensions();
     public abstract Annotator annotators();
+    public abstract Collection<MethodInfo> staticMethods();
 //    public abstract TypeInfo builderClassDeclaration();
 //    public abstract TypeInfo builderClassWithParams();
     public abstract Collection<PropertyInfo> properties();
@@ -77,11 +79,13 @@ public abstract class Context {
         Builder targetClassWithParams(TypeInfo cls);
 //        Builder builderClassDeclaration(TypeInfo cls);
 //        Builder builderClassWithParams(TypeInfo cls);
+        Builder staticMethods(Collection<MethodInfo> methods);
         Builder properties(Collection<PropertyInfo> properties);
         Builder imports(ImportTracker imports);
         Builder keyProperty(PropertyInfo keyProperty);
         Builder extensions(Extension extension);
         Builder annotators(Annotator annotator);
+
         Context build();
     }
 }

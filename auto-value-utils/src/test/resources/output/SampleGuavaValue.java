@@ -148,4 +148,5 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     @Override public abstract ImmutableMap<Integer, String> intToStringMap();
     @Override public abstract ImmutableBiMap<Integer, String> intToStringBiMap();
     @Override public abstract ImmutableList<String> optionalList();
+
 }

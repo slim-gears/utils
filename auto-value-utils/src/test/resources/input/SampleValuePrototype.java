@@ -22,4 +22,8 @@ public interface SampleValuePrototype {
     default String calculatedString() {
         return strValue() + doubleValue() + intValue();
     }
+
+    static SampleValue createDefault() {
+        return SampleValue.builder().build();
+    }
 }

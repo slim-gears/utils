@@ -7,10 +7,9 @@ import com.google.inject.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ThreadSingletonScope implements Scope {
-    private final ThreadLocal<Map<Key, Object>> instances = new ThreadLocal<>();
+    private final ThreadLocal<Map<Key, Object>> instances = ThreadLocal.withInitial(HashMap::new);
 
     private ThreadSingletonScope() {
     }
@@ -22,12 +21,7 @@ public class ThreadSingletonScope implements Scope {
     }
 
     private Map<Key, Object> getObjects() {
-        return Optional.ofNullable(instances.get())
-                .orElseGet(() -> {
-                    Map<Key, Object> map = new HashMap<>();
-                    instances.set(map);
-                    return map;
-                });
+        return instances.get();
     }
 
     public static void install(Binder binder) {
