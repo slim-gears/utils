@@ -91,9 +91,9 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
     }
 
     public static SampleValue create(
-        int intValue,
-        double doubleValue,
-        boolean foo) {
+int intValue,
+double doubleValue,
+boolean foo) {
         return SampleValue.builder()
             .intValue(intValue)
             .doubleValue(doubleValue)

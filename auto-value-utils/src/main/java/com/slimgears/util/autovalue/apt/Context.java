@@ -31,6 +31,14 @@ public abstract class Context {
     public abstract ImportTracker imports();
     @Nullable public abstract PropertyInfo keyProperty();
 
+    public boolean allMandatory() {
+        return properties().stream().noneMatch(PropertyInfo::isOptional);
+    }
+
+    public boolean allOptional() {
+        return properties().stream().allMatch(PropertyInfo::isOptional);
+    }
+
     public Environment environment() {
         return Environment.instance();
     }

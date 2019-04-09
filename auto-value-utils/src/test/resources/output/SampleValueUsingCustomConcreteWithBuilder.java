@@ -87,7 +87,7 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
     }
 
     public static SampleValueUsingCustomConcreteWithBuilder create(
-        int value) {
+int value) {
         return SampleValueUsingCustomConcreteWithBuilder.builder()
             .value(value)
             .build();

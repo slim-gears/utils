@@ -18,8 +18,7 @@ public abstract class SampleValueUsingCustomConcreteWithCreator implements Sampl
             optionalValue);
     }
 
-    public static SampleValueUsingCustomConcreteWithCreator create(
-        int value) {
+    public static SampleValueUsingCustomConcreteWithCreator create(int value) {
         return new AutoValue_SampleValueUsingCustomConcreteWithCreator(
             value,
             null);

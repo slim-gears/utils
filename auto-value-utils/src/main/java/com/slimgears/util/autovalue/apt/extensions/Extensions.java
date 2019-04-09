@@ -2,6 +2,7 @@ package com.slimgears.util.autovalue.apt.extensions;
 
 import com.google.auto.common.MoreTypes;
 import com.google.common.collect.ImmutableMultimap;
+import com.slimgears.apt.data.AnnotationInfo;
 import com.slimgears.util.stream.Streams;
 
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -51,7 +52,7 @@ public class Extensions {
                 .collect(Collectors.toList());
     }
 
-    public static <E> Stream<E> extensionsForAnnotationMirror(ImmutableMultimap<String, E> extensionMap, Set<String> visitedAnnotations, AnnotationMirror annotationMirror) {
+    private static <E> Stream<E> extensionsForAnnotationMirror(ImmutableMultimap<String, E> extensionMap, Set<String> visitedAnnotations, AnnotationMirror annotationMirror) {
         String annotationTypeName = annotationMirror.getAnnotationType().toString();
         return visitedAnnotations.add(annotationTypeName)
             ? Stream.concat(
@@ -64,6 +65,26 @@ public class Extensions {
                             .stream()
                             .flatMap(am -> extensionsForAnnotationMirror(extensionMap, visitedAnnotations, am)))
             : Stream.empty();
+    }
+
+    public static Collection<AnnotationInfo> allAnnotationsForType(TypeElement typeElement) {
+        return typeElement.getAnnotationMirrors().stream()
+                .flatMap(am -> allAnnotationsForAnnotationMirror(new HashSet<>(), am))
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private static Stream<AnnotationInfo> allAnnotationsForAnnotationMirror(Set<String> visitedAnnotations, AnnotationMirror annotationMirror) {
+        String annotationTypeName = annotationMirror.getAnnotationType().toString();
+        return visitedAnnotations.add(annotationTypeName)
+                ? Stream.concat(
+                        Stream.of(AnnotationInfo.of(annotationMirror)),
+                        annotationMirror.getAnnotationType()
+                                .asElement()
+                                .getAnnotationMirrors()
+                                .stream()
+                                .flatMap(am -> allAnnotationsForAnnotationMirror(visitedAnnotations, am)))
+                : Stream.empty();
     }
 
     private static Stream<String> supportedAnnotations(Class<?> cls) {

@@ -166,6 +166,46 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                 .test();
     }
 
+    @Test
+    public void testCustomAutoAnnotationOptionalOnlyWithBuilder() {
+        tester()
+                .inputFiles(
+                        "CustomAutoAnnotationWithBuilder.java",
+                        "SampleAllOptionalPropertiesProto.java")
+                .expectedSources("SampleAllOptionalPropertiesConcreteWithBuilder.java")
+                .test();
+    }
+
+    @Test
+    public void testCustomAutoAnnotationOptionalOnlyWithCreator() {
+        tester()
+                .inputFiles(
+                        "CustomAutoAnnotationWithCreator.java",
+                        "SampleAllOptionalPropertiesProto.java")
+                .expectedSources("SampleAllOptionalPropertiesConcreteWithCreator.java")
+                .test();
+    }
+
+    @Test
+    public void testCustomAutoAnnotationOptionalOnlyGenericWithBuilder() {
+        tester()
+                .inputFiles(
+                        "CustomAutoAnnotationWithBuilder.java",
+                        "GenericAllOptionalPropertiesProto.java")
+                .expectedSources("GenericAllOptionalPropertiesConcreteWithBuilder.java")
+                .test();
+    }
+
+    @Test
+    public void testCustomAutoAnnotationOptionalOnlyGenericWithCreator() {
+        tester()
+                .inputFiles(
+                        "CustomAutoAnnotationWithCreator.java",
+                        "GenericAllOptionalPropertiesProto.java")
+                .expectedSources("GenericAllOptionalPropertiesConcreteWithCreator.java")
+                .test();
+    }
+
     private AnnotationProcessingTester tester() {
         return AnnotationProcessingTester.create()
                 .verbosity(Level.TRACE)
