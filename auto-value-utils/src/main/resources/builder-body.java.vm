@@ -48,7 +48,8 @@
         return Builder.create();
     }
 
-    @$[com.google.auto.value.AutoValue].Builder
+    #annotateBuilderClass($context)
+
     public interface Builder#typeParamsDeclaration($sourceClass) extends ##
             $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<$targetClass.simpleName()#typeParams($sourceClass), ##
             Builder#typeParams($sourceClass)>, ##

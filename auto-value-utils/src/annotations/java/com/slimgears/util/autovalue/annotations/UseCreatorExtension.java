@@ -7,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-@AutoValuePrototype.Extension("com.slimgears.util.autovalue.apt.extensions.CreatorExtension")
 public @interface UseCreatorExtension {
 }

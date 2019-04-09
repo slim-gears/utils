@@ -1,14 +1,19 @@
 package com.slimgears.util.autovalue.apt.extensions;
 
 import com.google.auto.common.MoreTypes;
+import com.google.common.collect.ImmutableMultimap;
 import com.slimgears.util.stream.Streams;
 
+import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.TypeElement;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +35,48 @@ public class Extensions {
                 .flatMap(am -> namesFromAnnotationMirror(am, annotationCls, getter))
                 .distinct()
                 .toArray(String[]::new);
+    }
+
+    public static <E> ImmutableMultimap<String, E> loadExtensions(Class<E> extensionClass) {
+        ImmutableMultimap.Builder<String, E> builder = ImmutableMultimap.builder();
+        Streams.fromIterable(ServiceLoader.load(extensionClass, Extensions.class.getClassLoader()))
+                .forEach(e -> supportedAnnotations(e.getClass()).forEach(a -> builder.put(a, e)));
+        return builder.build();
+    }
+
+    public static <E> Collection<E> extensionsForType(ImmutableMultimap<String, E> extensionMap, TypeElement type) {
+        return type.getAnnotationMirrors().stream()
+                .flatMap(am -> extensionsForAnnotationMirror(extensionMap, new HashSet<>(), am))
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public static <E> Stream<E> extensionsForAnnotationMirror(ImmutableMultimap<String, E> extensionMap, Set<String> visitedAnnotations, AnnotationMirror annotationMirror) {
+        String annotationTypeName = annotationMirror.getAnnotationType().toString();
+        return visitedAnnotations.add(annotationTypeName)
+            ? Stream.concat(
+                    Optional.ofNullable(extensionMap.get(annotationTypeName))
+                            .map(Collection::stream)
+                            .orElseGet(Stream::empty),
+                    annotationMirror.getAnnotationType()
+                            .asElement()
+                            .getAnnotationMirrors()
+                            .stream()
+                            .flatMap(am -> extensionsForAnnotationMirror(extensionMap, visitedAnnotations, am)))
+            : Stream.empty();
+    }
+
+    private static Stream<String> supportedAnnotations(Class<?> cls) {
+        return Stream.concat(
+                Optional.ofNullable(cls.getAnnotation(SupportedAnnotationTypes.class))
+                        .map(SupportedAnnotationTypes::value)
+                        .map(Arrays::stream)
+                        .orElseGet(Stream::empty),
+                Optional.ofNullable(cls.getAnnotation(SupportedAnnotations.class))
+                        .map(SupportedAnnotations::value)
+                        .map(Arrays::stream)
+                        .orElseGet(Stream::empty)
+                        .map(Class::getName));
     }
 
     private static <A extends Annotation> Stream<String> namesFromAnnotationMirror(AnnotationMirror annotationMirror, Class<A> cls, Function<A, String[]> getter) {

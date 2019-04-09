@@ -1,5 +1,6 @@
-package com.slimgears.util.autovalue.annotations;
+package com.slimgears.util.autovalue.apt.extensions;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -7,7 +8,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@UseAutoValueAnnotator
-@UseBuilderExtension
-public @interface UseMetaDataExtension {
+public @interface SupportedAnnotations {
+    Class<? extends Annotation>[] value();
 }

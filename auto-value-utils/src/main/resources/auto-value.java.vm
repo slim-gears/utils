@@ -5,7 +5,8 @@ package $targetClass.packageName();
 $imports
 
 @$[javax.annotation.Generated]("$processor")
-@$[com.google.auto.value.AutoValue]
+#annotateClass($context)
+
 public abstract class $targetClass.simpleName()#typeParamsDeclaration($sourceClass) ##
 implements $[$sourceClass]#foreach ($iface in $extensions.getInterfaces($context)), $[$iface]#end ##
 {

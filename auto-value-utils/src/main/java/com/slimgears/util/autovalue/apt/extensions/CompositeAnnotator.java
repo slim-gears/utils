@@ -16,14 +16,16 @@ import java.util.stream.Collectors;
 public class CompositeAnnotator implements Annotator {
     private final Collection<Annotator> annotators;
 
-    public CompositeAnnotator(String... extensions) {
-        this.annotators = Extensions.fromStrings(Annotator.class, extensions);
+    private CompositeAnnotator(Collection<Annotator> annotators) {
+        this.annotators = annotators;
     }
 
-    public CompositeAnnotator(String[]... extensions) {
-        this.annotators = Extensions.fromStrings(
-                Annotator.class,
-                Arrays.stream(extensions).flatMap(Arrays::stream).distinct().toArray(String[]::new));
+    public static CompositeAnnotator of(Annotator... annotators) {
+        return of(Arrays.asList(annotators));
+    }
+
+    public static CompositeAnnotator of(Collection<Annotator> annotators) {
+        return new CompositeAnnotator(annotators);
     }
 
     @Override
@@ -44,6 +46,11 @@ public class CompositeAnnotator implements Annotator {
     @Override
     public Iterable<AnnotationInfo> annotateClass(Context context) {
         return combine(annotator -> annotator.annotateClass(context));
+    }
+
+    @Override
+    public Iterable<AnnotationInfo> annotateBuilderClass(Context context) {
+        return combine(annotator -> annotator.annotateBuilderClass(context));
     }
 
     @Override

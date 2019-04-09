@@ -4,12 +4,14 @@ import com.google.auto.service.AutoService;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
+import com.slimgears.util.autovalue.annotations.UseMetaDataExtension;
 import com.slimgears.util.autovalue.apt.Context;
 
 import java.util.Collections;
 import java.util.Objects;
 
 @AutoService(Extension.class)
+@SupportedAnnotations(UseMetaDataExtension.class)
 public class MetaDataExtension implements Extension {
     private final Extension extension = CompositeExtension.of(new WithKey(), new WithoutKey());
 
@@ -30,7 +32,6 @@ public class MetaDataExtension implements Extension {
         }
     }
 
-    @AutoService(Extension.class)
     private static class WithoutKey implements Extension {
         @Override
         public boolean isApplicable(Context context) {

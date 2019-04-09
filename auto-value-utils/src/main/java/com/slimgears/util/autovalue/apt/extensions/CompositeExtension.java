@@ -12,24 +12,15 @@ import java.util.stream.Stream;
 public class CompositeExtension implements Extension {
     private final Collection<Extension> extensions;
 
-    public CompositeExtension(String... extensions) {
-        this.extensions = Extensions.fromStrings(Extension.class, extensions);
-    }
-
-    public CompositeExtension(String[]... extensions) {
-        String[] allExtensions = Arrays.stream(extensions)
-                .flatMap(Arrays::stream)
-                .distinct()
-                .toArray(String[]::new);
-
-        this.extensions = Extensions.fromStrings(Extension.class, allExtensions);
-    }
-
-    private CompositeExtension(Extension[] extensions) {
-        this.extensions = Arrays.asList(extensions);
+    private CompositeExtension(Collection<Extension> extensions) {
+        this.extensions = extensions;
     }
 
     public static Extension of(Extension... extensions) {
+        return of(Arrays.asList(extensions));
+    }
+
+    public static Extension of(Collection<Extension> extensions) {
         return new CompositeExtension(extensions);
     }
 

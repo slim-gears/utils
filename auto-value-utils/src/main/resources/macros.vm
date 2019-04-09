@@ -39,3 +39,6 @@
 #macro (annotateClass $context)##
     #foreach($a in $context.annotators().annotateClass($context))$a.asString()#if ($foreach.hasNext) #end#end##
 #end##
+#macro (annotateBuilderClass $context)##
+    #foreach($a in $context.annotators().annotateBuilderClass($context))$a.asString()#if ($foreach.hasNext) #end#end##
+#end##

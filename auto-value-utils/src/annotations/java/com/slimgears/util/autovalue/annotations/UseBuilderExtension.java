@@ -7,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@AutoValuePrototype.Extension("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public @interface UseBuilderExtension {
 }

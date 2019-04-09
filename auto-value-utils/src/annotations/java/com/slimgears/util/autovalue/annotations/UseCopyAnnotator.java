@@ -7,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@AutoValuePrototype.Annotator("com.slimgears.util.autovalue.apt.extensions.CopyAnnotationsAnnotator")
 public @interface UseCopyAnnotator {
 }

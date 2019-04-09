@@ -2,6 +2,7 @@ package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.service.AutoService;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Sets;
 import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
@@ -17,6 +18,7 @@ import com.slimgears.util.autovalue.apt.extensions.CompositeAnnotator;
 import com.slimgears.util.autovalue.apt.extensions.CompositeExtension;
 import com.slimgears.util.autovalue.apt.extensions.Extension;
 import com.slimgears.util.autovalue.apt.extensions.Extensions;
+import com.slimgears.util.stream.Lazy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,8 @@ import java.util.stream.Collectors;
 @SupportedAnnotationTypes("com.slimgears.util.autovalue.annotations.AutoValuePrototype")
 public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationProcessor {
     private final static Logger log = LoggerFactory.getLogger(AutoValuePrototypeAnnotationProcessor.class);
+    private final Lazy<ImmutableMultimap<String, Extension>> extensionMap;
+    private final Lazy<ImmutableMultimap<String, Annotator>> annotatorMap;
     private final Map<String, MetaAnnotationInfo> metaAnnotationInfoMap = new HashMap<>();
 
     public static class MetaAnnotationInfo {
@@ -46,18 +50,18 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         final Extension extension;
         final Annotator annotator;
 
-        public MetaAnnotationInfo(TypeElement typeElement) {
+        public MetaAnnotationInfo(TypeElement typeElement,
+                                  Collection<Extension> extensions,
+                                  Collection<Annotator> annotators) {
             this.prototypeAnnotation = typeElement.getAnnotation(AutoValuePrototype.class);
-            this.extension = new CompositeExtension(
-                    Extensions.namesFromType(typeElement, AutoValuePrototype.Extension.class, AutoValuePrototype.Extension::value),
-                    prototypeAnnotation.extensions());
-            this.annotator = new CompositeAnnotator(
-                    Extensions.namesFromType(typeElement, AutoValuePrototype.Annotator.class, AutoValuePrototype.Annotator::value),
-                    prototypeAnnotation.annotators());
+            this.extension = CompositeExtension.of(extensions);
+            this.annotator = CompositeAnnotator.of(annotators);
         }
     }
 
     public AutoValuePrototypeAnnotationProcessor() {
+        this.extensionMap = Lazy.of(() -> Extensions.loadExtensions(Extension.class));
+        this.annotatorMap = Lazy.of(() -> Extensions.loadExtensions(Annotator.class));
     }
 
     @Override
@@ -148,7 +152,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                     .apply(JavaUtils.imports(importTracker))
                     .write(JavaUtils.fileWriter(processingEnv, targetClass));
         } catch (Throwable e) {
-            log.error("Error occurred: {}", e);
+            log.error("Error occurred:", e);
         }
     }
 
@@ -165,7 +169,10 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
     private MetaAnnotationInfo resolveMetaAnnotation(TypeElement annotationElement, TypeElement typeElement) {
         return AutoValuePrototype.class.getName().equals(annotationElement.getQualifiedName().toString())
-                ? new MetaAnnotationInfo(typeElement)
+                ? new MetaAnnotationInfo(
+                        typeElement,
+                        Extensions.extensionsForType(extensionMap.get(), typeElement),
+                        Extensions.extensionsForType(annotatorMap.get(), typeElement))
                 : Optional.ofNullable(annotationElement.getQualifiedName())
                 .map(Name::toString)
                 .map(metaAnnotationInfoMap::get)

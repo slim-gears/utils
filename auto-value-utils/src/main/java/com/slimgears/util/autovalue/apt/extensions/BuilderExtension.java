@@ -10,6 +10,7 @@ import com.slimgears.apt.util.ImportTracker;
 import com.slimgears.apt.util.JavaUtils;
 import com.slimgears.apt.util.TemplateEvaluator;
 import com.slimgears.apt.util.TemplateUtils;
+import com.slimgears.util.autovalue.annotations.UseBuilderExtension;
 import com.slimgears.util.autovalue.apt.BuilderInfo;
 import com.slimgears.util.autovalue.apt.Context;
 import com.slimgears.util.autovalue.apt.PropertyInfo;
@@ -30,24 +31,26 @@ import java.util.stream.Stream;
 import static com.slimgears.util.stream.Streams.ofType;
 
 @AutoService(Extension.class)
+@SupportedAnnotations(UseBuilderExtension.class)
 public class BuilderExtension implements Extension {
-    private final Logger log = LoggerFactory.getLogger(BuilderExtension.class);
+    private final static Logger log = LoggerFactory.getLogger(BuilderExtension.class);
 
     @Override
     public String generateClassBody(Context context) {
-        ensureBuildersForInterfaces(MoreTypes.asDeclared(context.sourceElement().asType()));
+        ensureBuildersForInterfaces(context.sourceElement());
         return context.evaluateResource("builder-body.java.vm");
     }
 
-    private void ensureBuildersForInterfaces(DeclaredType declaredType) {
+    private static void ensureBuildersForInterfaces(TypeElement typeElement) {
+        DeclaredType declaredType = MoreTypes.asDeclared(typeElement.asType());
         ElementUtils
                 .getHierarchy(declaredType)
                 .filter(t -> ElementUtils.toTypeElement(declaredType).anyMatch(ElementUtils::isInterface))
                 .filter(Registrar.current()::needsProcessing)
-                .forEach(this::generateInterfaceBuilder);
+                .forEach(BuilderExtension::generateInterfaceBuilder);
     }
 
-    private void generateInterfaceBuilder(DeclaredType type) {
+    private static void generateInterfaceBuilder(DeclaredType type) {
         type = MoreTypes.asDeclared(type.asElement().asType());
         Registrar.current().processed(type);
         Collection<BuilderInfo> builders = getBuilders(type);
@@ -69,7 +72,7 @@ public class BuilderExtension implements Extension {
                 .variable("utils", new TemplateUtils())
                 .variable("builders", builders)
                 .variable("properties", properties)
-                .variable("processor", TypeInfo.of(getClass()))
+                .variable("processor", TypeInfo.of(BuilderExtension.class))
                 .variable("sourceClass", sourceClass)
                 .variable("targetClass", targetClass)
                 .variable("imports", importTracker)
@@ -77,7 +80,7 @@ public class BuilderExtension implements Extension {
                 .write(JavaUtils.fileWriter(Environment.instance().processingEnvironment(), targetClass));
     }
 
-    private Collection<BuilderInfo> getBuilders(DeclaredType type) {
+    private static Collection<BuilderInfo> getBuilders(DeclaredType type) {
         return Stream
                 .concat(
                         ElementUtils.getHierarchy(type)
@@ -100,21 +103,21 @@ public class BuilderExtension implements Extension {
                 .collect(Collectors.toList());
     }
 
-    private Predicate<TypeElement> isValidBuilder(DeclaredType type) {
+    private static Predicate<TypeElement> isValidBuilder(DeclaredType type) {
         return te -> isValidBuilderName(te) && hasValidTypeParams(type, te);
     }
 
-    private boolean isValidBuilderName(TypeElement typeElement) {
+    private static boolean isValidBuilderName(TypeElement typeElement) {
         return "Builder".equals(typeElement.getSimpleName().toString());
     }
 
-    private boolean hasValidTypeParams(DeclaredType valType, TypeElement typeElement) {
+    private static boolean hasValidTypeParams(DeclaredType valType, TypeElement typeElement) {
         int paramSize = typeElement.getTypeParameters().size();
         return paramSize == valType.getTypeArguments().size() + 1 &&
                 hasValidBuilderBounds(typeElement, typeElement.getTypeParameters().get(paramSize - 1));
     }
 
-    private boolean hasValidBuilderBounds(TypeElement builderType, TypeParameterElement typeParamElement) {
+    private static boolean hasValidBuilderBounds(TypeElement builderType, TypeParameterElement typeParamElement) {
         if (typeParamElement.getBounds().size() != 1) {
             return false;
         }

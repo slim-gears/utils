@@ -7,7 +7,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@UseAutoValueAnnotator
-@UseBuilderExtension
-public @interface UseMetaDataExtension {
+public @interface UseAutoValueAnnotator {
 }

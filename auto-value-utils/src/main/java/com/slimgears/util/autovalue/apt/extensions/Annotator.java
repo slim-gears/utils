@@ -23,6 +23,10 @@ public interface Annotator {
         return Collections.emptySet();
     }
 
+    default Iterable<AnnotationInfo> annotateBuilderClass(Context context) {
+        return Collections.emptySet();
+    }
+
     default Iterable<AnnotationInfo> annotateNonPropertyMethod(Context context) {
         return Collections.emptySet();
     }
