@@ -68,7 +68,7 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
         String propertyName = propertyName(getterName);
         String setterName = usePrefixes ? "set" + capitalize(propertyName) : getterName;
 
-        PropertyInfo propertyInfo = builder()
+        return builder()
                 .name(propertyName)
                 .getterName(getterName)
                 .setterName(setterName)
@@ -79,8 +79,6 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
                 .annotationsFromElement(element)
                 .addBuilderMethods(PropertyUtils.builderMethods(executableType))
                 .build();
-
-        return propertyInfo;
     }
 
     static String propertyName(String name) {
