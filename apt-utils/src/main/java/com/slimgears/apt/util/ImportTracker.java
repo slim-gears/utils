@@ -89,19 +89,19 @@ public class ImportTracker {
             return typeInfo;
         }
 
-        if (knownClasses.contains(typeInfo.importName()) ||
-                (typeInfo.isArray() && knownClasses.contains(typeInfo.elementTypeOrSelf().importName()))) {
-            return typeInfo;
-        }
+        if (!knownClasses.contains(typeInfo.importName()) &&
+                (!typeInfo.isArray() || !knownClasses.contains(typeInfo.elementTypeOrSelf().importName()))) {
+            usedClasses.add(typeInfo.isArray()
+                    ? typeInfo.elementTypeOrSelf()
+                    : TypeInfo.of(typeInfo.importName()));
 
-        usedClasses.add(typeInfo.isArray()
-                ? typeInfo.elementTypeOrSelf()
-                : TypeInfo.of(typeInfo.importName()));
-
-        String packageName = typeInfo.packageName();
-        if (!packageName.isEmpty() && !knownPackageNames.contains(packageName)) {
-            TypeInfo importType = typeInfo.isArray() ? typeInfo.elementTypeOrSelf() : typeInfo;
-            imports.add(importType.importName());
+            String packageName = typeInfo.packageName();
+            if (!packageName.isEmpty() && !knownPackageNames.contains(packageName)) {
+                TypeInfo importType = typeInfo.isArray()
+                        ? typeInfo.elementTypeOrSelf()
+                        : typeInfo;
+                imports.add(importType.importName());
+            }
         }
 
         return TypeInfo.builder()

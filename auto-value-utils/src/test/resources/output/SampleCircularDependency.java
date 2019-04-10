@@ -13,7 +13,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleCircularDependency implements SampleCircularDependencyPrototype, HasMetaClass<com.slimgears.sample.SampleCircularDependency> {
+public abstract class SampleCircularDependency implements SampleCircularDependencyPrototype, HasMetaClass<SampleCircularDependency> {
 
     @Override
     public MetaClass<SampleCircularDependency> metaClass() {

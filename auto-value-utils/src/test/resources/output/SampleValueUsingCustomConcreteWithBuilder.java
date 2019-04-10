@@ -16,7 +16,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleValueUsingCustomConcreteWithBuilder implements SampleValueUsingCustomProto, HasMetaClass<com.slimgears.sample.SampleValueUsingCustomConcreteWithBuilder> {
+public abstract class SampleValueUsingCustomConcreteWithBuilder implements SampleValueUsingCustomProto, HasMetaClass<SampleValueUsingCustomConcreteWithBuilder> {
 
     @Override
     public MetaClass<SampleValueUsingCustomConcreteWithBuilder> metaClass() {

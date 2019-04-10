@@ -13,7 +13,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class SampleNestedType implements SampleNestedTypePrototype, HasMetaClass<com.slimgears.sample.SampleNestedType> {
+public abstract class SampleNestedType implements SampleNestedTypePrototype, HasMetaClass<SampleNestedType> {
 
     @Override
     public MetaClass<SampleNestedType> metaClass() {

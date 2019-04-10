@@ -16,7 +16,7 @@ import javax.annotation.Generated;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
-public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends Comparable<T>> implements GenericAllOptionalPropertiesProto<T>, HasMetaClass<com.slimgears.sample.GenericAllOptionalPropertiesConcreteWithBuilder<T>> {
+public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends Comparable<T>> implements GenericAllOptionalPropertiesProto<T>, HasMetaClass<GenericAllOptionalPropertiesConcreteWithBuilder<T>> {
 
     @Override
     public MetaClass<GenericAllOptionalPropertiesConcreteWithBuilder<T>> metaClass() {
