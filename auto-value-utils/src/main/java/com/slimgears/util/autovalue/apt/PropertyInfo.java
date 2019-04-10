@@ -57,6 +57,10 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
         return TypeInfo.of(PropertyUtils.builderTypeFor(MoreTypes.asDeclared(propertyType())));
     }
 
+    public String capitalizedName() {
+        return capitalize(name());
+    }
+
     public static Builder builder() {
         return new AutoValue_PropertyInfo.Builder();
     }

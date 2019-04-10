@@ -27,21 +27,21 @@ public abstract class GenericAllOptionalPropertiesConcreteWithCreator<T extends 
             null);
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithCreator<T> intProperty(Integer intProperty) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithCreator<T> ofIntProperty(Integer intProperty) {
         return create(
             intProperty,
             null,
             null);
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithCreator<T> strProperty(String strProperty) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithCreator<T> ofStrProperty(String strProperty) {
         return create(
             null,
             strProperty,
             null);
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithCreator<T> genericValue(T genericValue) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithCreator<T> ofGenericValue(T genericValue) {
         return create(
             null,
             null,

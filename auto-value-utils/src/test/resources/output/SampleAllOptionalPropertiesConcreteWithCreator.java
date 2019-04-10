@@ -24,13 +24,13 @@ public abstract class SampleAllOptionalPropertiesConcreteWithCreator implements 
             null);
     }
 
-    public static SampleAllOptionalPropertiesConcreteWithCreator intProperty(Integer intProperty) {
+    public static SampleAllOptionalPropertiesConcreteWithCreator ofIntProperty(Integer intProperty) {
         return create(
             intProperty,
             null);
     }
 
-    public static SampleAllOptionalPropertiesConcreteWithCreator strProperty(String strProperty) {
+    public static SampleAllOptionalPropertiesConcreteWithCreator ofStrProperty(String strProperty) {
         return create(
             null,
             strProperty);

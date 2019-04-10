@@ -118,15 +118,15 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
         Builder<T> genericValue(T genericValue);
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> intProperty(Integer intProperty) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> ofIntProperty(Integer intProperty) {
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder().intProperty(intProperty).build();
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> strProperty(String strProperty) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> ofStrProperty(String strProperty) {
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder().strProperty(strProperty).build();
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> genericValue(T genericValue) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> ofGenericValue(T genericValue) {
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder().genericValue(genericValue).build();
     }
 
