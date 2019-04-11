@@ -26,8 +26,8 @@ public abstract class SampleCustomBuilderValue implements SampleCustomBuilderVal
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleCustomBuilderValue, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleCustomBuilderValue, Integer> intValue = PropertyMeta.<SampleCustomBuilderValue, Integer, Builder>create(this, "intValue", new TypeToken<Integer>(){}, SampleCustomBuilderValue::intValue, Builder::intValue);
-        public final PropertyMeta<SampleCustomBuilderValue, Double> doubleValue = PropertyMeta.<SampleCustomBuilderValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, SampleCustomBuilderValue::doubleValue, Builder::doubleValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Integer> intValue = PropertyMeta.<SampleCustomBuilderValue, Integer, Builder>create(this, "intValue", new TypeToken<Integer>(){}, obj -> obj.intValue(), Builder::intValue);
+        public final PropertyMeta<SampleCustomBuilderValue, Double> doubleValue = PropertyMeta.<SampleCustomBuilderValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, obj -> obj.doubleValue(), Builder::doubleValue);
 
         Meta() {
             propertyMap.put("intValue", intValue);

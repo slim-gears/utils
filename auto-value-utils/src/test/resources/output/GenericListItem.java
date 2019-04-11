@@ -26,7 +26,7 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericListItem<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<GenericListItem<T>, T> entry = PropertyMeta.<GenericListItem<T>, T, Builder<T>>create(this, "entry", new TypeToken<T>(){}, GenericListItem::entry, Builder::entry);
+        public final PropertyMeta<GenericListItem<T>, T> entry = PropertyMeta.<GenericListItem<T>, T, Builder<T>>create(this, "entry", new TypeToken<T>(){}, obj -> obj.entry(), Builder::entry);
 
         Meta() {
             propertyMap.put("entry", entry);

@@ -28,8 +28,8 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<SampleB>
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleB, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleB, SampleA> value = PropertyMeta.<SampleB, SampleA, Builder>create(this, "value", new TypeToken<SampleA>(){}, SampleB::value, Builder::value);
-        public final PropertyMeta<SampleB, SampleAPrototype.NestedEnum> nestedEnum = PropertyMeta.<SampleB, SampleAPrototype.NestedEnum, Builder>create(this, "nestedEnum", new TypeToken<SampleAPrototype.NestedEnum>(){}, SampleB::nestedEnum, Builder::nestedEnum);
+        public final PropertyMeta<SampleB, SampleA> value = PropertyMeta.<SampleB, SampleA, Builder>create(this, "value", new TypeToken<SampleA>(){}, obj -> obj.value(), Builder::value);
+        public final PropertyMeta<SampleB, SampleAPrototype.NestedEnum> nestedEnum = PropertyMeta.<SampleB, SampleAPrototype.NestedEnum, Builder>create(this, "nestedEnum", new TypeToken<SampleAPrototype.NestedEnum>(){}, obj -> obj.nestedEnum(), Builder::nestedEnum);
 
         Meta() {
             propertyMap.put("value", value);

@@ -29,9 +29,9 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer> intProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer, Builder<T>>create(this, "intProperty", new TypeToken<Integer>(){}, GenericAllOptionalPropertiesConcreteWithBuilder::intProperty, Builder::intProperty);
-        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String> strProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String, Builder<T>>create(this, "strProperty", new TypeToken<String>(){}, GenericAllOptionalPropertiesConcreteWithBuilder::strProperty, Builder::strProperty);
-        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T> genericValue = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T, Builder<T>>create(this, "genericValue", new TypeToken<T>(){}, GenericAllOptionalPropertiesConcreteWithBuilder::genericValue, Builder::genericValue);
+        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer> intProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer, Builder<T>>create(this, "intProperty", new TypeToken<Integer>(){}, obj -> obj.intProperty(), Builder::intProperty);
+        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String> strProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String, Builder<T>>create(this, "strProperty", new TypeToken<String>(){}, obj -> obj.strProperty(), Builder::strProperty);
+        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T> genericValue = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T, Builder<T>>create(this, "genericValue", new TypeToken<T>(){}, obj -> obj.genericValue(), Builder::genericValue);
 
         Meta() {
             propertyMap.put("intProperty", intProperty);
@@ -118,15 +118,15 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
         Builder<T> genericValue(T genericValue);
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> ofIntProperty(Integer intProperty) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> intProperty(Integer intProperty) {
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder().intProperty(intProperty).build();
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> ofStrProperty(String strProperty) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> strProperty(String strProperty) {
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder().strProperty(strProperty).build();
     }
 
-    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> ofGenericValue(T genericValue) {
+    public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> genericValue(T genericValue) {
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder().genericValue(genericValue).build();
     }
 

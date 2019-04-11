@@ -29,8 +29,8 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> value = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "value", new TypeToken<Integer>(){}, SampleValueUsingCustomConcreteWithBuilder::value, Builder::value);
-        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> optionalValue = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "optionalValue", new TypeToken<Integer>(){}, SampleValueUsingCustomConcreteWithBuilder::optionalValue, Builder::optionalValue);
+        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> value = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "value", new TypeToken<Integer>(){}, obj -> obj.value(), Builder::value);
+        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> optionalValue = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "optionalValue", new TypeToken<Integer>(){}, obj -> obj.optionalValue(), Builder::optionalValue);
 
         Meta() {
             propertyMap.put("value", value);

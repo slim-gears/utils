@@ -26,10 +26,10 @@ public abstract class SampleValue implements SampleValuePrototype, HasMetaClass<
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleValue, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleValue, Integer> intValue = PropertyMeta.<SampleValue, Integer, Builder>create(this, "intValue", new TypeToken<Integer>(){}, SampleValue::intValue, Builder::intValue);
-        public final PropertyMeta<SampleValue, Double> doubleValue = PropertyMeta.<SampleValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, SampleValue::doubleValue, Builder::doubleValue);
-        public final PropertyMeta<SampleValue, String> strValue = PropertyMeta.<SampleValue, String, Builder>create(this, "strValue", new TypeToken<String>(){}, SampleValue::strValue, Builder::strValue);
-        public final PropertyMeta<SampleValue, Boolean> foo = PropertyMeta.<SampleValue, Boolean, Builder>create(this, "foo", new TypeToken<Boolean>(){}, SampleValue::foo, Builder::foo);
+        public final PropertyMeta<SampleValue, Integer> intValue = PropertyMeta.<SampleValue, Integer, Builder>create(this, "intValue", new TypeToken<Integer>(){}, obj -> obj.intValue(), Builder::intValue);
+        public final PropertyMeta<SampleValue, Double> doubleValue = PropertyMeta.<SampleValue, Double, Builder>create(this, "doubleValue", new TypeToken<Double>(){}, obj -> obj.doubleValue(), Builder::doubleValue);
+        public final PropertyMeta<SampleValue, String> strValue = PropertyMeta.<SampleValue, String, Builder>create(this, "strValue", new TypeToken<String>(){}, obj -> obj.strValue(), Builder::strValue);
+        public final PropertyMeta<SampleValue, Boolean> foo = PropertyMeta.<SampleValue, Boolean, Builder>create(this, "foo", new TypeToken<Boolean>(){}, obj -> obj.foo(), Builder::foo);
 
         Meta() {
             propertyMap.put("intValue", intValue);

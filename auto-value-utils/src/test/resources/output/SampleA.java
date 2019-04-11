@@ -26,7 +26,7 @@ public abstract class SampleA implements SampleAPrototype, HasMetaClass<SampleA>
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleA, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleA, Integer> value = PropertyMeta.<SampleA, Integer, Builder>create(this, "value", new TypeToken<Integer>(){}, SampleA::value, Builder::value);
+        public final PropertyMeta<SampleA, Integer> value = PropertyMeta.<SampleA, Integer, Builder>create(this, "value", new TypeToken<Integer>(){}, obj -> obj.value(), Builder::value);
 
         Meta() {
             propertyMap.put("value", value);

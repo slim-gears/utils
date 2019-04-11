@@ -27,7 +27,7 @@ public abstract class SampleGenericField implements SampleGenericFieldPrototype,
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleGenericField, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGenericField, Class<? extends Collection>> value = PropertyMeta.<SampleGenericField, Class<? extends Collection>, Builder>create(this, "value", new TypeToken<Class<? extends Collection>>(){}, SampleGenericField::value, Builder::value);
+        public final PropertyMeta<SampleGenericField, Class<? extends Collection>> value = PropertyMeta.<SampleGenericField, Class<? extends Collection>, Builder>create(this, "value", new TypeToken<Class<? extends Collection>>(){}, obj -> obj.value(), Builder::value);
 
         Meta() {
             propertyMap.put("value", value);

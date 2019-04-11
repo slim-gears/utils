@@ -27,7 +27,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleSpecializedGeneric, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleSpecializedGeneric, ImmutableList<String>> values = PropertyMeta.<SampleSpecializedGeneric, ImmutableList<String>, Builder>create(this, "values", new TypeToken<ImmutableList<String>>(){}, SampleSpecializedGeneric::values, Builder::values);
+        public final PropertyMeta<SampleSpecializedGeneric, ImmutableList<String>> values = PropertyMeta.<SampleSpecializedGeneric, ImmutableList<String>, Builder>create(this, "values", new TypeToken<ImmutableList<String>>(){}, obj -> obj.values(), Builder::values);
 
         Meta() {
             propertyMap.put("values", values);

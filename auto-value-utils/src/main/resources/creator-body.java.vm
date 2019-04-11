@@ -39,7 +39,7 @@
 #if ($allOptional)
 #foreach ($p in $properties)
 
-    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) of${p.capitalizedName()}($[$p.type()] $p.name()) {
+    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) ${p.name()}($[$p.type()] $p.name()) {
         return create(##
     #foreach ($pp in $properties)##
 

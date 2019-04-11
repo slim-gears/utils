@@ -29,8 +29,8 @@ public abstract class SampleAllOptionalPropertiesConcreteWithBuilder implements 
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, Integer> intProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, Integer, Builder>create(this, "intProperty", new TypeToken<Integer>(){}, SampleAllOptionalPropertiesConcreteWithBuilder::intProperty, Builder::intProperty);
-        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, String> strProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, String, Builder>create(this, "strProperty", new TypeToken<String>(){}, SampleAllOptionalPropertiesConcreteWithBuilder::strProperty, Builder::strProperty);
+        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, Integer> intProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, Integer, Builder>create(this, "intProperty", new TypeToken<Integer>(){}, obj -> obj.intProperty(), Builder::intProperty);
+        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, String> strProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, String, Builder>create(this, "strProperty", new TypeToken<String>(){}, obj -> obj.strProperty(), Builder::strProperty);
 
         Meta() {
             propertyMap.put("intProperty", intProperty);
@@ -111,11 +111,11 @@ public abstract class SampleAllOptionalPropertiesConcreteWithBuilder implements 
         Builder strProperty(String strProperty);
     }
 
-    public static SampleAllOptionalPropertiesConcreteWithBuilder ofIntProperty(Integer intProperty) {
+    public static SampleAllOptionalPropertiesConcreteWithBuilder intProperty(Integer intProperty) {
         return SampleAllOptionalPropertiesConcreteWithBuilder.builder().intProperty(intProperty).build();
     }
 
-    public static SampleAllOptionalPropertiesConcreteWithBuilder ofStrProperty(String strProperty) {
+    public static SampleAllOptionalPropertiesConcreteWithBuilder strProperty(String strProperty) {
         return SampleAllOptionalPropertiesConcreteWithBuilder.builder().strProperty(strProperty).build();
     }
 

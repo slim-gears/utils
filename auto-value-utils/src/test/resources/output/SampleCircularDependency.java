@@ -26,7 +26,7 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleCircularDependency, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleCircularDependency, SampleCircularDependency> parent = PropertyMeta.<SampleCircularDependency, SampleCircularDependency, Builder>create(this, "parent", new TypeToken<SampleCircularDependency>(){}, SampleCircularDependency::parent, Builder::parent);
+        public final PropertyMeta<SampleCircularDependency, SampleCircularDependency> parent = PropertyMeta.<SampleCircularDependency, SampleCircularDependency, Builder>create(this, "parent", new TypeToken<SampleCircularDependency>(){}, obj -> obj.parent(), Builder::parent);
 
         Meta() {
             propertyMap.put("parent", parent);
