@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 public abstract class SampleCustomBuilderValue implements SampleCustomBuilderValuePrototype, HasMetaClass<SampleCustomBuilderValue> {
 
     @Override
+    
     public MetaClass<SampleCustomBuilderValue> metaClass() {
         return metaClass;
     }

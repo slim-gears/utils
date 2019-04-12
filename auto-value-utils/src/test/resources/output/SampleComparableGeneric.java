@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 public abstract class SampleComparableGeneric<T extends Comparable<T>> implements SampleComparableGenericPrototype<T>, HasMetaClass<SampleComparableGeneric<T>> {
 
     @Override
+    
     public MetaClass<SampleComparableGeneric<T>> metaClass() {
         return (MetaClass<SampleComparableGeneric<T>>)metaClass;
     }

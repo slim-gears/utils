@@ -19,6 +19,7 @@ import javax.annotation.Generated;
 public abstract class SampleAllOptionalPropertiesConcreteWithBuilder implements SampleAllOptionalPropertiesProto, HasMetaClass<SampleAllOptionalPropertiesConcreteWithBuilder> {
 
     @Override
+    @JsonIgnore
     public MetaClass<SampleAllOptionalPropertiesConcreteWithBuilder> metaClass() {
         return metaClass;
     }

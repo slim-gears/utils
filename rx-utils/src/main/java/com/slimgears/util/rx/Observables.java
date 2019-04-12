@@ -3,8 +3,10 @@ package com.slimgears.util.rx;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -33,5 +35,12 @@ public class Observables {
                                 .doOnNext(v -> log.warning("Error occurred: " + e.getMessage() + " Retry #" + attemptsMade + " (delay: " + delayMillis + " milliseconds)" + e));
                     }));
         };
+    }
+
+    public static <T, R> ObservableTransformer<T, R> buffer(Duration maxIdleDuration, Function<List<T>, R> aggregator) {
+        return source -> source
+                .buffer(maxIdleDuration.toMillis(), TimeUnit.MILLISECONDS)
+                .filter(b -> !b.isEmpty())
+                .map(aggregator);
     }
 }

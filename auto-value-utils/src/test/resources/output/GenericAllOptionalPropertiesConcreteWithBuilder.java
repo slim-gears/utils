@@ -19,6 +19,7 @@ import javax.annotation.Generated;
 public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends Comparable<T>> implements GenericAllOptionalPropertiesProto<T>, HasMetaClass<GenericAllOptionalPropertiesConcreteWithBuilder<T>> {
 
     @Override
+    @JsonIgnore
     public MetaClass<GenericAllOptionalPropertiesConcreteWithBuilder<T>> metaClass() {
         return (MetaClass<GenericAllOptionalPropertiesConcreteWithBuilder<T>>)metaClass;
     }

@@ -19,6 +19,7 @@ import javax.annotation.Generated;
 public abstract class SampleValueUsingCustomConcreteWithBuilder implements SampleValueUsingCustomProto, HasMetaClass<SampleValueUsingCustomConcreteWithBuilder> {
 
     @Override
+    @JsonIgnore
     public MetaClass<SampleValueUsingCustomConcreteWithBuilder> metaClass() {
         return metaClass;
     }
@@ -87,7 +88,7 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
     }
 
     public static SampleValueUsingCustomConcreteWithBuilder create(
-int value) {
+        int value) {
         return SampleValueUsingCustomConcreteWithBuilder.builder()
             .value(value)
             .build();

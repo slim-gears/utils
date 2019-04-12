@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 public abstract class SampleCircularDependency implements SampleCircularDependencyPrototype, HasMetaClass<SampleCircularDependency> {
 
     @Override
+    
     public MetaClass<SampleCircularDependency> metaClass() {
         return metaClass;
     }

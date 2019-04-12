@@ -1,6 +1,8 @@
 #parse("macros.vm")
 
     @Override
+    #annotateNonPropertyMethod($context)
+
 #if ($hasKey)
     public $[com.slimgears.util.autovalue.annotations.MetaClassWithKey]<$[$keyProperty.type().asBoxed()], $targetClass.simpleName()#typeParams($sourceClass)> metaClass() {
 #else

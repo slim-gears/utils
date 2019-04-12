@@ -17,6 +17,7 @@ import javax.annotation.Generated;
 public abstract class SampleGenericField implements SampleGenericFieldPrototype, HasMetaClass<SampleGenericField> {
 
     @Override
+    
     public MetaClass<SampleGenericField> metaClass() {
         return metaClass;
     }

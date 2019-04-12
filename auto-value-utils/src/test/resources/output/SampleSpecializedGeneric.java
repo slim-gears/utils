@@ -17,6 +17,7 @@ import javax.annotation.Generated;
 public abstract class SampleSpecializedGeneric implements SampleSpecializedGenericPrototype, HasMetaClass<SampleSpecializedGeneric> {
 
     @Override
+    
     public MetaClass<SampleSpecializedGeneric> metaClass() {
         return metaClass;
     }

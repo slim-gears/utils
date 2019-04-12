@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 public abstract class SampleNestedType implements SampleNestedTypePrototype, HasMetaClass<SampleNestedType> {
 
     @Override
+    
     public MetaClass<SampleNestedType> metaClass() {
         return metaClass;
     }

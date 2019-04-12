@@ -18,6 +18,7 @@ import javax.annotation.Generated;
 public abstract class SampleB implements SampleBPrototype, HasMetaClass<SampleB> {
 
     @Override
+    
     public MetaClass<SampleB> metaClass() {
         return metaClass;
     }

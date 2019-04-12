@@ -17,6 +17,7 @@ import javax.annotation.Generated;
 public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaClassWithKey<String, SampleWithKey> {
 
     @Override
+    
     public MetaClassWithKey<String, SampleWithKey> metaClass() {
         return metaClass;
     }

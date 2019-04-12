@@ -51,6 +51,7 @@ public class Streams {
                 }, false);
     }
 
+
     private static <T>Spliterator<T> takeWhile(Spliterator<T> spliterator, Predicate<? super T> predicate) {
         return new Spliterators.AbstractSpliterator<T>(spliterator.estimateSize(), 0) {
             private boolean finished = false;

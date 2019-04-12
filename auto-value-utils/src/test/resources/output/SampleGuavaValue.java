@@ -20,6 +20,7 @@ import javax.annotation.Generated;
 public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, HasMetaClass<SampleGuavaValue> {
 
     @Override
+    
     public MetaClass<SampleGuavaValue> metaClass() {
         return metaClass;
     }
@@ -99,10 +100,10 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     }
 
     public static SampleGuavaValue create(
-ImmutableList<Integer> intList,
-ImmutableSet<String> stringSet,
-ImmutableMap<Integer, String> intToStringMap,
-ImmutableBiMap<Integer, String> intToStringBiMap) {
+        ImmutableList<Integer> intList,
+        ImmutableSet<String> stringSet,
+        ImmutableMap<Integer, String> intToStringMap,
+        ImmutableBiMap<Integer, String> intToStringBiMap) {
         return SampleGuavaValue.builder()
             .intList(intList)
             .stringSet(stringSet)

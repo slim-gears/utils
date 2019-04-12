@@ -17,6 +17,7 @@ import javax.annotation.Generated;
 public abstract class GenericListContainer<T> implements GenericListContainerPrototype<T>, HasMetaClass<GenericListContainer<T>> {
 
     @Override
+    
     public MetaClass<GenericListContainer<T>> metaClass() {
         return (MetaClass<GenericListContainer<T>>)metaClass;
     }
