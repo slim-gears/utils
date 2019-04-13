@@ -120,7 +120,10 @@ public class AnnotationProcessingTester {
         ResourceJavaFileObject(String resourceName, Kind kind) {
             super(URI.create(Resources.getResource(resourceName).toString()), kind);
             try {
-                content = Resources.toString(toUri().toURL(), Charsets.UTF_8);
+                content = Resources.toString(toUri().toURL(), Charsets.UTF_8)
+                        .replaceAll("\\r\\n", "\n")
+                        .replaceAll("\\r", "\n");
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
