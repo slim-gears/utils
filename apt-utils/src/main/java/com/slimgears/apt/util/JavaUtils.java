@@ -44,6 +44,7 @@ public class JavaUtils extends TemplateUtils {
         try {
             log.debug("Writing class: {}", targetClass.name());
             LogUtils.dumpContent(code);
+            code = FileUtils.lineEndingsNormalizer().apply(code.trim() + "\n");
             JavaFileObject sourceFile = environment.getFiler().createSourceFile(targetClass.name());
             try (Writer writer = sourceFile.openWriter()) {
                 writer.write(code);

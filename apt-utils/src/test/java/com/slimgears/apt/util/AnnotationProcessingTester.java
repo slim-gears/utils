@@ -50,18 +50,18 @@ public class AnnotationProcessingTester {
     }
 
     public AnnotationProcessingTester inputFiles(String... files) {
-        inputFiles.addAll(fromResources("input", files));
+        inputFiles.addAll(fromInputResources("input", files));
         return this;
     }
 
     public AnnotationProcessingTester expectedSources(String... files) {
-        List<JavaFileObject> sources = fromResources("output", files);
+        List<JavaFileObject> sources = fromResources("output", JavaFileObject.Kind.SOURCE, files);
         assertions.add(s -> s.and().generatesSources(sources.get(0), sources.stream().skip(1).toArray(JavaFileObject[]::new)));
         return this;
     }
 
     public AnnotationProcessingTester expectedFiles(String... files) {
-        return expectedFiles(fromResources("output", files));
+        return expectedFiles(fromResources("output", JavaFileObject.Kind.OTHER, files));
     }
 
     public AnnotationProcessingTester expectedFile(String name, String... lines) {
@@ -104,13 +104,20 @@ public class AnnotationProcessingTester {
         return this;
     }
 
-    private static List<JavaFileObject> fromResources(final String path, String[] files) {
+    private static List<JavaFileObject> fromInputResources(final String path, String[] files) {
         return Arrays.stream(files)
                 .map(input -> JavaFileObjects.forResource(path + '/' + input))
                 .collect(Collectors.toList());
     }
 
-    private static JavaFileObject forResource(String filename, JavaFileObject.Kind kind) {
+    private static List<JavaFileObject> fromResources(final String path, JavaFileObject.Kind kind, String[] files) {
+        return Arrays.stream(files)
+                .map(input -> forResource(kind, path + '/' + input))
+//                .map(input -> JavaFileObjects.forResource(path + '/' + input))
+                .collect(Collectors.toList());
+    }
+
+    private static JavaFileObject forResource(JavaFileObject.Kind kind, String filename) {
         return new ResourceJavaFileObject(filename, kind);
     }
 
@@ -120,13 +127,18 @@ public class AnnotationProcessingTester {
         ResourceJavaFileObject(String resourceName, Kind kind) {
             super(URI.create(Resources.getResource(resourceName).toString()), kind);
             try {
-                content = Resources.toString(toUri().toURL(), Charsets.UTF_8)
-                        .replaceAll("\\r\\n", "\n")
-                        .replaceAll("\\r", "\n");
+                content = FileUtils
+                        .lineEndingsNormalizer()
+                        .apply(Resources.toString(toUri().toURL(), Charsets.UTF_8).trim() + "\n");
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        @Override
+        public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
+            return content;
         }
 
         @Override
