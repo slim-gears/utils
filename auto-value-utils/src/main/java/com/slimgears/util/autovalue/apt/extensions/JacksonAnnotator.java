@@ -2,11 +2,11 @@ package com.slimgears.util.autovalue.apt.extensions;
 
 import com.google.auto.service.AutoService;
 import com.slimgears.apt.data.AnnotationInfo;
+import com.slimgears.apt.data.AnnotationValueInfo;
 import com.slimgears.util.autovalue.annotations.UseJacksonAnnotator;
 import com.slimgears.util.autovalue.apt.Context;
 import com.slimgears.util.autovalue.apt.PropertyInfo;
 
-import static com.slimgears.apt.data.AnnotationValueInfo.ofPrimitive;
 import static java.util.Collections.singleton;
 
 @AutoService(Annotator.class)
@@ -15,14 +15,13 @@ public class JacksonAnnotator implements Annotator {
     @Override
     public Iterable<AnnotationInfo> annotatePropertyMethod(Context context, PropertyInfo property) {
         return singleton(AnnotationInfo.ofType(
-                "com.fasterxml.jackson.annotation.JsonProperty"));
+                "com.fasterxml.jackson.annotation.JsonProperty",
+                AnnotationValueInfo.ofPrimitive("value", property.name())));
     }
 
     @Override
     public Iterable<AnnotationInfo> annotateCreatorParameter(Context context, PropertyInfo property) {
-        return singleton(AnnotationInfo.ofType(
-                "com.fasterxml.jackson.annotation.JsonProperty",
-                ofPrimitive("value", property.name())));
+        return annotatePropertyMethod(context, property);
     }
 
     @Override

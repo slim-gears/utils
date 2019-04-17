@@ -27,10 +27,12 @@ public abstract class ValueFilter<T> implements ValueFilterPrototype<T>, HasMeta
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<ValueFilter<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<ValueFilter<T>, Boolean> _null = PropertyMeta.<ValueFilter<T>, Boolean, Builder<T>>create(this, "null", new TypeToken<Boolean>(){}, obj -> obj.isNull(), Builder::setNull, "isNull");
+        public final PropertyMeta<ValueFilter<T>, Boolean> isNull = PropertyMeta.<ValueFilter<T>, Boolean, Builder<T>>create(this, "isNull", new TypeToken<Boolean>(){}, obj -> obj.isNull(), Builder::isNull);
+        public final PropertyMeta<ValueFilter<T>, T> equalsTo = PropertyMeta.<ValueFilter<T>, T, Builder<T>>create(this, "equalsTo", new TypeToken<T>(){}, obj -> obj.equalsTo(), Builder::equalsTo);
 
         Meta() {
-            propertyMap.put("null", _null);
+            propertyMap.put("isNull", isNull);
+            propertyMap.put("equalsTo", equalsTo);
         }
 
         @Override
@@ -73,9 +75,11 @@ public abstract class ValueFilter<T> implements ValueFilterPrototype<T>, HasMeta
     }
 
     public static <T> ValueFilter<T> create(
-         Boolean _null) {
+         Boolean isNull,
+         T equalsTo) {
         return ValueFilter.<T>builder()
-            .null(_null)
+            .isNull(isNull)
+            .equalsTo(equalsTo)
             .build();
     }
 
@@ -97,13 +101,21 @@ public abstract class ValueFilter<T> implements ValueFilterPrototype<T>, HasMeta
         }
 
         @Override
-        Builder<T> setNull(Boolean _null);
+        Builder<T> isNull(Boolean isNull);
+
+        @Override
+        Builder<T> equalsTo(T equalsTo);
     }
 
-    public static <T> ValueFilter<T> fromNull(Boolean _null) {
-        return ValueFilter.<T>builder().setNull(_null).build();
+    public static <T> ValueFilter<T> fromIsNull(Boolean isNull) {
+        return ValueFilter.<T>builder().isNull(isNull).build();
+    }
+
+    public static <T> ValueFilter<T> fromEqualsTo(T equalsTo) {
+        return ValueFilter.<T>builder().equalsTo(equalsTo).build();
     }
 
     @Override public abstract Boolean isNull();
+    @Override public abstract T equalsTo();
 
 }

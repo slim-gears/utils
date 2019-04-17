@@ -48,8 +48,8 @@ public abstract class GenericAllOptionalPropertiesConcreteWithCreator<T extends 
             genericValue);
     }
 
-    @Override @JsonProperty public abstract Integer intProperty();
-    @Override @JsonProperty public abstract String strProperty();
-    @Override @JsonProperty public abstract T genericValue();
+    @Override @JsonProperty("intProperty") public abstract Integer intProperty();
+    @Override @JsonProperty("strProperty") public abstract String strProperty();
+    @Override @JsonProperty("genericValue") public abstract T genericValue();
 
 }

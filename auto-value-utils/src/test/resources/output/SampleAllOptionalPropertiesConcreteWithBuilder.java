@@ -120,7 +120,7 @@ public abstract class SampleAllOptionalPropertiesConcreteWithBuilder implements 
         return SampleAllOptionalPropertiesConcreteWithBuilder.builder().strProperty(strProperty).build();
     }
 
-    @Override @JsonProperty public abstract Integer intProperty();
-    @Override @JsonProperty public abstract String strProperty();
+    @Override @JsonProperty("intProperty") public abstract Integer intProperty();
+    @Override @JsonProperty("strProperty") public abstract String strProperty();
 
 }

@@ -36,7 +36,7 @@ public abstract class SampleAllOptionalPropertiesConcreteWithCreator implements 
             strProperty);
     }
 
-    @Override @JsonProperty public abstract Integer intProperty();
-    @Override @JsonProperty public abstract String strProperty();
+    @Override @JsonProperty("intProperty") public abstract Integer intProperty();
+    @Override @JsonProperty("strProperty") public abstract String strProperty();
 
 }

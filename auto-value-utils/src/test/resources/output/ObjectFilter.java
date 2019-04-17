@@ -27,10 +27,10 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<ObjectFilter<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<ObjectFilter<T>, Boolean> _null = PropertyMeta.<ObjectFilter<T>, Boolean, Builder<T>>create(this, "null", new TypeToken<Boolean>(){}, obj -> obj.isNull(), Builder::setNull, "isNull");
+        public final PropertyMeta<ObjectFilter<T>, Boolean> isNull = PropertyMeta.<ObjectFilter<T>, Boolean, Builder<T>>create(this, "isNull", new TypeToken<Boolean>(){}, obj -> obj.isNull(), Builder::isNull);
 
         Meta() {
-            propertyMap.put("null", _null);
+            propertyMap.put("isNull", isNull);
         }
 
         @Override
@@ -73,9 +73,9 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
     }
 
     public static <T> ObjectFilter<T> create(
-         Boolean _null) {
+         Boolean isNull) {
         return ObjectFilter.<T>builder()
-            .null(_null)
+            .isNull(isNull)
             .build();
     }
 
@@ -97,11 +97,11 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
         }
 
         @Override
-        Builder<T> setNull(Boolean _null);
+        Builder<T> isNull(Boolean isNull);
     }
 
-    public static <T> ObjectFilter<T> fromNull(Boolean _null) {
-        return ObjectFilter.<T>builder().setNull(_null).build();
+    public static <T> ObjectFilter<T> fromIsNull(Boolean isNull) {
+        return ObjectFilter.<T>builder().isNull(isNull).build();
     }
 
     @Override public abstract Boolean isNull();
