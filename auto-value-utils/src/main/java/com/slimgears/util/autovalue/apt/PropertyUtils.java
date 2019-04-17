@@ -39,6 +39,17 @@ import java.util.stream.Stream;
 import static com.slimgears.util.stream.Streams.ofType;
 
 public class PropertyUtils {
+    private static final ImmutableSet<String> reservedWords = ImmutableSet.<String>builder()
+            .add("abstract", "class", "enum", "interface", "module", "super", "this")
+            .add("final", "native", "static", "public", "protected", "private")
+            .add("exports", "extends", "implements", "import", "requires")
+            .add("boolean", "byte", "char", "float", "double", "int", "long", "short", "string", "void")
+            .add("assert", "case", "default", "else", "finally", "if", "return")
+            .add("catch", "try", "throw", "throws")
+            .add("new", "null", "synchronized", "volatile")
+            .add("break", "continue", "for", "do", "while")
+            .build();
+
     private static final ImmutableSet<String> numericTypes = ImmutableSet.<String>builder()
             .add(Byte.class.getName(), byte.class.getName())
             .add(Short.class.getName(), short.class.getName())
@@ -67,6 +78,12 @@ public class PropertyUtils {
                 .findAny();
     }
 
+    public static String toSafeName(String unsafeName, String alternativeName) {
+        return reservedWords.contains(unsafeName)
+                ? "_" + unsafeName
+                : alternativeName;
+    }
+
     public static DeclaredType builderTypeFor(DeclaredType type) {
         return builderTypeFor(MoreElements.asType(type.asElement()))
                 .map(te -> Environment.instance().types().getDeclaredType(te, type.getTypeArguments().toArray(new TypeMirror[0])))
@@ -75,7 +92,7 @@ public class PropertyUtils {
 
     private static boolean propertyHasPrefix(ExecutableElement element) {
         String getterName = element.getSimpleName().toString();
-        return !PropertyInfo.propertyName(getterName).equals(getterName);
+        return getterName.startsWith("get");
     }
 
     public static Collection<MethodInfo> getStaticMethonds(DeclaredType type) {
@@ -199,7 +216,9 @@ public class PropertyUtils {
                         .forEach(i -> {
                             TypeMirror arg = args.get(i);
                             if (arg.getKind() == TypeKind.TYPEVAR) {
-                                arg = argsMap.get(((TypeVariable)arg).asElement().getSimpleName().toString());
+                                arg = Optional
+                                        .ofNullable(argsMap.get(((TypeVariable)arg).asElement().getSimpleName().toString()))
+                                        .orElse(arg);
                             }
                             argsMap.put(params.get(i).getSimpleName().toString(), arg);
                         });
@@ -208,7 +227,8 @@ public class PropertyUtils {
                 if (MoreTypes.isTypeOf(Collection.class, t)) {
                     TypeMirror arg = args.get(0);
                     if (arg.getKind() == TypeKind.TYPEVAR) {
-                        arg = Optional.ofNullable(argsMap.get(((TypeVariable)arg).asElement().getSimpleName().toString()))
+                        arg = Optional
+                                .ofNullable(argsMap.get(((TypeVariable)arg).asElement().getSimpleName().toString()))
                                 .orElse(arg);
                     }
                     elementType.set(TypeInfo.of(arg));

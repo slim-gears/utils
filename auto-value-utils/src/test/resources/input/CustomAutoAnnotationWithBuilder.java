@@ -17,7 +17,6 @@ import java.lang.annotation.Target;
         value = "$1ConcreteWithBuilder$2")
 @UseMetaDataExtension
 @UseJacksonAnnotator
-@UseBuilderExtension
 @interface CustomAutoAnnotation {
 
 }

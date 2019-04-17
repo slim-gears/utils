@@ -7,6 +7,6 @@ public interface SampleValueUsingCustomProtoBuilder<_B extends SampleValueUsingC
 
     _B value(int value);
 
-    _B optionalValue(Integer optionalValue);
+    _B optionalValue(Integer value);
     
 }

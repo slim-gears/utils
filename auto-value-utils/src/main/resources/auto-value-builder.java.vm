@@ -36,7 +36,7 @@ extends ##
     #end##
 ##
 
-    _B ${p.setterName()}($[$p.type()] $p.name());
+    _B ${p.setterName()}($[$p.type()] value);
     #if ($p.hasBuilder() && !$p.isOptional())##
 ##
 

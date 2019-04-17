@@ -5,12 +5,12 @@
     public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) create(##
 #foreach($p in $properties)##
 
-        #annotateCreatorParameter($context, $p) $[$p.type()] $p.name()##
+        #annotateCreatorParameter($context, $p) $[$p.type()] $p.safeName()##
     #if ($foreach.hasNext),#end##
 #end) {
         return ${targetClass.simpleName()}.#typeParams($sourceClass)builder()
 #foreach($p in $properties)
-            .${p.name()}($p.name())##
+            .${p.setterName()}($p.safeName())##
 ##
 
 #end
@@ -22,12 +22,12 @@
 #foreach($p in $mandatoryProperties)##
 
         ##
-        $[$p.type()] $p.name()##
+        $[$p.type()] $p.safeName()##
     #if ($foreach.hasNext),#end##
 #end) {
         return ${targetClass.simpleName()}.#typeParams($sourceClass)builder()
 #foreach($p in $mandatoryProperties)
-            .${p.name()}($p.name())##
+            .${p.name()}($p.safeName())##
 ##
 
 #end
@@ -70,7 +70,7 @@
     #end##
 ##
 
-        Builder#typeParams($sourceClass) ${p.setterName()}($[$p.type()] $p.name());##
+        Builder#typeParams($sourceClass) ${p.setterName()}($[$p.type()] $p.safeName());##
     #if ($p.hasBuilder() && !$p.isOptional())##
 ##
 
@@ -88,8 +88,8 @@
 #if ($allOptional)
 #foreach ($p in $properties)
 
-    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) ${p.name()}($[$p.type()] $p.name()) {
-        return ${targetClass.simpleName()}.#typeParams($sourceClass)builder().${p.name()}($p.name()).build();
+    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) from${p.capitalizedName()}($[$p.type()] $p.safeName()) {
+        return ${targetClass.simpleName()}.#typeParams($sourceClass)builder().${p.setterName()}($p.safeName()).build();
     }
 #end
 #end

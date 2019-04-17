@@ -7,10 +7,10 @@ import javax.annotation.Generated;
 public interface SampleWithKeyPrototypeBuilder<_B extends SampleWithKeyPrototypeBuilder<_B>> {
 
     @Key
-    _B id(String id);
+    _B id(String value);
 
-    _B text(String text);
+    _B text(String value);
 
-    _B number(int number);
+    _B number(int value);
     
 }

@@ -1,14 +1,26 @@
 package com.slimgears.util.autovalue.apt;
 
+import com.google.auto.common.MoreTypes;
 import com.google.auto.value.processor.AutoValueProcessor;
+import com.slimgears.apt.AbstractAnnotationProcessor;
+import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.AnnotationProcessingTester;
 import com.slimgears.apt.util.StoreWrittenFilesRule;
 import com.slimgears.util.generic.ScopedInstance;
+import com.slimgears.util.stream.Streams;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.event.Level;
+
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AutoValuePrototypeAnnotationProcessorTest {
     private ScopedInstance.Closeable registrarScope;
@@ -204,6 +216,44 @@ public class AutoValuePrototypeAnnotationProcessorTest {
                         "GenericAllOptionalPropertiesProto.java")
                 .expectedSources("GenericAllOptionalPropertiesConcreteWithCreator.java")
                 .test();
+    }
+
+    @Test
+    public void testReservedWordsAsPropertyNames() {
+        tester()
+                .inputFiles(
+                        "ObjectFilterPrototype.java",
+                        "ValueFilterPrototype.java")
+                .test();
+    }
+
+    @Test
+    public void testCollectionElementType() {
+        AtomicReference<TypeInfo> elementType = new AtomicReference<>();
+        AnnotationProcessingTester.create()
+                .inputFiles("SampleList.java")
+                .processedWith(new AbstractAnnotationProcessor() {
+                    @Override
+                    public Set<String> getSupportedAnnotationTypes() {
+                        return Collections.singleton("com.slimgears.util.autovalue.annotations.AutoValuePrototype");
+                    }
+
+                    @Override
+                    protected boolean processType(TypeElement annotationType, TypeElement typeElement) {
+                        ExecutableElement propertyElement = typeElement.getEnclosedElements()
+                                .stream()
+                                .flatMap(Streams.ofType(ExecutableElement.class))
+                                .findFirst()
+                                .get();
+
+                        DeclaredType declaredType = MoreTypes.asDeclared(typeElement.asType());
+                        PropertyInfo propertyInfo = PropertyInfo.create(declaredType, propertyElement, false);
+                        elementType.set(propertyInfo.collectionElementType());
+                        return true;
+                    }
+                })
+                .test();
+        Assert.assertEquals(TypeInfo.of("T"), elementType.get());
     }
 
     private AnnotationProcessingTester tester() {

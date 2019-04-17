@@ -54,6 +54,11 @@ public class AnnotationProcessingTester {
         return this;
     }
 
+    public AnnotationProcessingTester inputFiles(JavaFileObject... files) {
+        inputFiles.addAll(Arrays.asList(files));
+        return this;
+    }
+
     public AnnotationProcessingTester expectedSources(String... files) {
         List<JavaFileObject> sources = fromResources("output", JavaFileObject.Kind.SOURCE, files);
         assertions.add(s -> s.and().generatesSources(sources.get(0), sources.stream().skip(1).toArray(JavaFileObject[]::new)));

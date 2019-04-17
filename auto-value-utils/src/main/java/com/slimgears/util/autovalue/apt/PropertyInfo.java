@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 @AutoValue
 public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
-    private static final Pattern namePattern = Pattern.compile("^((get)|(is))(?<name>[A-Z]\\w*)$");
+    private static final Pattern namePattern = Pattern.compile("^(get)(?<name>[A-Z]\\w*)$");
 
     public abstract ExecutableType executableType();
     public abstract ExecutableElement executableElement();
@@ -47,6 +47,11 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
     }
     public TypeInfo collectionElementType() {
         return PropertyUtils.collectionElementType(propertyType());
+    }
+
+    public String safeName() {
+        String alternativeName = getterName().startsWith("is") ? getterName() : name();
+        return PropertyUtils.toSafeName(name(), alternativeName);
     }
 
     public boolean hasBuilder() {

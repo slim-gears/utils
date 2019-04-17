@@ -16,6 +16,6 @@ public interface SampleBPrototypeBuilder<_B extends SampleBPrototypeBuilder<_B>>
         return (_B)this;
     }
 
-    _B nestedEnum(SampleAPrototype.NestedEnum nestedEnum);
+    _B nestedEnum(SampleAPrototype.NestedEnum value);
     
 }

@@ -112,11 +112,11 @@ public abstract class SampleAllOptionalPropertiesConcreteWithBuilder implements 
         Builder strProperty(String strProperty);
     }
 
-    public static SampleAllOptionalPropertiesConcreteWithBuilder intProperty(Integer intProperty) {
+    public static SampleAllOptionalPropertiesConcreteWithBuilder fromIntProperty(Integer intProperty) {
         return SampleAllOptionalPropertiesConcreteWithBuilder.builder().intProperty(intProperty).build();
     }
 
-    public static SampleAllOptionalPropertiesConcreteWithBuilder strProperty(String strProperty) {
+    public static SampleAllOptionalPropertiesConcreteWithBuilder fromStrProperty(String strProperty) {
         return SampleAllOptionalPropertiesConcreteWithBuilder.builder().strProperty(strProperty).build();
     }
 

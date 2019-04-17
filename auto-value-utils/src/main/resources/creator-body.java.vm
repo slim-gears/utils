@@ -4,7 +4,7 @@
 
     public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) create(
 #foreach($p in $properties)
-        #annotateCreatorParameter($context, $p) $[$p.type()] $p.name()##
+        #annotateCreatorParameter($context, $p) $[$p.type()] $p.safeName()##
     #if ($foreach.hasNext),##
 
 ##
@@ -13,7 +13,7 @@
         return new AutoValue_${targetClass.simpleName()}#if ($sourceClass.hasTypeParams())<>#end(##
 #foreach($p in $properties)
 
-            $p.name()##
+            $p.safeName()##
     #if ($foreach.hasNext),#end##
 #end);
     }
@@ -21,7 +21,7 @@
 #if ($properties.size() > $mandatoryProperties.size())
     public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) create(##
 #foreach($p in $mandatoryProperties)##
-        $[$p.type()] $p.name()##
+        $[$p.type()] $p.safeName()##
     #if ($foreach.hasNext),##
 
 ##
@@ -30,7 +30,7 @@
         return new AutoValue_${targetClass.simpleName()}#if ($sourceClass.hasTypeParams())<>#end(##
 #foreach($p in $properties)
 
-            #if ($p.isOptional())null#else$p.name()#end##
+            #if ($p.isOptional())null#else$p.safeName()#end##
     #if ($foreach.hasNext),#end##
 #end);
     }
@@ -39,12 +39,12 @@
 #if ($allOptional)
 #foreach ($p in $properties)
 
-    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) ${p.name()}($[$p.type()] $p.name()) {
+    public static #typeParamsDeclaration($sourceClass) $targetClass.simpleName()#typeParams($sourceClass) ${p.safeName()}($[$p.type()] $p.safeName()) {
         return create(##
     #foreach ($pp in $properties)##
 
             ##
-            #if ($pp.name() == $p.name())$p.name()#{else}null#end##
+            #if ($pp.name() == $p.name())$p.safeName()#{else}null#end##
             #if ($foreach.hasNext),#end##
     #end);##
 

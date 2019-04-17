@@ -13,7 +13,7 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePrototypeBuilder<_B>> {
 
-    _B intList(ImmutableList<Integer> intList);
+    _B intList(ImmutableList<Integer> value);
     
     ImmutableList.Builder<Integer> intListBuilder();
         
@@ -37,7 +37,7 @@ public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePro
         return (_B)this;
     }
 
-    _B stringSet(ImmutableSet<String> stringSet);
+    _B stringSet(ImmutableSet<String> value);
     
     ImmutableSet.Builder<String> stringSetBuilder();
         
@@ -61,7 +61,7 @@ public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePro
         return (_B)this;
     }
 
-    _B intToStringMap(ImmutableMap<Integer, String> intToStringMap);
+    _B intToStringMap(ImmutableMap<Integer, String> value);
     
     ImmutableMap.Builder<Integer, String> intToStringMapBuilder();
         
@@ -90,7 +90,7 @@ public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePro
         return (_B)this;
     }
 
-    _B intToStringBiMap(ImmutableBiMap<Integer, String> intToStringBiMap);
+    _B intToStringBiMap(ImmutableBiMap<Integer, String> value);
     
     ImmutableBiMap.Builder<Integer, String> intToStringBiMapBuilder();
         
@@ -119,6 +119,6 @@ public interface SampleGuavaValuePrototypeBuilder<_B extends SampleGuavaValuePro
         return (_B)this;
     }
 
-    _B optionalList(ImmutableList<String> optionalList);
+    _B optionalList(ImmutableList<String> value);
     
 }

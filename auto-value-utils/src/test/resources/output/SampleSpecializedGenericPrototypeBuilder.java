@@ -7,7 +7,7 @@ import javax.annotation.Generated;
 @Generated("com.slimgears.util.autovalue.apt.extensions.BuilderExtension")
 public interface SampleSpecializedGenericPrototypeBuilder<_B extends SampleSpecializedGenericPrototypeBuilder<_B>> extends SampleGuavaInterfaceBuilder<java.lang.String, _B> {
 
-    _B values(ImmutableList<String> values);
+    _B values(ImmutableList<String> value);
     
     ImmutableList.Builder<String> valuesBuilder();
         
