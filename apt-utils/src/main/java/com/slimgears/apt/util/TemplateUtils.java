@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.slimgears.apt.util;
 
 import com.google.common.base.Strings;
@@ -10,6 +7,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("WeakerAccess")
 public class TemplateUtils {
     public final static TemplateUtils instance = new TemplateUtils();
     private final static Pattern camelCasePattern = Pattern.compile("([a-z])([A-Z])");
@@ -58,9 +56,9 @@ public class TemplateUtils {
     }
 
     public static String preProcessWhitespace(String template) {
-        template = template.replace("\r\n", "\n").replace("\r", "\n");
-        Pattern redundantWhiteSpace = Pattern.compile("(##\\n) +([^ ])", Pattern.DOTALL);
-        return redundantWhiteSpace.matcher(template).replaceAll("$1$2");
+        return template.replace("\r\n", "\n").replace("\r", "\n")
+                .replaceAll("(?s)(##\\n) +([^ ])", "$1$2")
+                /*.replaceAll("(?s)(\\n) +(#[^#])", "$1$2")*/;
     }
 
     public static String postProcessWhitespace(String template) {
@@ -68,9 +66,6 @@ public class TemplateUtils {
                 .replace("\r\n", "\n")
                 .replace("\r", "\n")
                 .replaceAll("(?s)([^\\s]+[ ])[ ]+([^ ])", "$1$2")
-                .replaceAll("(?s)\\n\\s*\\n\\s*\\n", "\n\n")
-//                .replaceAll("([\\s]+)([),.])", "$2")
-//                .replaceAll("\\(\\s+", "(")
-                ;
+                .replaceAll("(?s)\\n\\s*\\n\\s*\\n", "\n\n");
     }
 }

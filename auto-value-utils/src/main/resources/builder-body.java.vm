@@ -48,11 +48,13 @@
     public interface Builder#typeParamsDeclaration($sourceClass) extends ##
             $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<$targetClass.simpleName()#typeParams($sourceClass), ##
             Builder#typeParams($sourceClass)>, ##
-            $[${sourceClass.erasureName()}Builder]<##
+#if (!$properties.isEmpty())$[${sourceClass.erasureName()}Builder]<##
 #foreach ($tp in $sourceClass.typeParams())##
             $[$tp.type()], ##
 #end##
-            Builder#typeParams($sourceClass)> {##
+            Builder#typeParams($sourceClass)>##
+#end##
+        {##
 
         public static #typeParamsDeclaration($sourceClass) Builder#typeParams($sourceClass) create() {
             return new AutoValue_${targetClass.simpleName()}.Builder#if ($sourceClass.hasTypeParams())<>#end();

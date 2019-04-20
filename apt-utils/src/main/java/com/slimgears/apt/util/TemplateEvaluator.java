@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("WeakerAccess")
 public class TemplateEvaluator {
     private final static Logger log = LoggerFactory.getLogger(TemplateEvaluator.class);
     private final Map<String, Object> templateVariables = new HashMap<>();
@@ -84,7 +85,7 @@ public class TemplateEvaluator {
                     try {
                         m.setAccessible(true);
                         variable(m.getName(), m.invoke(variables));
-                    } catch (IllegalAccessException | InvocationTargetException e) {
+                    } catch (IllegalAccessException | InvocationTargetException ignored) {
                     }
                 });
 
@@ -114,11 +115,14 @@ public class TemplateEvaluator {
     }
 
     private String preProcess(String templateCode) {
-        return preProcessors
+        String preprocessedTemplate = preProcessors
                 .stream()
                 .reduce((a, b) -> str -> b.apply(a.apply(str)))
                 .orElse(str -> str)
                 .apply(templateCode);
+        log.debug("Template after preprocessing:");
+        log.debug(preprocessedTemplate);
+        return preprocessedTemplate;
     }
 
     private static Template.ResourceOpener fromResources() {
