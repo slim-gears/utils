@@ -16,9 +16,11 @@ import com.slimgears.util.autovalue.apt.Context;
 import com.slimgears.util.autovalue.apt.PropertyInfo;
 import com.slimgears.util.autovalue.apt.PropertyUtils;
 import com.slimgears.util.autovalue.apt.Registrar;
+import com.slimgears.util.stream.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
@@ -45,6 +47,8 @@ public class BuilderExtension implements Extension {
         DeclaredType declaredType = MoreTypes.asDeclared(typeElement.asType());
         ElementUtils
                 .getHierarchy(declaredType)
+                .filter(BuilderExtension::isNotJavaType)
+                .filter(BuilderExtension::hasProperties)
                 .filter(t -> ElementUtils.toTypeElement(declaredType).anyMatch(ElementUtils::isInterface))
                 .filter(Registrar.current()::needsProcessing)
                 .forEach(BuilderExtension::generateInterfaceBuilder);
@@ -93,6 +97,9 @@ public class BuilderExtension implements Extension {
                         ElementUtils.toTypeElement(type)
                                 .map(TypeElement::getInterfaces)
                                 .flatMap(Collection::stream)
+                                .flatMap(Streams.ofType(DeclaredType.class))
+                                .filter(BuilderExtension::isNotJavaType)
+                                .filter(BuilderExtension::hasProperties)
                                 .map(TypeInfo::of)
                                 .map(valType -> BuilderInfo.create(
                                         valType,
@@ -103,8 +110,18 @@ public class BuilderExtension implements Extension {
                 .collect(Collectors.toList());
     }
 
+    private static boolean isNotJavaType(DeclaredType type) {
+        return !type.toString().startsWith("java.");
+    }
+
+    private static boolean hasProperties(DeclaredType type) {
+        return PropertyUtils.hasProperties(type);
+    }
+
     private static Predicate<TypeElement> isValidBuilder(DeclaredType type) {
-        return te -> isValidBuilderName(te) && hasValidTypeParams(type, te);
+        return te -> te.getKind() == ElementKind.INTERFACE &&
+                isValidBuilderName(te) &&
+                hasValidTypeParams(type, te);
     }
 
     private static boolean isValidBuilderName(TypeElement typeElement) {

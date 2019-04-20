@@ -10,7 +10,6 @@ import com.slimgears.apt.data.MethodInfo;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.util.autovalue.annotations.NonProperty;
-import com.slimgears.util.autovalue.annotations.Reference;
 import com.slimgears.util.stream.Optionals;
 import com.slimgears.util.stream.Streams;
 
@@ -106,13 +105,25 @@ public class PropertyUtils {
     }
 
     public static Collection<PropertyInfo> getProperties(DeclaredType type) {
-        Collection<ExecutableElement> elements = MoreElements
+        return streamProperties(type).collect(Collectors.toList());
+    }
+
+    public static boolean hasProperties(DeclaredType type) {
+        return streamPropertyElements(type).findAny().isPresent();
+    }
+
+    private static Stream<ExecutableElement> streamPropertyElements(DeclaredType type) {
+        return MoreElements
                 .getLocalAndInheritedMethods(
                         MoreTypes.asTypeElement(type),
                         Environment.instance().types(),
                         Environment.instance().elements())
                 .stream()
-                .flatMap(PropertyUtils::isPropertyMethod)
+                .flatMap(PropertyUtils::isPropertyMethod);
+    }
+
+    private static Stream<PropertyInfo> streamProperties(DeclaredType type) {
+        Collection<ExecutableElement> elements = streamPropertyElements(type)
                 .collect(Collectors.toList());
 
         boolean hasPrefix = elements.stream()
@@ -120,8 +131,7 @@ public class PropertyUtils {
 
         return elements
                 .stream()
-                .map(ee -> PropertyInfo.create(type, ee, hasPrefix))
-                .collect(Collectors.toList());
+                .map(ee -> PropertyInfo.create(type, ee, hasPrefix));
     }
 
     private static Stream<ExecutableElement> isPropertyMethod(ExecutableElement executableElement) {
@@ -176,10 +186,6 @@ public class PropertyUtils {
                 .map(ee -> MethodInfo.create(ee, builderDeclaredType))
                 .sorted(Comparator.comparing(HasName::name))
                 .collect(ImmutableList.toImmutableList());
-    }
-
-    public static boolean isReference(ExecutableElement propertyElement) {
-        return propertyElement.getAnnotation(Reference.class) != null;
     }
 
     public static boolean isString(TypeMirror type) {

@@ -36,7 +36,6 @@ public abstract class PropertyInfo implements HasName, HasType, HasAnnotations {
         return executableElement().getAnnotation(Nullable.class) != null;
     }
     public boolean isKey() { return executableElement().getAnnotation(Key.class) != null; }
-    public boolean isReferenceProperty() { return PropertyUtils.isReference(executableElement()); }
     public boolean isStringProperty() { return String.class.getName().equals(propertyType().toString()); }
     public boolean isComparableProperty() { return PropertyUtils.isComparable(propertyType()); }
     public boolean isNumericProperty() { return PropertyUtils.isNumeric(propertyType()); }
