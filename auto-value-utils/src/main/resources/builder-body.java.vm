@@ -47,8 +47,8 @@
 
     public interface Builder#typeParamsDeclaration($sourceClass) extends ##
             $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<$targetClass.simpleName()#typeParams($sourceClass), ##
-            Builder#typeParams($sourceClass)>, ##
-#if (!$properties.isEmpty())$[${sourceClass.erasureName()}Builder]<##
+            Builder#typeParams($sourceClass)>##
+#if (!$properties.isEmpty()), $[${sourceClass.erasureName()}Builder]<##
 #foreach ($tp in $sourceClass.typeParams())##
             $[$tp.type()], ##
 #end##
