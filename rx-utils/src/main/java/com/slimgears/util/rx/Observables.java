@@ -1,14 +1,21 @@
 package com.slimgears.util.rx;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public class Observables {
@@ -37,10 +44,41 @@ public class Observables {
         };
     }
 
-    public static <T, R> ObservableTransformer<T, R> buffer(Duration maxIdleDuration, Function<List<T>, R> aggregator) {
-        return source -> source
-                .buffer(maxIdleDuration.toMillis(), TimeUnit.MILLISECONDS)
-                .filter(b -> !b.isEmpty())
-                .map(aggregator);
+    public static <T> ObservableTransformer<T, List<T>> bufferUntilIdle(Duration maxIdleDuration) {
+        return bufferUntilIdleOrFull(maxIdleDuration, Integer.MAX_VALUE);
+    }
+
+    public static <T> ObservableTransformer<T, List<T>> bufferUntilIdleOrFull(Duration maxIdleDuration, int maxSize) {
+        AtomicReference<List<T>> currentBuffer = new AtomicReference<>(new ArrayList<>());
+        AtomicReference<Disposable> currentTimerDisposable = new AtomicReference<>(Disposables.empty());
+        return source -> Observable.create(emitter -> {
+            Action flush = () -> {
+                Optional
+                        .of(currentBuffer.getAndSet(new ArrayList<>()))
+                        .filter(b -> !b.isEmpty())
+                        .ifPresent(emitter::onNext);
+                currentTimerDisposable.getAndSet(Disposables.empty()).dispose();
+            };
+
+            emitter.setDisposable(source.subscribe(
+                    next -> {
+                        List<T> buf = currentBuffer.get();
+                        buf.add(next);
+                        if (buf.size() >= maxSize) {
+                            flush.run();
+                        } else {
+                            currentTimerDisposable
+                                    .getAndSet(Completable
+                                            .timer(maxIdleDuration.toMillis(), TimeUnit.MILLISECONDS)
+                                            .subscribe(flush))
+                                    .dispose();
+                        }
+                    },
+                    emitter::onError,
+                    () -> {
+                        flush.run();
+                        emitter.onComplete();
+                    }));
+        });
     }
 }
