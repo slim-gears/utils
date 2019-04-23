@@ -1,6 +1,5 @@
 package com.slimgears.util.rx;
 
-import io.reactivex.MaybeTransformer;
 import io.reactivex.SingleTransformer;
 import io.reactivex.disposables.Disposable;
 
@@ -13,7 +12,7 @@ import static com.slimgears.util.rx.Maybes.retryPolicy;
 public class Singles {
     private final static Logger log = Logger.getLogger(Singles.class.getName());
 
-    public static <T> MaybeTransformer<T, T> backoffDelayRetry(Duration initialDelay, int maxErrors) {
+    public static <T> SingleTransformer<T, T> backoffDelayRetry(Duration initialDelay, int maxErrors) {
         return upstream -> {
             AtomicInteger attemptsMade = new AtomicInteger(0);
             return upstream
