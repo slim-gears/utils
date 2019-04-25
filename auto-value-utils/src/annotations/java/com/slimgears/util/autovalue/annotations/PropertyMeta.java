@@ -90,13 +90,18 @@ public interface PropertyMeta<T, V> {
             @Override
             public boolean equals(Object obj) {
                 return obj instanceof PropertyMeta
-                        && Objects.equals(declaringType, ((PropertyMeta) obj).declaringType())
+                        && Objects.equals(declaringType.objectClass().asClass(), ((PropertyMeta) obj).declaringType().objectClass().asClass())
                         && Objects.equals(name, ((PropertyMeta) obj).name());
             }
 
             @Override
             public int hashCode() {
-                return Objects.hash(declaringType, name);
+                return Objects.hash(declaringType.objectClass().asClass(), name);
+            }
+
+            @Override
+            public String toString() {
+                return declaringType.objectClass().asClass().getSimpleName() + "." + name;
             }
         };
     }
