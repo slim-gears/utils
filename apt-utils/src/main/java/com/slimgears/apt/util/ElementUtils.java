@@ -120,6 +120,10 @@ public class ElementUtils {
     }
 
     public static boolean hasInterface(TypeMirror type, Class... interfaceTypes) {
+        if (type.getKind() != TypeKind.DECLARED) {
+            return false;
+        }
+
         if (hasExtendsBound(type, interfaceTypes)) {
             return true;
         }

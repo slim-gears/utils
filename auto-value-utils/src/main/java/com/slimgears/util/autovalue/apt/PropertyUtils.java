@@ -189,12 +189,12 @@ public class PropertyUtils {
     }
 
     public static boolean isString(TypeMirror type) {
-        return MoreTypes.isTypeOf(String.class, type);
+        return type.getKind() == TypeKind.DECLARED && MoreTypes.isTypeOf(String.class, type);
     }
 
     public static boolean isNumeric(TypeMirror type) {
         return (type.getKind().isPrimitive() && type.getKind() != TypeKind.BOOLEAN)
-            || ElementUtils.hasInterface(type, Number.class, Comparable.class);
+            || (type.getKind() == TypeKind.DECLARED && ElementUtils.hasInterface(type, Number.class, Comparable.class));
     }
 
     public static boolean isComparable(TypeMirror type) {
