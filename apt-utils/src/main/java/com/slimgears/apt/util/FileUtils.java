@@ -1,7 +1,6 @@
 package com.slimgears.apt.util;
 
 import com.slimgears.apt.data.Environment;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,9 +10,11 @@ import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@SuppressWarnings("WeakerAccess")
 public class FileUtils {
     private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
 
@@ -49,7 +50,7 @@ public class FileUtils {
 
                 Environment.instance()
                         .fileListener()
-                        .onFileWrite(FilenameUtils.getBaseName(filename), content);
+                        .onFileWrite(Paths.get(filename).getFileName().toString(), content);
 
             } catch (IOException e) {
                 log.warn("Could not write file: {}", filename, e);

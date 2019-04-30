@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.slimgears.apt.util;
 
 import com.slimgears.apt.data.TypeInfo;
@@ -40,14 +37,8 @@ public class TypeTokenParserAdapter {
     }
 
     private static TypeInfo toTypeInfo(TypeTokenParser.TypeContext ctx) {
-        return Optionals.or(
-                () -> Optional.ofNullable(ctx.primitiveType()).map(TypeTokenParserAdapter::toTypeInfo),
-                () -> Optional.ofNullable(ctx.referenceType()).map(TypeTokenParserAdapter::toTypeInfo))
+        return Optional.ofNullable(ctx.referenceType()).map(TypeTokenParserAdapter::toTypeInfo)
                 .orElse(null);
-    }
-
-    private static TypeInfo toTypeInfo(TypeTokenParser.PrimitiveTypeContext ctx) {
-        return TypeInfo.ofPrimitive(ctx.getText());
     }
 
     private static TypeInfo toTypeInfo(TypeTokenParser.ReferenceTypeContext ctx) {
@@ -103,7 +94,6 @@ public class TypeTokenParserAdapter {
     private static TypeInfo toTypeInfo(TypeTokenParser.ArrayTypeContext ctx) {
         return Optionals.or(
                 () -> Optional.ofNullable(ctx.classOrInterfaceType()).map(TypeTokenParserAdapter::toTypeInfo).map(type -> TypeInfo.arrayOf(type, ctx.dim().size())),
-                () -> Optional.ofNullable(ctx.primitiveType()).map(TypeTokenParserAdapter::toTypeInfo).map(type -> TypeInfo.arrayOf(type, ctx.dim().size())),
                 () -> Optional.ofNullable(ctx.typeVariable()).map(TypeTokenParserAdapter::toTypeInfo).map(type -> TypeInfo.arrayOf(type, ctx.dim().size())))
                 .orElse(null);
     }

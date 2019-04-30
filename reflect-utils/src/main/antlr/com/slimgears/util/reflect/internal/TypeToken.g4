@@ -1,8 +1,8 @@
 grammar TypeToken;
 
-type: (primitiveType | referenceType) EOF;
+type: (referenceType) EOF;
 
-primitiveType: 'boolean' |	'byte' | 'short' | 'int' | 'long' | 'float' | 'double' | 'char';
+//primitiveType: 'boolean' |	'byte' | 'short' | 'int' | 'long' | 'float' | 'double' | 'char';
 
 referenceType: classOrInterfaceType | typeVariable | arrayType;
 
@@ -12,7 +12,7 @@ classOrInterfaceArgs: '<' typeArgument (',' typeArgument)* '>';
 
 typeVariable: Identifier;
 
-arrayType: (primitiveType | classOrInterfaceType | typeVariable) dim dim*;
+arrayType: (classOrInterfaceType | typeVariable) dim dim*;
 
 dim: '[' ']';
 

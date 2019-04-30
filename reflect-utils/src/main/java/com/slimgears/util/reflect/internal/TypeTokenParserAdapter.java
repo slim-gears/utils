@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.slimgears.util.reflect.internal;
 
 import com.slimgears.util.reflect.TypeToken;
@@ -25,19 +22,10 @@ public class TypeTokenParserAdapter {
     }
 
     private static TypeToken toTypeToken(TypeTokenParser.TypeContext ctx) {
-        return Optionals.or(
-                () -> Optional.ofNullable(ctx.primitiveType()).map(TypeTokenParserAdapter::toTypeToken),
-                () -> Optional.ofNullable(ctx.referenceType()).map(TypeTokenParserAdapter::toTypeToken))
+        return Optional.ofNullable(ctx.referenceType()).map(TypeTokenParserAdapter::toTypeToken)
                 .orElse(null);
     }
 
-    private static TypeToken toTypeToken(TypeTokenParser.PrimitiveTypeContext ctx) {
-        try {
-            return TypeToken.ofType(Class.forName(ctx.getText()));
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private static TypeToken toTypeToken(TypeTokenParser.ReferenceTypeContext ctx) {
         return Optionals.or(
@@ -90,10 +78,8 @@ public class TypeTokenParserAdapter {
     }
 
     private static TypeToken toTypeToken(TypeTokenParser.ArrayTypeContext ctx) {
-        //noinspection unchecked
         return Optionals.<TypeToken>or(
                 () -> Optional.ofNullable(ctx.classOrInterfaceType()).map(TypeTokenParserAdapter::toTypeToken).map(TypeToken::toArray),
-                () -> Optional.ofNullable(ctx.primitiveType()).map(TypeTokenParserAdapter::toTypeToken).map(TypeToken::toArray),
                 () -> Optional.ofNullable(ctx.typeVariable()).map(TypeTokenParserAdapter::toTypeToken).map(TypeToken::toArray))
                 .flatMap(t -> IntStream.range(0, ctx.dim().size()).mapToObj(i -> t).reduce((t1, t2) -> t1.toArray()))
                 .orElse(null);
