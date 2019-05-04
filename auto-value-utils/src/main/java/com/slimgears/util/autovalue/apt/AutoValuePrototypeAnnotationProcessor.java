@@ -50,9 +50,9 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         final Extension extension;
         final Annotator annotator;
 
-        public MetaAnnotationInfo(TypeElement typeElement,
-                                  Collection<Extension> extensions,
-                                  Collection<Annotator> annotators) {
+        MetaAnnotationInfo(TypeElement typeElement,
+                           Collection<Extension> extensions,
+                           Collection<Annotator> annotators) {
             this.prototypeAnnotation = typeElement.getAnnotation(AutoValuePrototype.class);
             this.extension = CompositeExtension.of(extensions);
             this.annotator = CompositeAnnotator.of(annotators);
@@ -68,7 +68,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     protected boolean processType(TypeElement annotationElement, TypeElement type) {
         MetaAnnotationInfo metaAnnotation = resolveMetaAnnotation(annotationElement, type);
         if (metaAnnotation == null) {
-            delayProcessing();
+            delayProcessing("Meta annotation is not available yet");
         }
 
         if (type.getKind() == ElementKind.ANNOTATION_TYPE) {
@@ -114,12 +114,18 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
         Collection<PropertyInfo> properties = PropertyUtils.getProperties(declaredType);
 
-        if (properties.stream().anyMatch(p -> ElementUtils
-                .findErrors(p.propertyType())
-                .map(TypeInfo::of)
-                .anyMatch(t -> !targetClass.equals(t) && !targetClass.simpleName().equals(t.toString())))) {
-            delayProcessing();
-        }
+        properties.forEach(p -> {
+            String pendingTypes = ElementUtils
+                    .findErrors(p.propertyType())
+                    .map(TypeInfo::of)
+                    .filter(t -> !targetClass.equals(t) && !targetClass.simpleName().equals(t.toString()))
+                    .map(TypeInfo::toString)
+                    .collect(Collectors.joining(", "));
+
+            if (!pendingTypes.isEmpty()) {
+                delayProcessing("Property " + p.name() + ": could not resolve types: " + pendingTypes);
+            }
+        });
 
         ImportTracker importTracker = ImportTracker.create("java.lang", targetClass.packageName());
 

@@ -4,6 +4,7 @@ import com.google.auto.common.MoreElements;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.util.LogUtils;
 import com.slimgears.util.stream.Safe;
+import com.slimgears.util.stream.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import java.util.stream.Stream;
 import static com.slimgears.util.stream.Streams.ofType;
 import static com.slimgears.util.stream.Streams.takeWhile;
 
+@SuppressWarnings("WeakerAccess")
 @SupportedOptions(LogUtils.verbosityOption)
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     interface ElementSupplier<E extends Element> {
@@ -48,11 +51,12 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
             return this.annotation;
         }
 
-        public  PendingElementInfo(Element element, TypeElement annotation) {
+        PendingElementInfo(Element element, TypeElement annotation) {
             this.annotation = annotation;
             this.elementSupplier = toElementSupplier(element);
         }
 
+        @SuppressWarnings("UnstableApiUsage")
         private ElementSupplier<? extends Element> toElementSupplier(Element element) {
             if (element instanceof TypeElement) {
                 return toTypeElementSupplier(MoreElements.asType(element));
@@ -64,7 +68,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                         .getElement(elements)
                         .getEnclosedElements()
                         .stream()
-                        .filter(e -> ((Element) e).getKind() == elementKind && ((Element) e).getSimpleName().toString().equals(memberName))
+                        .filter(e -> e.getKind() == elementKind && e.getSimpleName().toString().equals(memberName))
                         .findAny()
                         .orElseThrow(() -> new IllegalStateException("Member " + memberName + " not found"));
             }
@@ -80,6 +84,9 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private final List<PendingElementInfo> pendingElements = new ArrayList<>();
 
     private static class DelayProcessingException extends RuntimeException {
+        DelayProcessingException(String reason) {
+            super(reason);
+        }
     }
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -102,7 +109,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
             return res;
         }
         catch (Exception e) {
-            log.error("Error: {}", e);
+            log.error("Error: ", e);
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
             return true;
         }
@@ -137,7 +144,11 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .flatMap(s -> s)
                     .findAny()
                     .orElse(true);
-        } catch (DelayProcessingException ignored) {
+        } catch (DelayProcessingException e) {
+            log.debug("Processing of element {} with annotation {} delayed until next round: {}",
+                    element.getSimpleName(),
+                    annotationType.getSimpleName(),
+                    e.getMessage());
             pendingElements.add(new PendingElementInfo(element, annotationType));
             return true;
         }
@@ -164,8 +175,17 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     protected boolean processMethod(TypeElement annotationType, ExecutableElement methodElement) { return false; }
     protected boolean processField(TypeElement annotationType, VariableElement variableElement) { return false; }
 
-    protected void delayProcessing() {
-        throw new DelayProcessingException();
+    protected void delayProcessing(String reason) {
+        throw new DelayProcessingException(reason);
+    }
+
+    @SuppressWarnings("unused")
+    protected void delayProcessing(Iterable<TypeMirror> types) {
+        delayProcessing("Types: [" + Streams
+                .fromIterable(types)
+                .map(Object::toString)
+                .collect(Collectors.joining(", "))
+                + "] are not resolved");
     }
 
     @Override

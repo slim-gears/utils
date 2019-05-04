@@ -120,8 +120,8 @@ public class TemplateEvaluator {
                 .reduce((a, b) -> str -> b.apply(a.apply(str)))
                 .orElse(str -> str)
                 .apply(templateCode);
-        log.debug("Template after preprocessing:");
-        log.debug(preprocessedTemplate);
+        log.trace("Template after preprocessing:");
+        log.trace(preprocessedTemplate);
         return preprocessedTemplate;
     }
 
