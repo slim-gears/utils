@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@SuppressWarnings("WeakerAccess")
 public class TestReflectUtils {
     public interface AnnotatedItem<A extends Annotation, Q extends Annotation> {
         A annotation();
@@ -22,8 +23,9 @@ public class TestReflectUtils {
     }
 
     public static <T, Q extends Annotation> Stream<T> providersForMethod(FrameworkMethod testMethod, Class<Q> qualifier, ProviderFactory<T, Q> factory) {
-        return TestReflectUtils
-                .getAnnotationsOf(testMethod.getMethod(), qualifier)
+        return Stream.concat(
+                TestReflectUtils.getAnnotationsOf(testMethod.getMethod(), qualifier),
+                Arrays.stream(testMethod.getAnnotations()).flatMap(a -> TestReflectUtils.getAnnotationsOf(a.annotationType(), qualifier)))
                 .flatMap(item -> Stream.concat(Stream.of(item), TestReflectUtils.getAnnotationsOf(item.annotation().annotationType(), qualifier)))
                 .map(Safe.ofFunction(factory::create));
     }
@@ -48,8 +50,8 @@ public class TestReflectUtils {
 
         return (element instanceof Method)
                 ? Stream.concat(
-                TestReflectUtils.getAnnotationsOf(((Method) element).getDeclaringClass(), annotationQualifier),
-                stream)
+                        TestReflectUtils.getAnnotationsOf(((Method) element).getDeclaringClass(), annotationQualifier),
+                        stream)
                 : stream;
     }
 
