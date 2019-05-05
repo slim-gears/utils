@@ -19,6 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("WeakerAccess")
 public class Extensions {
     public static <E> Collection<E> fromStrings(Class<E> cls, String... qualifiedNames) {
         return fromStrings(cls, Arrays.asList(qualifiedNames));
@@ -52,6 +53,13 @@ public class Extensions {
                 .collect(Collectors.toList());
     }
 
+    public static <E> Collection<E> extensionsForType(ImmutableMultimap<String, E> extensionMap, Class<?> type) {
+        return Arrays.stream(type.getAnnotations())
+                .flatMap(am -> extensionsForAnnotation(extensionMap, new HashSet<>(), am))
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     private static <E> Stream<E> extensionsForAnnotationMirror(ImmutableMultimap<String, E> extensionMap, Set<String> visitedAnnotations, AnnotationMirror annotationMirror) {
         String annotationTypeName = annotationMirror.getAnnotationType().toString();
         return visitedAnnotations.add(annotationTypeName)
@@ -64,6 +72,19 @@ public class Extensions {
                             .getAnnotationMirrors()
                             .stream()
                             .flatMap(am -> extensionsForAnnotationMirror(extensionMap, visitedAnnotations, am)))
+            : Stream.empty();
+    }
+
+    private static <E> Stream<E> extensionsForAnnotation(ImmutableMultimap<String, E> extensionMap, Set<String> visitedAnnotations, Annotation annotation) {
+        String annotationTypeName = annotation.annotationType().getName();
+        return visitedAnnotations.add(annotationTypeName)
+            ? Stream.concat(
+                    Optional.ofNullable(extensionMap.get(annotationTypeName))
+                            .map(Collection::stream)
+                            .orElseGet(Stream::empty),
+                    Arrays.stream(annotation.annotationType()
+                            .getAnnotations())
+                            .flatMap(am -> extensionsForAnnotation(extensionMap, visitedAnnotations, am)))
             : Stream.empty();
     }
 
