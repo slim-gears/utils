@@ -17,7 +17,7 @@ public class CustomRulesClassRunner extends BlockJUnit4ClassRunner {
 
     @Override
     protected boolean isIgnored(FrameworkMethod child) {
-        return MethodRules.isIgnored(child);
+        return super.isIgnored(child) || MethodRules.isIgnored(child);
     }
 
     @Override
