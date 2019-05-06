@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(CustomRulesClassRunner.class)
-public class CustomIgnoreTest {
+public class SkipWhenEnvDefinedOnMethodTest {
     @Test @SkipWhenPathDefined
     public void testShouldBeIgnored() {
         Assert.fail();

@@ -25,7 +25,10 @@ public class TestReflectUtils {
     public static <T, Q extends Annotation> Stream<T> providersForMethod(FrameworkMethod testMethod, Class<Q> qualifier, ProviderFactory<T, Q> factory) {
         return Stream.concat(
                 TestReflectUtils.getAnnotationsOf(testMethod.getMethod(), qualifier),
-                Arrays.stream(testMethod.getAnnotations()).flatMap(a -> TestReflectUtils.getAnnotationsOf(a.annotationType(), qualifier)))
+                Stream.concat(
+                        Arrays.stream(testMethod.getAnnotations()),
+                        Arrays.stream(testMethod.getDeclaringClass().getAnnotations()))
+                        .flatMap(a -> TestReflectUtils.getAnnotationsOf(a.annotationType(), qualifier)))
                 .flatMap(item -> Stream.concat(Stream.of(item), TestReflectUtils.getAnnotationsOf(item.annotation().annotationType(), qualifier)))
                 .map(Safe.ofFunction(factory::create));
     }
