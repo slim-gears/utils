@@ -32,7 +32,11 @@ import static com.slimgears.util.stream.Streams.ofType;
 import static com.slimgears.util.stream.Streams.takeWhile;
 
 @SuppressWarnings("WeakerAccess")
-@SupportedOptions(LogUtils.verbosityOption)
+@SupportedOptions({
+        LogUtils.verbosityOption,
+        Environment.configOptionName,
+        Environment.excludedTypesOptionName,
+        Environment.includeTypesOptionName})
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     interface ElementSupplier<E extends Element> {
         E getElement(Elements elements);

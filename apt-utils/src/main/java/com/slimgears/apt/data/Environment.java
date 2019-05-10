@@ -22,9 +22,9 @@ import java.util.function.Predicate;
 @AutoValue
 public abstract class Environment implements Safe.Closable {
     private final ScopedInstance.Closeable closeable;
-    private final static String configOptionName = "apt.config";
-    private final static String excludedTypesOptionName = "apt.excludeTypes";
-    private final static String includeTypesOptionName = "apt.includeTypes";
+    public final static String configOptionName = "apt.config";
+    public final static String excludedTypesOptionName = "apt.excludeTypes";
+    public final static String includeTypesOptionName = "apt.includeTypes";
     private final static ScopedInstance<Environment> instance = ScopedInstance.create();
     private final static ScopedInstance<FileListener> fileListenerInstance = ScopedInstance.create(FileListener.empty);
 
