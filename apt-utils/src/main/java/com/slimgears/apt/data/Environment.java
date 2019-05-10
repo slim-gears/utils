@@ -22,9 +22,9 @@ import java.util.function.Predicate;
 @AutoValue
 public abstract class Environment implements Safe.Closable {
     private final ScopedInstance.Closeable closeable;
-    private final static String configOptionName = "rxrpc.config";
-    private final static String excludedTypesOptionName = "rxrpc.excludeTypes";
-    private final static String includeTypesOptionName = "rxrpc.includeTypes";
+    private final static String configOptionName = "apt.config";
+    private final static String excludedTypesOptionName = "apt.excludeTypes";
+    private final static String includeTypesOptionName = "apt.includeTypes";
     private final static ScopedInstance<Environment> instance = ScopedInstance.create();
     private final static ScopedInstance<FileListener> fileListenerInstance = ScopedInstance.create(FileListener.empty);
 
@@ -87,7 +87,7 @@ public abstract class Environment implements Safe.Closable {
 
     private static Environment create(ProcessingEnvironment processingEnvironment, RoundEnvironment roundEnvironment) {
         Properties properties = ConfigProviders.create(
-                ConfigProviders.loadFromResource("/rxrpc-apt.properties"),
+                ConfigProviders.loadFromResource("/apt.properties"),
                 ConfigProviders.fromServiceLoader(),
                 loadFromExternalConfig(processingEnvironment),
                 loadFromOptions(processingEnvironment));
@@ -135,6 +135,7 @@ public abstract class Environment implements Safe.Closable {
                         .orElse("true")));
     }
 
+    @SuppressWarnings("WeakerAccess")
     @AutoValue.Builder
     public static abstract class Builder {
         private final Map<String, String> properties = new HashMap<>();
