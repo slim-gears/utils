@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+@SuppressWarnings("WeakerAccess")
 public class TypeToken<T> {
     private final Type type;
 
@@ -141,7 +142,7 @@ public class TypeToken<T> {
     }
 
     private TypeToken(Type type) {
-        this.type = type;
+        this.type = CanonicalType.of(type);
     }
 
     @Override
