@@ -1,19 +1,20 @@
 package com.slimgears.util.rx;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import org.reactivestreams.Publisher;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
+@SuppressWarnings("WeakerAccess")
 public class Observables {
-    private final static Logger log = Logger.getLogger(Observables.class.getName());
-
     public static <T> ObservableTransformer<T, T> startNow() {
         return src -> {
             src = src.cache();
@@ -22,23 +23,22 @@ public class Observables {
         };
     }
 
-    public static <T> ObservableTransformer<T, T> backoffDelayRetry(Duration initialDelay, int maxErrors) {
+    public static <T> ObservableTransformer<T, T> backOffDelayRetry(Duration initialDelay, int maxErrors) {
+        return backOffDelayRetry(t -> true, initialDelay, maxErrors);
+    }
+
+    public static <T> ObservableTransformer<T, T> backOffDelayRetry(Predicate<Throwable> predicate, Duration initialDelay, int maxErrors) {
         return upstream -> {
             AtomicInteger attemptsMade = new AtomicInteger(0);
             return upstream
                     .doOnNext(v -> attemptsMade.lazySet(0))
-                    .retryWhen(retryPolicy(attemptsMade, initialDelay, maxErrors));
+                    .retryWhen(retryPolicy(predicate, attemptsMade, initialDelay, maxErrors));
         };
     }
 
-    private static Function<Observable<Throwable>, Observable<?>> retryPolicy(AtomicInteger attemptsMade, Duration initialDelay, int maxErrors) {
-        return err -> err.flatMap(e -> {
-            long delayMillis = (1 << attemptsMade.get()) * initialDelay.toMillis();
-            return (attemptsMade.incrementAndGet() > maxErrors)
-                    ? Observable.error(e)
-                    : Observable.timer(delayMillis, TimeUnit.MILLISECONDS)
-                    .doOnNext(v -> log.warning(() -> "Error occurred: " + e.getMessage() + " Retry #" + attemptsMade + " (delay: " + delayMillis + " milliseconds)" + e));
-        });
+    private static Function<Observable<Throwable>, Observable<?>> retryPolicy(Predicate<Throwable> errorPredicate, AtomicInteger attemptsMade, Duration initialDelay, int maxErrors) {
+        Function<Flowable<Throwable>, Publisher<?>> retryPolicy = Maybes.retryPolicy(errorPredicate, attemptsMade, initialDelay, maxErrors);
+        return err -> Observable.fromPublisher(retryPolicy.apply(err.toFlowable(BackpressureStrategy.LATEST)));
     }
 
     public static <T> ObservableTransformer<T, List<T>> bufferUntilIdle(Duration maxIdleDuration) {

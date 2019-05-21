@@ -2,22 +2,25 @@ package com.slimgears.util.rx;
 
 import io.reactivex.SingleTransformer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Predicate;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 import static com.slimgears.util.rx.Maybes.retryPolicy;
 
+@SuppressWarnings("WeakerAccess")
 public class Singles {
-    private final static Logger log = Logger.getLogger(Singles.class.getName());
+    public static <T> SingleTransformer<T, T> backOffDelayRetry(Duration initialDelay, int maxErrors) {
+        return backOffDelayRetry(t -> true, initialDelay, maxErrors);
+    }
 
-    public static <T> SingleTransformer<T, T> backoffDelayRetry(Duration initialDelay, int maxErrors) {
+    public static <T> SingleTransformer<T, T> backOffDelayRetry(Predicate<Throwable> errorPredicate, Duration initialDelay, int maxErrors) {
         return upstream -> {
             AtomicInteger attemptsMade = new AtomicInteger(0);
             return upstream
                     .doOnSuccess(v -> attemptsMade.lazySet(0))
-                    .retryWhen(retryPolicy(attemptsMade, initialDelay, maxErrors));
+                    .retryWhen(retryPolicy(errorPredicate, attemptsMade, initialDelay, maxErrors));
         };
     }
 
