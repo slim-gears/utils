@@ -2,23 +2,39 @@ sourceSets {
     guice {
         java.srcDir 'src/guice/java'
     }
+    logback {
+        java.srcDir 'src/logback/java'
+    }
 }
 
 dependencies {
     implementation libs.junit, libs.mockito
     implementation project(':stream-utils')
     implementation project(':generic-utils')
+    implementation libs.slf4j, libs.logbackClassic
+    implementation libs.guava
+    compileOnly libs.autoService
+    annotationProcessor libs.autoService
+
+    logbackImplementation libs.slf4j, libs.logbackClassic
+    logbackCompileOnly libs.autoService
+    logbackAnnotationProcessor libs.autoService
+    logbackImplementation project.sourceSetDependency(sourceSets.main)
+
     guiceImplementation project.sourceSetDependency(sourceSets.main)
     guiceImplementation project(':guice-utils')
     guiceImplementation libs.guice
     guiceImplementation libs.junit, libs.mockito
     guiceImplementation project(':stream-utils')
     guiceImplementation project(':generic-utils')
+
     testImplementation libs.guice
     testImplementation project.sourceSetDependency(sourceSets.guice)
+    testImplementation project.sourceSetDependency(sourceSets.logback)
 }
 
 configurations {
     guiceImplementation.extendsFrom implementation
+    logbackImplementation.extendsFrom implementation
     testImplementation.extendsFrom guiceImplementation
 }

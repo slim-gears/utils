@@ -1,5 +1,6 @@
-package com.slimgears.util.test;
+package com.slimgears.util.test.logging;
 
+import com.slimgears.util.test.AnnotationMethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 

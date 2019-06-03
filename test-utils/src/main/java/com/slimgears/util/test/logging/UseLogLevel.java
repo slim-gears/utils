@@ -1,5 +1,6 @@
-package com.slimgears.util.test;
+package com.slimgears.util.test.logging;
 
+import com.slimgears.util.test.AnnotationMethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
@@ -17,18 +18,8 @@ import java.util.logging.Logger;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @AnnotationMethodRule.Qualifier(UseLogLevel.Provider.class)
 public @interface UseLogLevel {
-    enum Level {
-        OFF,
-        SEVERE,
-        WARNING,
-        INFO,
-        CONFIG,
-        FINE,
-        FINER,
-        FINEST
-    }
 
-    Level value();
+    LogLevel value();
     String logger() default "";
 
     class Provider implements AnnotationMethodRule<UseLogLevel> {
@@ -37,20 +28,11 @@ public @interface UseLogLevel {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    Logger logger = Logger.getLogger(info.logger());
-                    java.util.logging.Level level = java.util.logging.Level.parse(info.value().name());
-                    java.util.logging.Level prevLevel = logger.getLevel();
-                    Map<Handler, java.util.logging.Level> handlerLevelMap = new HashMap<>();
-                    logger.setLevel(level);
-                    Arrays.asList(logger.getHandlers()).forEach(h -> {
-                        handlerLevelMap.put(h, h.getLevel());
-                        h.setLevel(level);
-                    });
+                    LogLevelListener.Rollback rollback = LogLevelListener.apply(info.logger(), info.value());
                     try {
                         base.evaluate();
                     } finally {
-                        handlerLevelMap.forEach(Handler::setLevel);
-                        logger.setLevel(prevLevel);
+                        rollback.apply();
                     }
                 }
             };
