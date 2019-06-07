@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -60,7 +61,7 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleValueUsingCustomConcreteWithBuilder, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleValueUsingCustomConcreteWithBuilder>> B createBuilder() {
             return (B)(BuilderPrototype)SampleValueUsingCustomConcreteWithBuilder.builder();
         }
 
@@ -102,7 +103,7 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleValueUsingCustomConcreteWithBuilder, Builder>, SampleValueUsingCustomProtoBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleValueUsingCustomConcreteWithBuilder, Builder>, SampleValueUsingCustomProtoBuilder<Builder>{
         public static Builder create() {
             return new AutoValue_SampleValueUsingCustomConcreteWithBuilder.Builder();
         }

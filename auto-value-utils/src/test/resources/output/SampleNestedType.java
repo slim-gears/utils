@@ -3,6 +3,7 @@ package com.slimgears.sample;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -55,7 +56,7 @@ public abstract class SampleNestedType implements SampleNestedTypePrototype, Has
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleNestedType, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleNestedType>> B createBuilder() {
             return (B)(BuilderPrototype)SampleNestedType.builder();
         }
 
@@ -86,7 +87,7 @@ public abstract class SampleNestedType implements SampleNestedTypePrototype, Has
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleNestedType, Builder>, SampleNestedTypePrototypeBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleNestedType, Builder>, SampleNestedTypePrototypeBuilder<Builder>{
         public static Builder create() {
             return new AutoValue_SampleNestedType.Builder();
         }

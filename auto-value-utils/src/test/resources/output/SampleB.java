@@ -5,6 +5,7 @@ import com.slimgears.sample.a.SampleA;
 import com.slimgears.sample.a.SampleAPrototype;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -59,7 +60,7 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<SampleB>
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleB, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleB>> B createBuilder() {
             return (B)(BuilderPrototype)SampleB.builder();
         }
 
@@ -92,7 +93,7 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<SampleB>
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleB, Builder>, SampleBPrototypeBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleB, Builder>, SampleBPrototypeBuilder<Builder>{
         public static Builder create() {
             return new AutoValue_SampleB.Builder();
         }

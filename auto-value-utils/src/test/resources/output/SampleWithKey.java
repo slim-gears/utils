@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.Key;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -65,7 +66,7 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleWithKey, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleWithKey>> B createBuilder() {
             return (B)(BuilderPrototype)SampleWithKey.builder();
         }
 
@@ -100,7 +101,7 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleWithKey, Builder>, SampleWithKeyPrototypeBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleWithKey, Builder>, SampleWithKeyPrototypeBuilder<Builder>{
         public static Builder create() {
             return new AutoValue_SampleWithKey.Builder();
         }

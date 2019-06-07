@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -67,7 +68,7 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleGuavaValue, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleGuavaValue>> B createBuilder() {
             return (B)(BuilderPrototype)SampleGuavaValue.builder();
         }
 
@@ -119,7 +120,7 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleGuavaValue, Builder>, SampleGuavaValuePrototypeBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleGuavaValue, Builder>, SampleGuavaValuePrototypeBuilder<Builder>{
         public static Builder create() {
             return new AutoValue_SampleGuavaValue.Builder();
         }

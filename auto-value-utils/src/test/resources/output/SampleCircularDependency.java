@@ -3,6 +3,7 @@ package com.slimgears.sample;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -55,7 +56,7 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleCircularDependency, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleCircularDependency>> B createBuilder() {
             return (B)(BuilderPrototype)SampleCircularDependency.builder();
         }
 
@@ -86,7 +87,7 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleCircularDependency, Builder>, SampleCircularDependencyPrototypeBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleCircularDependency, Builder>, SampleCircularDependencyPrototypeBuilder<Builder>{
         public static Builder create() {
             return new AutoValue_SampleCircularDependency.Builder();
         }

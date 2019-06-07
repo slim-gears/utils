@@ -72,7 +72,7 @@
         }
 
         @Override
-        public <B extends $[com.slimgears.util.autovalue.annotations.BuilderPrototype]<${targetClass.simpleName()}#typeParams($sourceClass), B>> B createBuilder() {
+        public <B extends $[com.slimgears.util.autovalue.annotations.MetaBuilder]<${targetClass.simpleName()}#typeParams($sourceClass)>> B createBuilder() {
             return (B)(BuilderPrototype)${targetClass.simpleName()}.builder();
         }
 

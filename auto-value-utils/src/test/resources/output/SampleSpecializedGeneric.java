@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -56,7 +57,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleSpecializedGeneric, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleSpecializedGeneric>> B createBuilder() {
             return (B)(BuilderPrototype)SampleSpecializedGeneric.builder();
         }
 
@@ -87,7 +88,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
     }
 
     @AutoValue.Builder
-    public interface Builder extends BuilderPrototype<SampleSpecializedGeneric, Builder>, SampleSpecializedGenericPrototypeBuilder<Builder> {
+    public interface Builder extends BuilderPrototype<SampleSpecializedGeneric, Builder>, SampleSpecializedGenericPrototypeBuilder<Builder>{
         public static Builder create() {
             return new AutoValue_SampleSpecializedGeneric.Builder();
         }

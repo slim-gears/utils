@@ -3,6 +3,7 @@ package com.slimgears.sample;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -56,7 +57,7 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
         }
 
         @Override
-        public <B extends BuilderPrototype<GenericListContainer<T>, B>> B createBuilder() {
+        public <B extends MetaBuilder<GenericListContainer<T>>> B createBuilder() {
             return (B)(BuilderPrototype)GenericListContainer.builder();
         }
 
@@ -87,7 +88,7 @@ public abstract class GenericListContainer<T> implements GenericListContainerPro
     }
 
     @AutoValue.Builder
-    public interface Builder<T> extends BuilderPrototype<GenericListContainer<T>, Builder<T>>, GenericListContainerPrototypeBuilder<T, Builder<T>> {
+    public interface Builder<T> extends BuilderPrototype<GenericListContainer<T>, Builder<T>>, GenericListContainerPrototypeBuilder<T, Builder<T>>{
         public static <T> Builder<T> create() {
             return new AutoValue_GenericListContainer.Builder<>();
         }

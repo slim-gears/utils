@@ -3,6 +3,7 @@ package com.slimgears.sample;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -55,7 +56,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         }
 
         @Override
-        public <B extends BuilderPrototype<SampleComparableGeneric<T>, B>> B createBuilder() {
+        public <B extends MetaBuilder<SampleComparableGeneric<T>>> B createBuilder() {
             return (B)(BuilderPrototype)SampleComparableGeneric.builder();
         }
 
@@ -86,7 +87,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
     }
 
     @AutoValue.Builder
-    public interface Builder<T extends Comparable<T>> extends BuilderPrototype<SampleComparableGeneric<T>, Builder<T>>, SampleComparableGenericPrototypeBuilder<T, Builder<T>> {
+    public interface Builder<T extends Comparable<T>> extends BuilderPrototype<SampleComparableGeneric<T>, Builder<T>>, SampleComparableGenericPrototypeBuilder<T, Builder<T>>{
         public static <T extends Comparable<T>> Builder<T> create() {
             return new AutoValue_SampleComparableGeneric.Builder<>();
         }

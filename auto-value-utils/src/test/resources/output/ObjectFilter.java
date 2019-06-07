@@ -3,6 +3,7 @@ package com.slimgears.sample;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -55,7 +56,7 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
         }
 
         @Override
-        public <B extends BuilderPrototype<ObjectFilter<T>, B>> B createBuilder() {
+        public <B extends MetaBuilder<ObjectFilter<T>>> B createBuilder() {
             return (B)(BuilderPrototype)ObjectFilter.builder();
         }
 
@@ -91,7 +92,7 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
     }
 
     @AutoValue.Builder
-    public interface Builder<T> extends BuilderPrototype<ObjectFilter<T>, Builder<T>>, ObjectFilterPrototypeBuilder<T, Builder<T>> {
+    public interface Builder<T> extends BuilderPrototype<ObjectFilter<T>, Builder<T>>, ObjectFilterPrototypeBuilder<T, Builder<T>>{
         public static <T> Builder<T> create() {
             return new AutoValue_ObjectFilter.Builder<>();
         }

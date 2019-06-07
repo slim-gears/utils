@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
+import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
 import com.slimgears.util.reflect.TypeToken;
@@ -62,7 +63,7 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
         }
 
         @Override
-        public <B extends BuilderPrototype<GenericAllOptionalPropertiesConcreteWithBuilder<T>, B>> B createBuilder() {
+        public <B extends MetaBuilder<GenericAllOptionalPropertiesConcreteWithBuilder<T>>> B createBuilder() {
             return (B)(BuilderPrototype)GenericAllOptionalPropertiesConcreteWithBuilder.builder();
         }
 
@@ -104,7 +105,7 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
     }
 
     @AutoValue.Builder
-    public interface Builder<T extends Comparable<T>> extends BuilderPrototype<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Builder<T>>, GenericAllOptionalPropertiesProtoBuilder<T, Builder<T>> {
+    public interface Builder<T extends Comparable<T>> extends BuilderPrototype<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Builder<T>>, GenericAllOptionalPropertiesProtoBuilder<T, Builder<T>>{
         public static <T extends Comparable<T>> Builder<T> create() {
             return new AutoValue_GenericAllOptionalPropertiesConcreteWithBuilder.Builder<>();
         }
