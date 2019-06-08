@@ -30,6 +30,17 @@ public class TypeToken<T> {
         return TypeToken.ofType(new CanonicalWildcardType(lowerBounds, upperBounds));
     }
 
+    public <R> TypeToken<R> as(TypeToken<R> token) {
+        if (!token.asClass().isAssignableFrom(asClass())) {
+            throw new ClassCastException("Cannot cast " + this + " to " + token);
+        }
+        return TypeToken.ofType(type);
+    }
+
+    public <R> TypeToken<R> as(Class<R> cls) {
+        return as(TypeToken.of(cls));
+    }
+
     public static TypeToken ofWildcard() {
         return TypeToken.ofType(new CanonicalWildcardType(new Type[0], new Type[0]));
     }

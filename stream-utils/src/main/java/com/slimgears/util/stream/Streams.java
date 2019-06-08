@@ -1,15 +1,13 @@
 package com.slimgears.util.stream;
 
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+@SuppressWarnings("WeakerAccess")
 public class Streams {
     public static <T, R extends T> Stream<R> ofType(Class<R> clazz, Stream<T> source) {
         return source.filter(clazz::isInstance).map(clazz::cast);
@@ -51,6 +49,15 @@ public class Streams {
                 }, false);
     }
 
+    public static <T> Stream<T> orderByTopology(Stream<T> source, Function<T, Stream<T>> childrenGetter) {
+        return orderByTopology(source, childrenGetter, new HashSet<>());
+    }
+
+    private static <T> Stream<T> orderByTopology(Stream<T> source, Function<T, Stream<T>> childrenGetter, Set<T> visited) {
+        return source
+                .filter(visited::add)
+                .flatMap(val -> Stream.concat(orderByTopology(childrenGetter.apply(val), childrenGetter, visited), Stream.of(val)));
+    }
 
     private static <T>Spliterator<T> takeWhile(Spliterator<T> spliterator, Predicate<? super T> predicate) {
         return new Spliterators.AbstractSpliterator<T>(spliterator.estimateSize(), 0) {

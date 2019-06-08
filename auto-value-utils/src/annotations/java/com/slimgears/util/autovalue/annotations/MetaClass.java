@@ -9,6 +9,10 @@ public interface MetaClass<T> {
     <V> PropertyMeta<T, V> getProperty(String propertyName);
     <B extends MetaBuilder<T>> B createBuilder();
 
+    default Iterable<MetaClass<?>> dependencies() {
+        return MetaClasses.dependencies(this);
+    }
+
     default String simpleName() {
         return asClass().getSimpleName();
     }
