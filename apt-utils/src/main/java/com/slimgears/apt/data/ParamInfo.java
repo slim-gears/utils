@@ -22,6 +22,10 @@ public abstract class ParamInfo implements HasName, HasType, HasAnnotations {
         return builder().name(name).type(type).build();
     }
 
+    public boolean isOptional() {
+        return annotations().stream().anyMatch(a -> a.type().simpleName().equals("Nullable"));
+    }
+
     @AutoValue.Builder
     public interface Builder extends
             InfoBuilder<ParamInfo>,
