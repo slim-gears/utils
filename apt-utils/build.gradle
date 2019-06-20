@@ -5,7 +5,8 @@ configurations {
 }
 
 task testJar(type: Jar, dependsOn: testClasses) {
-    classifier = 'tests'
+    //noinspection GroovyAssignabilityCheck
+    archiveClassifier = 'tests'
     from sourceSets.test.output
 }
 

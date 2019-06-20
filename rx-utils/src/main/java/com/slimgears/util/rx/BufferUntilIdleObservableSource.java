@@ -73,7 +73,7 @@ public class BufferUntilIdleObservableSource<T> implements ObservableSource<List
                     .dispose();
         }
 
-        private void flush() {
+        private synchronized void flush() {
             Optional
                     .of(currentBuffer.getAndSet(new ArrayList<>()))
                     .filter(b -> !b.isEmpty())
