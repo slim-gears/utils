@@ -22,7 +22,7 @@ dependencies {
     logbackImplementation project.sourceSetDependency(sourceSets.main)
 
     guiceImplementation project.sourceSetDependency(sourceSets.main)
-    guiceImplementation project(':guice-utils')
+    guiceImplementation project.sourceSetDependency(project(':guice-utils').sourceSets.main)
     guiceImplementation libs.guice
     guiceImplementation libs.junit, libs.mockito
     guiceImplementation project(':stream-utils')
