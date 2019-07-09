@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import static com.slimgears.util.stream.Streams.ofType;
 import static java.util.Objects.requireNonNull;
 
+@SuppressWarnings("WeakerAccess")
 @AutoValue
 public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods, HasAnnotations, HasTypeParameters {
     private final static ScopedInstance<Map<String, TypeInfo>> typeRegistrar = ScopedInstance.create(new HashMap<>());
@@ -176,6 +177,7 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
         }
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public static TypeInfo of(DeclaredType declaredType) {
         TypeInfo enclosingType = HasEnclosingType.enclosingType(declaredType);
         String name = MoreElements.asType(declaredType.asElement()).getQualifiedName().toString();
@@ -196,13 +198,14 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
 
     public static TypeInfo of(TypeElement typeElement) {
         DeclaredType declaredType = ElementUtils.toDeclaredType(typeElement);
+        String name = typeElement.getQualifiedName().toString();
         Builder builder = builder()
-                .name(typeElement.getQualifiedName().toString())
                 .annotationsFromElement(typeElement)
                 .typeParamsFromElements(typeElement.getTypeParameters());
 
-        if (typeElement.getEnclosingElement() instanceof TypeElement) {
-            builder.enclosingType(MoreElements.asType(typeElement.getEnclosingElement()));
+        TypeInfo enclosingType = HasEnclosingType.enclosingType(typeElement);
+        if (enclosingType != null) {
+            name = name.replace(enclosingType.name() + ".", enclosingType.name() + "$");
         }
 
         typeElement.getEnclosedElements()
@@ -211,7 +214,10 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
                 .map(m -> MethodInfo.create(m, declaredType))
                 .forEach(builder::method);
 
-        return register(builder.build());
+        return register(builder
+                .enclosingType(enclosingType)
+                .name(name)
+                .build());
     }
 
     @AutoValue.Builder

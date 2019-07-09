@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.slimgears.util.guice;
 
 import com.google.inject.AbstractModule;
@@ -35,6 +32,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("WeakerAccess")
 public class ServiceModules {
     private final static Logger LOG = LoggerFactory.getLogger(ServiceModules.class);
 
@@ -181,8 +179,12 @@ public class ServiceModules {
     }
 
     public static <S> Stream<Class<? extends S>> readServices(Class<S> serviceClass) {
+        String resourcePath = "META-INF/services/" + serviceClass.getName();
+        return readServices(resourcePath);
+    }
+
+    static <S> Stream<Class<? extends S>> readServices(String resourcePath) {
         ClassLoader classLoader = ServiceModules.class.getClassLoader();
-        String resourcePath = String.format("META-INF/services/%s", serviceClass.getName());
         try {
             return Streams
                     .fromEnumeration(classLoader.getResources(resourcePath))
@@ -203,7 +205,7 @@ public class ServiceModules {
                     .onClose(() -> {
                         try {
                             bufferedReader.close();
-                        } catch (IOException e) {
+                        } catch (IOException ignored) {
                         }
                     });
         } catch (IOException e) {

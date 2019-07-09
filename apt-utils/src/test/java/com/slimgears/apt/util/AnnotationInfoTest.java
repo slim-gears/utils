@@ -6,7 +6,13 @@ import com.slimgears.apt.data.TypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 public class AnnotationInfoTest {
+    @interface TestAnnotationWithoutParams {
+
+    }
+
     @interface TestAnnotation {
         Class value() default Object.class;
         Item[] items() default {};
@@ -66,5 +72,16 @@ public class AnnotationInfoTest {
                 .asString();
 
         Assert.assertEquals("@AnnotationInfoTest.TestAnnotation.Item(\"TestValue3\")", annotation);
+    }
+
+    @Test
+    public void testAnnotationWithoutParamsToString() {
+        String annotation = AnnotationInfo
+                .builder()
+                .type(TestAnnotationWithoutParams.class)
+                .build()
+                .asString();
+
+        Assert.assertThat(annotation, equalTo("@AnnotationInfoTest.TestAnnotationWithoutParams"));
     }
 }

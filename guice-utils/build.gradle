@@ -1,3 +1,9 @@
+sourceSets {
+    apt {
+        java.srcDir 'src/apt/java'
+    }
+}
+
 dependencies {
     implementation project(':stream-utils')
     implementation project(':generic-utils')
@@ -7,4 +13,16 @@ dependencies {
     implementation libs.guice
     implementation libs.guiceMultiBindings
     implementation libs.guiceAssistedInject
+
+    aptImplementation project(':apt-utils')
+    aptImplementation project(':stream-utils')
+    aptImplementation project.sourceSetDependency(sourceSets.main)
+    aptImplementation libs.autoCommons
+    aptCompileOnly libs.autoService
+    aptAnnotationProcessor libs.autoService
+
+    testAnnotationProcessor project.sourceSetDependency(sourceSets.apt)
+    testImplementation project(':test-utils')
 }
+
+configurations.testAnnotationProcessor.extendsFrom(configurations.aptImplementation)

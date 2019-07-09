@@ -1,6 +1,7 @@
 package com.slimgears.apt.data;
 
 import com.google.auto.common.MoreElements;
+import com.google.auto.common.MoreTypes;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.Element;
@@ -39,21 +40,21 @@ public interface HasEnclosingType {
     }
 
     static TypeInfo enclosingType(TypeMirror type) {
-        return TypeInfo.of(type.toString());
+        return enclosingType(MoreTypes.asDeclared(type));
     }
 
     static TypeInfo enclosingType(TypeElement type) {
-        return TypeInfo.of(type.getQualifiedName().toString());
+        return enclosingType(type.asType());
     }
 
     static TypeInfo enclosingType(DeclaredType type) {
         TypeMirror enclosingType = type.getEnclosingType();
         if (enclosingType.getKind() != TypeKind.NONE) {
-            return enclosingType(enclosingType);
+            return TypeInfo.of(enclosingType.toString());
         } else {
             Element element = type.asElement().getEnclosingElement();
             if (element instanceof TypeElement) {
-                return enclosingType(MoreElements.asType(element));
+                return TypeInfo.of(element.asType().toString());
             }
         }
         return null;

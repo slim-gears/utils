@@ -1,13 +1,16 @@
 package com.slimgears.util.rx;
 
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.MaybeTransformer;
+import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import org.reactivestreams.Publisher;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,6 +35,15 @@ public class Maybes {
                     .doOnSuccess(v -> attemptsMade.lazySet(0))
                     .retryWhen(retryPolicy(predicate, attemptsMade, initialDelay, maxErrors));
         };
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public static <T> Maybe<T> fromOptional(Optional<T> optional) {
+        return optional.map(Maybe::just).orElseGet(Maybe::empty);
+    }
+
+    public static <T> Maybe<T> fromOptional(@Nullable T optional) {
+        return Maybe.fromCallable(() -> optional);
     }
 
     static Function<Flowable<Throwable>, Publisher<?>> retryPolicy(Predicate<Throwable> predicate, AtomicInteger attemptsMade, Duration initialDelay, int maxErrors) {
