@@ -27,7 +27,7 @@ public class ConfigBindingTest {
         Injector injector = Guice.createInjector(
                 PropertyModules.forProperties(ConfigProviders.loadFromResource("/test-config.properties")),
                 new TypeConversionModule(),
-                new ConfigBindingModule());
+                ConfigBindingModule.create());
         Config config = injector.getInstance(Config.class);
         assertThat(config.toString(), equalTo("Configuration(path: test.node.config)"));
         assertThat(config, notNullValue());

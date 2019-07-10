@@ -35,6 +35,14 @@ public class ConfigBindingModule extends AbstractModule {
             .build();
     public static final String resourcePath = "META-INF/config-map";
 
+    private ConfigBindingModule() {
+
+    }
+
+    public static ConfigBindingModule create() {
+        return new ConfigBindingModule();
+    }
+
     @Override
     protected void configure() {
         Provider<Injector> injectorProvider = getProvider(Injector.class);
@@ -54,12 +62,12 @@ public class ConfigBindingModule extends AbstractModule {
     }
 
     private <T> T createProxy(Provider<Injector> injectorProvider, String path, Class<T> cls) {
-        return createProxy(cls, new Invocator(injectorProvider, path, cls, false));
+        return createProxy(cls, new Invoker(injectorProvider, path, cls, false));
     }
 
     private <T> T createEagerProxy(Provider<Injector> injectorProvider, String path, Class<T> cls) {
         try {
-            return createProxy(cls, new Invocator(injectorProvider, path, cls, true));
+            return createProxy(cls, new Invoker(injectorProvider, path, cls, true));
         } catch (ConfigurationException e) {
             return null;
         }
@@ -73,12 +81,12 @@ public class ConfigBindingModule extends AbstractModule {
                 invocationHandler);
     }
 
-    class Invocator implements InvocationHandler {
+    class Invoker implements InvocationHandler {
         private final Provider<Injector> injectorProvider;
         private final String path;
         private final Map<String, Object> values = new ConcurrentHashMap<>();
 
-        Invocator(Provider<Injector> injectorProvider, String path, Class<?> clazz, boolean eager) {
+        Invoker(Provider<Injector> injectorProvider, String path, Class<?> clazz, boolean eager) {
             this.injectorProvider = injectorProvider;
             this.path = path;
             if (eager) {
