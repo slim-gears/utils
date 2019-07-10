@@ -3,16 +3,22 @@ package com.slimgears.util.guice;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.*;
 import com.google.inject.name.Names;
+import com.slimgears.util.reflect.internal.Classes;
 import com.slimgears.util.stream.Safe;
+import com.slimgears.util.stream.Streams;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 public class ConfigBindingModule extends AbstractModule {
     private final static Pattern propertyNamePattern = Pattern.compile("(get|is)(?<name>[A-Z]\\w*)");
@@ -47,12 +53,24 @@ public class ConfigBindingModule extends AbstractModule {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private <T> T createProxy(Provider<Injector> injectorProvider, String path, Class<T> cls) {
+        return createProxy(cls, new Invocator(injectorProvider, path, cls, false));
+    }
+
+    private <T> T createEagerProxy(Provider<Injector> injectorProvider, String path, Class<T> cls) {
+        try {
+            return createProxy(cls, new Invocator(injectorProvider, path, cls, true));
+        } catch (ConfigurationException e) {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T createProxy(Class<T> cls, InvocationHandler invocationHandler) {
         return (T)Proxy.newProxyInstance(
                 getClass().getClassLoader(),
                 new Class[] { cls },
-                new Invocator(injectorProvider, path));
+                invocationHandler);
     }
 
     class Invocator implements InvocationHandler {
@@ -60,9 +78,17 @@ public class ConfigBindingModule extends AbstractModule {
         private final String path;
         private final Map<String, Object> values = new ConcurrentHashMap<>();
 
-        Invocator(Provider<Injector> injectorProvider, String path) {
+        Invocator(Provider<Injector> injectorProvider, String path, Class<?> clazz, boolean eager) {
             this.injectorProvider = injectorProvider;
             this.path = path;
+            if (eager) {
+                Classes.allMethods(clazz)
+                        .filter(m -> m.getDeclaringClass() != Object.class)
+                        .forEach(m -> {
+                            String propertyName = toPropertyName(m);
+                            values.put(propertyName, retrieveValue(propertyName, m.getReturnType()));
+                        });
+            }
         }
 
         @Override
@@ -77,13 +103,24 @@ public class ConfigBindingModule extends AbstractModule {
                 throw new RuntimeException("Configuration interface should have only getter methods");
             }
 
-            String propertyName = toPropertyName(method);
-            return values.computeIfAbsent(propertyName, name -> {
-                String propertyPath = path + "." + propertyName;
-                return Optional
-                        .<Object>ofNullable(provider(injectorProvider, propertyPath, type).get())
-                        .orElseGet(() -> type.isPrimitive() ? defaultValues.get(type) : null);
-            });
+            return values.computeIfAbsent(toPropertyName(method), name -> retrieveValue(name, type));
+        }
+
+        private Object retrieveValue(String name, Class<?> type) {
+            String propertyPath = path + "." + name;
+            if (type.isArray() && type.getComponentType().isInterface()) {
+                Class<?> componentType = type.getComponentType();
+                AtomicInteger integer = new AtomicInteger();
+                return Streams.takeWhile(IntStream
+                        .generate(integer::getAndIncrement).mapToObj(i -> propertyPath + "." + i)
+                        .map(p -> createEagerProxy(injectorProvider, p, componentType)),
+                        Objects::nonNull)
+                        .toArray(size -> (Object[])Array.newInstance(componentType, size));
+            }
+
+            return Optional
+                    .<Object>ofNullable(provider(injectorProvider, propertyPath, type).get())
+                    .orElseGet(() -> type.isPrimitive() ? defaultValues.get(type) : null);
         }
 
         @Override
