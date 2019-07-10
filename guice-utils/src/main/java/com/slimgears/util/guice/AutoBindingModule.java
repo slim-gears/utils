@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class AutoBindingModule extends AbstractModule {
+    public final static String resourcePath = "META-INF/autobinding/";
     private final static Logger log = LoggerFactory.getLogger(AutoBindingModule.class);
     private final Set<Class<?>> excludedClassesOrInterfaces = new HashSet<>();
 
@@ -24,7 +25,7 @@ public class AutoBindingModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     protected void configure() {
-        ServiceModules.readServices("META-INF/autobinding/" + getClass().getName())
+        ServiceModules.readServices(resourcePath + getClass().getName())
                 .peek(cls -> log.debug("Found binding: ${}", cls.getName()))
                 .filter(notExcluded())
                 .forEach(cls -> {

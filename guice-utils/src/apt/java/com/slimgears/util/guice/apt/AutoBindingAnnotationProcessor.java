@@ -6,6 +6,7 @@ import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.apt.util.FileUtils;
 import com.slimgears.util.guice.AutoBinding;
+import com.slimgears.util.guice.AutoBindingModule;
 
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -42,7 +43,7 @@ public class AutoBindingAnnotationProcessor extends AbstractAnnotationProcessor 
                 .map(type -> TypeInfo.of(type).name())
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        FileUtils.fileWriter(StandardLocation.CLASS_OUTPUT, "META-INF/autobinding/" + moduleType.name())
+        FileUtils.fileWriter(StandardLocation.CLASS_OUTPUT, AutoBindingModule.resourcePath + moduleType.name())
                 .accept(content);
     }
 }

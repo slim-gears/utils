@@ -175,7 +175,7 @@ public class ServiceModules {
 
     public static <S> Map<String, Class<? extends S>> readNamedServiceMap(Class<S> serviceClass) {
         return readServices(serviceClass)
-                .collect(Collectors.toMap(ServiceModules::nameFromAnnotation, cls -> cls));
+                    .collect(Collectors.toMap(ServiceModules::nameFromAnnotation, cls -> cls));
     }
 
     public static <S> Stream<Class<? extends S>> readServices(Class<S> serviceClass) {
@@ -184,23 +184,28 @@ public class ServiceModules {
     }
 
     static <S> Stream<Class<? extends S>> readServices(String resourcePath) {
+        return readLines(resourcePath)
+                .<Class<? extends S>>map(ServiceModules::safeClassByName)
+                .filter(Objects::nonNull);
+    }
+
+    static Stream<String> readLines(String resourcePath) {
         ClassLoader classLoader = ServiceModules.class.getClassLoader();
         try {
             return Streams
                     .fromEnumeration(classLoader.getResources(resourcePath))
-                    .flatMap(ServiceModules::readServices);
+                    .flatMap(ServiceModules::readLines);
         } catch (IOException e) {
             return Stream.empty();
         }
     }
 
-    private static <S> Stream<Class<? extends S>> readServices(URL url) {
+    private static Stream<String> readLines(URL url) {
         try {
             InputStream stream = url.openStream();
             InputStreamReader reader = new InputStreamReader(stream);
             BufferedReader bufferedReader = new BufferedReader(reader);
             return bufferedReader.lines()
-                    .<Class<? extends S>>map(ServiceModules::safeClassByName)
                     .filter(Objects::nonNull)
                     .onClose(() -> {
                         try {
