@@ -3,7 +3,6 @@ package com.slimgears.util.guice;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.*;
 import com.google.inject.name.Names;
-import com.slimgears.util.stream.Optionals;
 import com.slimgears.util.stream.Safe;
 
 import java.lang.reflect.InvocationHandler;
@@ -44,7 +43,7 @@ public class ConfigBindingModule extends AbstractModule {
             String type = matcher.group("type");
             String path = matcher.group("path");
             Class cls = Safe.ofCallable(() -> Class.forName(type)).get();
-            bind(cls).toProvider(provider(injectorProvider, path, cls));
+            bind(cls).toProvider(provider(injectorProvider, path, cls)).in(Singleton.class);
         }
     }
 

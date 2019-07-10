@@ -35,5 +35,6 @@ public class ConfigBindingTest {
         assertThat(config.nestedConfig().nestedName(), equalTo("Test nested name"));
         assertThat(config.stringArray(), equalTo(new String[] {"One", "Two", "Three"}));
         assertThat(config.intArray(), equalTo(new int[] {4, 5, 6, 7}));
+        assertThat(config.toString(), equalTo("Configuration(path: test.node.config)"));
     }
 }
