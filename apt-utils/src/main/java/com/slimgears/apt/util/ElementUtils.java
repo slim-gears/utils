@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.slimgears.apt.util;
 
 import com.google.auto.common.MoreElements;
@@ -40,9 +37,10 @@ import java.util.stream.Stream;
 import static com.slimgears.util.stream.Streams.ofType;
 import static com.slimgears.util.stream.Streams.self;
 
+@SuppressWarnings({"WeakerAccess", "UnstableApiUsage"})
 public class ElementUtils {
     public static boolean isKnownType(TypeElement typeElement) {
-        return Environment.instance().isIgnoredType(TypeInfo.of(typeElement.getQualifiedName().toString()));
+        return Environment.instance().isIgnoredType(TypeInfo.of(typeElement));
     }
 
     public static boolean isUnknownType(TypeElement typeElement) {
@@ -309,7 +307,10 @@ public class ElementUtils {
 
     public static <A extends Annotation> TypeMirror[] typeMirrorsFromAnnotation(A annotation, Function<A, Class[]> classRetriever) {
         try {
-            return Stream.of(classRetriever.apply(annotation)).toArray(TypeMirror[]::new);
+            return Stream
+                    .of(classRetriever.apply(annotation))
+                    .map(TypeMirror.class::cast)
+                    .toArray(TypeMirror[]::new);
         } catch (MirroredTypesException e) {
             return e.getTypeMirrors().toArray(new TypeMirror[0]);
         }

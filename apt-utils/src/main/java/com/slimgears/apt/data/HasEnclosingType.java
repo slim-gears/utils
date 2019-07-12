@@ -2,6 +2,7 @@ package com.slimgears.apt.data;
 
 import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
+import com.slimgears.util.stream.Optionals;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.Element;
@@ -10,6 +11,7 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 public interface HasEnclosingType {
     @Nullable TypeInfo enclosingType();
@@ -25,11 +27,11 @@ public interface HasEnclosingType {
         }
 
         default B enclosingType(TypeMirror type) {
-            return enclosingType(TypeInfo.of(type.toString()));
+            return enclosingType(TypeInfo.of(type).withoutAnnontations());
         }
 
         default B enclosingType(TypeElement type) {
-            return enclosingType(TypeInfo.of(type.getQualifiedName().toString()));
+            return enclosingType(TypeInfo.of(type).withoutAnnontations());
         }
 
         @SuppressWarnings("unchecked")
@@ -49,14 +51,17 @@ public interface HasEnclosingType {
 
     static TypeInfo enclosingType(DeclaredType type) {
         TypeMirror enclosingType = type.getEnclosingType();
-        if (enclosingType.getKind() != TypeKind.NONE) {
-            return TypeInfo.of(enclosingType.toString());
-        } else {
-            Element element = type.asElement().getEnclosingElement();
-            if (element instanceof TypeElement) {
-                return TypeInfo.of(element.asType().toString());
-            }
+        if (enclosingType.equals(type)) {
+            return null;
         }
-        return null;
+
+        if (enclosingType.getKind() != TypeKind.NONE) {
+            return TypeInfo.of(enclosingType);
+        }
+        return Optional.of(type.asElement())
+                .map(Element::getEnclosingElement)
+                .flatMap(Optionals.ofType(TypeElement.class))
+                .map(element -> TypeInfo.of(element).withoutAnnontations())
+                .orElse(null);
     }
 }

@@ -29,11 +29,6 @@ public abstract class MethodInfo implements HasName, HasEnclosingType, HasAnnota
                 .typeParamsFromMethod(executableElement)
                 .returnType(TypeInfo.of(executableElement.getReturnType()));
 
-        executableElement.getParameters()
-                .stream()
-                .map(ParamInfo::of)
-                .forEach(builder::addParam);
-
         return builder.build();
     }
 

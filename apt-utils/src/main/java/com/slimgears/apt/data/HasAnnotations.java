@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.slimgears.apt.data;
 
 import com.google.common.collect.ImmutableList;
@@ -34,6 +31,7 @@ public interface HasAnnotations {
 
     @SuppressWarnings("unchecked")
     interface Builder<B extends Builder<B>> {
+        B annotations(ImmutableList<AnnotationInfo> annotations);
         ImmutableList.Builder<AnnotationInfo> annotationsBuilder();
 
         default B annotationsFromElement(Element element) {

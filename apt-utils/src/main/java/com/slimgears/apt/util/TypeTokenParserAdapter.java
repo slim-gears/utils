@@ -24,12 +24,11 @@ public class TypeTokenParserAdapter {
                 ? TypeInfo.builder().name(str).build()
                 : typeInfo;
 
-        String[] parts = typeInfo.name().split("\\$");
-
-        if (parts.length > 1) {
-            typeInfo = typeInfo
-                    .toBuilder()
-                    .enclosingType(toTypeInfo(parts[0]))
+        String typeName = typeInfo.name();
+        int separatorPos = typeName.lastIndexOf("$");
+        if (separatorPos >= 0) {
+            typeInfo = typeInfo.toBuilder()
+                    .enclosingType(toTypeInfo(typeName.substring(0, separatorPos)))
                     .build();
         }
 

@@ -3,12 +3,12 @@ package com.slimgears.apt.data;
 import com.google.auto.common.MoreElements;
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.apt.util.TypeTokenParserAdapter;
 import com.slimgears.util.generic.ScopedInstance;
 
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
@@ -23,12 +23,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.slimgears.util.stream.Streams.ofType;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("WeakerAccess")
 @AutoValue
-public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods, HasAnnotations, HasTypeParameters {
+public abstract class TypeInfo implements HasName, HasEnclosingType, HasAnnotations, HasTypeParameters {
     private final static ScopedInstance<Map<String, TypeInfo>> typeRegistrar = ScopedInstance.create(new HashMap<>());
 
     public final static Comparator<TypeInfo> comparator = Comparator
@@ -90,6 +89,14 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
 
     public String erasureName() {
         return name() + dimensionsToString();
+    }
+
+    public TypeInfo withoutAnnontations() {
+        return annotations().isEmpty()
+                ? this
+                : toBuilder()
+                .annotations(ImmutableList.of())
+                .build();
     }
 
     public TypeInfo erasure() {
@@ -208,11 +215,11 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
             name = name.replace(enclosingType.name() + ".", enclosingType.name() + "$");
         }
 
-        typeElement.getEnclosedElements()
-                .stream()
-                .flatMap(ofType(ExecutableElement.class))
-                .map(m -> MethodInfo.create(m, declaredType))
-                .forEach(builder::method);
+//        typeElement.getEnclosedElements()
+//                .stream()
+//                .flatMap(ofType(ExecutableElement.class))
+//                .map(m -> MethodInfo.create(m, declaredType))
+//                .forEach(builder::method);
 
         return register(builder
                 .enclosingType(enclosingType)
@@ -225,7 +232,6 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasMethods,
             InfoBuilder<TypeInfo>,
             HasName.Builder<Builder>,
             HasEnclosingType.Builder<Builder>,
-            HasMethods.Builder<Builder>,
             HasTypeParameters.Builder<Builder>,
             HasAnnotations.Builder<Builder> {
         Builder arrayDimensions(int dimensions);

@@ -9,7 +9,7 @@ public abstract class ParamInfo implements HasName, HasType, HasAnnotations {
     public static ParamInfo of(VariableElement element) {
         return builder()
                 .name(element.getSimpleName().toString())
-                .type(TypeInfo.of(element.asType().toString()))
+                .type(TypeInfo.of(element.asType()).withoutAnnontations())
                 .annotationsFromElement(element)
                 .build();
     }
