@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.apt.util.TypeTokenParserAdapter;
-import com.slimgears.util.generic.ScopedInstance;
 
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
@@ -16,8 +15,6 @@ import javax.lang.model.type.NoType;
 import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.Type;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,8 +25,6 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings("WeakerAccess")
 @AutoValue
 public abstract class TypeInfo implements HasName, HasEnclosingType, HasAnnotations, HasTypeParameters {
-    private final static ScopedInstance<Map<String, TypeInfo>> typeRegistrar = ScopedInstance.create(new HashMap<>());
-
     public final static Comparator<TypeInfo> comparator = Comparator
             .<TypeInfo, String>comparing(TypeInfo::packageName)
             .thenComparing(TypeInfo::simpleName);
@@ -165,22 +160,22 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasAnnotati
     }
 
     public static TypeInfo of(String name, TypeInfo param, TypeInfo... otherParams) {
-        return register(builder().name(name)
+        return builder().name(name)
                 .typeParams(param)
-                .typeParams(otherParams).build());
+                .typeParams(otherParams).build();
     }
 
     public static TypeInfo of(String fullName) {
-        return register(TypeTokenParserAdapter.toTypeInfo(fullName));
+        return TypeTokenParserAdapter.toTypeInfo(fullName);
     }
 
     public static TypeInfo of(TypeMirror typeMirror) {
         if (typeMirror instanceof NoType) {
             return TypeInfo.of(void.class);
         } else if (typeMirror instanceof DeclaredType) {
-            return register(TypeInfo.of((DeclaredType)(typeMirror)));
+            return TypeInfo.of((DeclaredType)(typeMirror));
         } else {
-            return register(of(typeMirror.toString()));
+            return of(typeMirror.toString());
         }
     }
 
@@ -200,7 +195,7 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasAnnotati
     }
 
     public static TypeInfo of(Type type) {
-        return register(of(type.getTypeName()));
+        return of(type.getTypeName());
     }
 
     public static TypeInfo of(TypeElement typeElement) {
@@ -221,10 +216,10 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasAnnotati
 //                .map(m -> MethodInfo.create(m, declaredType))
 //                .forEach(builder::method);
 
-        return register(builder
+        return builder
                 .enclosingType(enclosingType)
                 .name(name)
-                .build());
+                .build();
     }
 
     @AutoValue.Builder
@@ -259,17 +254,5 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasAnnotati
 
     private String dimensionsToString() {
         return IntStream.range(0, arrayDimensions()).mapToObj(i -> "[]").collect(Collectors.joining());
-    }
-
-    public static ScopedInstance.Closeable withRegistrar() {
-        return typeRegistrar.scope(new HashMap<>());
-    }
-
-    private static TypeInfo register(TypeInfo type) {
-        typeRegistrar.current().computeIfAbsent(type.erasureName(), tname -> type.hasTypeParams() ? TypeInfo.of(tname) : type);
-        if (!type.hasEnclosingType() && typeRegistrar.current().containsKey(packageName(type.erasureName()))) {
-            return type.toBuilder().enclosingType(typeRegistrar.current().get(packageName(type.erasureName()))).build();
-        }
-        return type;
     }
 }
