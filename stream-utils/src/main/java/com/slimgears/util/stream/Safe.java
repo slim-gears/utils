@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.slimgears.util.stream;
 
 import java.util.concurrent.Callable;
@@ -8,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@SuppressWarnings("WeakerAccess")
 public class Safe {
     public interface UnsafeSupplier<T> {
         T get() throws Exception;
@@ -25,7 +23,7 @@ public class Safe {
         R apply(T from) throws Exception;
     }
 
-    public interface Closable extends AutoCloseable {
+    public interface Closeable extends AutoCloseable {
         void close();
     }
 
@@ -41,7 +39,7 @@ public class Safe {
         return () -> safely(callable);
     }
 
-    public static Closable ofClosable(AutoCloseable closeable) {
+    public static Closeable ofClosable(AutoCloseable closeable) {
         return ofRunnable(closeable::close)::run;
     }
 

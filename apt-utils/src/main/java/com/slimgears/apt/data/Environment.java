@@ -20,7 +20,7 @@ import java.util.Properties;
 import java.util.function.Predicate;
 
 @AutoValue
-public abstract class Environment implements Safe.Closable {
+public abstract class Environment implements Safe.Closeable {
     private final ScopedInstance.Closeable closeable;
     public final static String configOptionName = "apt.config";
     public final static String excludedTypesOptionName = "apt.excludeTypes";
@@ -112,7 +112,7 @@ public abstract class Environment implements Safe.Closable {
         return Optional.ofNullable(instance.current()).orElseThrow(() -> new RuntimeException("Environment was not set"));
     }
 
-    public static Safe.Closable withEnvironment(ProcessingEnvironment processingEnvironment, RoundEnvironment roundEnvironment) {
+    public static Safe.Closeable withEnvironment(ProcessingEnvironment processingEnvironment, RoundEnvironment roundEnvironment) {
         return create(processingEnvironment, roundEnvironment);
     }
 
