@@ -49,7 +49,8 @@ public abstract class Environment implements Safe.Closeable {
     }
 
     protected Environment() {
-        this.closeable = instance.scope(this);
+        this.closeable = instance.scope(this)
+                .merge(TypeInfo.withRegistrar());
     }
 
     public void close() {
