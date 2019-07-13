@@ -140,7 +140,10 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
             }
         });
 
-        ImportTracker importTracker = ImportTracker.create("java.lang", targetClass.packageName());
+        ImportTracker importTracker = ImportTracker.create(
+                "java.lang",
+                targetClass.packageName(),
+                targetClass.simpleName());
 
         List<PropertyInfo> keyProperties = properties.stream().filter(PropertyInfo::isKey).collect(Collectors.toList());
         if (keyProperties.size() > 1) {
