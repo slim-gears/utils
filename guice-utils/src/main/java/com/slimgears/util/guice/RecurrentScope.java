@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 
 @SuppressWarnings("WeakerAccess")
 public class RecurrentScope extends AbstractScope {
-    private final RecurrentThreadLocal<ObjectStorage> objects = new RecurrentThreadLocal<>(ObjectStorage::new);
+    private final RecurrentThreadLocal<ObjectStorage> objects = RecurrentThreadLocal.of(ObjectStorage::new);
 
     @Override
     protected <T> T provide(final Key<T> key, final Provider<T> provider) {

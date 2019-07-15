@@ -97,8 +97,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        try (LogUtils.SelfClosable ignored = LogUtils.applyLogging(processingEnv);
-             Safe.Closeable envCloseable = Environment.withEnvironment(processingEnv, roundEnv)) {
+        try (LogUtils.SelfClosable ignored1 = LogUtils.applyLogging(processingEnv);
+             Safe.Closeable ignored2 = Environment.withEnvironment(processingEnv, roundEnv)) {
             processPendingElements();
 
             boolean res = annotations
