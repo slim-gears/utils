@@ -7,4 +7,9 @@ public interface HasMetaClass<S> {
     interface Builder<_B extends Builder<_B, S>, S> {
         _B metaClass(MetaClass<S> metaClass);
     }
+
+    @SuppressWarnings("unchecked")
+    default S merge(S other) {
+        return MetaClasses.merge(metaClass(), (S)this, other);
+    }
 }

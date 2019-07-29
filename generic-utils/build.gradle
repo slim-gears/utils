@@ -1,3 +1,3 @@
 dependencies {
-    bundledImplementation project(':reflect-utils')
+    implementation project(':reflect-utils')
 }

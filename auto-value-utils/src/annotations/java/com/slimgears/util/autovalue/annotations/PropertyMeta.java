@@ -10,31 +10,76 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Property meta data
+ * @param <T> Declaring type
+ * @param <V> Value type
+ */
 public interface PropertyMeta<T, V> {
+    /**
+     * Declaring meta class
+     * @return Meta class
+     */
     MetaClass<T> declaringType();
+
+    /**
+     * Property name
+     * @return property name
+     */
     String name();
+
+    /**
+     * Value type
+     * @return Value type
+     */
     TypeToken<V> type();
+
+    /**
+     * Sets property value in object builder
+     * @param builder builder instance
+     * @param value value
+     */
     void setValue(MetaBuilder<T> builder, V value);
+
+    /**
+     * Returns property value from object
+     * @param instance object instance
+     * @return property value
+     */
     V getValue(T instance);
+
+    /**
+     * Returns property annotation by type
+     * @param annotationClass annotation type
+     * @param <A> annotation type
+     * @return annotation instance if exists, otherwise null
+     */
     <A extends Annotation> A getAnnotation(Class<A> annotationClass);
 
+    /**
+     * Returns whether the property is mergeable
+     * @return true if mergeable, otherwise false
+     */
+    default boolean isMergeable() {
+        return hasAnnotation(Mergeable.class);
+    }
+
+    /**
+     * Checks whether the property has annotation with specified annotation type
+     * @param annotationClass annotation type
+     * @return true if annotation with specified type exists
+     */
     default boolean hasAnnotation(Class<? extends Annotation> annotationClass) {
         return getAnnotation(annotationClass) != null;
     }
 
-    default void mergeValue(MetaBuilder<T> builder, T instance) {
-        Optional
-                .ofNullable(getValue(instance))
-                .ifPresent(val -> setValue(builder, val));
-    }
-
-    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(MetaClass<T> metaClass, String name) {
-        return metaClass.getProperty(name);
-    }
-
-    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(TypeToken<T> declaringType, String name) {
-        return create(MetaClasses.forToken(declaringType), name);
-    }
+//    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(MetaClass<T> metaClass, String name) {
+//        return metaClass.getProperty(name);
+//    }
+//
+//    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(TypeToken<T> declaringType, String name) {
+//        return create(MetaClasses.forToken(declaringType), name);
+//    }
 
     static <T, V, B extends BuilderPrototype<T, B>> PropertyMeta<T, V> create(
             MetaClass<T> declaringType,

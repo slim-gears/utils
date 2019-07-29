@@ -10,6 +10,7 @@ sourceSets {
 dependencies {
     implementation libs.junit, libs.mockito
     implementation project(':stream-utils')
+    implementation project(':reflect-utils')
     implementation project(':generic-utils')
     implementation libs.slf4j, libs.logbackClassic
     implementation libs.guava

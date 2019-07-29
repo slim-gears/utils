@@ -3,15 +3,16 @@ package com.slimgears.util.generic;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class LazyToString {
-    private final Supplier<Object> supplier;
+public class LazyString {
+    private final Supplier<?> supplier;
 
-    private LazyToString(Supplier<Object> supplier) {
+    private LazyString(Supplier<?> supplier) {
         this.supplier = supplier;
     }
 
-    public static Object lazy(Supplier<Object> supplier) {
-        return new LazyToString(supplier);
+    @SuppressWarnings("WeakerAccess")
+    public static Object lazy(Supplier<?> supplier) {
+        return new LazyString(supplier);
     }
 
     @Override
