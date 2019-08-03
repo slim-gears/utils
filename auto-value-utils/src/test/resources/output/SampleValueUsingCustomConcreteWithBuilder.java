@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
+import com.google.common.reflect.TypeToken;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,7 +27,7 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
 
     public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClass<SampleValueUsingCustomConcreteWithBuilder> {
-        private final TypeToken<SampleValueUsingCustomConcreteWithBuilder> objectClass = new TypeToken<SampleValueUsingCustomConcreteWithBuilder>(){};
+        private final TypeToken<SampleValueUsingCustomConcreteWithBuilder> objectType = new TypeToken<SampleValueUsingCustomConcreteWithBuilder>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, ?>> propertyMap = new LinkedHashMap<>();
 
@@ -45,8 +45,8 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
         }
 
         @Override
-        public TypeToken<SampleValueUsingCustomConcreteWithBuilder> objectClass() {
-            return this.objectClass;
+        public TypeToken<SampleValueUsingCustomConcreteWithBuilder> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -67,13 +67,13 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
 
         @Override
         public int hashCode() {
-            return Objects.hash(objectClass, builderClass);
+            return Objects.hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

@@ -1,12 +1,12 @@
 package com.slimgears.sample;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.reflect.TypeToken;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +24,7 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
 
     public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClass<SampleCircularDependency> {
-        private final TypeToken<SampleCircularDependency> objectClass = new TypeToken<SampleCircularDependency>(){};
+        private final TypeToken<SampleCircularDependency> objectType = new TypeToken<SampleCircularDependency>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleCircularDependency, ?>> propertyMap = new LinkedHashMap<>();
 
@@ -40,8 +40,8 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         }
 
         @Override
-        public TypeToken<SampleCircularDependency> objectClass() {
-            return this.objectClass;
+        public TypeToken<SampleCircularDependency> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -62,13 +62,13 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
 
         @Override
         public int hashCode() {
-            return Objects.hash(objectClass, builderClass);
+            return Objects.hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

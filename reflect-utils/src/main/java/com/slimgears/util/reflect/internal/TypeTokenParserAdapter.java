@@ -1,6 +1,7 @@
 package com.slimgears.util.reflect.internal;
 
-import com.slimgears.util.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
+import com.slimgears.util.reflect.TypeTokens;
 import com.slimgears.util.stream.Optionals;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -10,24 +11,26 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+@SuppressWarnings("UnstableApiUsage")
 public class TypeTokenParserAdapter {
-    public static TypeToken toTypeToken(String str) {
+    @SuppressWarnings("unchecked")
+    public static <T> TypeToken<T> toTypeToken(String str) {
         TypeTokenLexer lexer = new TypeTokenLexer(CharStreams.fromString(str));
 //        lexer.removeErrorListeners();
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         TypeTokenParser parser = new TypeTokenParser(tokenStream);
 //        parser.removeErrorListeners();
 //        parser.removeParseListeners();
-        return toTypeToken(parser.type());
+        return (TypeToken<T>)toTypeToken(parser.type());
     }
 
-    private static TypeToken toTypeToken(TypeTokenParser.TypeContext ctx) {
+    private static TypeToken<?> toTypeToken(TypeTokenParser.TypeContext ctx) {
         return Optional.ofNullable(ctx.referenceType()).map(TypeTokenParserAdapter::toTypeToken)
                 .orElse(null);
     }
 
 
-    private static TypeToken toTypeToken(TypeTokenParser.ReferenceTypeContext ctx) {
+    private static TypeToken<?> toTypeToken(TypeTokenParser.ReferenceTypeContext ctx) {
         return Optionals.or(
                 () -> Optional.ofNullable(ctx.classOrInterfaceType()).map(TypeTokenParserAdapter::toTypeToken),
                 () -> Optional.ofNullable(ctx.arrayType()).map(TypeTokenParserAdapter::toTypeToken),
@@ -35,10 +38,10 @@ public class TypeTokenParserAdapter {
                 .orElse(null);
     }
 
-    private static TypeToken toTypeToken(TypeTokenParser.ClassOrInterfaceTypeContext ctx) {
+    private static TypeToken<?> toTypeToken(TypeTokenParser.ClassOrInterfaceTypeContext ctx) {
         try {
             Class rawClass = Class.forName(ctx.TypeIdentifier().getText());
-            return TypeToken.ofParameterized(
+            return TypeTokens.ofParameterized(
                     rawClass,
                     Optional
                             .ofNullable(ctx.classOrInterfaceArgs())
@@ -50,42 +53,43 @@ public class TypeTokenParserAdapter {
         }
     }
 
-    private static TypeToken toTypeParamInfo(TypeTokenParser.TypeArgumentContext typeArgument) {
+    private static TypeToken<?> toTypeParamInfo(TypeTokenParser.TypeArgumentContext typeArgument) {
         return Optionals.or(
                 () -> Optional.ofNullable(typeArgument.referenceType()).map(TypeTokenParserAdapter::toTypeToken),
                 () -> Optional.ofNullable(typeArgument.wildcard()).map(TypeTokenParserAdapter::toTypeParamInfo))
                 .orElse(null);
     }
 
-    private static TypeToken toTypeParamInfo(TypeTokenParser.WildcardContext ctx) {
+    private static TypeToken<?> toTypeParamInfo(TypeTokenParser.WildcardContext ctx) {
         return Optional.ofNullable(ctx.wildcardBounds())
-                .map(bctx -> {
+                .<TypeToken>map(bctx -> {
                     Type[] upperBounds = Optional.ofNullable(bctx.wildcardExtendBound())
                             .map(TypeTokenParser.WildcardExtendBoundContext::referenceType)
                             .map(TypeTokenParserAdapter::toTypeToken)
-                            .map(TypeToken::type)
+                            .map(TypeToken::getType)
                             .map(t -> new Type[]{t})
                             .orElseGet(() -> new Type[0]);
                     Type[] lowerBounds = Optional.ofNullable(bctx.wildcardSuperBound())
                             .map(TypeTokenParser.WildcardSuperBoundContext::referenceType)
                             .map(TypeTokenParserAdapter::toTypeToken)
-                            .map(TypeToken::type)
+                            .map(TypeToken::getType)
                             .map(t -> new Type[]{t})
                             .orElseGet(() -> new Type[0]);
-                    return TypeToken.ofWildcard(lowerBounds, upperBounds);
+                    return TypeTokens.ofWildcard(upperBounds, lowerBounds);
                 })
-                .orElseGet(TypeToken::ofWildcard);
+                .orElseGet(TypeTokens::ofWildcard);
     }
 
-    private static TypeToken toTypeToken(TypeTokenParser.ArrayTypeContext ctx) {
-        return Optionals.<TypeToken>or(
-                () -> Optional.ofNullable(ctx.classOrInterfaceType()).map(TypeTokenParserAdapter::toTypeToken).map(TypeToken::toArray),
-                () -> Optional.ofNullable(ctx.typeVariable()).map(TypeTokenParserAdapter::toTypeToken).map(TypeToken::toArray))
-                .flatMap(t -> IntStream.range(0, ctx.dim().size()).mapToObj(i -> t).reduce((t1, t2) -> t1.toArray()))
+    @SuppressWarnings("unchecked")
+    private static TypeToken<?> toTypeToken(TypeTokenParser.ArrayTypeContext ctx) {
+        return (TypeToken<?>)Optionals.<TypeToken>or(
+                () -> Optional.ofNullable(ctx.classOrInterfaceType()).map(TypeTokenParserAdapter::toTypeToken).map(TypeTokens::ofArray),
+                () -> Optional.ofNullable(ctx.typeVariable()).map(TypeTokenParserAdapter::toTypeToken).map(TypeTokens::ofArray))
+                .flatMap(t -> IntStream.range(0, ctx.dim().size()).mapToObj(i -> t).reduce((t1, t2) -> TypeTokens.ofArray(t1)))
                 .orElse(null);
     }
 
-    private static TypeToken toTypeToken(TypeTokenParser.TypeVariableContext ctx) {
+    private static TypeToken<?> toTypeToken(TypeTokenParser.TypeVariableContext ctx) {
         throw new IllegalStateException("Cannot handle type variables: " + ctx.getText());
     }
 }

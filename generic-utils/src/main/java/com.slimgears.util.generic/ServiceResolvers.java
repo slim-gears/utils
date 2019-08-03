@@ -1,9 +1,7 @@
-/**
- *
- */
 package com.slimgears.util.generic;
 
-import com.slimgears.util.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
+import com.slimgears.util.reflect.TypeTokens;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -12,6 +10,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+@SuppressWarnings({"UnstableApiUsage", "WeakerAccess"})
 public class ServiceResolvers {
     public final static ServiceResolver defaultResolver = defaultConstructorResolver();
 
@@ -20,15 +19,15 @@ public class ServiceResolvers {
             @Override
             public <T> T resolve(TypeToken<T> token) {
                 return canResolve(token)
-                        ? token.newInstance()
+                        ? TypeTokens.newInstance(token)
                         : null;
             }
 
             @Override
             public boolean canResolve(TypeToken<?> token) {
-                return !token.isInterface() &&
-                        !token.hasModifier(Modifier::isAbstract) &&
-                        token.constructor() != null;
+                return !token.getRawType().isInterface() &&
+                        !TypeTokens.hasModifier(token, Modifier::isAbstract) &&
+                        TypeTokens.constructor(token) != null;
             }
         };
     }

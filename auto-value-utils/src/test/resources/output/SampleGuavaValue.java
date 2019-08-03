@@ -5,12 +5,12 @@ import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.reflect.TypeToken;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
 
     public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClass<SampleGuavaValue> {
-        private final TypeToken<SampleGuavaValue> objectClass = new TypeToken<SampleGuavaValue>(){};
+        private final TypeToken<SampleGuavaValue> objectType = new TypeToken<SampleGuavaValue>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleGuavaValue, ?>> propertyMap = new LinkedHashMap<>();
 
@@ -52,8 +52,8 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         }
 
         @Override
-        public TypeToken<SampleGuavaValue> objectClass() {
-            return this.objectClass;
+        public TypeToken<SampleGuavaValue> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -74,13 +74,13 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
 
         @Override
         public int hashCode() {
-            return Objects.hash(objectClass, builderClass);
+            return Objects.hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

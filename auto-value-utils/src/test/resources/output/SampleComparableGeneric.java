@@ -1,12 +1,12 @@
 package com.slimgears.sample;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.reflect.TypeToken;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +24,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
 
     public static final Meta metaClass = new Meta();
     public static class Meta<T extends Comparable<T>> implements MetaClass<SampleComparableGeneric<T>> {
-        private final TypeToken<SampleComparableGeneric<T>> objectClass = new TypeToken<SampleComparableGeneric<T>>(){};
+        private final TypeToken<SampleComparableGeneric<T>> objectType = new TypeToken<SampleComparableGeneric<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleComparableGeneric<T>, ?>> propertyMap = new LinkedHashMap<>();
 
@@ -40,8 +40,8 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         }
 
         @Override
-        public TypeToken<SampleComparableGeneric<T>> objectClass() {
-            return this.objectClass;
+        public TypeToken<SampleComparableGeneric<T>> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -62,13 +62,13 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
 
         @Override
         public int hashCode() {
-            return Objects.hash(objectClass, builderClass);
+            return Objects.hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

@@ -1,12 +1,12 @@
 package com.slimgears.sample;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.reflect.TypeToken;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,7 +24,7 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
 
     public static final Meta metaClass = new Meta();
     public static class Meta<T> implements MetaClass<ObjectFilter<T>> {
-        private final TypeToken<ObjectFilter<T>> objectClass = new TypeToken<ObjectFilter<T>>(){};
+        private final TypeToken<ObjectFilter<T>> objectType = new TypeToken<ObjectFilter<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<ObjectFilter<T>, ?>> propertyMap = new LinkedHashMap<>();
 
@@ -40,8 +40,8 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
         }
 
         @Override
-        public TypeToken<ObjectFilter<T>> objectClass() {
-            return this.objectClass;
+        public TypeToken<ObjectFilter<T>> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -62,13 +62,13 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
 
         @Override
         public int hashCode() {
-            return Objects.hash(objectClass, builderClass);
+            return Objects.hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

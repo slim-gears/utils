@@ -17,9 +17,13 @@ public class LazyString {
 
     @Override
     public String toString() {
-        return Optional
-                .ofNullable(supplier.get())
-                .map(Object::toString)
-                .orElse(null);
+        try {
+            return Optional
+                    .ofNullable(supplier.get())
+                    .map(Object::toString)
+                    .orElse(null);
+        } catch (Throwable e) {
+            return "{error: '" + e.getMessage() + "'}";
+        }
     }
 }

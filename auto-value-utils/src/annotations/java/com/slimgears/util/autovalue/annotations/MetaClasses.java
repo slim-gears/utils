@@ -1,6 +1,7 @@
 package com.slimgears.util.autovalue.annotations;
 
-import com.slimgears.util.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
+import com.slimgears.util.reflect.TypeTokens;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "UnstableApiUsage"})
 public class MetaClasses {
     private final static Map<Class, MetaClass> metaClassMap = new HashMap<>();
 
@@ -32,29 +33,28 @@ public class MetaClasses {
     }
 
     public static <T extends HasMetaClass<T>> MetaClass<T> forToken(TypeToken<T> typeToken) {
-        return forClass(typeToken.asClass());
+        return forClass(TypeTokens.asClass(typeToken));
     }
 
     public static <T> MetaClass<T> forTokenUnchecked(TypeToken<?> typeToken) {
-        return forClassUnchecked(typeToken.asClass());
+        return forClassUnchecked(TypeTokens.asClass(typeToken));
     }
 
     public static Iterable<MetaClass<?>> dependencies(MetaClass<?> metaClass) {
         return StreamSupport
                 .stream(metaClass.properties().spliterator(), false)
-                .filter(p -> p.type().is(HasMetaClass.class::isAssignableFrom))
+                .filter(p -> p.type().isSubtypeOf(HasMetaClass.class))
                 .map(PropertyMeta::type)
-                .map(t -> t.as(new TypeToken<HasMetaClass<?>>(){}))
                 .map(MetaClasses::forTokenUnchecked)
                 .collect(Collectors.toList());
     }
 
     public static <K, T extends HasMetaClassWithKey<K, T>> MetaClassWithKey<K, T> forTokenWithKey(TypeToken<T> typeToken) {
-        return forClassWithKey(typeToken.asClass());
+        return forClassWithKey(TypeTokens.asClass(typeToken));
     }
 
     public static <K, T> MetaClassWithKey<K, T> forTokenWithKeyUnchecked(TypeToken<?> typeToken) {
-        return forClassWithKeyUnchecked(typeToken.asClass());
+        return forClassWithKeyUnchecked(TypeTokens.asClass(typeToken));
     }
 
     public static <T extends HasMetaClass<T>> T merge(@Nonnull T first, T second) {

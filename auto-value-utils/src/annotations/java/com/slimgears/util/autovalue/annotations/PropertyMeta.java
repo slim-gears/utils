@@ -1,11 +1,11 @@
 package com.slimgears.util.autovalue.annotations;
 
-import com.slimgears.util.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
+import com.slimgears.util.reflect.TypeTokens;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -15,6 +15,7 @@ import java.util.function.Supplier;
  * @param <T> Declaring type
  * @param <V> Value type
  */
+@SuppressWarnings("UnstableApiUsage")
 public interface PropertyMeta<T, V> {
     /**
      * Declaring meta class
@@ -98,7 +99,7 @@ public interface PropertyMeta<T, V> {
             BiConsumer<B, V> setter,
             String getterMethodName) {
 
-        Supplier<Method> lazyMethod = AtomicLazy.of(() -> declaringType.objectClass().asClass().getMethod(getterMethodName));
+        Supplier<Method> lazyMethod = AtomicLazy.of(() -> TypeTokens.method(declaringType.asType(), getterMethodName));
 
         return new PropertyMeta<T, V>() {
             @Override
@@ -135,18 +136,18 @@ public interface PropertyMeta<T, V> {
             @Override
             public boolean equals(Object obj) {
                 return obj instanceof PropertyMeta
-                        && Objects.equals(declaringType.objectClass().asClass(), ((PropertyMeta) obj).declaringType().objectClass().asClass())
+                        && Objects.equals(declaringType.asType().getRawType(), ((PropertyMeta) obj).declaringType().asType().getRawType())
                         && Objects.equals(name, ((PropertyMeta) obj).name());
             }
 
             @Override
             public int hashCode() {
-                return Objects.hash(declaringType.objectClass().asClass(), name);
+                return Objects.hash(declaringType.asType().getRawType(), name);
             }
 
             @Override
             public String toString() {
-                return declaringType.objectClass().asClass().getSimpleName() + "." + name;
+                return declaringType.asType().getRawType().getSimpleName() + "." + name;
             }
         };
     }

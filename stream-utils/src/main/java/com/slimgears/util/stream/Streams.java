@@ -1,6 +1,9 @@
 package com.slimgears.util.stream;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -9,6 +12,12 @@ import java.util.stream.StreamSupport;
 
 @SuppressWarnings("WeakerAccess")
 public class Streams {
+    public static <T> Stream<Stream<T>> toBatch(Stream<T> source, int batchSize) {
+        Spliterator<Spliterator<T>> batchSpliterator = batch(source.spliterator(), batchSize);
+        return StreamSupport.stream(batchSpliterator, false)
+                .map(spliterator -> StreamSupport.stream(spliterator, false));
+    }
+
     public static <T, R extends T> Stream<R> ofType(Class<R> clazz, Stream<T> source) {
         return source.filter(clazz::isInstance).map(clazz::cast);
     }
@@ -59,7 +68,7 @@ public class Streams {
                 .flatMap(val -> Stream.concat(orderByTopology(childrenGetter.apply(val), childrenGetter, visited), Stream.of(val)));
     }
 
-    private static <T>Spliterator<T> takeWhile(Spliterator<T> spliterator, Predicate<? super T> predicate) {
+    private static <T> Spliterator<T> takeWhile(Spliterator<T> spliterator, Predicate<? super T> predicate) {
         return new Spliterators.AbstractSpliterator<T>(spliterator.estimateSize(), 0) {
             private boolean finished = false;
 
@@ -72,6 +81,38 @@ public class Streams {
                         finished = true;
                     }
                 }) && !finished;
+            }
+        };
+    }
+
+    static class LimitedSpliterator<T> extends Spliterators.AbstractSpliterator<T> {
+        private final Spliterator<T> source;
+        private final AtomicInteger remaining;
+        private final AtomicBoolean finished = new AtomicBoolean(false);
+
+        LimitedSpliterator(Spliterator<T> source, int maxSize) {
+            super(maxSize, 0);
+            this.source = source;
+            this.remaining = new AtomicInteger(maxSize);
+        }
+
+        @Override
+        public boolean tryAdvance(Consumer<? super T> action) {
+            if (remaining.decrementAndGet() == 0) {
+                return false;
+            }
+            finished.set(source.tryAdvance(action));
+            return finished.get();
+        }
+    }
+
+    private static <T> Spliterator<Spliterator<T>> batch(Spliterator<T> source, int batchSize) {
+        return new Spliterators.AbstractSpliterator<Spliterator<T>>(source.estimateSize() / batchSize, 0) {
+            @Override
+            public boolean tryAdvance(Consumer<? super Spliterator<T>> action) {
+                LimitedSpliterator<T> spliterator = new LimitedSpliterator<>(source, batchSize);
+                action.accept(spliterator);
+                return !spliterator.finished.get();
             }
         };
     }

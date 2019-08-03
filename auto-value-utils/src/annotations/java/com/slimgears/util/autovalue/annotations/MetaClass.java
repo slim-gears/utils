@@ -1,11 +1,12 @@
 package com.slimgears.util.autovalue.annotations;
 
-import com.slimgears.util.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
 
 /**
  * Immutable meta class
  * @param <T> Target immutable class
  */
+@SuppressWarnings("UnstableApiUsage")
 public interface MetaClass<T> {
     /**
      * Builder class
@@ -17,7 +18,7 @@ public interface MetaClass<T> {
      * Object type token
      * @return object type token
      */
-    TypeToken<T> objectClass();
+    TypeToken<T> asType();
 
     /**
      * Class Properties
@@ -60,7 +61,8 @@ public interface MetaClass<T> {
      * Returns target class
      * @return target class
      */
+    @SuppressWarnings("unchecked")
     default Class<T> asClass() {
-        return objectClass().asClass();
+        return (Class<T>) asType().getRawType();
     }
 }

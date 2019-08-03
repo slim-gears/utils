@@ -29,12 +29,12 @@
         $[com.slimgears.util.autovalue.annotations.MetaClass]<##
         $targetClass.simpleName()#typeParams($sourceClass)>##
 #end {
-        private final $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass = new $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
-        private final $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass = new $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
+        private final $[com.google.common.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectType = new $[com.google.common.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)>(){};
+        private final $[com.google.common.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass = new $[com.google.common.reflect.TypeToken]<Builder#typeParams($sourceClass)>(){};
         private final $[java.util.Map]<String, $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 
 #foreach ($p in $properties)
-        public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.safeName() = PropertyMeta.<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()], Builder#typeParams($sourceClass)>create(this, "$p.name()", new $[com.slimgears.util.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, obj -> obj.${p.getterName()}(), Builder::$p.setterName()#if ($p.name() != $p.getterName()), "$p.getterName()"#end);
+        public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.safeName() = PropertyMeta.<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()], Builder#typeParams($sourceClass)>create(this, "$p.name()", new $[com.google.common.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, obj -> obj.${p.getterName()}(), Builder::$p.setterName()#if ($p.name() != $p.getterName()), "$p.getterName()"#end);
 #end
 
 #if ($hasKey)
@@ -51,13 +51,13 @@
         }
 
         @Override
-        public $[com.slimgears.util.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass() {
+        public $[com.google.common.reflect.TypeToken]<Builder#typeParams($sourceClass)> builderClass() {
             return this.builderClass;
         }
 
         @Override
-        public $[com.slimgears.util.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> objectClass() {
-            return this.objectClass;
+        public $[com.google.common.reflect.TypeToken]<$targetClass.simpleName()#typeParams($sourceClass)> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -78,13 +78,13 @@
 
         @Override
         public int hashCode() {
-            return $[java.util.Objects].hash(objectClass, builderClass);
+            return $[java.util.Objects].hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
+import com.google.common.reflect.TypeToken;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,7 +27,7 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
 
     public static final Meta metaClass = new Meta();
     public static class Meta<T extends Comparable<T>> implements MetaClass<GenericAllOptionalPropertiesConcreteWithBuilder<T>> {
-        private final TypeToken<GenericAllOptionalPropertiesConcreteWithBuilder<T>> objectClass = new TypeToken<GenericAllOptionalPropertiesConcreteWithBuilder<T>>(){};
+        private final TypeToken<GenericAllOptionalPropertiesConcreteWithBuilder<T>> objectType = new TypeToken<GenericAllOptionalPropertiesConcreteWithBuilder<T>>(){};
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, ?>> propertyMap = new LinkedHashMap<>();
 
@@ -47,8 +47,8 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
         }
 
         @Override
-        public TypeToken<GenericAllOptionalPropertiesConcreteWithBuilder<T>> objectClass() {
-            return this.objectClass;
+        public TypeToken<GenericAllOptionalPropertiesConcreteWithBuilder<T>> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -69,13 +69,13 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
 
         @Override
         public int hashCode() {
-            return Objects.hash(objectClass, builderClass);
+            return Objects.hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

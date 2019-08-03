@@ -6,4 +6,5 @@ generateGrammarSource {
 
 dependencies {
     implementation project(':stream-utils')
+    implementation libs.guava
 }

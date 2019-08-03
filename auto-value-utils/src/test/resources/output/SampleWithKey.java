@@ -1,13 +1,13 @@
 package com.slimgears.sample;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.reflect.TypeToken;
 import com.slimgears.util.autovalue.annotations.BuilderPrototype;
 import com.slimgears.util.autovalue.annotations.HasMetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.Key;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
-import com.slimgears.util.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,7 +25,7 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
 
     public static final Meta metaClass = new Meta();
     public static class Meta implements MetaClassWithKey<String, SampleWithKey> {
-        private final TypeToken<SampleWithKey> objectClass = new TypeToken<SampleWithKey>(){};
+        private final TypeToken<SampleWithKey> objectType = new TypeToken<SampleWithKey>(){};
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleWithKey, ?>> propertyMap = new LinkedHashMap<>();
 
@@ -50,8 +50,8 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         }
 
         @Override
-        public TypeToken<SampleWithKey> objectClass() {
-            return this.objectClass;
+        public TypeToken<SampleWithKey> asType() {
+            return this.objectType;
         }
 
         @Override
@@ -72,13 +72,13 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
 
         @Override
         public int hashCode() {
-            return Objects.hash(objectClass, builderClass);
+            return Objects.hash(objectType, builderClass);
         }
 
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Meta
-            && Objects.equals(((Meta)obj).objectClass(), objectClass())
+            && Objects.equals(((Meta)obj).asType(), asType())
             && Objects.equals(((Meta)obj).builderClass(), builderClass());
         }
     }

@@ -1,7 +1,8 @@
 package com.slimgears.util.generic;
 
-import com.slimgears.util.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
 
+@SuppressWarnings("UnstableApiUsage")
 public interface ServiceResolver extends AutoCloseable {
     <T> T resolve(TypeToken<T> token);
     boolean canResolve(TypeToken<?> token);
