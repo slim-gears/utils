@@ -95,7 +95,7 @@ public class TypeTokenTest {
 
     @Test
     public void testHasTypeVariables() {
-        Assert.assertTrue(TypeTokens.hasTypeVars(TypeToken.of(Dummy.class)));
+        Assert.assertTrue(TypeTokens.hasTypeVars(TypeTokens.ofParameterized(Dummy.class, TypeToken.of(Dummy.class.getTypeParameters()[0]))));
         Assert.assertFalse(TypeTokens.hasTypeVars(new TypeToken<Dummy<String>>() {}));
     }
 }
