@@ -10,6 +10,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,9 +32,9 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer> intProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer, Builder<T>>create(this, "intProperty", new TypeToken<Integer>(){}, obj -> obj.intProperty(), Builder::intProperty);
-        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String> strProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String, Builder<T>>create(this, "strProperty", new TypeToken<String>(){}, obj -> obj.strProperty(), Builder::strProperty);
-        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T> genericValue = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T, Builder<T>>create(this, "genericValue", new TypeToken<T>(){}, obj -> obj.genericValue(), Builder::genericValue);
+        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer> intProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, Integer, Builder<T>>create(this, "intProperty", new PropertyType<Integer>(){}, obj -> obj.intProperty(), Builder::intProperty);
+        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String> strProperty = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, String, Builder<T>>create(this, "strProperty", new PropertyType<String>(){}, obj -> obj.strProperty(), Builder::strProperty);
+        public final PropertyMeta<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T> genericValue = PropertyMeta.<GenericAllOptionalPropertiesConcreteWithBuilder<T>, T, Builder<T>>create(this, "genericValue", new PropertyType<T>(){}, obj -> obj.genericValue(), Builder::genericValue);
 
         Meta() {
             propertyMap.put("intProperty", intProperty);

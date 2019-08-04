@@ -74,18 +74,10 @@ public interface PropertyMeta<T, V> {
         return getAnnotation(annotationClass) != null;
     }
 
-//    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(MetaClass<T> metaClass, String name) {
-//        return metaClass.getProperty(name);
-//    }
-//
-//    static <T extends HasMetaClass<T>, V> PropertyMeta<T, V> create(TypeToken<T> declaringType, String name) {
-//        return create(MetaClasses.forToken(declaringType), name);
-//    }
-
     static <T, V, B extends BuilderPrototype<T, B>> PropertyMeta<T, V> create(
             MetaClass<T> declaringType,
             String name,
-            TypeToken<V> type,
+            PropertyType<V> type,
             Function<T, V> getter,
             BiConsumer<B, V> setter) {
         return create(declaringType, name, type, getter, setter, name);
@@ -94,12 +86,13 @@ public interface PropertyMeta<T, V> {
     static <T, V, B extends BuilderPrototype<T, B>> PropertyMeta<T, V> create(
             MetaClass<T> declaringType,
             String name,
-            TypeToken<V> type,
+            PropertyType<V> type,
             Function<T, V> getter,
             BiConsumer<B, V> setter,
             String getterMethodName) {
 
         Supplier<Method> lazyMethod = AtomicLazy.of(() -> TypeTokens.method(declaringType.asType(), getterMethodName));
+        TypeToken<V> typeToken = type.asToken();
 
         return new PropertyMeta<T, V>() {
             @Override
@@ -114,7 +107,7 @@ public interface PropertyMeta<T, V> {
 
             @Override
             public TypeToken<V> type() {
-                return type;
+                return typeToken;
             }
 
             @Override

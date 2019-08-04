@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public abstract class SampleCircularDependency implements SampleCircularDependen
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleCircularDependency, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleCircularDependency, SampleCircularDependency> parent = PropertyMeta.<SampleCircularDependency, SampleCircularDependency, Builder>create(this, "parent", new TypeToken<SampleCircularDependency>(){}, obj -> obj.parent(), Builder::parent);
+        public final PropertyMeta<SampleCircularDependency, SampleCircularDependency> parent = PropertyMeta.<SampleCircularDependency, SampleCircularDependency, Builder>create(this, "parent", new PropertyType<SampleCircularDependency>(){}, obj -> obj.parent(), Builder::parent);
 
         Meta() {
             propertyMap.put("parent", parent);

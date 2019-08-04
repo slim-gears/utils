@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public abstract class SampleComparableGeneric<T extends Comparable<T>> implement
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleComparableGeneric<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleComparableGeneric<T>, T> tValue = PropertyMeta.<SampleComparableGeneric<T>, T, Builder<T>>create(this, "tValue", new TypeToken<T>(){}, obj -> obj.tValue(), Builder::tValue);
+        public final PropertyMeta<SampleComparableGeneric<T>, T> tValue = PropertyMeta.<SampleComparableGeneric<T>, T, Builder<T>>create(this, "tValue", new PropertyType<T>(){}, obj -> obj.tValue(), Builder::tValue);
 
         Meta() {
             propertyMap.put("tValue", tValue);

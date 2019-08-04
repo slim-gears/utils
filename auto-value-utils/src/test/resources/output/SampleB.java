@@ -9,6 +9,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,8 +31,8 @@ public abstract class SampleB implements SampleBPrototype, HasMetaClass<SampleB>
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleB, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleB, SampleA> value = PropertyMeta.<SampleB, SampleA, Builder>create(this, "value", new TypeToken<SampleA>(){}, obj -> obj.value(), Builder::value);
-        public final PropertyMeta<SampleB, SampleAPrototype.NestedEnum> nestedEnum = PropertyMeta.<SampleB, SampleAPrototype.NestedEnum, Builder>create(this, "nestedEnum", new TypeToken<SampleAPrototype.NestedEnum>(){}, obj -> obj.nestedEnum(), Builder::nestedEnum);
+        public final PropertyMeta<SampleB, SampleA> value = PropertyMeta.<SampleB, SampleA, Builder>create(this, "value", new PropertyType<SampleA>(){}, obj -> obj.value(), Builder::value);
+        public final PropertyMeta<SampleB, SampleAPrototype.NestedEnum> nestedEnum = PropertyMeta.<SampleB, SampleAPrototype.NestedEnum, Builder>create(this, "nestedEnum", new PropertyType<SampleAPrototype.NestedEnum>(){}, obj -> obj.nestedEnum(), Builder::nestedEnum);
 
         Meta() {
             propertyMap.put("value", value);

@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public abstract class SampleA implements SampleAPrototype, HasMetaClass<SampleA>
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleA, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleA, Integer> value = PropertyMeta.<SampleA, Integer, Builder>create(this, "value", new TypeToken<Integer>(){}, obj -> obj.value(), Builder::value);
+        public final PropertyMeta<SampleA, Integer> value = PropertyMeta.<SampleA, Integer, Builder>create(this, "value", new PropertyType<Integer>(){}, obj -> obj.value(), Builder::value);
 
         Meta() {
             propertyMap.put("value", value);

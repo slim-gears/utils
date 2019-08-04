@@ -34,7 +34,7 @@
         private final $[java.util.Map]<String, $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), ?>> propertyMap = new $[java.util.LinkedHashMap]<>();
 
 #foreach ($p in $properties)
-        public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.safeName() = PropertyMeta.<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()], Builder#typeParams($sourceClass)>create(this, "$p.name()", new $[com.google.common.reflect.TypeToken]<$[$p.type().asBoxed()]>(){}, obj -> obj.${p.getterName()}(), Builder::$p.setterName()#if ($p.name() != $p.getterName()), "$p.getterName()"#end);
+        public final $[com.slimgears.util.autovalue.annotations.PropertyMeta]<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()]> $p.safeName() = PropertyMeta.<$targetClass.simpleName()#typeParams($sourceClass), $[$p.type().asBoxed()], Builder#typeParams($sourceClass)>create(this, "$p.name()", new $[com.slimgears.util.autovalue.annotations.PropertyType]<$[$p.type().asBoxed()]>(){}, obj -> obj.${p.getterName()}(), Builder::$p.setterName()#if ($p.name() != $p.getterName()), "$p.getterName()"#end);
 #end
 
 #if ($hasKey)

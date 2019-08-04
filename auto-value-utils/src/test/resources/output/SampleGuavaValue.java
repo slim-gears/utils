@@ -11,6 +11,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,11 +33,11 @@ public abstract class SampleGuavaValue implements SampleGuavaValuePrototype, Has
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleGuavaValue, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGuavaValue, ImmutableList<Integer>> intList = PropertyMeta.<SampleGuavaValue, ImmutableList<Integer>, Builder>create(this, "intList", new TypeToken<ImmutableList<Integer>>(){}, obj -> obj.intList(), Builder::intList);
-        public final PropertyMeta<SampleGuavaValue, ImmutableSet<String>> stringSet = PropertyMeta.<SampleGuavaValue, ImmutableSet<String>, Builder>create(this, "stringSet", new TypeToken<ImmutableSet<String>>(){}, obj -> obj.stringSet(), Builder::stringSet);
-        public final PropertyMeta<SampleGuavaValue, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.<SampleGuavaValue, ImmutableMap<Integer, String>, Builder>create(this, "intToStringMap", new TypeToken<ImmutableMap<Integer, String>>(){}, obj -> obj.intToStringMap(), Builder::intToStringMap);
-        public final PropertyMeta<SampleGuavaValue, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.<SampleGuavaValue, ImmutableBiMap<Integer, String>, Builder>create(this, "intToStringBiMap", new TypeToken<ImmutableBiMap<Integer, String>>(){}, obj -> obj.intToStringBiMap(), Builder::intToStringBiMap);
-        public final PropertyMeta<SampleGuavaValue, ImmutableList<String>> optionalList = PropertyMeta.<SampleGuavaValue, ImmutableList<String>, Builder>create(this, "optionalList", new TypeToken<ImmutableList<String>>(){}, obj -> obj.optionalList(), Builder::optionalList);
+        public final PropertyMeta<SampleGuavaValue, ImmutableList<Integer>> intList = PropertyMeta.<SampleGuavaValue, ImmutableList<Integer>, Builder>create(this, "intList", new PropertyType<ImmutableList<Integer>>(){}, obj -> obj.intList(), Builder::intList);
+        public final PropertyMeta<SampleGuavaValue, ImmutableSet<String>> stringSet = PropertyMeta.<SampleGuavaValue, ImmutableSet<String>, Builder>create(this, "stringSet", new PropertyType<ImmutableSet<String>>(){}, obj -> obj.stringSet(), Builder::stringSet);
+        public final PropertyMeta<SampleGuavaValue, ImmutableMap<Integer, String>> intToStringMap = PropertyMeta.<SampleGuavaValue, ImmutableMap<Integer, String>, Builder>create(this, "intToStringMap", new PropertyType<ImmutableMap<Integer, String>>(){}, obj -> obj.intToStringMap(), Builder::intToStringMap);
+        public final PropertyMeta<SampleGuavaValue, ImmutableBiMap<Integer, String>> intToStringBiMap = PropertyMeta.<SampleGuavaValue, ImmutableBiMap<Integer, String>, Builder>create(this, "intToStringBiMap", new PropertyType<ImmutableBiMap<Integer, String>>(){}, obj -> obj.intToStringBiMap(), Builder::intToStringBiMap);
+        public final PropertyMeta<SampleGuavaValue, ImmutableList<String>> optionalList = PropertyMeta.<SampleGuavaValue, ImmutableList<String>, Builder>create(this, "optionalList", new PropertyType<ImmutableList<String>>(){}, obj -> obj.optionalList(), Builder::optionalList);
 
         Meta() {
             propertyMap.put("intList", intList);

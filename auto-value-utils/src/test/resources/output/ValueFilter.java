@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,8 +29,8 @@ public abstract class ValueFilter<T> implements ValueFilterPrototype<T>, HasMeta
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<ValueFilter<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<ValueFilter<T>, Boolean> isNull = PropertyMeta.<ValueFilter<T>, Boolean, Builder<T>>create(this, "isNull", new TypeToken<Boolean>(){}, obj -> obj.isNull(), Builder::isNull);
-        public final PropertyMeta<ValueFilter<T>, T> equalsTo = PropertyMeta.<ValueFilter<T>, T, Builder<T>>create(this, "equalsTo", new TypeToken<T>(){}, obj -> obj.equalsTo(), Builder::equalsTo);
+        public final PropertyMeta<ValueFilter<T>, Boolean> isNull = PropertyMeta.<ValueFilter<T>, Boolean, Builder<T>>create(this, "isNull", new PropertyType<Boolean>(){}, obj -> obj.isNull(), Builder::isNull);
+        public final PropertyMeta<ValueFilter<T>, T> equalsTo = PropertyMeta.<ValueFilter<T>, T, Builder<T>>create(this, "equalsTo", new PropertyType<T>(){}, obj -> obj.equalsTo(), Builder::equalsTo);
 
         Meta() {
             propertyMap.put("isNull", isNull);

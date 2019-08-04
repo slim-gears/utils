@@ -92,4 +92,10 @@ public class TypeTokenTest {
         TypeToken<ImmutableList<String>> token = new TypeToken<ImmutableList<String>>() {};
         Assert.assertEquals(String.class, token.resolveType(Collection.class.getTypeParameters()[0]).getType());
     }
+
+    @Test
+    public void testHasTypeVariables() {
+        Assert.assertTrue(TypeTokens.hasTypeVars(TypeToken.of(Dummy.class)));
+        Assert.assertFalse(TypeTokens.hasTypeVars(new TypeToken<Dummy<String>>() {}));
+    }
 }

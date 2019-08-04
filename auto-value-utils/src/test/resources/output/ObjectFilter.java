@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public abstract class ObjectFilter<T> implements ObjectFilterPrototype<T>, HasMe
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<ObjectFilter<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<ObjectFilter<T>, Boolean> isNull = PropertyMeta.<ObjectFilter<T>, Boolean, Builder<T>>create(this, "isNull", new TypeToken<Boolean>(){}, obj -> obj.isNull(), Builder::isNull);
+        public final PropertyMeta<ObjectFilter<T>, Boolean> isNull = PropertyMeta.<ObjectFilter<T>, Boolean, Builder<T>>create(this, "isNull", new PropertyType<Boolean>(){}, obj -> obj.isNull(), Builder::isNull);
 
         Meta() {
             propertyMap.put("isNull", isNull);

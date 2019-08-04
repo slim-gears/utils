@@ -8,6 +8,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public abstract class SampleSpecializedGeneric implements SampleSpecializedGener
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleSpecializedGeneric, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleSpecializedGeneric, ImmutableList<String>> values = PropertyMeta.<SampleSpecializedGeneric, ImmutableList<String>, Builder>create(this, "values", new TypeToken<ImmutableList<String>>(){}, obj -> obj.values(), Builder::values);
+        public final PropertyMeta<SampleSpecializedGeneric, ImmutableList<String>> values = PropertyMeta.<SampleSpecializedGeneric, ImmutableList<String>, Builder>create(this, "values", new PropertyType<ImmutableList<String>>(){}, obj -> obj.values(), Builder::values);
 
         Meta() {
             propertyMap.put("values", values);

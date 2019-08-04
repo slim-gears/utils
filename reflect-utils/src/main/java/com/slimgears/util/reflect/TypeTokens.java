@@ -31,6 +31,18 @@ public class TypeTokens {
         return modifierPredicate.test(type.getRawType().getModifiers());
     }
 
+    public static boolean isEnum(TypeToken<?> typeToken) {
+        return typeToken.getRawType().isEnum();
+    }
+
+    public static boolean isInterface(TypeToken<?> typeToken) {
+        return typeToken.getRawType().isInterface();
+    }
+
+    public static boolean isArray(TypeToken<?> typeToken) {
+        return typeToken.getRawType().isArray();
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> Constructor<T> constructor(TypeToken<T> type, Class<?>... argTypes) {
         try {
@@ -68,6 +80,11 @@ public class TypeTokens {
 
     public static ParameterizedBuilder parameterizedBuilder(Class<?> rawType) {
         return new ParameterizedBuilder(rawType);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> TypeToken<T> ofType(Type type) {
+        return (TypeToken<T>)TypeToken.of(type);
     }
 
     @SuppressWarnings("unchecked")
@@ -153,11 +170,37 @@ public class TypeTokens {
         }
     }
 
-    public static TypeToken<?> eliminateTypeVars(TypeToken<?> type) {
-        return TypeToken.of(TypeVarContext.runInContext(() -> eliminateTypeVars(type.getType())));
+    @SuppressWarnings("unchecked")
+    public static <T> TypeToken<T> eliminateTypeVars(TypeToken<T> type) {
+        return (TypeToken<T>)TypeToken.of(TypeVarContext.runInContext(() -> eliminateTypeVars(type.getType())));
     }
 
-    private static WildcardType wildcardType(Type[] lowerBounds, Type[] upperBounds) {
+    public static boolean hasTypeVars(TypeToken<?> type) {
+        return hasTypeVars(type.getType());
+    }
+
+    private static boolean hasTypeVars(Type... types) {
+        return Arrays.stream(types).anyMatch(TypeTokens::hasTypeVars);
+    }
+
+    private static boolean hasTypeVars(Type type) {
+        if (type instanceof TypeVariable) {
+            return true;
+        }
+        if (type instanceof GenericArrayType) {
+            return hasTypeVars(((GenericArrayType)type).getGenericComponentType());
+        }
+        if (type instanceof ParameterizedType) {
+            return hasTypeVars(((ParameterizedType)type).getActualTypeArguments());
+        }
+        if (type instanceof WildcardType) {
+            return hasTypeVars(((WildcardType)type).getLowerBounds()) ||
+                    hasTypeVars(((WildcardType)type).getUpperBounds());
+        }
+        return false;
+    }
+
+    private static WildcardType wildcardType(Type[] upperBounds, Type[] lowerBounds) {
         Equality.Checker<WildcardType> equalityChecker = Equality.builder(WildcardType.class)
                 .add(WildcardType::getLowerBounds)
                 .add(WildcardType::getUpperBounds)
@@ -278,10 +321,10 @@ public class TypeTokens {
     private static Type eliminateTypeVars(Type type) {
         if (type instanceof TypeVariable) {
             return wildcardType(
-                    new Type[0],
                     TypeVarContext.visit((TypeVariable)type)
                             ? eliminateTypeVars(((TypeVariable) type).getBounds())
-                            : new Type[]{Object.class});
+                            : new Type[]{Object.class},
+                    new Type[0]);
         }
         if (type instanceof ParameterizedType) {
             return parameterizedType(
@@ -322,5 +365,4 @@ public class TypeTokens {
             }
         }
     }
-
 }

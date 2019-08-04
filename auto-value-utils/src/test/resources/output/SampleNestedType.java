@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public abstract class SampleNestedType implements SampleNestedTypePrototype, Has
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleNestedType, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleNestedType, SampleNestedTypePrototype.NestedEnum> value = PropertyMeta.<SampleNestedType, SampleNestedTypePrototype.NestedEnum, Builder>create(this, "value", new TypeToken<SampleNestedTypePrototype.NestedEnum>(){}, obj -> obj.value(), Builder::value);
+        public final PropertyMeta<SampleNestedType, SampleNestedTypePrototype.NestedEnum> value = PropertyMeta.<SampleNestedType, SampleNestedTypePrototype.NestedEnum, Builder>create(this, "value", new PropertyType<SampleNestedTypePrototype.NestedEnum>(){}, obj -> obj.value(), Builder::value);
 
         Meta() {
             propertyMap.put("value", value);

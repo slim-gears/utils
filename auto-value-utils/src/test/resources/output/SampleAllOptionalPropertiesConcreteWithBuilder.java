@@ -10,6 +10,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,8 +32,8 @@ public abstract class SampleAllOptionalPropertiesConcreteWithBuilder implements 
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, Integer> intProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, Integer, Builder>create(this, "intProperty", new TypeToken<Integer>(){}, obj -> obj.intProperty(), Builder::intProperty);
-        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, String> strProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, String, Builder>create(this, "strProperty", new TypeToken<String>(){}, obj -> obj.strProperty(), Builder::strProperty);
+        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, Integer> intProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, Integer, Builder>create(this, "intProperty", new PropertyType<Integer>(){}, obj -> obj.intProperty(), Builder::intProperty);
+        public final PropertyMeta<SampleAllOptionalPropertiesConcreteWithBuilder, String> strProperty = PropertyMeta.<SampleAllOptionalPropertiesConcreteWithBuilder, String, Builder>create(this, "strProperty", new PropertyType<String>(){}, obj -> obj.strProperty(), Builder::strProperty);
 
         Meta() {
             propertyMap.put("intProperty", intProperty);

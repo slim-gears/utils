@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public abstract class GenericListItem<T> implements GenericListItemPrototype<T>,
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<GenericListItem<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<GenericListItem<T>, T> entry = PropertyMeta.<GenericListItem<T>, T, Builder<T>>create(this, "entry", new TypeToken<T>(){}, obj -> obj.entry(), Builder::entry);
+        public final PropertyMeta<GenericListItem<T>, T> entry = PropertyMeta.<GenericListItem<T>, T, Builder<T>>create(this, "entry", new PropertyType<T>(){}, obj -> obj.entry(), Builder::entry);
 
         Meta() {
             propertyMap.put("entry", entry);

@@ -8,6 +8,7 @@ import com.slimgears.util.autovalue.annotations.Key;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClassWithKey;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,9 +30,9 @@ public abstract class SampleWithKey implements SampleWithKeyPrototype, HasMetaCl
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleWithKey, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleWithKey, String> id = PropertyMeta.<SampleWithKey, String, Builder>create(this, "id", new TypeToken<String>(){}, obj -> obj.id(), Builder::id);
-        public final PropertyMeta<SampleWithKey, String> text = PropertyMeta.<SampleWithKey, String, Builder>create(this, "text", new TypeToken<String>(){}, obj -> obj.text(), Builder::text);
-        public final PropertyMeta<SampleWithKey, Integer> number = PropertyMeta.<SampleWithKey, Integer, Builder>create(this, "number", new TypeToken<Integer>(){}, obj -> obj.number(), Builder::number);
+        public final PropertyMeta<SampleWithKey, String> id = PropertyMeta.<SampleWithKey, String, Builder>create(this, "id", new PropertyType<String>(){}, obj -> obj.id(), Builder::id);
+        public final PropertyMeta<SampleWithKey, String> text = PropertyMeta.<SampleWithKey, String, Builder>create(this, "text", new PropertyType<String>(){}, obj -> obj.text(), Builder::text);
+        public final PropertyMeta<SampleWithKey, Integer> number = PropertyMeta.<SampleWithKey, Integer, Builder>create(this, "number", new PropertyType<Integer>(){}, obj -> obj.number(), Builder::number);
 
         @Override
         public PropertyMeta<SampleWithKey, String> keyProperty() {

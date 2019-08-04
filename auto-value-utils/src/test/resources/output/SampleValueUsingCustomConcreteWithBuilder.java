@@ -10,6 +10,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,8 +32,8 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
         private final TypeToken<Builder> builderClass = new TypeToken<Builder>(){};
         private final Map<String, PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> value = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "value", new TypeToken<Integer>(){}, obj -> obj.value(), Builder::value);
-        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> optionalValue = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "optionalValue", new TypeToken<Integer>(){}, obj -> obj.optionalValue(), Builder::optionalValue);
+        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> value = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "value", new PropertyType<Integer>(){}, obj -> obj.value(), Builder::value);
+        public final PropertyMeta<SampleValueUsingCustomConcreteWithBuilder, Integer> optionalValue = PropertyMeta.<SampleValueUsingCustomConcreteWithBuilder, Integer, Builder>create(this, "optionalValue", new PropertyType<Integer>(){}, obj -> obj.optionalValue(), Builder::optionalValue);
 
         Meta() {
             propertyMap.put("value", value);

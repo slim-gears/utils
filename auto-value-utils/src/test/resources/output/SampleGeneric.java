@@ -7,6 +7,7 @@ import com.slimgears.util.autovalue.annotations.HasMetaClass;
 import com.slimgears.util.autovalue.annotations.MetaBuilder;
 import com.slimgears.util.autovalue.annotations.MetaClass;
 import com.slimgears.util.autovalue.annotations.PropertyMeta;
+import com.slimgears.util.autovalue.annotations.PropertyType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,8 +29,8 @@ public abstract class SampleGeneric<T> implements SampleGenericPrototype<T>, Has
         private final TypeToken<Builder<T>> builderClass = new TypeToken<Builder<T>>(){};
         private final Map<String, PropertyMeta<SampleGeneric<T>, ?>> propertyMap = new LinkedHashMap<>();
 
-        public final PropertyMeta<SampleGeneric<T>, String> value = PropertyMeta.<SampleGeneric<T>, String, Builder<T>>create(this, "value", new TypeToken<String>(){}, obj -> obj.value(), Builder::value);
-        public final PropertyMeta<SampleGeneric<T>, T> tValue = PropertyMeta.<SampleGeneric<T>, T, Builder<T>>create(this, "tValue", new TypeToken<T>(){}, obj -> obj.tValue(), Builder::tValue);
+        public final PropertyMeta<SampleGeneric<T>, String> value = PropertyMeta.<SampleGeneric<T>, String, Builder<T>>create(this, "value", new PropertyType<String>(){}, obj -> obj.value(), Builder::value);
+        public final PropertyMeta<SampleGeneric<T>, T> tValue = PropertyMeta.<SampleGeneric<T>, T, Builder<T>>create(this, "tValue", new PropertyType<T>(){}, obj -> obj.tValue(), Builder::tValue);
 
         Meta() {
             propertyMap.put("value", value);
