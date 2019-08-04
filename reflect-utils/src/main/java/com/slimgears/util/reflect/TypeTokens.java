@@ -18,11 +18,12 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TypeTokens {
-    @SuppressWarnings("unchecked")
-    public static <T> T newInstance(TypeToken<T> type) {
+    public static <T> T newInstance(TypeToken<T> type, Object... args) {
         try {
-            return (T)type.getRawType().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return type
+                    .constructor(type.getRawType().getConstructor(Arrays.stream(args).map(Object::getClass).toArray(Class[]::new)))
+                    .invoke(null, args);
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
