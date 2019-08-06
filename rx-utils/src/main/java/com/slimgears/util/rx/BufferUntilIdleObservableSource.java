@@ -46,8 +46,10 @@ public class BufferUntilIdleObservableSource<T> implements ObservableSource<List
 
         @Override
         public void onNext(T next) {
-            List<T> buf = currentBuffer.get();
-            buf.add(next);
+            synchronized (currentBuffer) {
+                List<T> buf = currentBuffer.get();
+                buf.add(next);
+            }
             rescheduleFlush(idleTimerDisposable, maxIdleDuration);
         }
 
@@ -74,8 +76,14 @@ public class BufferUntilIdleObservableSource<T> implements ObservableSource<List
         }
 
         private synchronized void flush() {
+            List<T> buffer;
+
+            synchronized (currentBuffer) {
+                buffer = currentBuffer.getAndSet(new ArrayList<>());
+            }
+
             Optional
-                    .of(currentBuffer.getAndSet(new ArrayList<>()))
+                    .of(buffer)
                     .filter(b -> !b.isEmpty())
                     .ifPresent(observer::onNext);
             cancelFlush(idleTimerDisposable);
