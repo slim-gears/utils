@@ -9,8 +9,8 @@ import java.util.Objects;
 
 @SuppressWarnings("WeakerAccess")
 public class DateUtils {
-    private final static ThreadLocal<DateFormat> LONG_DATE_TIME_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("YYYY/MM/dd HH:mm:ss"));
-    private final static ThreadLocal<DateFormat> COMPACT_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("YYYYMMdd"));
+    private final static ThreadLocal<DateFormat> LONG_DATE_TIME_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"));
+    private final static ThreadLocal<DateFormat> COMPACT_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMMdd"));
 
     public static Date round(Date time, Duration period) {
         long rounded = (time.getTime() / period.toMillis()) * period.toMillis();
@@ -19,6 +19,18 @@ public class DateUtils {
 
     public static boolean equalsRounded(Date first, Date second, Duration duration) {
         return Objects.equals(round(first, duration), round(second, duration));
+    }
+
+    public static Date add(Date date, Duration duration) {
+        return new Date(date.getTime() + duration.toMillis());
+    }
+
+    public static Date sub(Date date, Duration duration) {
+        return new Date(date.getTime() - duration.toMillis());
+    }
+
+    public static Duration times(Duration duration, double times) {
+        return Duration.ofMillis(Math.round((double)duration.toMillis() * times));
     }
 
     public static Date parseCompactDate(String dateString) {
