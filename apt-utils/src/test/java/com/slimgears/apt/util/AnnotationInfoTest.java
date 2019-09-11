@@ -3,6 +3,7 @@ package com.slimgears.apt.util;
 import com.slimgears.apt.data.AnnotationInfo;
 import com.slimgears.apt.data.AnnotationValueInfo;
 import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.util.stream.Comparables;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,6 +18,8 @@ public class AnnotationInfoTest {
         Class value() default Object.class;
         Item[] items() default {};
         Item singleItem() default @Item;
+        Item[] emptyItems() default {};
+        Class<? extends String> classWithWildcard() default String.class;
 
         @interface Item {
             String value() default "";
@@ -30,6 +33,8 @@ public class AnnotationInfoTest {
                 .builder()
                 .type(TestAnnotation.class)
                 .value(AnnotationValueInfo.ofType("value", TypeInfo.of(getClass())))
+                .value(AnnotationValueInfo.ofType("classWithWildcard", TypeInfo.of(String.class)))
+                .value(AnnotationValueInfo.ofArray("emptyItems", TestAnnotation.Item[].class))
                 .value(AnnotationValueInfo.ofArray("items", TestAnnotation.Item[].class,
                         AnnotationValueInfo.Value.ofAnnotation(AnnotationInfo
                                 .builder()
@@ -55,11 +60,14 @@ public class AnnotationInfoTest {
 
         Assert.assertEquals(
                 "@AnnotationInfoTest.TestAnnotation(value = AnnotationInfoTest.class, " +
-                "items = {" +
+                        "classWithWildcard = String.class, " +
+                        "emptyItems = {}, " +
+                        "items = {" +
                         "@AnnotationInfoTest.TestAnnotation.Item(\"TestValue1\"), " +
                         "@AnnotationInfoTest.TestAnnotation.Item(value = \"TestValue2\", items = {1, 2, 3}), " +
                         "@AnnotationInfoTest.TestAnnotation.Item(\"TestValue3\")}, " +
-                        "item = @AnnotationInfoTest.TestAnnotation.Item)", annotation.asString());
+                        "item = @AnnotationInfoTest.TestAnnotation.Item)",
+                annotation.asString());
     }
 
     @Test

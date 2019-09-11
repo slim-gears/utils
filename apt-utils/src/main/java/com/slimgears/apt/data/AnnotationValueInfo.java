@@ -1,7 +1,11 @@
 package com.slimgears.apt.data;
 
+import com.google.auto.common.AnnotationMirrors;
+import com.google.auto.common.MoreElements;
+import com.google.auto.common.MoreTypes;
 import com.google.auto.value.AutoOneOf;
 import com.google.auto.value.AutoValue;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.slimgears.apt.util.ImportTracker;
 import com.slimgears.util.stream.Optionals;
@@ -98,8 +102,8 @@ public abstract class AnnotationValueInfo implements HasName, HasType {
         return Optionals
                 .or(
                         () -> val.map(v -> AnnotationValueInfo.ofPrimitive(name, v)),
-                        () -> val.<TypeMirror>flatMap(Optionals.ofType(TypeMirror.class)).map(v -> AnnotationValueInfo.ofType(name, v)),
-                        () -> val.<AnnotationMirror>flatMap(Optionals.ofType(AnnotationMirror.class)).map(v -> AnnotationValueInfo.ofAnnotation(name, v)))
+                        () -> val.flatMap(Optionals.ofType(TypeMirror.class)).map(v -> AnnotationValueInfo.ofType(name, v)),
+                        () -> val.flatMap(Optionals.ofType(AnnotationMirror.class)).map(v -> AnnotationValueInfo.ofAnnotation(name, v)))
                 .orElse(null);
     }
 

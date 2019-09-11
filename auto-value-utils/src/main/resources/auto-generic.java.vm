@@ -1,0 +1,29 @@
+package $packageName;
+
+$imports
+
+@$[javax.annotation.Generated]("$processor")
+#foreach ($a in $annotations)
+$a
+#end
+public #if($isInterface)interface#{else}class#end $targetClass.simpleName() extends $[$superClass] {
+#foreach ($c in $mappedConstructors)
+#foreach ($ann in $c.superConstructor().annotations())
+    @$[$ann.type()]
+#end
+    public $targetClass.simpleName()(##
+#foreach ($p in $c.params())##
+$[$p.type()] $p.name()#if ($foreach.hasNext), #end##
+#end) {
+        super(##
+#foreach ($p in $c.superConstructor().params())##
+#if ($c.isClassParam($p))##
+$[$c.getClassParam($p)].class##
+#else##
+$p.name()##
+#end##
+#if ($foreach.hasNext), #end##
+#end);
+    }
+#end
+}
