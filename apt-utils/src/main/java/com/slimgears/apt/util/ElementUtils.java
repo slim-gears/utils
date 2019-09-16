@@ -77,6 +77,13 @@ public class ElementUtils {
         return Stream.of(modifiers).noneMatch(elementModifiers::contains);
     }
 
+    public static String fullName(Element element) {
+        return Optional
+            .ofNullable(element.getEnclosingElement())
+            .map(e -> fullName(e) + "." + element.getSimpleName().toString())
+            .orElseGet(element::toString);
+    }
+
     public static Predicate<? super Element> ofKind(ElementKind kind) {
         return el -> el.getKind() == kind;
     }

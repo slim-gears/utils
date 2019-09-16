@@ -2,6 +2,7 @@ package com.slimgears.apt;
 
 import com.google.auto.common.MoreElements;
 import com.slimgears.apt.data.Environment;
+import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.apt.util.LogUtils;
 import com.slimgears.util.stream.Safe;
 import com.slimgears.util.stream.Streams;
@@ -12,19 +13,11 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -85,7 +78,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         }
     }
 
-    private final List<PendingElementInfo> pendingElements = new ArrayList<>();
+    private final Map<String, PendingElementInfo> pendingElements = new HashMap<>();
 
     private static class DelayProcessingException extends RuntimeException {
         DelayProcessingException(String reason) {
@@ -133,14 +126,14 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     }
 
     private void processPendingElements() {
-        PendingElementInfo[] pendingElements = this.pendingElements.toArray(new PendingElementInfo[0]);
-        this.pendingElements.clear();
+        PendingElementInfo[] pendingElements = this.pendingElements.values().toArray(new PendingElementInfo[0]);
         Arrays.stream(pendingElements).forEach(pe -> processElement(pe.annotation(), pe.element()));
     }
 
     private boolean processElement(TypeElement annotationType, Element element) {
+        String elementName = ElementUtils.fullName(element);
         try {
-            return Stream
+            boolean res = Stream
                     .of(
                             ofType(TypeElement.class, Stream.of(element)).map(el -> processType(annotationType, el)),
                             ofType(ExecutableElement.class, Stream.of(element)).map(el -> processMethod(annotationType, el)),
@@ -148,12 +141,18 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .flatMap(s -> s)
                     .findAny()
                     .orElse(true);
+            if (pendingElements.containsKey(elementName)) {
+                pendingElements.remove(elementName);
+            }
+            return res;
         } catch (DelayProcessingException e) {
             log.debug("Processing of element {} with annotation {} delayed until next round: {}",
                     element.getSimpleName(),
                     annotationType.getSimpleName(),
                     e.getMessage());
-            pendingElements.add(new PendingElementInfo(element, annotationType));
+            if (!pendingElements.containsKey(elementName)) {
+                pendingElements.put(elementName, new PendingElementInfo(element, annotationType));
+            }
             return true;
         }
     }
