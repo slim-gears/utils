@@ -42,7 +42,7 @@ public class AutoGenericAnnotationProcessor extends AbstractAnnotationProcessor 
             Stream.of(annotation.variants())
                     .forEach(imp -> generateClass(type, annotation, imp));
         } catch (AnnotationTypeMismatchException e) {
-            return false;
+            delayProcessing("Could not resolve: " + e.foundType());
         }
         return true;
     }
