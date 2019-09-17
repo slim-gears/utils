@@ -1,6 +1,7 @@
 package com.slimgears.apt;
 
 import com.google.auto.common.MoreElements;
+import com.google.common.collect.ImmutableList;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.util.ElementUtils;
 import com.slimgears.apt.util.LogUtils;
@@ -17,6 +18,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -126,12 +128,11 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     }
 
     private void processPendingElements() {
-        PendingElementInfo[] pendingElements = this.pendingElements.values().toArray(new PendingElementInfo[0]);
-        Arrays.stream(pendingElements).forEach(pe -> processElement(pe.annotation(), pe.element()));
+        Iterable<PendingElementInfo> pendingElements = ImmutableList.copyOf(this.pendingElements.values());
+        pendingElements.forEach(pe -> processElement(pe.annotation(), pe.element()));
     }
 
     private boolean processElement(TypeElement annotationType, Element element) {
-        String elementName = ElementUtils.fullName(element);
         try {
             boolean res = Stream
                     .of(
@@ -141,20 +142,21 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .flatMap(s -> s)
                     .findAny()
                     .orElse(true);
-            if (pendingElements.containsKey(elementName)) {
-                pendingElements.remove(elementName);
-            }
-            return res;
+            pendingElements.remove(ElementUtils.fullName(element));
+        } catch (AnnotationTypeMismatchException e) {
+            addPendingElement(element, annotationType);
         } catch (DelayProcessingException e) {
             log.debug("Processing of element {} with annotation {} delayed until next round: {}",
                     element.getSimpleName(),
                     annotationType.getSimpleName(),
                     e.getMessage());
-            if (!pendingElements.containsKey(elementName)) {
-                pendingElements.put(elementName, new PendingElementInfo(element, annotationType));
-            }
-            return true;
+            addPendingElement(element, annotationType);
         }
+        return true;
+    }
+
+    private void addPendingElement(Element element, TypeElement annotationType) {
+        pendingElements.computeIfAbsent(ElementUtils.fullName(element), en -> new PendingElementInfo(element, annotationType));
     }
 
     protected boolean processAnnotation(TypeElement annotationType, RoundEnvironment roundEnv) {
