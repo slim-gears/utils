@@ -4,13 +4,12 @@
 package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.service.AutoService;
+import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.slimgears.apt.AbstractAnnotationProcessor;
-import com.slimgears.apt.data.Environment;
-import com.slimgears.apt.data.MethodInfo;
-import com.slimgears.apt.data.TypeInfo;
+import com.slimgears.apt.data.*;
 import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoGeneric;
 
@@ -53,7 +52,7 @@ public class AutoGenericAnnotationProcessor extends AbstractAnnotationProcessor 
 
         Preconditions.checkArgument(
                 typeArgs.length == sourceType.getTypeParameters().size(),
-                "@AutoGeneric.WithParams parameters number mismatch.");
+                "@AutoGeneric.Variant parameters number mismatch.");
 
         String nameTemplate = classAnnotation.className();
         TypeInfo sourceClass = TypeInfo.of(sourceType);
@@ -112,6 +111,7 @@ public class AutoGenericAnnotationProcessor extends AbstractAnnotationProcessor 
                 .variable("superClass", superClass)
                 .variable("mappedConstructors", mappedConstructors)
                 .variable("typeParams", typeParams)
+                .variable("typeArgs", typeArgs)
                 .variable("classParamAnnotation", TypeInfo.of(AutoGeneric.ClassParam.class))
                 .variable("utils", javaUtils)
                 .apply(JavaUtils.imports(importTracker))
@@ -136,7 +136,7 @@ public class AutoGenericAnnotationProcessor extends AbstractAnnotationProcessor 
             builder.append(importTracker.use(className));
             lastPos = begin + className.length();
         }
-        builder.append(str.substring(lastPos, str.length()));
+        builder.append(str.substring(lastPos));
         return builder.toString();
     }
 }

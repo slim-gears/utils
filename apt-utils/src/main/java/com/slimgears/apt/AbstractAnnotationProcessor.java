@@ -143,8 +143,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .findAny()
                     .orElse(true);
             pendingElements.remove(ElementUtils.fullName(element));
-        } catch (AnnotationTypeMismatchException e) {
-            addPendingElement(element, annotationType);
+//        } catch (AnnotationTypeMismatchException e) {
+//            addPendingElement(element, annotationType);
         } catch (DelayProcessingException e) {
             log.debug("Processing of element {} with annotation {} delayed until next round: {}",
                     element.getSimpleName(),

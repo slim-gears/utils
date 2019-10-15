@@ -184,39 +184,11 @@ public class ServiceModules {
     }
 
     static <S> Stream<Class<? extends S>> readServices(String resourcePath) {
-        return readLines(resourcePath)
+        return MetaInfoResources.readLines(resourcePath)
                 .<Class<? extends S>>map(ServiceModules::safeClassByName)
                 .filter(Objects::nonNull);
     }
 
-    static Stream<String> readLines(String resourcePath) {
-        ClassLoader classLoader = ServiceModules.class.getClassLoader();
-        try {
-            return Streams
-                    .fromEnumeration(classLoader.getResources(resourcePath))
-                    .flatMap(ServiceModules::readLines);
-        } catch (IOException e) {
-            return Stream.empty();
-        }
-    }
-
-    private static Stream<String> readLines(URL url) {
-        try {
-            InputStream stream = url.openStream();
-            InputStreamReader reader = new InputStreamReader(stream);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            return bufferedReader.lines()
-                    .filter(Objects::nonNull)
-                    .onClose(() -> {
-                        try {
-                            bufferedReader.close();
-                        } catch (IOException ignored) {
-                        }
-                    });
-        } catch (IOException e) {
-            return Stream.empty();
-        }
-    }
 
     @SuppressWarnings("unchecked")
     private static <S> Class<? extends S> safeClassByName(String className) {

@@ -3,6 +3,7 @@ package $packageName;
 $imports
 
 @$[javax.annotation.Generated]("$processor")
+@$[com.slimgears.util.autovalue.annotations.AutoGeneric].Variant({#foreach($vt in $typeArgs)$[$vt].class#if ($foreach.hasNext), #end#end})
 #foreach ($a in $annotations)
 $a
 #end
