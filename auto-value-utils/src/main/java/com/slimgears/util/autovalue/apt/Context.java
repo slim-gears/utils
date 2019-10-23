@@ -24,6 +24,7 @@ public abstract class Context {
     public abstract TypeInfo targetClassWithParams();
     public abstract Extension extensions();
     public abstract Annotator annotators();
+    public abstract String processor();
     public abstract Collection<MethodInfo> staticMethods();
 //    public abstract TypeInfo builderClassDeclaration();
 //    public abstract TypeInfo builderClassWithParams();
@@ -93,6 +94,7 @@ public abstract class Context {
         Builder keyProperty(PropertyInfo keyProperty);
         Builder extensions(Extension extension);
         Builder annotators(Annotator annotator);
+        Builder processor(String processor);
 
         Context build();
     }

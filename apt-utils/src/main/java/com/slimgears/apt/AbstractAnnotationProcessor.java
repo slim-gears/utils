@@ -102,12 +102,14 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .reduce(Boolean::logicalOr)
                     .orElse(false);
 
+            onRoundFinished();
             if (isProcessingOver(roundEnv, annotations)) {
                 onComplete();
             }
             return res;
         }
         catch (Exception e) {
+            System.err.println("Error!!!: " + e);
             log.error("Error: ", e);
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
             return true;
@@ -121,6 +123,10 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     protected boolean isProcessingOver(RoundEnvironment roundEnvironment, Set<? extends TypeElement> annotations) {
         return roundEnvironment.processingOver();
+    }
+
+    protected void onRoundFinished() {
+
     }
 
     protected void onComplete() {
@@ -143,8 +149,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     .findAny()
                     .orElse(true);
             pendingElements.remove(ElementUtils.fullName(element));
-//        } catch (AnnotationTypeMismatchException e) {
-//            addPendingElement(element, annotationType);
+        } catch (AnnotationTypeMismatchException | ClassCastException e) {
+            addPendingElement(element, annotationType);
         } catch (DelayProcessingException e) {
             log.debug("Processing of element {} with annotation {} delayed until next round: {}",
                     element.getSimpleName(),

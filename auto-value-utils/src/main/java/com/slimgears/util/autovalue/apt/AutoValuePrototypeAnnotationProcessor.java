@@ -2,23 +2,16 @@ package com.slimgears.util.autovalue.apt;
 
 import com.google.auto.service.AutoService;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.slimgears.apt.AbstractAnnotationProcessor;
 import com.slimgears.apt.data.Environment;
 import com.slimgears.apt.data.TypeInfo;
 import com.slimgears.apt.data.TypeParameterInfo;
-import com.slimgears.apt.util.ElementUtils;
-import com.slimgears.apt.util.FileUtils;
-import com.slimgears.apt.util.ImportTracker;
-import com.slimgears.apt.util.JavaUtils;
-import com.slimgears.apt.util.TemplateEvaluator;
+import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
-import com.slimgears.util.autovalue.apt.extensions.Annotator;
-import com.slimgears.util.autovalue.apt.extensions.CompositeAnnotator;
-import com.slimgears.util.autovalue.apt.extensions.CompositeExtension;
-import com.slimgears.util.autovalue.apt.extensions.Extension;
-import com.slimgears.util.autovalue.apt.extensions.Extensions;
+import com.slimgears.util.autovalue.apt.extensions.*;
 import com.slimgears.util.stream.Lazy;
 import com.slimgears.util.stream.Streams;
 import org.slf4j.Logger;
@@ -37,14 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,15 +45,23 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
 
     public static class MetaAnnotationInfo {
         final AutoValuePrototype prototypeAnnotation;
-        final Extension extension;
-        final Annotator annotator;
+        final Collection<Extension> extensions;
+        final Collection<Annotator> annotators;
 
         MetaAnnotationInfo(AutoValuePrototype prototypeAnnotation,
                            Collection<Extension> extensions,
                            Collection<Annotator> annotators) {
             this.prototypeAnnotation = prototypeAnnotation;
-            this.extension = CompositeExtension.of(extensions);
-            this.annotator = CompositeAnnotator.of(annotators);
+            this.extensions = ImmutableList.copyOf(extensions);
+            this.annotators = ImmutableList.copyOf(annotators);
+        }
+
+        MetaAnnotationInfo(MetaAnnotationInfo metaAnnotationInfo,
+                           Collection<Extension> extensions,
+                           Collection<Annotator> annotators) {
+            this.prototypeAnnotation = metaAnnotationInfo.prototypeAnnotation;
+            this.extensions = Extensions.combine(metaAnnotationInfo.extensions, extensions);
+            this.annotators = Extensions.combine(metaAnnotationInfo.annotators, annotators);
         }
     }
 
@@ -157,12 +151,13 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .sourceElement(type)
                 .targetClassDeclaration(targetClassDeclaration)
                 .targetClassWithParams(targetClassWithParams)
-                .extensions(metaAnnotation.extension)
-                .annotators(metaAnnotation.annotator)
+                .extensions(CompositeExtension.of(metaAnnotation.extensions))
+                .annotators(CompositeAnnotator.of(metaAnnotation.annotators))
                 .properties(properties)
                 .staticMethods(PropertyUtils.getStaticMethonds(declaredType))
                 .imports(importTracker)
                 .keyProperty(keyProperty)
+                .processor(getClass().getName())
                 .build();
 
         importTracker.knownClass(targetClass);
@@ -198,6 +193,9 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 : Optional.ofNullable(annotationElement.getQualifiedName())
                 .map(Name::toString)
                 .map(metaAnnotationInfoMap.get()::get)
+                .map(metaAnnotationInfo -> new MetaAnnotationInfo(metaAnnotationInfo,
+                    Extensions.extensionsForType(extensionMap.get(), typeElement),
+                    Extensions.extensionsForType(annotatorMap.get(), typeElement)))
                 .orElse(null);
     }
 

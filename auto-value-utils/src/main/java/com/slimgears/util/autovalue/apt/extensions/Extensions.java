@@ -1,9 +1,12 @@
 package com.slimgears.util.autovalue.apt.extensions;
 
 import com.google.auto.common.MoreTypes;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;
 import com.slimgears.apt.data.AnnotationInfo;
 import com.slimgears.util.stream.Streams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.AnnotationMirror;
@@ -21,6 +24,8 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("WeakerAccess")
 public class Extensions {
+    private final static Logger log = LoggerFactory.getLogger(Extensions.class);
+
     public static <E> Collection<E> fromStrings(Class<E> cls, String... qualifiedNames) {
         return fromStrings(cls, Arrays.asList(qualifiedNames));
     }
@@ -42,14 +47,37 @@ public class Extensions {
     public static <E> ImmutableMultimap<String, E> loadExtensions(Class<E> extensionClass) {
         ImmutableMultimap.Builder<String, E> builder = ImmutableMultimap.builder();
         Streams.fromIterable(ServiceLoader.load(extensionClass, Extensions.class.getClassLoader()))
-                .forEach(e -> supportedAnnotations(e.getClass()).forEach(a -> builder.put(a, e)));
+                .forEach(e -> supportedAnnotations(e.getClass())
+                    .peek(a -> log.debug("Found supported extension for {}: {}", a, e.getClass().getSimpleName()))
+                    .forEach(a -> builder.put(a, e)));
         return builder.build();
+    }
+
+    public static <E> Collection<E> combine(Collection<E> list, E item) {
+        return combine(list, ImmutableList.of(item));
+    }
+
+    public static <E> Collection<E> combine(Collection<E> list, Collection<E> other) {
+        Set<Class<?>> classes = list.stream()
+            .map(Object::getClass)
+            .collect(Collectors.toSet());
+        Collection<E> filteredOther = other
+            .stream()
+            .filter(i -> !classes.contains(i.getClass()))
+            .collect(Collectors.toList());
+        return filteredOther.isEmpty()
+            ? list
+            : ImmutableList.<E>builder()
+            .addAll(list)
+            .addAll(filteredOther)
+            .build();
     }
 
     public static <E> Collection<E> extensionsForType(ImmutableMultimap<String, E> extensionMap, TypeElement type) {
         return type.getAnnotationMirrors().stream()
                 .flatMap(am -> extensionsForAnnotationMirror(extensionMap, new HashSet<>(), am))
                 .distinct()
+                .peek(e -> log.debug("Found extension for {}: {}", type.getSimpleName(), e.getClass().getSimpleName()))
                 .collect(Collectors.toList());
     }
 
@@ -57,11 +85,13 @@ public class Extensions {
         return Arrays.stream(type.getAnnotations())
                 .flatMap(am -> extensionsForAnnotation(extensionMap, new HashSet<>(), am))
                 .distinct()
+                .peek(e -> log.debug("Found extension for {}: {}", type.getSimpleName(), e.getClass().getSimpleName()))
                 .collect(Collectors.toList());
     }
 
     private static <E> Stream<E> extensionsForAnnotationMirror(ImmutableMultimap<String, E> extensionMap, Set<String> visitedAnnotations, AnnotationMirror annotationMirror) {
         String annotationTypeName = annotationMirror.getAnnotationType().toString();
+        log.debug("Looking for extensions for annotation type: {}", annotationMirror.getAnnotationType().asElement().getSimpleName());
         return visitedAnnotations.add(annotationTypeName)
             ? Stream.concat(
                     Optional.ofNullable(extensionMap.get(annotationTypeName))
@@ -77,6 +107,7 @@ public class Extensions {
 
     private static <E> Stream<E> extensionsForAnnotation(ImmutableMultimap<String, E> extensionMap, Set<String> visitedAnnotations, Annotation annotation) {
         String annotationTypeName = annotation.annotationType().getName();
+        log.debug("Looking for extensions for annotation type: {}", annotation.annotationType().getSimpleName());
         return visitedAnnotations.add(annotationTypeName)
             ? Stream.concat(
                     Optional.ofNullable(extensionMap.get(annotationTypeName))

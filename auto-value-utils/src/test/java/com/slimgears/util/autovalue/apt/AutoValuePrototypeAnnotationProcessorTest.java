@@ -228,6 +228,27 @@ public class AutoValuePrototypeAnnotationProcessorTest {
     }
 
     @Test
+    public void testCustomCompositeAnnotation() {
+        tester()
+            .inputFiles(
+                "CustomCompositeAnnotation.java",
+                "SampleCustomExtensionValuePrototype.java")
+            .expectedSources("SampleCustomExtensionValue.java")
+            .test();
+    }
+
+    @Test
+    public void testRecursiveCompositeAnnotation() {
+        tester()
+            .inputFiles(
+                "CustomCompositeAnnotation.java",
+                "RecursiveCompositeAnnotation.java",
+                "SampleRecursiveExtensionValuePrototype.java")
+            .expectedSources("SampleRecursiveExtensionValue.java")
+            .test();
+    }
+
+    @Test
     public void testCollectionElementType() {
         AtomicReference<TypeInfo> elementType = new AtomicReference<>();
         AnnotationProcessingTester.create()
