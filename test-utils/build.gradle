@@ -35,7 +35,16 @@ dependencies {
 }
 
 configurations {
+    guiceOutput
     guiceImplementation.extendsFrom implementation
     logbackImplementation.extendsFrom implementation
     testImplementation.extendsFrom guiceImplementation
+}
+
+task guiceOutputJar(type: Jar) {
+    from sourceSets.guice.output
+}
+
+artifacts {
+    guiceOutput guiceOutputJar
 }

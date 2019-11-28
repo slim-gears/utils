@@ -1,0 +1,24 @@
+sourceSets {
+    guice {
+        java.srcDir 'src/guice/java'
+    }
+}
+
+configurations {
+    guiceImplementation.extendsFrom implementation
+    testImplementation.extendsFrom guiceImplementation
+}
+
+dependencies {
+    implementation libs.micrometerCore
+    implementation libs.rxJava
+    guiceImplementation project.sourceSetDependency(project(':guice-utils').sourceSets.main)
+    guiceImplementation project.sourceSetDependency(project(':nanometer').sourceSets.main)
+    guiceImplementation libs.guice
+    testImplementation project.sourceSetDependency(project(':test-utils').sourceSets.main)
+    testImplementation sourceSets.guice.output
+    testImplementation project.sourceSetDependency(project(':stream-utils').sourceSets.main)
+    testImplementation project.sourceSetDependency(project(':generic-utils').sourceSets.main)
+    testImplementation project(path: ':test-utils', configuration: 'guiceOutput')
+    testImplementation libs.slf4j
+}
