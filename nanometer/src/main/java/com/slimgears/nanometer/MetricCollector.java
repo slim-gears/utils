@@ -188,4 +188,8 @@ public interface MetricCollector extends Taggable<MetricCollector>, MetricFilter
     static MetricCollector composite(MetricCollector... collectors) {
         return CompositeMetricCollector.of(collectors);
     }
+
+    static MetricCollector empty() {
+        return EmptyMetricCollector.instance;
+    }
 }

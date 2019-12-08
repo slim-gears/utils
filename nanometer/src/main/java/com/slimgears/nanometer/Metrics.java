@@ -12,6 +12,10 @@ public class Metrics {
         return factory.createForClass(cls);
     }
 
+    public static MetricCollector collector() {
+        return factory.create();
+    }
+
     public static void filter(MetricFilter filter) {
         factory.filter(filter);
     }

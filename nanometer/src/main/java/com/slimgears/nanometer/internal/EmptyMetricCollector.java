@@ -7,9 +7,9 @@ import com.slimgears.nanometer.MetricTag;
 
 import java.util.function.ToDoubleFunction;
 
-class EmptyMetricCollector extends AbstractMetricCollector {
-    static final MetricCollector instance = new EmptyMetricCollector();
-    static final MetricCollector.Factory factory = new MetricCollector.Factory() {
+public class EmptyMetricCollector extends AbstractMetricCollector {
+    public static final MetricCollector instance = new EmptyMetricCollector();
+    public static final MetricCollector.Factory factory = new MetricCollector.Factory() {
         @Override
         public MetricCollector create() {
             return instance;

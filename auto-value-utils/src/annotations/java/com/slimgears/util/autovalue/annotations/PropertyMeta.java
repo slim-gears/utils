@@ -5,6 +5,8 @@ import com.slimgears.util.reflect.TypeTokens;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -62,7 +64,7 @@ public interface PropertyMeta<T, V> {
      * @return true if mergeable, otherwise false
      */
     default boolean isMergeable() {
-        return hasAnnotation(Mergeable.class);
+        return !hasAnnotation(NonMergeable.class);
     }
 
     /**
@@ -92,6 +94,7 @@ public interface PropertyMeta<T, V> {
             String getterMethodName) {
 
         Supplier<Method> lazyMethod = AtomicLazy.of(() -> TypeTokens.method(declaringType.asType(), getterMethodName));
+        Supplier<Map<Class<?>, Annotation>> lazyAnnotationsMap = AtomicLazy.of(HashMap::new);
         TypeToken<V> typeToken = type.asToken();
 
         return new PropertyMeta<T, V>() {
@@ -123,7 +126,8 @@ public interface PropertyMeta<T, V> {
 
             @Override
             public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-                return lazyMethod.get().getAnnotation(annotationClass);
+                return annotationClass.cast(lazyAnnotationsMap.get()
+                        .computeIfAbsent(annotationClass, a -> lazyMethod.get().getAnnotation(annotationClass)));
             }
 
             @Override

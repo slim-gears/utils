@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @SuppressWarnings("WeakerAccess")
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Mergeable {
+public @interface NonMergeable {
 }
