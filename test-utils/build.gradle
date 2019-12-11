@@ -16,8 +16,6 @@ dependencies {
     implementation project(':reflect-utils')
     implementation project(':generic-utils')
     implementation libs.slf4j
-    implementation libs.logbackClassic
-    implementation libs.log4jApi, libs.log4jCore, libs.log4jSlf4jBridge
     implementation libs.guava
     compileOnly libs.autoService
     annotationProcessor libs.autoService
@@ -27,7 +25,7 @@ dependencies {
     logbackAnnotationProcessor libs.autoService
     logbackImplementation project.sourceSetDependency(sourceSets.main)
 
-    log4jImplementation libs.slf4j, libs.log4jApi, libs.log4jSlf4jBridge
+    log4jImplementation libs.slf4j, libs.log4jApi, libs.log4jCore, libs.log4jSlf4jBridge
     log4jCompileOnly libs.autoService
     log4jAnnotationProcessor libs.autoService
     log4jImplementation project.sourceSetDependency(sourceSets.main)
@@ -50,7 +48,7 @@ configurations {
     guiceImplementation.extendsFrom implementation
     logbackImplementation.extendsFrom implementation
     log4jImplementation.extendsFrom implementation
-    testImplementation.extendsFrom guiceImplementation
+    testImplementation.extendsFrom guiceImplementation, logbackImplementation, log4jImplementation
 }
 
 task guiceOutputJar(type: Jar) {
