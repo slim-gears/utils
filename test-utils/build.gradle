@@ -5,6 +5,9 @@ sourceSets {
     logback {
         java.srcDir 'src/logback/java'
     }
+    log4j {
+        java.srcDir 'src/log4j/java'
+    }
 }
 
 dependencies {
@@ -12,7 +15,9 @@ dependencies {
     implementation project(':stream-utils')
     implementation project(':reflect-utils')
     implementation project(':generic-utils')
-    implementation libs.slf4j, libs.logbackClassic
+    implementation libs.slf4j
+    implementation libs.logbackClassic
+    implementation libs.log4jApi, libs.log4jCore, libs.log4jSlf4jBridge
     implementation libs.guava
     compileOnly libs.autoService
     annotationProcessor libs.autoService
@@ -21,6 +26,11 @@ dependencies {
     logbackCompileOnly libs.autoService
     logbackAnnotationProcessor libs.autoService
     logbackImplementation project.sourceSetDependency(sourceSets.main)
+
+    log4jImplementation libs.slf4j, libs.log4jApi, libs.log4jSlf4jBridge
+    log4jCompileOnly libs.autoService
+    log4jAnnotationProcessor libs.autoService
+    log4jImplementation project.sourceSetDependency(sourceSets.main)
 
     guiceImplementation project.sourceSetDependency(sourceSets.main)
     guiceImplementation project.sourceSetDependency(project(':guice-utils').sourceSets.main)
@@ -32,12 +42,14 @@ dependencies {
     testImplementation libs.guice
     testImplementation project.sourceSetDependency(sourceSets.guice)
     testImplementation project.sourceSetDependency(sourceSets.logback)
+    testImplementation project.sourceSetDependency(sourceSets.log4j)
 }
 
 configurations {
     guiceOutput
     guiceImplementation.extendsFrom implementation
     logbackImplementation.extendsFrom implementation
+    log4jImplementation.extendsFrom implementation
     testImplementation.extendsFrom guiceImplementation
 }
 
