@@ -57,8 +57,9 @@ class ObjectStorage implements AutoCloseable {
             AutoCloseable closeable = closeables.pop();
             try {
                 closeable.close();
+                LOG.debug("{} was closed", closeable.getClass());
             } catch (Exception e) {
-                LOG.error("Error occurred when closing " + closeable.getClass(), e);
+                LOG.error("Error occurred when closing {}", closeable.getClass(), e);
             }
         }
     }
