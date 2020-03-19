@@ -15,10 +15,7 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.NoType;
 import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.Type;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -266,9 +263,15 @@ public abstract class TypeInfo implements HasName, HasEnclosingType, HasAnnotati
     }
 
     private static TypeInfo register(TypeInfo type) {
-        typeRegistrar.current().computeIfAbsent(type.erasureName(), tname -> type.hasTypeParams() ? TypeInfo.of(tname) : type);
-        if (!type.hasEnclosingType() && typeRegistrar.current().containsKey(packageName(type.erasureName()))) {
-            return type.toBuilder().enclosingType(typeRegistrar.current().get(packageName(type.erasureName()))).build();
+        String erasureName = type.erasureName();
+        if (typeRegistrar.current().get(erasureName) == null) {
+            TypeInfo newValue = type.hasTypeParams() ? TypeInfo.of(erasureName) : type;
+            if (newValue != null) {
+                typeRegistrar.current().put(erasureName, newValue);
+            }
+        }
+        if (!type.hasEnclosingType() && typeRegistrar.current().containsKey(packageName(erasureName))) {
+            return type.toBuilder().enclosingType(typeRegistrar.current().get(packageName(erasureName))).build();
         }
         return type;
     }

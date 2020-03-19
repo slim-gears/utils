@@ -1,5 +1,3 @@
-import org.gradle.internal.jvm.Jvm
-
 configurations {
     testOutput.extendsFrom (testImplementation)
 }
@@ -45,6 +43,4 @@ dependencies {
     implementation libs.logbackCore
     implementation libs.javaxAnnotationApi
     implementation libs.javaPoet
-
-    testImplementation files(Jvm.current().getToolsJar())
 }

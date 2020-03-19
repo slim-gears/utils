@@ -1,6 +1,7 @@
 package com.slimgears.util.guice;
 
 import com.google.inject.*;
+import com.google.inject.Module;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
