@@ -250,6 +250,7 @@ public class ElementUtils {
                         .map(ArrayType::getComponentType))
                 .flatMap(self())
                 .filter(DeclaredType.class::isInstance)
+                .map(typeMirror -> (TypeMirror)typeMirror)
                 .distinct();
     }
 
@@ -350,6 +351,7 @@ public class ElementUtils {
                         .map(ElementUtils::getHierarchy)
                         .orElseGet(Stream::empty))
                 .flatMap(Function.identity())
+                .map(t -> (TypeMirror)t)
                 .filter(t -> MoreTypes.isTypeOf(interfaceType, t))
                 .findFirst()
                 .orElse(null);
