@@ -126,6 +126,10 @@ public class TypeConverters {
     }
 
     private static boolean areTypesMatching(TypeInfo left, TypeInfo right) {
+        if (left.arrayDimensions() == 0 && left.fullName().startsWith("$")) {
+            return true;
+        }
+
         if (left.arrayDimensions() != right.arrayDimensions()) {
             return false;
         }
@@ -134,7 +138,12 @@ public class TypeConverters {
             return false;
         }
 
-        return (left.typeParams().size() == right.typeParams().size());
+        if (left.typeParams().size() != right.typeParams().size()) {
+            return false;
+        }
+
+        return IntStream.range(0, left.typeParams().size())
+                .allMatch(i -> areTypesMatching(left.typeParams().get(i).type(), right.typeParams().get(i).type()));
     }
 
     private static Pattern patternFromWildcard(String wildcard) {
@@ -190,7 +199,7 @@ public class TypeConverters {
         }
 
         for (Map.Entry<String, TypeInfo> entry : paramMap.entrySet()) {
-            String varRef = "${" + entry.getKey() + "}";
+            String varRef = entry.getKey();
             template = template.replace(varRef, entry.getValue().fullName());
         }
 
