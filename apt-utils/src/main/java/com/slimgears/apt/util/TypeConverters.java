@@ -27,12 +27,14 @@ import static com.slimgears.util.guice.ConfigProviders.loadFromResource;
 import static com.slimgears.util.stream.Streams.ofType;
 
 public class TypeConverters {
+    private final static Pattern typeNameFromPropertyPatten = Pattern.compile("^[0-9]+\\.(.*)$");
     public static TypeConverter empty = create(t -> false, (u, t) -> t);
 
     public static TypeConverter fromProperties(Properties properties) {
         return properties.stringPropertyNames()
                 .stream()
-                .map(fromType -> createConverter(fromType, properties.getProperty(fromType)))
+                .sorted()
+                .map(propName -> createConverter(toTypeName(propName), properties.getProperty(propName)))
                 .reduce(TypeConverter::combineWith)
                 .orElse(TypeConverters.empty);
     }
@@ -214,5 +216,12 @@ public class TypeConverters {
 
     private static boolean isWildcard(String template) {
         return template.startsWith("`") && template.endsWith("`");
+    }
+
+    private static String toTypeName(String propertyName) {
+        Matcher matcher = typeNameFromPropertyPatten.matcher(propertyName);
+        return matcher.matches()
+                ? matcher.group(1)
+                : propertyName;
     }
 }

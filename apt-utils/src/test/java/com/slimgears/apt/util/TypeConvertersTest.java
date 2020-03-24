@@ -69,8 +69,9 @@ public class TypeConvertersTest {
     public void testMapsWithDifferentKey() {
         Properties properties = ConfigProviders.create(
                 p -> p.put("com.sample.CustomDataType", "CustomDataType"),
-                p -> p.put("java.util.Map<java.lang.Float, $V>", "test.NumberKeyMap<$V>"),
-                p -> p.put("java.util.Map<java.lang.String, $V>", "test.StringKeyMap<$V>"));
+                p -> p.put("0.java.util.Map<java.lang.Float, $V>", "test.NumberKeyMap<$V>"),
+                p -> p.put("0.java.util.Map<java.lang.String, $V>", "test.StringKeyMap<$V>"),
+                p -> p.put("1.java.util.Map<$K, $V>", "Map<$K, $V>"));
         testConversion(properties,
                 TypeInfo.of("java.util.Map<java.lang.Float, com.sample.CustomDataType>"),
                 TypeInfo.of("test.NumberKeyMap<CustomDataType>"));
