@@ -1,6 +1,7 @@
 package com.slimgears.util.guice;
 
 import com.google.inject.*;
+import com.google.inject.Module;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
