@@ -13,6 +13,7 @@ import com.slimgears.apt.util.*;
 import com.slimgears.util.autovalue.annotations.AutoValuePrototype;
 import com.slimgears.util.autovalue.apt.extensions.*;
 import com.slimgears.util.stream.Lazy;
+import com.slimgears.util.stream.Optionals;
 import com.slimgears.util.stream.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         MetaAnnotationInfo(AutoValuePrototype prototypeAnnotation,
                            Collection<Extension> extensions,
                            Collection<Annotator> annotators) {
+            Objects.requireNonNull(prototypeAnnotation);
             this.prototypeAnnotation = prototypeAnnotation;
             this.extensions = ImmutableList.copyOf(extensions);
             this.annotators = ImmutableList.copyOf(annotators);
@@ -199,11 +201,35 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
                 .orElse(null);
     }
 
-    private MetaAnnotationInfo resolveMetaAnnotation(Class<? extends Annotation> annotationClass) {
-        return new MetaAnnotationInfo(
-                        annotationClass.getAnnotation(AutoValuePrototype.class),
-                        Extensions.extensionsForType(extensionMap.get(), annotationClass),
-                        Extensions.extensionsForType(annotatorMap.get(), annotationClass));
+    private MetaAnnotationInfo resolveMetaAnnotation(Class<? extends Annotation> annotationClass, Map<String, MetaAnnotationInfo> annotationInfoMap) {
+        return Optionals.or(
+                () -> Optional.of(annotationClass)
+                        .map(Class::getName)
+                        .map(annotationInfoMap::get),
+                () -> Optional
+                        .ofNullable(annotationClass.getAnnotation(AutoValuePrototype.class))
+                        .map(annotation -> new MetaAnnotationInfo(
+                                annotation,
+                                Extensions.extensionsForType(extensionMap.get(), annotationClass),
+                                Extensions.extensionsForType(annotatorMap.get(), annotationClass)))
+                        .map(info -> {
+                            annotationInfoMap.put(annotationClass.getName(), info);
+                            return info;
+                        })
+                ,
+                () -> Arrays.stream(annotationClass.getAnnotations())
+                        .map(Annotation::annotationType)
+                        .filter(Objects::nonNull)
+                        .map(cls -> resolveMetaAnnotation(cls, annotationInfoMap))
+                        .map(metaAnnotationInfo -> new MetaAnnotationInfo(metaAnnotationInfo,
+                                Extensions.extensionsForType(extensionMap.get(), annotationClass),
+                                Extensions.extensionsForType(annotatorMap.get(), annotationClass)))
+                        .findFirst())
+                        .map(info -> {
+                            annotationInfoMap.put(annotationClass.getName(), info);
+                            return info;
+                        })
+                .orElse(null);
     }
 
     @Override
@@ -220,8 +246,10 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     }
 
     private Map<String, MetaAnnotationInfo> discoverMetaAnnotations() {
-        return discoverAnnotationClasses()
-                    .collect(Collectors.toMap(Class::getName, this::resolveMetaAnnotation));
+        Map<String, MetaAnnotationInfo> map = new HashMap<>();
+        discoverAnnotationClasses()
+                .forEach(cls -> resolveMetaAnnotation(cls, map));
+        return map;
     }
 
     private Stream<Class<? extends Annotation>> discoverAnnotationClasses() {
