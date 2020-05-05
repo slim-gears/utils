@@ -101,11 +101,7 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
         //generateInterfaceBuilder(declaredType);
 
         AutoValuePrototype annotation = metaAnnotation.prototypeAnnotation;
-        String pattern = annotation.pattern().isEmpty()
-                ? "Prototype"
-                : annotation.pattern();
-
-
+        String pattern = annotation.pattern();
         String targetName = type.getSimpleName().toString().replaceAll(pattern, annotation.value());
 
         TypeInfo sourceClass = TypeInfo.of(type);
@@ -178,12 +174,8 @@ public class AutoValuePrototypeAnnotationProcessor extends AbstractAnnotationPro
     private void validatePrototype(TypeElement type, MetaAnnotationInfo metaAnnotation) {
         AutoValuePrototype annotation = metaAnnotation.prototypeAnnotation;
 
-        Preconditions.checkArgument(ElementUtils.isInterface(type), "AutoValue Prototype should be interface");
-        Preconditions.checkArgument(
-                !annotation.value().isEmpty() ||
-                type.getSimpleName().toString().startsWith("Prototype") ||
-                type.getSimpleName().toString().endsWith("Prototype"),
-                "AutoValue Prototype name should start or end with 'Prototype'");
+        Preconditions.checkArgument(ElementUtils.isInterface(type), "AutoValue prototype should be interface");
+        Preconditions.checkArgument(!annotation.value().isEmpty());
     }
 
     private MetaAnnotationInfo resolveMetaAnnotation(TypeElement annotationElement, TypeElement typeElement) {
