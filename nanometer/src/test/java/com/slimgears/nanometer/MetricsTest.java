@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 @CollectMetrics(
         value = "test.metrics",
         level = MetricLevel.INFO,
@@ -131,7 +132,7 @@ public class MetricsTest {
                 .concatWith(Observable
                         .range(0, 10)
                         .concatMapSingle(i -> Single.just(i).delay(10, TimeUnit.MILLISECONDS)))
-                .lift(collector.async()
+                .compose(collector.async()
                         .timeTillComplete("completeTime")
                         .timeTillFirst("firstElementTime")
                         .timeBetweenItems("timeBetweenItems")
@@ -159,7 +160,7 @@ public class MetricsTest {
                         : Observable.empty())
                 .concatWith(Observable
                 .range(0, 10))
-                .lift(collector.async()
+                .compose(collector.async()
                         .countItems("itemCounter", MetricTag.of("tag1", "value1"))
                         .countCompletions("completionCounter")
                         .countSubscriptions("subscriptionCounter")

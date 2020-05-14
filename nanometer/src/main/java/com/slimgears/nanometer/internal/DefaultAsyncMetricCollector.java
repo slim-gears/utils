@@ -7,6 +7,7 @@ import io.reactivex.disposables.Disposable;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -18,6 +19,7 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
     private final AtomicReference<Supplier<Runnable>> doOnSubscribe = new AtomicReference<>();
     private final AtomicReference<Supplier<Runnable>> doOnComplete = new AtomicReference<>();
     private final AtomicReference<Supplier<Runnable>> doOnError = new AtomicReference<>();
+    private final AtomicReference<Supplier<Runnable>> doFinally = new AtomicReference<>();
 
     private DefaultAsyncMetricCollector(MetricCollector metricCollector) {
         this.metricCollector = metricCollector;
@@ -40,6 +42,14 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
     }
 
     @Override
+    public MetricCollector.Async countActiveSubscriptions(String name, MetricTag... tags) {
+        AtomicInteger currentSubscriptions = new AtomicInteger();
+        metricCollector.gauge(name, tags).record(currentSubscriptions, AtomicInteger::doubleValue);
+        addRunnable(doOnSubscribe, currentSubscriptions::incrementAndGet);
+        return addRunnable(doFinally, currentSubscriptions::decrementAndGet);
+    }
+
+    @Override
     public MetricCollector.Async countErrors(String name, MetricTag... tags) {
         MetricCollector.Counter counter = metricCollector.counter(name, tags);
         return addRunnable(doOnError, counter::increment);
@@ -59,9 +69,8 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
                     .stopper()
                     .start();
             return () -> {
-                if (!isStopped.get()) {
+                if (isStopped.compareAndSet(false, true)) {
                     stopper.stop();
-                    isStopped.lazySet(true);
                 }
             };
         });
@@ -87,14 +96,15 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
     }
 
     @Override
-    public <T> ObservableOperator<T, T> forObservable() {
-        return observer -> {
+    public <T> ObservableTransformer<T, T> forObservable() {
+        return source -> {
             Runnable onNext = toRunnable(doOnNext);
             Runnable onComplete = toRunnable(doOnComplete);
             Runnable onSubscribe = toRunnable(doOnSubscribe);
             Runnable onError = toRunnable(doOnError);
+            Runnable onFinally = toRunnable(doFinally);
 
-            return new Observer<T>() {
+            ObservableOperator<T, T> operator = observer -> new Observer<T>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     onSubscribe.run();
@@ -119,18 +129,22 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
                     observer.onComplete();
                 }
             };
+            return source
+                    .lift(operator)
+                    .doFinally(onFinally::run);
         };
     }
 
     @Override
-    public <T> MaybeOperator<T, T> forMaybe() {
-        return observer -> {
+    public <T> MaybeTransformer<T, T> forMaybe() {
+        return source -> {
             Runnable onNext = toRunnable(doOnNext);
             Runnable onComplete = toRunnable(doOnComplete);
             Runnable onSubscribe = toRunnable(doOnSubscribe);
             Runnable onError = toRunnable(doOnError);
+            Runnable onFinally = toRunnable(doFinally);
 
-            return new MaybeObserver<T>() {
+            MaybeOperator<T, T> operator = observer -> new MaybeObserver<T>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     onSubscribe.run();
@@ -156,17 +170,23 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
                     observer.onComplete();
                 }
             };
+
+            return source
+                    .lift(operator)
+                    .doFinally(onFinally::run);
         };
     }
 
     @Override
-    public <T> SingleOperator<T, T> forSingle() {
-        return observer -> {
+    public <T> SingleTransformer<T, T> forSingle() {
+        return source -> {
             Runnable onNext = toRunnable(doOnNext);
             Runnable onComplete = toRunnable(doOnComplete);
             Runnable onSubscribe = toRunnable(doOnSubscribe);
             Runnable onError = toRunnable(doOnError);
-            return new SingleObserver<T>() {
+            Runnable onFinally = toRunnable(doFinally);
+
+            SingleOperator<T, T> operator = observer -> new SingleObserver<T>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     onSubscribe.run();
@@ -186,17 +206,22 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
                     observer.onError(e);
                 }
             };
+
+            return source
+                    .lift(operator)
+                    .doFinally(onFinally::run);
         };
     }
 
     @Override
-    public CompletableOperator forCompletable() {
-        return observer -> {
-            Runnable onNext = toRunnable(doOnNext);
+    public CompletableTransformer forCompletable() {
+        return source -> {
             Runnable onComplete = toRunnable(doOnComplete);
             Runnable onSubscribe = toRunnable(doOnSubscribe);
             Runnable onError = toRunnable(doOnError);
-            return new CompletableObserver() {
+            Runnable onFinally = toRunnable(doFinally);
+
+            CompletableOperator operator = observer -> new CompletableObserver() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     onSubscribe.run();
@@ -215,6 +240,9 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
                     observer.onError(e);
                 }
             };
+
+            return source.lift(operator)
+                    .doFinally(onFinally::run);
         };
     }
 
@@ -223,23 +251,24 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
         Runnable onNext = toRunnable(doOnNext);
         Runnable onComplete = toRunnable(doOnComplete);
         Runnable onSubscribe = toRunnable(doOnSubscribe);
+        Runnable onFinally = toRunnable(doFinally);
 
         onSubscribe.run();
         return stream
-                .onClose(onComplete::run)
+                .onClose(combine(onComplete, onFinally))
                 .peek(val -> onNext.run());
     }
 
-    private MetricCollector.Async addDeferred(AtomicReference<Supplier<Runnable>> Runnable, Supplier<Runnable> newRunnable) {
-        Runnable.updateAndGet(existingRunnable -> Optional
+    private MetricCollector.Async addDeferred(AtomicReference<Supplier<Runnable>> runnable, Supplier<Runnable> newRunnable) {
+        runnable.updateAndGet(existingRunnable -> Optional
                 .ofNullable(existingRunnable)
                 .map(a -> combine(a, newRunnable))
                 .orElse(newRunnable));
         return this;
     }
 
-    private MetricCollector.Async addRunnable(AtomicReference<Supplier<Runnable>> Runnable, Runnable newRunnable) {
-        return addDeferred(Runnable, () -> newRunnable);
+    private MetricCollector.Async addRunnable(AtomicReference<Supplier<Runnable>> runnable, Runnable newRunnable) {
+        return addDeferred(runnable, () -> newRunnable);
     }
 
     private Supplier<Runnable> combine(Supplier<Runnable> a1, Supplier<Runnable> a2) {
@@ -253,7 +282,7 @@ public class DefaultAsyncMetricCollector implements MetricCollector.Async {
         };
     }
 
-    private Runnable toRunnable(AtomicReference<Supplier<Runnable>> RunnableSupplier) {
-        return Optional.ofNullable(RunnableSupplier.get()).map(Supplier::get).orElse(emptyRunnable);
+    private Runnable toRunnable(AtomicReference<Supplier<Runnable>> runnableSupplier) {
+        return Optional.ofNullable(runnableSupplier.get()).map(Supplier::get).orElse(emptyRunnable);
     }
 }

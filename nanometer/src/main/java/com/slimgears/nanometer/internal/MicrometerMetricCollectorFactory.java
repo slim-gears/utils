@@ -9,9 +9,7 @@ import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.ServiceLoader;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MicrometerMetricCollectorFactory extends AbstractMetricCollector.Factory {
@@ -72,6 +70,6 @@ public class MicrometerMetricCollectorFactory extends AbstractMetricCollector.Fa
 
     @Override
     protected MetricCollector create(MetricFilter filter) {
-        return new MicrometerMetricCollector(registry, filter);
+        return CachedMetricCollectorDecorator.decorate(new MicrometerMetricCollector(registry, filter));
     }
 }

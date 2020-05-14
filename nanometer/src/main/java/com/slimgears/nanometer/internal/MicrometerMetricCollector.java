@@ -8,6 +8,9 @@ import io.micrometer.core.instrument.Tag;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
@@ -46,24 +49,21 @@ class MicrometerMetricCollector extends AbstractMetricCollector {
     }
 
     static class MicrometerGauge implements Gauge {
-        private final io.micrometer.core.instrument.MeterRegistry registry;
-        private final String name;
-        private final Iterable<Tag> tags;
+        private final AtomicReference<Double> value = new AtomicReference<>(0.0);
+        private final AtomicReference<Supplier<Double>> valueSupplier = new AtomicReference<>(value::get);
 
         MicrometerGauge(MeterRegistry registry, String name, Iterable<Tag> tags) {
-            this.registry = registry;
-            this.name = name;
-            this.tags = tags;
+            registry.gauge(name, tags, valueSupplier, vs -> vs.get().get());
         }
 
         @Override
-        public <T> void record(T object, ToDoubleFunction<T> valueProducer) {
-            registry.gauge(name, tags, object, valueProducer);
+        public <T, N extends Number> void record(T object, Function<T, N> valueProducer) {
+            valueSupplier.set(() -> valueProducer.apply(object).doubleValue());
         }
 
         @Override
         public <N extends Number> void record(N number) {
-            registry.gauge(name, tags, number);
+            value.set(number.doubleValue());
         }
     }
 

@@ -2,10 +2,9 @@ package com.slimgears.nanometer.internal;
 
 import com.slimgears.nanometer.MetricCollector;
 import com.slimgears.nanometer.MetricFilter;
-import com.slimgears.nanometer.MetricLevel;
 import com.slimgears.nanometer.MetricTag;
 
-import java.util.function.ToDoubleFunction;
+import java.util.function.Function;
 
 public class EmptyMetricCollector extends AbstractMetricCollector {
     public static final MetricCollector instance = new EmptyMetricCollector();
@@ -39,7 +38,7 @@ public class EmptyMetricCollector extends AbstractMetricCollector {
 
     private final static Gauge emptyGauge = new Gauge() {
         @Override
-        public <T> void record(T object, ToDoubleFunction<T> valueProducer) {
+        public <T, N extends Number> void record(T object, Function<T, N> valueProducer) {
         }
 
         @Override

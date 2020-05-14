@@ -1,13 +1,18 @@
 package com.slimgears.nanometer;
 
 import com.slimgears.nanometer.internal.*;
-import io.reactivex.*;
+import io.reactivex.CompletableTransformer;
+import io.reactivex.MaybeTransformer;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.SingleTransformer;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Stream;
 
 public interface MetricCollector extends Taggable<MetricCollector>, MetricFilter {
@@ -20,12 +25,20 @@ public interface MetricCollector extends Taggable<MetricCollector>, MetricFilter
     }
 
     interface Gauge {
-        <T> void record(T object, ToDoubleFunction<T> valueProducer);
+        <T, N extends Number> void record(T object, Function<T, N> valueProducer);
 
-        default <N extends Number> void record(N number) {}
+        <N extends Number> void record(N number);
 
-        default void record(Supplier<Double> valueProducer) {
+        default <N extends Number> void record(Supplier<N> valueProducer) {
             record(valueProducer, Supplier::get);
+        }
+
+        default void record(AtomicInteger value) {
+            record((Supplier<Double>) value::doubleValue);
+        }
+
+        default void record(AtomicLong value) {
+            record((Supplier<Double>) value::doubleValue);
         }
     }
 
@@ -60,6 +73,10 @@ public interface MetricCollector extends Taggable<MetricCollector>, MetricFilter
             };
         }
 
+        default Runnable wrap(Runnable runnable) {
+            return () -> record(runnable);
+        }
+
         default void record(Runnable runnable) {
             Stopper stopper = stopper().start();
             try {
@@ -82,16 +99,17 @@ public interface MetricCollector extends Taggable<MetricCollector>, MetricFilter
     interface Async {
         Async countItems(String name, MetricTag... tags);
         Async countSubscriptions(String name, MetricTag... tags);
+        Async countActiveSubscriptions(String name, MetricTag... tags);
         Async countErrors(String name, MetricTag... tags);
         Async countCompletions(String name, MetricTag... tags);
         Async timeTillFirst(String name, MetricTag... tags);
         Async timeTillComplete(String name, MetricTag... tags);
         Async timeBetweenItems(String name, MetricTag... tags);
 
-        <T> ObservableOperator<T, T> forObservable();
-        <T> MaybeOperator<T, T> forMaybe();
-        <T> SingleOperator<T, T> forSingle();
-        CompletableOperator forCompletable();
+        <T> ObservableTransformer<T, T> forObservable();
+        <T> MaybeTransformer<T, T> forMaybe();
+        <T> SingleTransformer<T, T> forSingle();
+        CompletableTransformer forCompletable();
         <T> Stream<T> forStream(Stream<T> stream);
     }
 
@@ -102,6 +120,21 @@ public interface MetricCollector extends Taggable<MetricCollector>, MetricFilter
     interface Factory {
         MetricCollector create();
         Factory filter(MetricFilter filter);
+
+        default Factory name(String name) {
+            Factory self = this;
+            return new Factory() {
+                @Override
+                public MetricCollector create() {
+                    return self.create().name(name);
+                }
+
+                @Override
+                public Factory filter(MetricFilter filter) {
+                    return self.filter(filter);
+                }
+            };
+        }
 
         default Factory level(MetricLevel level) {
             return filter((name, tags) -> level);
