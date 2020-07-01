@@ -1,17 +1,20 @@
 package com.slimgears.util.rx;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.ObservableTransformer;
+import io.reactivex.*;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import org.reactivestreams.Publisher;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings("WeakerAccess")
 public class Observables {
@@ -25,6 +28,29 @@ public class Observables {
 
     public static <T> ObservableTransformer<T, T> backOffDelayRetry(Duration initialDelay, int maxErrors) {
         return backOffDelayRetry(t -> true, initialDelay, maxErrors);
+    }
+
+    public static Observable<Duration> timerObservable(Duration interval) {
+        return Observable.defer(() -> {
+            long startTime = new Date().getTime();
+            return Observable.interval(interval.toMillis(), TimeUnit.MILLISECONDS)
+                    .map(n -> Duration.ofMillis(new Date().getTime() - startTime));
+        });
+    }
+
+    public static <T> ObservableTransformer<T, T> doWhileWaiting(Duration interval, Consumer<Duration> action) {
+        return src -> {
+            Observable<Duration> timer = timerObservable(interval);
+            AtomicReference<Disposable> subscription = new AtomicReference<>(Disposables.empty());
+            return src
+                    .doOnSubscribe(d -> subscription.getAndSet(timer.subscribe(action)).dispose())
+                    .doOnNext(n -> subscription.getAndSet(timer.subscribe(action)).dispose())
+                    .doFinally(() -> subscription.getAndSet(Disposables.empty()).dispose());
+        };
+    }
+
+    public static <T> ObservableTransformer<T, T> doWhileWaiting(Duration interval, Action action) {
+        return doWhileWaiting(interval, duration -> action.run());
     }
 
     public static <T> ObservableTransformer<T, T> backOffDelayRetry(Predicate<Throwable> predicate, Duration initialDelay, int maxErrors) {

@@ -1,10 +1,11 @@
 package com.slimgears.util.rx;
 
-import io.reactivex.Flowable;
-import io.reactivex.Maybe;
-import io.reactivex.MaybeTransformer;
+import io.reactivex.*;
 import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import org.reactivestreams.Publisher;
@@ -13,6 +14,7 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings("WeakerAccess")
 public class Maybes {
@@ -26,6 +28,20 @@ public class Maybes {
 
     public static <T> MaybeTransformer<T, T> backOffDelayRetry(Duration initialDelay, int maxErrors) {
         return backOffDelayRetry(t -> true, initialDelay, maxErrors);
+    }
+
+    public static <T> MaybeTransformer<T, T> doWhileWaiting(Duration interval, Consumer<Duration> action) {
+        return src -> {
+            Observable<Duration> timer = Observables.timerObservable(interval);
+            AtomicReference<Disposable> subscription = new AtomicReference<>(Disposables.empty());
+            return src
+                    .doOnSubscribe(d -> subscription.getAndSet(timer.subscribe(action)).dispose())
+                    .doFinally(() -> subscription.getAndSet(Disposables.empty()).dispose());
+        };
+    }
+
+    public static <T> MaybeTransformer<T, T> doWhileWaiting(Duration interval, Action action) {
+        return doWhileWaiting(interval, duration -> action.run());
     }
 
     public static <T> MaybeTransformer<T, T> backOffDelayRetry(Predicate<Throwable> predicate, Duration initialDelay, int maxErrors) {
