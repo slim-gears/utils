@@ -25,10 +25,10 @@ import java.util.stream.Stream;
 abstract class AbstractContextScope<C extends AbstractContextScope.Context<C>> implements Scope {
     private final static Logger LOG = LoggerFactory.getLogger(AbstractContextScope.class);
 
-    private final List<Provider> autoInstantiated = new ArrayList<>();
+    private final List<Provider<?>> autoInstantiated = new ArrayList<>();
     private final Binder binder;
     private final ThreadLocal<C> currentContext = new ThreadLocal<>();
-    private final Map<Key<?>, List<Consumer>> listenerMap = new ConcurrentHashMap<>();
+    private final Map<Key<?>, List<Consumer<?>>> listenerMap = new ConcurrentHashMap<>();
     private final List<Listener<C>> contextListeners = new CopyOnWriteArrayList<>();
     private final Provider<Injector> injectorProvider;
     private final Class<C> contextClass;
@@ -116,10 +116,10 @@ abstract class AbstractContextScope<C extends AbstractContextScope.Context<C>> i
 
         public void close() {
             if (scope.contexts.contains(self())) {
+                onCloseListeners.forEach(Runnable::run);
                 scope.contextListeners.forEach(l -> l.onClosing(self()));
                 objectStorage.close();
                 scope.contexts.remove(self());
-                onCloseListeners.forEach(Runnable::run);
                 LOG.info("Context {} closed", contextId);
             }
         }
@@ -135,6 +135,7 @@ abstract class AbstractContextScope<C extends AbstractContextScope.Context<C>> i
                     .ofNullable(scope.listenerMap.get(key))
                     .map(Collection::stream)
                     .orElseGet(Stream::empty)
+                    .map(l -> (Consumer<T>)l)
                     .forEach(l -> l.accept(instance));
         }
 
@@ -186,7 +187,7 @@ abstract class AbstractContextScope<C extends AbstractContextScope.Context<C>> i
         Optional
                 .ofNullable(listenerMap.get(key))
                 .orElseGet(() -> {
-                    List<Consumer> listeners = new CopyOnWriteArrayList<>();
+                    List<Consumer<?>> listeners = new CopyOnWriteArrayList<>();
                     listenerMap.put(key, listeners);
                     return listeners;
                 })
@@ -201,7 +202,7 @@ abstract class AbstractContextScope<C extends AbstractContextScope.Context<C>> i
         Optional
                 .ofNullable(listenerMap.get(key))
                 .orElseGet(() -> {
-                    List<Consumer> listeners = new CopyOnWriteArrayList<>();
+                    List<Consumer<?>> listeners = new CopyOnWriteArrayList<>();
                     listenerMap.put(key, listeners);
                     return listeners;
                 })
