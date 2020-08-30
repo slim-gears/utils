@@ -19,8 +19,14 @@ public class MetaClasses {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> MetaClass<T> forClassUnchecked(Class<?> cls) {
-        return (MetaClass<T>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
+    public static <T> MetaClass<T> forClassUnchecked(Class cls) {
+        if (metaClassMap.get(cls) == null) {
+            MetaClass<T> newValue = MetaClasses.fromField(cls);
+            if (newValue != null) {
+                metaClassMap.put(cls, newValue);
+            }
+        }
+        return metaClassMap.get(cls);
     }
 
     public static <K, T extends HasMetaClassWithKey<K, T>> MetaClassWithKey<K, T> forClassWithKey(Class<T> cls) {
@@ -28,8 +34,8 @@ public class MetaClasses {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, T> MetaClassWithKey<K, T> forClassWithKeyUnchecked(Class<?> cls) {
-        return (MetaClassWithKey<K, T>)metaClassMap.computeIfAbsent(cls, MetaClasses::fromField);
+    public static <K, T> MetaClassWithKey<K, T> forClassWithKeyUnchecked(Class cls) {
+        return (MetaClassWithKey<K, T>) MetaClasses.forClassUnchecked(cls);
     }
 
     public static <T extends HasMetaClass<T>> MetaClass<T> forToken(TypeToken<T> typeToken) {
