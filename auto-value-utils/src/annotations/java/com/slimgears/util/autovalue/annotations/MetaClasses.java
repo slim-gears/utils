@@ -20,13 +20,15 @@ public class MetaClasses {
 
     @SuppressWarnings("unchecked")
     public static <T> MetaClass<T> forClassUnchecked(Class cls) {
-        if (metaClassMap.get(cls) == null) {
-            MetaClass<T> newValue = MetaClasses.fromField(cls);
-            if (newValue != null) {
-                metaClassMap.put(cls, newValue);
+        synchronized (metaClassMap) {
+            if (metaClassMap.get(cls) == null) {
+                MetaClass<T> newValue = MetaClasses.fromField(cls);
+                if (newValue != null) {
+                    metaClassMap.put(cls, newValue);
+                }
             }
+            return metaClassMap.get(cls);
         }
-        return metaClassMap.get(cls);
     }
 
     public static <K, T extends HasMetaClassWithKey<K, T>> MetaClassWithKey<K, T> forClassWithKey(Class<T> cls) {
