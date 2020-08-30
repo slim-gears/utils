@@ -19,7 +19,7 @@ public class MetaClasses {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> MetaClass<T> forClassUnchecked(Class<?> cls) {
+    public static <T> MetaClass<T> forClassUnchecked(Class cls) {
         synchronized (metaClassMap) {
             if (metaClassMap.get(cls) == null) {
                 MetaClass<T> newValue = MetaClasses.fromField(cls);
@@ -36,7 +36,7 @@ public class MetaClasses {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, T> MetaClassWithKey<K, T> forClassWithKeyUnchecked(Class<?> cls) {
+    public static <K, T> MetaClassWithKey<K, T> forClassWithKeyUnchecked(Class cls) {
         return (MetaClassWithKey<K, T>) MetaClasses.forClassUnchecked(cls);
     }
 
