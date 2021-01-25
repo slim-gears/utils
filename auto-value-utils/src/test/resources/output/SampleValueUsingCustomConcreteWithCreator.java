@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import javax.annotation.Generated;
+import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
@@ -12,7 +13,7 @@ public abstract class SampleValueUsingCustomConcreteWithCreator implements Sampl
     @JsonCreator
     public static SampleValueUsingCustomConcreteWithCreator create(
         @JsonProperty("value") int value,
-        @JsonProperty("optionalValue") Integer optionalValue) {
+        @Nullable @JsonProperty("optionalValue") Integer optionalValue) {
         return new AutoValue_SampleValueUsingCustomConcreteWithCreator(
             value,
             optionalValue);
@@ -25,6 +26,6 @@ public abstract class SampleValueUsingCustomConcreteWithCreator implements Sampl
     }
 
     @Override @JsonProperty("value") public abstract int value();
-    @Override @JsonProperty("optionalValue") public abstract Integer optionalValue();
+    @Override @Nullable @JsonProperty("optionalValue") public abstract Integer optionalValue();
 
 }

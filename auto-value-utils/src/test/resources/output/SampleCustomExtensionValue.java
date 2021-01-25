@@ -9,7 +9,7 @@ import javax.annotation.Generated;
 public abstract class SampleCustomExtensionValue implements SampleCustomExtensionValuePrototype {
 
     public static SampleCustomExtensionValue create(
-        int intValue) {
+         int intValue) {
         return SampleCustomExtensionValue.builder()
             .intValue(intValue)
             .build();

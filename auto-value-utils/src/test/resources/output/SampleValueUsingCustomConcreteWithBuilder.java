@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
@@ -82,7 +83,7 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
     @JsonCreator
     public static SampleValueUsingCustomConcreteWithBuilder create(
         @JsonProperty("value") int value,
-        @JsonProperty("optionalValue") Integer optionalValue) {
+        @Nullable @JsonProperty("optionalValue") Integer optionalValue) {
         return SampleValueUsingCustomConcreteWithBuilder.builder()
             .value(value)
             .optionalValue(optionalValue)
@@ -117,6 +118,6 @@ public abstract class SampleValueUsingCustomConcreteWithBuilder implements Sampl
     }
 
     @Override @JsonProperty("value") public abstract int value();
-    @Override @JsonProperty("optionalValue") public abstract Integer optionalValue();
+    @Override @Nullable @JsonProperty("optionalValue") public abstract Integer optionalValue();
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import javax.annotation.Generated;
+import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
@@ -11,9 +12,9 @@ public abstract class GenericAllOptionalPropertiesConcreteWithCreator<T extends 
 
     @JsonCreator
     public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithCreator<T> create(
-        @JsonProperty("intProperty") Integer intProperty,
-        @JsonProperty("strProperty") String strProperty,
-        @JsonProperty("genericValue") T genericValue) {
+        @Nullable @JsonProperty("intProperty") Integer intProperty,
+        @Nullable @JsonProperty("strProperty") String strProperty,
+        @Nullable @JsonProperty("genericValue") T genericValue) {
         return new AutoValue_GenericAllOptionalPropertiesConcreteWithCreator<>(
             intProperty,
             strProperty,
@@ -48,8 +49,8 @@ public abstract class GenericAllOptionalPropertiesConcreteWithCreator<T extends 
             genericValue);
     }
 
-    @Override @JsonProperty("intProperty") public abstract Integer intProperty();
-    @Override @JsonProperty("strProperty") public abstract String strProperty();
-    @Override @JsonProperty("genericValue") public abstract T genericValue();
+    @Override @Nullable @JsonProperty("intProperty") public abstract Integer intProperty();
+    @Override @Nullable @JsonProperty("strProperty") public abstract String strProperty();
+    @Override @Nullable @JsonProperty("genericValue") public abstract T genericValue();
 
 }

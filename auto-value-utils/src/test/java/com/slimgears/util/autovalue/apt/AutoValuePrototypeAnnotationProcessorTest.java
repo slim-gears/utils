@@ -249,6 +249,15 @@ public class AutoValuePrototypeAnnotationProcessorTest {
     }
 
     @Test
+    public void testCustomCompositeAnnotationWithJackson() {
+        tester()
+            .inputFiles("CustomCompositeAnnotationWithJackson.java",
+                        "SampleWithJacksonPrototype.java")
+            .expectedSources("SampleWithJackson.java")
+            .test();
+    }
+
+    @Test
     public void testCollectionElementType() {
         AtomicReference<TypeInfo> elementType = new AtomicReference<>();
         AnnotationProcessingTester.create()

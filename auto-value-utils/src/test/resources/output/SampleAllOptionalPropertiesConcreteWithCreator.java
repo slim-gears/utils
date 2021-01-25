@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 import javax.annotation.Generated;
+import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
@@ -11,8 +12,8 @@ public abstract class SampleAllOptionalPropertiesConcreteWithCreator implements 
 
     @JsonCreator
     public static SampleAllOptionalPropertiesConcreteWithCreator create(
-        @JsonProperty("intProperty") Integer intProperty,
-        @JsonProperty("strProperty") String strProperty) {
+        @Nullable @JsonProperty("intProperty") Integer intProperty,
+        @Nullable @JsonProperty("strProperty") String strProperty) {
         return new AutoValue_SampleAllOptionalPropertiesConcreteWithCreator(
             intProperty,
             strProperty);
@@ -36,7 +37,7 @@ public abstract class SampleAllOptionalPropertiesConcreteWithCreator implements 
             strProperty);
     }
 
-    @Override @JsonProperty("intProperty") public abstract Integer intProperty();
-    @Override @JsonProperty("strProperty") public abstract String strProperty();
+    @Override @Nullable @JsonProperty("intProperty") public abstract Integer intProperty();
+    @Override @Nullable @JsonProperty("strProperty") public abstract String strProperty();
 
 }

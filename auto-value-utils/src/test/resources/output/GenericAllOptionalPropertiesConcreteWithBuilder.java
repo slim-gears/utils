@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.annotation.Nullable;
 
 @Generated("com.slimgears.util.autovalue.apt.AutoValuePrototypeAnnotationProcessor")
 @AutoValue
@@ -83,9 +84,9 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
 
     @JsonCreator
     public static <T extends Comparable<T>> GenericAllOptionalPropertiesConcreteWithBuilder<T> create(
-        @JsonProperty("intProperty") Integer intProperty,
-        @JsonProperty("strProperty") String strProperty,
-        @JsonProperty("genericValue") T genericValue) {
+        @Nullable @JsonProperty("intProperty") Integer intProperty,
+        @Nullable @JsonProperty("strProperty") String strProperty,
+        @Nullable @JsonProperty("genericValue") T genericValue) {
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder()
             .intProperty(intProperty)
             .strProperty(strProperty)
@@ -133,8 +134,8 @@ public abstract class GenericAllOptionalPropertiesConcreteWithBuilder<T extends 
         return GenericAllOptionalPropertiesConcreteWithBuilder.<T>builder().genericValue(genericValue).build();
     }
 
-    @Override @JsonProperty("intProperty") public abstract Integer intProperty();
-    @Override @JsonProperty("strProperty") public abstract String strProperty();
-    @Override @JsonProperty("genericValue") public abstract T genericValue();
+    @Override @Nullable @JsonProperty("intProperty") public abstract Integer intProperty();
+    @Override @Nullable @JsonProperty("strProperty") public abstract String strProperty();
+    @Override @Nullable @JsonProperty("genericValue") public abstract T genericValue();
 
 }
