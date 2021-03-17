@@ -1,9 +1,6 @@
 package com.slimgears.util.rx;
 
-import io.reactivex.CompletableTransformer;
-import io.reactivex.MaybeTransformer;
-import io.reactivex.Observable;
-import io.reactivex.SingleTransformer;
+import io.reactivex.*;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.functions.Action;
@@ -23,12 +20,12 @@ public class Singles {
     }
 
     public static <T> SingleTransformer<T, T> backOffDelayRetry(Predicate<Throwable> errorPredicate, Duration initialDelay, int maxErrors) {
-        return upstream -> {
+        return upstream -> Single.defer(() -> {
             AtomicInteger attemptsMade = new AtomicInteger(0);
             return upstream
                     .doOnSuccess(v -> attemptsMade.lazySet(0))
                     .retryWhen(retryPolicy(errorPredicate, attemptsMade, initialDelay, maxErrors));
-        };
+        });
     }
 
     public static <T> SingleTransformer<T, T> doWhileWaiting(Duration interval, Consumer<Duration> action) {

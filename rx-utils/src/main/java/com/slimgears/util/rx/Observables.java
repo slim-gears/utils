@@ -54,12 +54,13 @@ public class Observables {
     }
 
     public static <T> ObservableTransformer<T, T> backOffDelayRetry(Predicate<Throwable> predicate, Duration initialDelay, int maxErrors) {
-        return upstream -> {
+        return upstream -> Observable.defer(() -> {
             AtomicInteger attemptsMade = new AtomicInteger(0);
             return upstream
                     .doOnNext(v -> attemptsMade.lazySet(0))
+                    .doOnComplete(() -> attemptsMade.lazySet(0))
                     .retryWhen(retryPolicy(predicate, attemptsMade, initialDelay, maxErrors));
-        };
+        });
     }
 
     private static Function<Observable<Throwable>, Observable<?>> retryPolicy(Predicate<Throwable> errorPredicate, AtomicInteger attemptsMade, Duration initialDelay, int maxErrors) {

@@ -5,14 +5,21 @@ package com.slimgears.apt.data;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.slimgears.apt.util.ImportTracker;
 import com.slimgears.apt.util.JavaUtils;
 import com.slimgears.apt.util.TemplateEvaluator;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 
 @AutoValue
 public abstract class AnnotationInfo implements HasType {
@@ -21,6 +28,12 @@ public abstract class AnnotationInfo implements HasType {
     public boolean hasValues() {
         return !values().isEmpty();
     }
+    public abstract ImmutableSet<ElementType> elementTypes();
+
+    public boolean supportsElement(ElementType elementType) {
+        return elementTypes().isEmpty() || elementTypes().contains(elementType);
+    }
+
     public AnnotationValueInfo.Value getValue(String name) {
         return values()
                 .stream()
@@ -63,7 +76,10 @@ public abstract class AnnotationInfo implements HasType {
     }
 
     public static AnnotationInfo of(AnnotationMirror annotationMirror) {
-        Builder builder = builder().type(annotationMirror.getAnnotationType());
+        Builder builder = builder()
+                .type(annotationMirror.getAnnotationType())
+                .elementTypesFromAnnotation(annotationMirror);
+
         annotationMirror.getElementValues()
                 .forEach((key, value) -> builder.value(key.getSimpleName().toString(), value));
         return builder.build();
@@ -72,7 +88,22 @@ public abstract class AnnotationInfo implements HasType {
     @AutoValue.Builder
     public interface Builder extends HasType.Builder<Builder> {
         ImmutableList.Builder<AnnotationValueInfo> valuesBuilder();
+        ImmutableSet.Builder<ElementType> elementTypesBuilder();
         AnnotationInfo build();
+
+        default Builder elementType(ElementType elementType) {
+            elementTypesBuilder().add(elementType);
+            return this;
+        }
+
+        default Builder elementTypesFromAnnotation(AnnotationMirror annotation) {
+            Optional.ofNullable(annotation.getAnnotationType())
+                    .map(DeclaredType::asElement)
+                    .map(el -> el.getAnnotation(Target.class))
+                    .map(Target::value)
+                    .ifPresent(elementTypesBuilder()::add);
+            return this;
+        }
 
         default Builder value(AnnotationValueInfo valueInfo) {
             valuesBuilder().add(valueInfo);

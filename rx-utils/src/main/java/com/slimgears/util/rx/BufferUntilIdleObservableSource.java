@@ -3,6 +3,7 @@ package com.slimgears.util.rx;
 import io.reactivex.Completable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 
@@ -25,7 +26,7 @@ public class BufferUntilIdleObservableSource<T> implements ObservableSource<List
     }
 
     @Override
-    public void subscribe(Observer<? super List<T>> observer) {
+    public void subscribe(@NonNull Observer<? super List<T>> observer) {
         source.subscribe(new SourceObserver(observer));
     }
 
@@ -45,7 +46,7 @@ public class BufferUntilIdleObservableSource<T> implements ObservableSource<List
         }
 
         @Override
-        public void onNext(T next) {
+        public void onNext(@NonNull T next) {
             synchronized (currentBuffer) {
                 List<T> buf = currentBuffer.get();
                 buf.add(next);

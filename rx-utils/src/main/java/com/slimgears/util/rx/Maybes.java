@@ -45,12 +45,13 @@ public class Maybes {
     }
 
     public static <T> MaybeTransformer<T, T> backOffDelayRetry(Predicate<Throwable> predicate, Duration initialDelay, int maxErrors) {
-        return upstream -> {
+        return upstream -> Maybe.defer(() -> {
             AtomicInteger attemptsMade = new AtomicInteger(0);
             return upstream
                     .doOnSuccess(v -> attemptsMade.lazySet(0))
+                    .doOnComplete(() -> attemptsMade.lazySet(0))
                     .retryWhen(retryPolicy(predicate, attemptsMade, initialDelay, maxErrors));
-        };
+        });
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

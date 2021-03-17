@@ -12,14 +12,14 @@ import java.util.stream.StreamSupport;
 
 @SuppressWarnings({"WeakerAccess", "UnstableApiUsage"})
 public class MetaClasses {
-    private final static Map<Class, MetaClass> metaClassMap = new HashMap<>();
+    private final static Map<Class<?>, MetaClass<?>> metaClassMap = new HashMap<>();
 
     public static <T extends HasMetaClass<T>> MetaClass<T> forClass(Class<T> cls) {
         return forClassUnchecked(cls);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> MetaClass<T> forClassUnchecked(Class cls) {
+    public static <T> MetaClass<T> forClassUnchecked(Class<?> cls) {
         synchronized (metaClassMap) {
             if (metaClassMap.get(cls) == null) {
                 MetaClass<T> newValue = MetaClasses.fromField(cls);
@@ -27,7 +27,7 @@ public class MetaClasses {
                     metaClassMap.put(cls, newValue);
                 }
             }
-            return metaClassMap.get(cls);
+            return (MetaClass<T>)metaClassMap.get(cls);
         }
     }
 
@@ -36,7 +36,7 @@ public class MetaClasses {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, T> MetaClassWithKey<K, T> forClassWithKeyUnchecked(Class cls) {
+    public static <K, T> MetaClassWithKey<K, T> forClassWithKeyUnchecked(Class<?> cls) {
         return (MetaClassWithKey<K, T>) MetaClasses.forClassUnchecked(cls);
     }
 
@@ -93,7 +93,7 @@ public class MetaClasses {
             if (secondVal instanceof HasMetaClass) {
                 V firstVal = property.getValue(first);
                 if (firstVal != null) {
-                    secondVal = (V)merge(((HasMetaClass)firstVal).metaClass(), firstVal, secondVal);
+                    secondVal = merge(((HasMetaClass<V>)firstVal).metaClass(), firstVal, secondVal);
                 }
             }
             property.setValue(builder, secondVal);
@@ -102,7 +102,7 @@ public class MetaClasses {
         return false;
     }
 
-    private static <T extends HasMetaClass<T>> MetaClass<T> fromField(Class<T> cls) {
+    private static <T> MetaClass<T> fromField(Class<?> cls) {
         try {
             Field field = cls.getField("metaClass");
             field.setAccessible(true);
