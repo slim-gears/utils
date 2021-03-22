@@ -12,6 +12,7 @@ import com.slimgears.util.stream.Streams;
 
 import java.lang.annotation.ElementType;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singleton;
@@ -28,7 +29,15 @@ public class JacksonAnnotator implements Annotator {
                         a.type().simpleName().equals("NonNull"))
                 .collect(Collectors.toMap(AnnotationInfo::type, a -> a));
 
-        if (!annotationInfos.containsKey(jsonPropertyAnnotationType) || Strings.isNullOrEmpty(String.valueOf(annotationInfos.get(jsonPropertyAnnotationType).getValue("value").primitive()))) {
+        boolean hasExplicitPropertyNameOptional = Optional
+                .ofNullable(annotationInfos.get(jsonPropertyAnnotationType))
+                .map(a -> a.getValue("value"))
+                .map(AnnotationValueInfo.Value::primitive)
+                .map(String::valueOf)
+                .map(s -> !Strings.isNullOrEmpty(s))
+                .orElse(false);
+
+        if (!hasExplicitPropertyNameOptional) {
             annotationInfos.put(jsonPropertyAnnotationType, AnnotationInfo.ofType(jsonPropertyAnnotationType,
                     AnnotationValueInfo.ofPrimitive("value", property.name())));
         }
