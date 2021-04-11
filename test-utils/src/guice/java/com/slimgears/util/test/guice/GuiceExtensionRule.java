@@ -7,6 +7,7 @@ import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.util.Modules;
 import com.slimgears.util.guice.GuiceServiceResolver;
+import com.slimgears.util.stream.Safe;
 import com.slimgears.util.test.ExtensionRule;
 import com.slimgears.util.test.ExtensionRules;
 import org.mockito.Mock;
@@ -61,24 +62,19 @@ public class GuiceExtensionRule implements ExtensionRule {
     private static Consumer<Binder> toBinding(Field field, Object target) {
         field.setAccessible(true);
         Type fieldType = field.getGenericType();
-        try {
-            Object fieldValue = field.get(target);
-            if (fieldType instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType)fieldType;
-                Type rawType = parameterizedType.getRawType();
-                if (rawType == Provider.class || rawType == com.google.inject.Provider.class) {
-                    //noinspection unchecked
-                    return binder -> toAnnotatedBinding(binder.bind(TypeLiteral.get(parameterizedType.getActualTypeArguments()[0])), field)
-                            .toProvider((Provider<?>)fieldValue);
-                }
+        Provider<?> fieldValueProvider = Safe.ofCallable(() -> field.get(target))::get;
+        if (fieldType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType)fieldType;
+            Type rawType = parameterizedType.getRawType();
+            if (rawType == Provider.class || rawType == com.google.inject.Provider.class) {
+                //noinspection unchecked
+                return binder -> toAnnotatedBinding(binder.bind(TypeLiteral.get(parameterizedType.getActualTypeArguments()[0])), field)
+                        .toProvider(() -> ((Provider<?>)fieldValueProvider.get()).get());
             }
-            //noinspection unchecked
-            return binder -> toAnnotatedBinding(binder.bind(TypeLiteral.get(fieldType)), field)
-                    .toInstance(fieldValue);
-
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
+        //noinspection unchecked
+        return binder -> toAnnotatedBinding(binder.bind(TypeLiteral.get(fieldType)), field)
+                .toProvider(fieldValueProvider);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -101,6 +97,7 @@ public class GuiceExtensionRule implements ExtensionRule {
         Injector injector = createInjector(method, target);
         ExtensionRule rule = ExtensionRules.annotationRule(GuiceServiceResolver.forInjector(injector));
         return rule.andThen((m, t) -> {
+            MockitoAnnotations.initMocks(target);
             injector.injectMembers(t);
             return () -> {};
         }).prepare(method, target);
@@ -108,7 +105,6 @@ public class GuiceExtensionRule implements ExtensionRule {
 
     private Injector createInjector(Method method, Object target) {
         Module module = Modules.override(GuiceExtensionRule.this.module).with(ModuleProvider.forMethod(method, target));
-        MockitoAnnotations.initMocks(target);
         module = Modules.override(module).with(createMockModule(target));
         return Guice.createInjector(module);
     }

@@ -9,6 +9,8 @@ configurations {
     testImplementation.extendsFrom guiceImplementation
 }
 
+project.evaluationDependsOn(':test-utils')
+
 dependencies {
     implementation libs.micrometerCore
     implementation libs.rxJava
@@ -16,9 +18,11 @@ dependencies {
     guiceImplementation project.sourceSetDependency(project(':nanometer').sourceSets.main)
     guiceImplementation libs.guice
     testImplementation project.sourceSetDependency(project(':test-utils').sourceSets.main)
+    testImplementation project.sourceSetDependency(project(':test-utils').sourceSets.guice)
+    testImplementation project.sourceSetDependency(project(':test-utils').sourceSets.junit)
     testImplementation sourceSets.guice.output
     testImplementation project.sourceSetDependency(project(':stream-utils').sourceSets.main)
     testImplementation project.sourceSetDependency(project(':generic-utils').sourceSets.main)
-    testImplementation project(path: ':test-utils', configuration: 'guiceOutput')
-    testImplementation libs.slf4j
+//    testImplementation project(path: ':test-utils', configuration: 'guiceOutput')
+    testImplementation libs.slf4j, libs.junit, libs.mockito
 }

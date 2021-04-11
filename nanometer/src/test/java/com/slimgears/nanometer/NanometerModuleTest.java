@@ -7,7 +7,7 @@ import com.google.inject.multibindings.ProvidesIntoSet;
 import com.slimgears.nanometer.guice.NanometerModule;
 import com.slimgears.util.guice.InjectLog;
 import com.slimgears.util.guice.LogModule;
-import com.slimgears.util.test.guice.GuiceJUnit;
+import com.slimgears.util.junit.ExtensionRuleRunner;
 import com.slimgears.util.test.guice.UseModules;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-@RunWith(GuiceJUnit.class)
+@RunWith(ExtensionRuleRunner.class)
 @UseModules({NanometerModule.class, LogModule.class, NanometerModuleTest.TestModule.class})
 @CollectMetrics(value = "nanometer.test")
 public class NanometerModuleTest {
