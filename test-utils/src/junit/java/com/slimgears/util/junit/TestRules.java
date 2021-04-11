@@ -1,4 +1,4 @@
-package com.slimgears.util.test;
+package com.slimgears.util.junit;
 
 import org.junit.rules.TestRule;
 

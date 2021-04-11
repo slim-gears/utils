@@ -1,4 +1,7 @@
 sourceSets {
+    junit {
+        java.srcDir 'src/junit/java'
+    }
     guice {
         java.srcDir 'src/guice/java'
     }
@@ -8,10 +11,13 @@ sourceSets {
     log4j {
         java.srcDir 'src/log4j/java'
     }
+    jupiter {
+        java.srcDir 'src/jupiter/java'
+    }
 }
 
 dependencies {
-    implementation libs.junit, libs.mockito
+    implementation libs.mockito
     implementation project(':stream-utils')
     implementation project(':reflect-utils')
     implementation project(':generic-utils')
@@ -19,6 +25,9 @@ dependencies {
     implementation libs.guava
     compileOnly libs.autoService
     annotationProcessor libs.autoService
+
+    junitImplementation libs.junit
+    junitImplementation project.sourceSetDependency(sourceSets.main)
 
     logbackImplementation libs.slf4j, libs.logbackClassic
     logbackCompileOnly libs.autoService
@@ -36,9 +45,18 @@ dependencies {
     guiceImplementation libs.junit, libs.mockito
     guiceImplementation project(':stream-utils')
     guiceImplementation project(':generic-utils')
+    guiceCompileOnly libs.autoService
+    guiceAnnotationProcessor libs.autoService
 
-    testImplementation libs.guice
+    jupiterImplementation libs.jupiterApi
+    jupiterImplementation libs.autoService
+    jupiterAnnotationProcessor libs.autoService
+    jupiterImplementation project.sourceSetDependency(sourceSets.main)
+
+    testImplementation libs.jupiterApi, libs.jupiterEngine, libs.junit5Vintage, libs.guice
     testImplementation project.sourceSetDependency(sourceSets.guice)
+    testImplementation project.sourceSetDependency(sourceSets.junit)
+    testImplementation project.sourceSetDependency(sourceSets.jupiter)
     testImplementation project.sourceSetDependency(sourceSets.logback)
     testImplementation project.sourceSetDependency(sourceSets.log4j)
 }
@@ -48,7 +66,9 @@ configurations {
     guiceImplementation.extendsFrom implementation
     logbackImplementation.extendsFrom implementation
     log4jImplementation.extendsFrom implementation
-    testImplementation.extendsFrom guiceImplementation, logbackImplementation, log4jImplementation
+    jupiterImplementation.extendsFrom implementation
+    junitImplementation.extendsFrom implementation
+    testImplementation.extendsFrom guiceImplementation, junitImplementation, logbackImplementation, log4jImplementation
 }
 
 task guiceOutputJar(type: Jar) {
@@ -57,4 +77,10 @@ task guiceOutputJar(type: Jar) {
 
 artifacts {
     guiceOutput guiceOutputJar
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter', 'junit-vintage'
+    }
 }

@@ -3,7 +3,7 @@ package com.slimgears.util.test;
 import com.google.inject.AbstractModule;
 import com.slimgears.util.guice.ConfigProviders;
 import com.slimgears.util.guice.PropertyModules;
-import com.slimgears.util.test.guice.GuiceJUnit;
+import com.slimgears.util.junit.ExtensionRuleRunner;
 import com.slimgears.util.test.guice.UseModules;
 import com.slimgears.util.test.guice.UseProperties;
 import org.junit.Assert;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-@RunWith(GuiceJUnit.class)
+@RunWith(ExtensionRuleRunner.class)
 @UseModules(UsePropertiesTest.Module.class)
 @UseProperties({
         @UseProperties.Property(name = "test-value", value = "Test value from test class"),

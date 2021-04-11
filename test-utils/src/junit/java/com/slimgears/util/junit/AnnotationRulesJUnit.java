@@ -1,5 +1,6 @@
-package com.slimgears.util.test;
+package com.slimgears.util.junit;
 
+import com.slimgears.util.test.ExtensionRules;
 import org.junit.rules.MethodRule;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
@@ -26,6 +27,6 @@ public class AnnotationRulesJUnit extends BlockJUnit4ClassRunner{
     }
 
     public static MethodRule rule() {
-        return MethodRules.annotationRule();
+        return MethodRules.fromExtensionRule(ExtensionRules.annotationRule());
     }
 }

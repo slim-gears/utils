@@ -4,15 +4,13 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.slimgears.util.test.guice.GuiceJUnit;
+import com.slimgears.util.junit.ExtensionRuleRunner;
 import com.slimgears.util.test.guice.UseModules;
 import com.slimgears.util.test.guice.UseProperties;
 import com.slimgears.util.test.guice.UseProviders;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 
 import javax.inject.Named;
@@ -25,7 +23,7 @@ import java.lang.annotation.Target;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(GuiceJUnit.class)
+@RunWith(ExtensionRuleRunner.class)
 @UseModules(GuiceRuleTest.TestModule.class)
 public class GuiceRuleTest {
     @UseModules.Field private final Module fieldModule = new AbstractModule() {
@@ -57,16 +55,18 @@ public class GuiceRuleTest {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.TYPE})
-    @AnnotationMethodRule.Qualifier(InjectionTestAnnotation.Rule.class)
+    @AnnotationRuleProvider.Qualifier(InjectionTestAnnotation.RuleProvider.class)
     public @interface InjectionTestAnnotation {
-        class Rule implements AnnotationMethodRule<InjectionTestAnnotation> {
+        class RuleProvider implements AnnotationRuleProvider<InjectionTestAnnotation> {
             @Inject @Named("test") private String injectedMagicString;
 
             @Override
-            public Statement apply(InjectionTestAnnotation info, Statement base, FrameworkMethod method, Object target) {
+            public ExtensionRule provide(InjectionTestAnnotation info) {
                 Assert.assertEquals("magic string", injectedMagicString);
-                ((GuiceRuleTest)target).magicStringFromAnnotation = injectedMagicString;
-                return base;
+                return (method, target) -> {
+                    ((GuiceRuleTest)target).magicStringFromAnnotation = injectedMagicString;
+                    return () -> {};
+                };
             }
         }
     }

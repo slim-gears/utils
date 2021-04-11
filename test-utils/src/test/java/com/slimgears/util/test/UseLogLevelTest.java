@@ -1,5 +1,7 @@
 package com.slimgears.util.test;
 
+import com.slimgears.util.junit.AnnotationRulesJUnit;
+import com.slimgears.util.junit.ExtensionRuleRunner;
 import com.slimgears.util.test.logging.LogLevel;
 import com.slimgears.util.test.logging.UseLogLevel;
 import com.slimgears.util.test.logging.UseLogLevels;

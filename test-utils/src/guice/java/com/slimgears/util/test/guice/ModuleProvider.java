@@ -10,6 +10,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 
 public interface ModuleProvider<A extends Annotation> {
     @Retention(RetentionPolicy.RUNTIME)
@@ -18,9 +19,9 @@ public interface ModuleProvider<A extends Annotation> {
         Class<? extends ModuleProvider<? extends Annotation>> value();
     }
 
-    Module createModule(A annotation, FrameworkMethod testMethod, Object target);
+    Module createModule(A annotation, Method testMethod, Object target);
 
-    static Module forMethod(FrameworkMethod testMethod, Object target) {
+    static Module forMethod(Method testMethod, Object target) {
         return TestReflectUtils
                 .providersForMethod(testMethod, ModuleProvider.Qualifier.class, item -> {
                     Class<? extends ModuleProvider<? extends Annotation>> moduleProviderClass = item.qualifier().value();

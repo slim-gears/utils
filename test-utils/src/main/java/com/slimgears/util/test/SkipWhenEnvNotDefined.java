@@ -1,11 +1,10 @@
 package com.slimgears.util.test;
 
-import org.junit.runners.model.FrameworkMethod;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -16,7 +15,7 @@ public @interface SkipWhenEnvNotDefined {
 
     class Provider implements IgnoreTestRule<SkipWhenEnvNotDefined> {
         @Override
-        public boolean isIgnored(SkipWhenEnvNotDefined annotation, FrameworkMethod method) {
+        public boolean isIgnored(SkipWhenEnvNotDefined annotation, Method method) {
             return Arrays.stream(annotation.value()).anyMatch(v -> System.getenv() == null);
         }
     }

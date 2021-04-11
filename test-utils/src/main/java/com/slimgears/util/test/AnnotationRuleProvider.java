@@ -6,10 +6,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-public interface AnnotationMethodRule<A extends Annotation> extends AdditionalInfoMethodRule<A> {
+public interface AnnotationRuleProvider<A extends Annotation> extends AdditionalInfoRuleProvider<A> {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.ANNOTATION_TYPE)
     @interface Qualifier {
-        Class<? extends AnnotationMethodRule<? extends Annotation>> value();
+        Class<? extends AnnotationRuleProvider<? extends Annotation>> value();
     }
 }

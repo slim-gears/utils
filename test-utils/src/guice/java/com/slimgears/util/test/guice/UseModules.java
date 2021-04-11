@@ -9,6 +9,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -25,7 +26,7 @@ public @interface UseModules {
     @interface Field {
         class Provider implements ModuleProvider<Field> {
             @Override
-            public Module createModule(Field annotation, FrameworkMethod testMethod, Object target) {
+            public Module createModule(Field annotation, Method testMethod, Object target) {
                 return Arrays.stream(target.getClass().getDeclaredFields())
                         .filter(field -> field.isAnnotationPresent(UseModules.Field.class))
                         .filter(field -> Module.class.isAssignableFrom(field.getType()))
@@ -45,7 +46,7 @@ public @interface UseModules {
 
     class Provider implements ModuleProvider<UseModules> {
         @Override
-        public Module createModule(UseModules annotation, FrameworkMethod testMethod, Object target) {
+        public Module createModule(UseModules annotation, Method testMethod, Object target) {
             return Arrays.stream(annotation.value())
                     .<Module>map(Safe.ofFunction(Class::newInstance))
                     .reduce((m1, m2) -> Modules.override(m1).with(m2))

@@ -1,8 +1,6 @@
 package com.slimgears.util.test;
 
 import com.slimgears.util.stream.Safe;
-import org.junit.runner.Description;
-import org.junit.runners.model.FrameworkMethod;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -22,9 +20,9 @@ public class TestReflectUtils {
         T create(AnnotatedItem<Annotation, Q> annotatedItem) throws Exception;
     }
 
-    public static <T, Q extends Annotation> Stream<T> providersForMethod(FrameworkMethod testMethod, Class<Q> qualifier, ProviderFactory<T, Q> factory) {
+    public static <T, Q extends Annotation> Stream<T> providersForMethod(Method testMethod, Class<Q> qualifier, ProviderFactory<T, Q> factory) {
         return Stream.concat(
-                TestReflectUtils.getAnnotationsOf(testMethod.getMethod(), qualifier),
+                TestReflectUtils.getAnnotationsOf(testMethod, qualifier),
                 Stream.concat(
                         Arrays.stream(testMethod.getAnnotations()),
                         Arrays.stream(testMethod.getDeclaringClass().getAnnotations()))
@@ -33,18 +31,6 @@ public class TestReflectUtils {
                 .map(Safe.ofFunction(factory::create));
     }
 
-    public static <T, Q extends Annotation> Stream<T> providersForDescription(Description description, Class<Q> qualifier, ProviderFactory<T, Q> factory) {
-        return TestReflectUtils
-                .fromDescription(description, qualifier)
-                .flatMap(item -> Stream.concat(Stream.of(item), TestReflectUtils.getAnnotationsOf(item.annotation().annotationType(), qualifier)))
-                .map(Safe.ofFunction(factory::create));
-    }
-
-    public static <Q extends Annotation> Stream<AnnotatedItem<Annotation, Q>> fromDescription(Description description, Class<Q> annotationQualifier) {
-        return description.getAnnotations()
-                .stream()
-                .flatMap(a -> getAnnotation(a, annotationQualifier));
-    }
 
     public static <Q extends Annotation> Stream<AnnotatedItem<Annotation, Q>> getAnnotationsOf(AnnotatedElement element, Class<Q> annotationQualifier) {
         Stream<AnnotatedItem<Annotation, Q>> stream = Arrays
