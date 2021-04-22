@@ -56,6 +56,7 @@ public class GuiceExtensionRule implements ExtensionRule {
     }
 
     private static Module createMockModule(Object target) {
+        MockitoAnnotations.initMocks(target);
         return createModuleFromFields(target, Mock.class, Spy.class);
     }
 
@@ -97,7 +98,6 @@ public class GuiceExtensionRule implements ExtensionRule {
         Injector injector = createInjector(method, target);
         ExtensionRule rule = ExtensionRules.annotationRule(GuiceServiceResolver.forInjector(injector));
         return rule.andThen((m, t) -> {
-            MockitoAnnotations.initMocks(target);
             injector.injectMembers(t);
             return () -> {};
         }).prepare(method, target);
