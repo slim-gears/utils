@@ -6,5 +6,6 @@ apply from: "$projectDir/gradle/root.gradle"
 
 subprojects {
     apply from: "$scriptsDir/java.gradle"
-    apply from: "$scriptsDir/sonatype.gradle"
 }
+
+apply from: "$scriptsDir/sonatype.gradle"
