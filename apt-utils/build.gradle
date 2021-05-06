@@ -1,25 +1,16 @@
 import org.gradle.internal.jvm.Jvm
 
 configurations {
-    testOutput.extendsFrom (testImplementation)
+    testOutput.extendsFrom testImplementation
 }
 
 task testJar(type: Jar, dependsOn: testClasses) {
-    //noinspection GroovyAssignabilityCheck
-    archiveClassifier = 'tests'
+    archiveClassifier.value 'tests'
     from sourceSets.test.output
 }
 
 artifacts {
     testOutput testJar
-}
-
-project.afterEvaluate {
-    project.publishing.publications {
-        mainMaven {
-            artifact project.tasks.testJar
-        }
-    }
 }
 
 dependencies {
