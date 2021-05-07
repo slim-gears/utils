@@ -15,7 +15,7 @@ cache:
   - "$HOME/.gradle/wrapper/"
 deploy:
   provider: script
-  script: ./gradlew publishAndRelease
+  script: travis_wait 25 ./gradlew publishAndRelease
     -PprojectVersion=$TRAVIS_TAG
     -Psigning.keyId=$SIGNING_KEY_ID
     -Psigning.password=
