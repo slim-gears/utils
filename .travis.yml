@@ -22,7 +22,6 @@ deploy:
     -Psigning.secretKeyRingFile=key.gpg
     -Psonatype.username=$SONATYPE_USERNAME
     -Psonatype.password=$SONATYPE_PASSWORD
-    --info
 
   skip_cleanup: true
   on:
