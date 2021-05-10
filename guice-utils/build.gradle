@@ -25,6 +25,7 @@ dependencies {
     testAnnotationProcessor project.sourceSetDependency(sourceSets.apt)
     testImplementation project(':test-utils')
     testImplementation libs.junit
+    testImplementation libs.systemRules
 }
 
 configurations.testAnnotationProcessor.extendsFrom(configurations.aptImplementation)
