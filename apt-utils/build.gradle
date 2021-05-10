@@ -2,6 +2,7 @@ import org.gradle.internal.jvm.Jvm
 
 configurations {
     testOutput.extendsFrom testImplementation
+    mainArchives
 }
 
 task testJar(type: Jar, dependsOn: testClasses) {
@@ -11,6 +12,7 @@ task testJar(type: Jar, dependsOn: testClasses) {
 
 artifacts {
     testOutput testJar
+    mainArchives testJar
 }
 
 dependencies {
