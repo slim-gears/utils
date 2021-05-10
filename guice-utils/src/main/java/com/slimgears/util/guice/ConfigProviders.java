@@ -3,6 +3,7 @@
 package com.slimgears.util.guice;
 
 import com.slimgears.util.stream.DoubleUtils;
+import com.slimgears.util.stream.Optionals;
 import org.apache.commons.text.StringSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,6 +70,19 @@ public class ConfigProviders {
         Properties properties = new Properties();
         of(configs).apply(properties);
         return properties;
+    }
+
+    public static ConfigProvider evaluator() {
+        return ConfigProviders::evaluate;
+    }
+
+    public static void evaluate(Properties properties) {
+        StringSubstitutor substitutor = new StringSubstitutor(key ->
+                Optionals.or(
+                        () -> Optional.ofNullable(System.getenv(key)),
+                        () -> Optional.ofNullable(properties.getProperty(key)).map(String::valueOf))
+                        .orElse(null));
+        properties.entrySet().forEach(e -> e.setValue(substitutor.replace(String.valueOf(e.getValue()))));
     }
 
     @SuppressWarnings("unchecked")

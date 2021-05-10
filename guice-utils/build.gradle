@@ -24,6 +24,11 @@ dependencies {
 
     testAnnotationProcessor project.sourceSetDependency(sourceSets.apt)
     testImplementation project(':test-utils')
+<<<<<<< HEAD
+=======
+    testImplementation libs.junit
+    testImplementation libs.systemRules
+>>>>>>> d738be2 ([guice] Adding env vars evaluator)
 }
 
 configurations.testAnnotationProcessor.extendsFrom(configurations.aptImplementation)
