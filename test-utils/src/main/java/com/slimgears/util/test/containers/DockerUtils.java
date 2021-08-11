@@ -63,7 +63,10 @@ public class DockerUtils {
             System.out.println("Sleeping " + config.delaySeconds() + "s");
             Thread.sleep(1000L * config.delaySeconds());
         }
-        return () -> execute("docker", "stop", containerId);
+        return Optional.ofNullable(containerId)
+                .map(id -> id.substring(0, 12))
+                .<AutoCloseable>map(id -> () -> execute("docker", "stop", containerId.substring(0, 12)))
+                .orElse(() -> {});
     }
 
     public static AutoCloseable withCompose(String composePath) {
