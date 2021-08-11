@@ -1,4 +1,5 @@
-apply from: "$rootProject.projectDir/gradle/string-interpolation.gradle"
+apply from: "$project.rootDir/gradle/string-interpolation.gradle"
+apply from: "$project.rootDir/gradle/lombok.gradle"
 
 sourceSets {
     junit {

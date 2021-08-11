@@ -1,8 +1,8 @@
 package com.slimgears.util.test.containers;
 
+import com.google.common.base.Strings;
 import com.slimgears.util.test.AnnotationRuleProvider;
 import com.slimgears.util.test.ExtensionRule;
-import jdk.internal.joptsimple.internal.Strings;
 
 import java.util.Arrays;
 
