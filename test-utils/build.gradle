@@ -1,3 +1,5 @@
+apply from: "$rootProject.projectDir/gradle/string-interpolation.gradle"
+
 sourceSets {
     junit {
         java.srcDir 'src/junit/java'
@@ -21,10 +23,16 @@ dependencies {
     implementation project(':stream-utils')
     implementation project(':reflect-utils')
     implementation project(':generic-utils')
+
     implementation libs.slf4j
     implementation libs.guava
-    compileOnly libs.autoService
-    annotationProcessor libs.autoService
+
+    annotationProcessor libs.autoService, libs.autoValue
+    compileOnly libs.autoService, libs.autoValueAnnotations
+
+    annotationProcessor project(':auto-value-utils')
+    compileOnly project.sourceSetDependency(project(':auto-value-utils').sourceSets.annotations)
+    compileOnly libs.javaxAnnotationApi
 
     junitImplementation libs.junit
     junitImplementation project.sourceSetDependency(sourceSets.main)
