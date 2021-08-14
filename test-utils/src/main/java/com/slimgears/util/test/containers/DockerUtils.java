@@ -50,7 +50,12 @@ public class DockerUtils {
     public static AutoCloseable withContainer(ContainerConfig config) {
         ImmutableList.Builder<String> cmdLineBuilder = ImmutableList.<String>builder().add("docker", "run", "-d", "--rm");
         if (!Strings.isNullOrEmpty(config.containerName())) {
-            cmdLineBuilder.add("--name", config.containerName());
+            String containerName = config.containerName();
+            cmdLineBuilder.add("--name", containerName);
+            String id = execute("docker", "ps", "-aqf", "name=${containerName}");
+            Optional.ofNullable(id)
+                    .filter(s -> !Strings.isNullOrEmpty(s))
+                    .ifPresent(i -> execute("docker", "stop", i));
         }
         config.ports().forEach((p1, p2) -> cmdLineBuilder.add("-p", "${p1}:${p2}"));
         config.environment().forEach((k, v) -> cmdLineBuilder.add("-e", "${k}=${v}"));
@@ -58,11 +63,14 @@ public class DockerUtils {
         cmdLineBuilder.add(config.image());
         config.command().forEach(cmdLineBuilder::add);
         String[] cmdLine = cmdLineBuilder.build().toArray(new String[0]);
+
         String containerId = execute(cmdLine);
-        if (config.delaySeconds() != null) {
-            System.out.println("Sleeping " + config.delaySeconds() + "s");
-            Thread.sleep(1000L * config.delaySeconds());
-        }
+        Optional.ofNullable(config.waitPolicy())
+                .ifPresent(policy -> {
+                    if (!policy.waitForReady()) {
+                        throw new RuntimeException("Could not start container");
+                    }
+                });
         return Optional.ofNullable(containerId)
                 .map(id -> id.substring(0, 12))
                 .<AutoCloseable>map(id -> () -> execute("docker", "stop", containerId.substring(0, 12)))
