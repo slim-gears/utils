@@ -55,6 +55,7 @@ public class DockerUtils {
             String id = execute("docker", "ps", "-aqf", "name=${containerName}");
             Optional.ofNullable(id)
                     .filter(s -> !Strings.isNullOrEmpty(s))
+                    .map(i -> i.substring(0, 12))
                     .ifPresent(i -> execute("docker", "stop", i));
         }
         config.ports().forEach((p1, p2) -> cmdLineBuilder.add("-p", "${p1}:${p2}"));
