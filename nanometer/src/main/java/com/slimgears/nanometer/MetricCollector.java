@@ -186,6 +186,18 @@ public interface MetricCollector extends Taggable<MetricCollector>, MetricFilter
         return DefaultAsyncMetricCollector.create(this);
     }
 
+    default Async asyncDefault() {
+        return DefaultAsyncMetricCollector.create(this)
+                .countSubscriptions("totalSubscriptionCount")
+                .countActiveSubscriptions("activeSubscriptionCount")
+                .countCompletions("completeCount")
+                .countErrors("errorCount")
+                .countItems("itemCount")
+                .timeTillFirst("timeTillFirst")
+                .timeTillComplete("timeTillComplete")
+                .timeBetweenItems("timeBetweenItems");
+    }
+
     default MetricCollector name(String name) {
         return WithNameAndTagsMetricCollectorDecorator.decorate(this, name);
     }

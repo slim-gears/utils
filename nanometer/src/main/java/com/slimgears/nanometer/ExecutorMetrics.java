@@ -8,7 +8,7 @@ public class ExecutorMetrics {
     private final MetricCollector metricCollector;
 
     private ExecutorMetrics(MetricCollector metricCollector) {
-        this.metricCollector = metricCollector;
+        this.metricCollector = Optional.ofNullable(metricCollector).orElse(MetricCollector.empty()).name("task");
     }
 
     public static ExecutorMetrics create(MetricCollector collector) {
@@ -19,13 +19,13 @@ public class ExecutorMetrics {
         AtomicInteger queueSize = new AtomicInteger();
         AtomicInteger currentlyRunningCount = new AtomicInteger();
 
-        MetricCollector.Timer executionTimer = metricCollector.timer("task.executionDuration");
-        MetricCollector.Timer pendingTimer = metricCollector.timer("task.pendingDuration");
-        MetricCollector.Counter totalCompleteCount = metricCollector.counter("task.totalCompleteCount");
-        MetricCollector.Counter totalQueuedCount = metricCollector.counter("task.totalQueuedCount");
-        metricCollector.gauge("task.pendingCount").record(queueSize);
-        metricCollector.gauge("task.runningCount").record(currentlyRunningCount);
-        MetricCollector.Counter errorCount = metricCollector.counter("task.errorCount");
+        MetricCollector.Timer executionTimer = metricCollector.timer("executionDuration");
+        MetricCollector.Timer pendingTimer = metricCollector.timer("pendingDuration");
+        MetricCollector.Counter totalCompleteCount = metricCollector.counter("totalCompleteCount");
+        MetricCollector.Counter totalQueuedCount = metricCollector.counter("totalQueuedCount");
+        metricCollector.gauge("pendingCount").record(queueSize);
+        metricCollector.gauge("runningCount").record(currentlyRunningCount);
+        MetricCollector.Counter errorCount = metricCollector.counter("errorCount");
         return runnable -> {
             queueSize.incrementAndGet();
             MetricCollector.Timer.Stopper pendingStopper = pendingTimer.stopper().start();
@@ -47,9 +47,6 @@ public class ExecutorMetrics {
     }
 
     public Executor wrap(Executor executor, String name) {
-        MetricCollector metricCollector = Optional.ofNullable(this.metricCollector)
-                .orElse(MetricCollector.empty())
-                .name(name);
-        return wrap(executor, metricCollector);
+        return wrap(executor, metricCollector.name(name));
     }
 }

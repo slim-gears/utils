@@ -1,4 +1,6 @@
 dependencies {
     implementation project(':reflect-utils')
     implementation libs.guava
+
+    testImplementation libs.junit
 }
