@@ -16,21 +16,23 @@ import io.micrometer.core.instrument.binder.MeterBinder;
 import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
 
 import javax.inject.Provider;
-import javax.inject.Qualifier;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class NanometerModule extends AbstractModule {
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    @interface CompositeFactory {
+    private final String name;
 
+    private NanometerModule(String name) {
+        this.name = name;
+    }
+
+    public static NanometerModule create(String name) {
+        return new NanometerModule(name);
+    }
+
+    public static NanometerModule create() {
+        return new NanometerModule("metrics");
     }
 
     @Override
@@ -43,8 +45,13 @@ public class NanometerModule extends AbstractModule {
         Provider<MetricCollector.Factory> compositeFactoryProvider = getProvider(Key.get(MetricCollector.Factory.class, CompositeFactory.class));
         FieldInjector.inject(MetricCollector.class)
                 .toAnnotatedField(InjectMetrics.class)
-                .resolveByClass(cls -> compositeFactoryProvider.get().createForClass(cls))
+                .resolveByField((a, f) -> compositeFactoryProvider.get().createForClass(f.getDeclaringClass()).name(a.value()))
                 .install(binder());
+    }
+
+    @Provides
+    private MetricCollector provideMetricCollector(@CompositeFactory MetricCollector.Factory factory) {
+        return factory.create();
     }
 
     @ProvidesIntoSet
@@ -77,6 +84,7 @@ public class NanometerModule extends AbstractModule {
             Set<MetricCollector.Binder> metricCollectorBinders) {
         return MetricCollector.Factory
                 .composite(factories)
+                .name(name)
                 .bind(metricCollectorBinders);
     }
 }

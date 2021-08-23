@@ -20,10 +20,9 @@ import javax.inject.Inject;
 
 @RunWith(ExtensionRuleRunner.class)
 @UseModules({NanometerModule.class, LogModule.class, NanometerModuleTest.TestModule.class})
-@CollectMetrics(value = "nanometer.test")
 public class NanometerModuleTest {
     @InjectLog Logger log;
-    @InjectMetrics MetricCollector metricCollector;
+    @InjectMetrics("nanometer.test") MetricCollector metricCollector;
     @Inject SimpleMeterRegistry simpleMeterRegistry;
 
     public static class TestModule extends AbstractModule {
