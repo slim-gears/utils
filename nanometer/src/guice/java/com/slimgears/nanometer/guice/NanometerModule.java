@@ -23,6 +23,10 @@ import java.util.stream.Collectors;
 public class NanometerModule extends AbstractModule {
     private final String name;
 
+    public NanometerModule() {
+        this("metrics");
+    }
+
     private NanometerModule(String name) {
         this.name = name;
     }
@@ -32,7 +36,7 @@ public class NanometerModule extends AbstractModule {
     }
 
     public static NanometerModule create() {
-        return new NanometerModule("metrics");
+        return new NanometerModule();
     }
 
     @Override

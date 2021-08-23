@@ -41,8 +41,8 @@ public class NanometerModuleTest {
     public void testInjectedMetrics() {
         Assert.assertNotNull(metricCollector);
         metricCollector.counter("testCounter").increment();
-        Assert.assertNotNull(simpleMeterRegistry.find("nanometer.test.testCounter").counter());
-        Assert.assertEquals(1.0, simpleMeterRegistry.find("nanometer.test.testCounter").counter().count(), 0.01);
+        Assert.assertNotNull(simpleMeterRegistry.find("metrics.nanometer.test.testCounter").counter());
+        Assert.assertEquals(1.0, simpleMeterRegistry.find("metrics.nanometer.test.testCounter").counter().count(), 0.01);
     }
 
     @Test
