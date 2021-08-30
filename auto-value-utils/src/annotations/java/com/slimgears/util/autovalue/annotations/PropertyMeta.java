@@ -2,12 +2,15 @@ package com.slimgears.util.autovalue.annotations;
 
 import com.google.common.reflect.TypeToken;
 import com.slimgears.util.reflect.TypeTokens;
+import com.slimgears.util.stream.Lazy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -93,8 +96,8 @@ public interface PropertyMeta<T, V> {
             BiConsumer<B, V> setter,
             String getterMethodName) {
 
-        Supplier<Method> lazyMethod = AtomicLazy.of(() -> TypeTokens.method(declaringType.asType(), getterMethodName));
-        Supplier<Map<Class<?>, Annotation>> lazyAnnotationsMap = AtomicLazy.of(HashMap::new);
+        Supplier<Method> lazyMethod = Lazy.of(() -> TypeTokens.method(declaringType.asType(), getterMethodName));
+        Supplier<ConcurrentMap<Class<?>, Annotation>> lazyAnnotationsMap = Lazy.of(ConcurrentHashMap::new);
         TypeToken<V> typeToken = type.asToken();
 
         return new PropertyMeta<T, V>() {
