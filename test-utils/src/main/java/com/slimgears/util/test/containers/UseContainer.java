@@ -3,7 +3,9 @@ package com.slimgears.util.test.containers;
 import com.google.common.base.Strings;
 import com.slimgears.util.test.AnnotationRuleProvider;
 import com.slimgears.util.test.ExtensionRule;
+import lombok.SneakyThrows;
 
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 
 @AnnotationRuleProvider.Qualifier(UseContainer.Provider.class)
@@ -15,6 +17,8 @@ public @interface UseContainer {
     Port[] ports() default {};
     EnvVar[] environment() default {};
     Volume[] volumes() default {};
+    int waitSeconds() default 5;
+    Class<? extends WaitPolicy> waitPolicy() default WaitPolicy.class;
 
     @interface EnvVar {
         String name();
@@ -48,6 +52,7 @@ public @interface UseContainer {
             return (method, target) -> DockerUtils.withContainer(toContainerConfig(info));
         }
 
+        @SneakyThrows
         private ContainerConfig toContainerConfig(UseContainer info) {
             ContainerConfig.Builder builder = ContainerConfig.builder()
                     .containerName(info.containerName())
@@ -62,6 +67,15 @@ public @interface UseContainer {
             });
             Arrays.asList(info.environment()).forEach(v -> builder.environmentPut(v.name(), v.value()));
             Arrays.asList(info.volumes()).forEach(v -> builder.volumesPut(v.localPath(), v.remotePath()));
+
+            WaitPolicy waitPolicy = WaitPolicy.delaySeconds(info.waitSeconds());
+
+            if (info.waitPolicy() != WaitPolicy.class) {
+                waitPolicy = info.waitPolicy().getConstructor().newInstance();
+            }
+
+            builder.waitPolicy(waitPolicy);
+
             return builder.build();
         }
     }
