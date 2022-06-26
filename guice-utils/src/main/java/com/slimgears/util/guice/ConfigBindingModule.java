@@ -3,7 +3,7 @@ package com.slimgears.util.guice;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.*;
 import com.google.inject.name.Names;
-import com.slimgears.util.reflect.internal.Classes;
+import com.slimgears.util.reflect.ReflectUtils;
 import com.slimgears.util.stream.Safe;
 import com.slimgears.util.stream.Streams;
 
@@ -90,7 +90,7 @@ public class ConfigBindingModule extends AbstractModule {
             this.injectorProvider = injectorProvider;
             this.path = path;
             if (eager) {
-                Classes.allMethods(clazz)
+                ReflectUtils.allMethods(clazz)
                         .filter(m -> m.getDeclaringClass() != Object.class)
                         .forEach(m -> {
                             String propertyName = toPropertyName(m);
