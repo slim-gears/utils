@@ -40,16 +40,17 @@ public class TypeConverters {
     }
 
     public static TypeConverter fromEnvironmentMaps(String typeMapsKey) {
-        return Optional
+        return TypeConverters.ofMultiple(Optional
                 .ofNullable(Environment.instance().properties().get(typeMapsKey))
                 .map(typeMaps -> typeMaps.split(","))
                 .map(Stream::of)
                 .orElseGet(Stream::empty)
                 .map(String::trim)
                 .map(Paths::get)
-                .map(TypeConverters::fromPropertiesFile)
-                .reduce(TypeConverter::combineWith)
-                .orElse(empty);
+                .map(path -> path.startsWith("$/")
+                        ? TypeConverters.fromPropertiesResource(path.toString().substring(1))
+                        : TypeConverters.fromPropertiesFile(path))
+                .toArray(TypeConverter[]::new));
     }
 
     @SuppressWarnings("unchecked")

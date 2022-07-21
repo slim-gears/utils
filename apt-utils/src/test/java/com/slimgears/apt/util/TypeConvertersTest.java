@@ -94,6 +94,21 @@ public class TypeConvertersTest {
                 TypeInfo.builder().name("{[key: string]: number[]}").build());
     }
 
+    @Test
+    public void testTypeConversionOverride() {
+        var props1 = new Properties();
+        props1.put("java.util.Date", "number");
+
+        var props2 = new Properties();
+        props2.put("java.util.Date", "string");
+
+        var converter = TypeConverters.ofMultiple(
+                TypeConverters.fromProperties(props2),
+                TypeConverters.fromProperties(props1));
+
+        testConversion(converter, TypeInfo.of("java.util.Date"), TypeInfo.of("string"));
+    }
+
     private void testConversion(TypeInfo from, TypeInfo expected) {
         testConversion(propertiesTypeConverter, from, expected);
     }
